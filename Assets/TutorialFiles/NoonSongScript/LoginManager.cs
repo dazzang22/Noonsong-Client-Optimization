@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using BackEnd;
 
 public class LoginManager : MonoBehaviour
 {
@@ -17,11 +18,22 @@ public class LoginManager : MonoBehaviour
     private string user = "NoonSong";
     private string password = "1906";
 
+
+
+    public BackendLogin backendLogin;
+    
+
+
     /// <summary>
     /// 우측 하단의 하늘색 로그인 버튼 클릭시 실행
     /// </summary>
     public void LoginButtonClick()
     {
+        //BackendLogin.Instance.CustomSignUp("NoonSong", "1906"); // [추가] 뒤끝 로그인
+
+        BackendLogin.Instance.CustomLogin(inputField_ID.text, inputField_PW.text); // [추가] 뒤끝 로그인
+
+        /*
         if (inputField_ID.text == user && inputField_PW.text == password)
         {
             Debug.Log("로그인 성공!");
@@ -32,5 +44,6 @@ public class LoginManager : MonoBehaviour
         {
             Debug.Log("로그인 실패");
         }
+        */
     }
 }
