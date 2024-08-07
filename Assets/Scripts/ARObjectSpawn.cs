@@ -3,8 +3,8 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using Mapbox.Unity.Map;
 using Mapbox.Utils;
-using Mapbox.Unity.Utilities;
 using System.Collections.Generic;
+using Mapbox.Unity.Utilities;
 
 [RequireComponent(typeof(ARRaycastManager))]
 public class ARObjectSpawn : MonoBehaviour
@@ -18,7 +18,10 @@ public class ARObjectSpawn : MonoBehaviour
     float _spawnScale = 30f;
 
     [SerializeField]
-    GameObject[] majorNoonsong;
+    NoonsongManager noonsongManager;
+
+    [SerializeField]
+    NoonsongEntryManager noonsongEntryManager;
 
     [SerializeField]
     GameObject[] generalNoonsong;
@@ -27,13 +30,14 @@ public class ARObjectSpawn : MonoBehaviour
     AbstractMap _map;
 
     private ARRaycastManager _raycastManager;
-    private List<GameObject> _spawnedObjects;
+    private List<SpawnedObject> _spawnedObjects;
     private List<ARRaycastHit> _hits = new List<ARRaycastHit>();
 
     [SerializeField]
     float changeInterval = 2f; // Time interval in seconds
 
     private float timer;
+    public List<SpawnedObject> SpawnedObjects => _spawnedObjects;
 
     void Awake()
     {
@@ -43,7 +47,7 @@ public class ARObjectSpawn : MonoBehaviour
     void Start()
     {
         InitializeLocations();
-        _spawnedObjects = new List<GameObject>();
+        _spawnedObjects = new List<SpawnedObject>();
 
         // Spawn an initial marker at a random location
         SpawnMarkerAtRandomLocation();
@@ -63,26 +67,32 @@ public class ARObjectSpawn : MonoBehaviour
         int randomIndex = Random.Range(0, _locations.Length);
         Vector2d location = _locations[randomIndex];
 
-        GameObject prefab = GetRandomPrefab();
+        var spawnedObject = GetRandomPrefab();
+        GameObject prefab = spawnedObject.GameObject;
+        NoonsongEntry entry = spawnedObject.NoonsongEntry;
+
         var instance = Instantiate(prefab);
         var worldPosition = _map.GeoToWorldPosition(location, true);
         instance.transform.position = new Vector3(worldPosition.x, worldPosition.y, worldPosition.z);
         instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-        _spawnedObjects.Add(instance);
+
+        // Store the instance and its NoonsongEntry
+        _spawnedObjects.Add(new SpawnedObject(instance, entry));
     }
 
-    GameObject GetRandomPrefab()
+    SpawnedObject GetRandomPrefab()
     {
         float probability = Random.Range(0f, 1f); // Generate a random float between 0 and 1
         if (probability < 0.6f) // 60% probability for majorNoonsong
         {
-            int randomIndex = Random.Range(0, majorNoonsong.Length);
-            return majorNoonsong[randomIndex];
+            NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
+            int randomIndex = Random.Range(0, entries.Length);
+            return new SpawnedObject(entries[randomIndex].prefab, entries[randomIndex]);
         }
         else // 40% probability for generalNoonsong
         {
             int randomIndex = Random.Range(0, generalNoonsong.Length);
-            return generalNoonsong[randomIndex];
+            return new SpawnedObject(generalNoonsong[randomIndex], null);
         }
     }
 
@@ -108,7 +118,7 @@ public class ARObjectSpawn : MonoBehaviour
         // Destroy the previous marker
         if (_spawnedObjects.Count > 0)
         {
-            Destroy(_spawnedObjects[0]);
+            Destroy(_spawnedObjects[0].GameObject);
             _spawnedObjects.Clear();
         }
 
