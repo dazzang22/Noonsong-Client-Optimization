@@ -1,6 +1,5 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System;
-using UnityEngine.XR.ARSubsystems;
 
 namespace UnityARInterface
 {

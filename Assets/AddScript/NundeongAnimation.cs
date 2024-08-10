@@ -5,8 +5,6 @@ public class NundeongAnimation : MonoBehaviour
     public Transform nundeong; // 눈덩이 Transform
     public Transform arCamera; // AR 카메라 Transform
     public float moveDuration = 2f; // 이동 애니메이션 지속 시간
-    public float floatAmplitude = 0.1f; // 떠있는 애니메이션의 진폭
-    public float floatFrequency = 1f; // 떠있는 애니메이션의 주기
 
     private Vector3 startPos;
     private Vector3 endPos;
@@ -45,13 +43,6 @@ public class NundeongAnimation : MonoBehaviour
                 floatStartPos = nundeong.position;
                 elapsedTime = 0f; // 떠있는 애니메이션을 위한 시간 초기화
             }
-        }
-        else
-        {
-            // 둥실둥실 떠있는 애니메이션
-            float yOffset = floatAmplitude * Mathf.Sin(floatFrequency * elapsedTime * Mathf.PI * 2);
-            nundeong.position = floatStartPos + new Vector3(0, yOffset, 0);
-            elapsedTime += Time.deltaTime;
         }
     }
 }
