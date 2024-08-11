@@ -31,19 +31,18 @@ public class LoginManager : MonoBehaviour
     {
         //BackendLogin.Instance.CustomSignUp("NoonSong", "1906"); // [추가] 뒤끝 로그인
 
-        BackendLogin.Instance.CustomLogin(inputField_ID.text, inputField_PW.text); // [추가] 뒤끝 로그인
+        //BackendLogin.Instance.CustomLogin(inputField_ID.text, inputField_PW.text); // [추가] 뒤끝 로그인
 
-        /*
         if (inputField_ID.text == user && inputField_PW.text == password)
         {
             Debug.Log("로그인 성공!");
             //로그인 성공시 Main Scene 로드
-            SceneManager.LoadScene("MainScene"); // replace "MainScene" 으로 이동
+            //SceneManager.LoadScene("MainScene"); // replace "MainScene" 으로 이동
+            SceneManager.LoadScene("Merge-TutorialScene"); // replace "Merge-TutorialScene" 으로 이동
         }
         else
         {
             Debug.Log("로그인 실패");
         }
-        */
     }
 }
