@@ -13,6 +13,17 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private bool isHolding = false;
     // 버튼이 눌려진 시간을 누적하는 변수
     private float holdCounter = 0f;
+    // 오디오 소스 컴포넌트
+    private AudioSource audioSource;
+    // 재생할 사운드 클립
+    public AudioClip clickSound;
+
+    void Start()
+    {
+        // AudioSource 컴포넌트를 가져옴
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = clickSound;
+    }
 
     void Update()
     {
@@ -49,6 +60,11 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     public void OnPointerDown(PointerEventData eventData)
     {
         isHolding = true;
+        // 버튼이 눌리면 사운드를 재생
+        if (audioSource != null && clickSound != null)
+        {
+            audioSource.Play();
+        }
     }
 
     // 버튼이 떼어졌을 때 호출

@@ -3,10 +3,11 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using Mapbox.Unity.Map;
 using Mapbox.Utils;
-using System.Collections.Generic;
 using Mapbox.Unity.Utilities;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using static UnityEngine.EventSystems.EventTrigger;
 
-[RequireComponent(typeof(ARRaycastManager))]
 public class ARObjectSpawn : MonoBehaviour
 {
     [SerializeField]
@@ -29,20 +30,16 @@ public class ARObjectSpawn : MonoBehaviour
     [SerializeField]
     AbstractMap _map;
 
-    private ARRaycastManager _raycastManager;
+    [SerializeField]
+    ARAnchorManager _anchorManager; // ARAnchorManager Ãß°¡
+
     private List<SpawnedObject> _spawnedObjects;
-    private List<ARRaycastHit> _hits = new List<ARRaycastHit>();
 
     [SerializeField]
     float changeInterval = 2f; // Time interval in seconds
 
     private float timer;
     public List<SpawnedObject> SpawnedObjects => _spawnedObjects;
-
-    void Awake()
-    {
-        _raycastManager = GetComponent<ARRaycastManager>();
-    }
 
     void Start()
     {
@@ -70,14 +67,20 @@ public class ARObjectSpawn : MonoBehaviour
         var spawnedObject = GetRandomPrefab();
         GameObject prefab = spawnedObject.GameObject;
         NoonsongEntry entry = spawnedObject.NoonsongEntry;
-
         var instance = Instantiate(prefab);
         var worldPosition = _map.GeoToWorldPosition(location, true);
-        instance.transform.position = new Vector3(worldPosition.x, worldPosition.y, worldPosition.z);
+        instance.transform.position = new Vector3(worldPosition.x, -5, worldPosition.z);
         instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
 
-        // Store the instance and its NoonsongEntry
+        // Add ARAnchor to the instance directly
+        var anchor = instance.AddComponent<ARAnchor>();
+
+        // Optionally, you can use ARAnchorManager to manage anchors in a more advanced setup.
+        // In this case, you are directly adding ARAnchor to the instance.
+        instance.transform.parent = anchor.transform;
+
         _spawnedObjects.Add(new SpawnedObject(instance, entry));
+
     }
 
     SpawnedObject GetRandomPrefab()
@@ -86,8 +89,9 @@ public class ARObjectSpawn : MonoBehaviour
         if (probability < 0.6f) // 60% probability for majorNoonsong
         {
             NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
-            int randomIndex = Random.Range(0, entries.Length);
+            int randomIndex = Random.Range(0, 1);
             return new SpawnedObject(entries[randomIndex].prefab, entries[randomIndex]);
+
         }
         else // 40% probability for generalNoonsong
         {
