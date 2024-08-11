@@ -990,7 +990,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 360559605}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
@@ -998,7 +998,7 @@ MonoBehaviour:
   _locationStrings:
   - 37.546344, 126.964714
   - 37.546327, 126.964681
-  _spawnScale: 10
+  _spawnScale: 15
   noonsongManager: {fileID: 1954565876}
   noonsongEntryManager: {fileID: 1098759413}
   generalNoonsong:
@@ -1013,12 +1013,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 360559605}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 520926a668cad314f9213ad70446e483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rectangleVertices: []
+  rectangleVertices:
+  - x: 37.5464974
+    y: 126.9641175
+  - x: 37.5465687
+    y: 126.9652981
+  - x: 37.5463733
+    y: 126.9652924
+  - x: 37.5462746
+    y: 126.9641611
   scriptToActivate: {fileID: 360559607}
   map: {fileID: 903801594}
   xrOrigin: {fileID: 1922857011}
@@ -1792,8 +1800,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
-  far clip plane: 20
+  near clip plane: 2
+  far clip plane: 40
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1911,7 +1919,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.56720835}
   m_AnchorMax: {x: 1, y: 0.95400006}
-  m_AnchoredPosition: {x: 0, y: -43.0165}
+  m_AnchoredPosition: {x: 0, y: -43.016357}
   m_SizeDelta: {x: 0, y: -86.0331}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &701838568
@@ -2149,7 +2157,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!136 &886340949
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2281,7 +2289,7 @@ MonoBehaviour:
         rangeAroundCenterOptions:
           west: 2
           north: 1
-          east: 3
+          east: 2
           south: 1
         rangeAroundTransformOptions:
           targetTransform: {fileID: 0}
@@ -2870,7 +2878,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 125.05261, y: -255.78955}
+  m_AnchoredPosition: {x: 125.052734, y: -255.78955}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1237079819
