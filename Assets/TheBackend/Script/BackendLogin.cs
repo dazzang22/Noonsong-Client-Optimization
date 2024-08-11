@@ -55,7 +55,7 @@ public class BackendLogin
 
 
 
-            SceneManager.LoadScene("MainScene"); // replace "MainScene" 으로 이동
+            SceneManager.LoadScene("Merge-TutorialScene"); // replace "Merge-TutorialScene" 으로 이동
 
         }
         else
