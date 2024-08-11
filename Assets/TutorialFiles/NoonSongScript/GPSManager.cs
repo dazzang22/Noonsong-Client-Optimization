@@ -56,10 +56,13 @@ public class GPSManager : MonoBehaviour
             // 위치 정보가 성공적으로 받아지면 초기 위치를 출력
             print("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " + Input.location.lastData.altitude);
         }
+
+        // yield return new WaitForSeconds(5f);
+        // StartCoroutine(DialogTrigger());
     }
 
-    void LateUpdate()
-    {
+
+    void LateUpdate() {
         int nextIndex = currentIndex + 1; // 다음 위치의 인덱스를 설정
 
         // 위치 서비스가 실행 중인 경우
@@ -74,7 +77,7 @@ public class GPSManager : MonoBehaviour
                 double remainDistance = distance(myLat, myLong, lats[currentIndex], longs[currentIndex]);
 
                 // 지정된 거리 내에 도착하면
-                if (remainDistance <= 10f) // 10m 이내
+                if (remainDistance <= 100f) // 10m 이내
                 {
                     if (talkDialogue.IsDialogTriggered(currentIndex))
                     {
@@ -85,7 +88,9 @@ public class GPSManager : MonoBehaviour
                 }
             }
         }
+
     }
+
 
     private double distance(double lat1, double lon1, double lat2, double lon2)
     {
