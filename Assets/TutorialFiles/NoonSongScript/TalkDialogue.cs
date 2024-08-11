@@ -27,6 +27,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     public GameObject turi;      // part7 튜리 등장
 
     public GameObject ParticlePanel; // ParticlePanel 오브젝트
+    public GameObject StudentIdPanel;
 
     public Transform arCamera; // AR 카메라 Transform
     public float moveDuration = 2f; // 이동 애니메이션 지속 시간
@@ -70,7 +71,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FirstDialog.Add(new DialogData("/color:black/어디? 어디?", "NoonDung", () => StartCoroutine(MoveObject(snowflake, arCamera.TransformPoint(new Vector3(0.35f, 2f, -1f)), arCamera.TransformPoint(new Vector3(0.35f, 0f, -1f)))))); // 하늘에서 내려옴 눈꽃송이 시작
         FirstDialog.Add(new DialogData("/color:black//wait:1/우리는! /wait:0.5/학교를 지키는 어벤져스, /click/눈꽃송이들이야!", "Snowflake"));
         FirstDialog.Add(new DialogData("/color:black/마침 잘 만났다! 얘들아, 이 새송이가 눈송이와 친구가 되고 싶대!", "NoonDung"));
-        FirstDialog.Add(new DialogData("/color:black/그런거라면... 눈송이는 눈의 결정을 좋아하니까, 눈의 결정을 준다면 분명 친구가 될 수 있을 거야", "Snowflake", () => StartCoroutine(ShowPanel())));
+        FirstDialog.Add(new DialogData("/color:black/그런거라면... 눈송이는 눈의 결정을 좋아하니까, 눈의 결정을 준다면 분명 친구가 될 수 있을 거야", "Snowflake", () => StartCoroutine(ShowPanelFirst())));
         FirstDialog.Add(new DialogData("/color:black//wait:0.5/마침 우리한테 꿍쳐놓은 눈의 결정이 있으니까, 너한테 줄게!", "Snowflake", () => ChangeAnimation(snowflakeAnimator1, "standing")));
         FirstDialog.Add(new DialogData("/color:black/어려운 친구를 돕는 것도 우리 일이니까. 우리가 새송이를 도와주는 건 어떨까? /click/(뭉치면 산다!)", "Snowflake", () => ChangeAnimation(snowflakeAnimator1, "standing")));
         FirstDialog.Add(new DialogData("/color:black/그래, 눈의 결정이라면 우리가 전문이니까, 함께 다니면서 눈의 결정 찾는걸 도와줄게! /click/(맡겨 줘!)", "Snowflake"));
@@ -119,8 +120,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FirstDialog.Add(new DialogData("/color:black/바로 /color:blue/특별한 눈의 결정/color:black/! 특별한 눈송이들의 마음도 사로잡을 수 있는 대단한 아이템이야!", "Turi", () => ChangeAnimation(turiAnimator, "standing")));
         FirstDialog.Add(new DialogData("/color:black/어때? 가지고 싶지? 그 대신, 특별한 눈의 결정을 만들기 위해서는 눈의 결정이 많이 필요해.", "Turi"));
         FirstDialog.Add(new DialogData("/color:blue/제2캠퍼스 원형 광장/color:black/에 있는 내 연구실에 오면 다양한 특별한 눈의 결정으로 바꿔줄게! 잊지 말고 놀러 와~!", "Turi", () => turi.SetActive(false)));
-        FirstDialog.Add(new DialogData("/color:black/튜토리얼을 성공적으로 마친 당신에게 이것을 드립니다!","Narrator"));
-        FirstDialog.Add(new DialogData("/color:black/다양한 눈송이들과 친구가 되어 완벽한 학생증을 완성하는 것을 목표로 힘을 내 봐요!","Narrator"));
+        FirstDialog.Add(new DialogData("/color:black/튜토리얼을 성공적으로 마친 당신에게 이것을 드립니다!","Narrator",() => StartCoroutine(ShowPanelSecond())));
+        FirstDialog.Add(new DialogData("/color:black//wait:0.5/다양한 눈송이들과 친구가 되어 완벽한 학생증을 완성하는 것을 목표로 힘을 내 봐요!","Narrator"));
         FirstDialog.Add(new DialogData("/color:black/도감을 다 채우고 학생증을 완성한다면, 특별한 선물이 있을 지도…!?","Narrator"));
         DialogManager.Show(FirstDialog);
     }
@@ -281,11 +282,25 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         obj.transform.position = endPos;
     }
 
-    private IEnumerator ShowPanel()
+    private IEnumerator ShowPanelFirst()
     {
         Time.timeScale = 0f; // 시간 정지
                              // 패널 활성화
         ParticlePanel.SetActive(true);
+
+        while (!Input.GetMouseButtonDown(0)) // 마우스 클릭을 기다림
+        {
+            yield return null; // 한 프레임을 대기
+        }
+
+        Time.timeScale = 1f; // 시간 재개
+    }
+
+    private IEnumerator ShowPanelSecond()
+    {
+        Time.timeScale = 0f; // 시간 정지
+                             // 패널 활성화
+        StudentIdPanel.SetActive(true);
 
         while (!Input.GetMouseButtonDown(0)) // 마우스 클릭을 기다림
         {
