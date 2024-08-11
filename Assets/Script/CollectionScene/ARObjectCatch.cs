@@ -10,6 +10,9 @@ public class ARObjectCatch : MonoBehaviour
     private NoonsongManager noonsongManager;
 
     [SerializeField]
+    private CurrencyManager currencyManager; // CurrencyManager 추가
+
+    [SerializeField]
     private Button catchButton;
 
     private GameObject currentTarget;
@@ -17,7 +20,6 @@ public class ARObjectCatch : MonoBehaviour
     void Start()
     {
         catchButton.onClick.AddListener(OnCatchButtonClicked);
-        catchButton.gameObject.SetActive(false);
     }
 
     void Update()
@@ -35,14 +37,16 @@ public class ARObjectCatch : MonoBehaviour
 
             if (onScreen)
             {
-                catchButton.gameObject.SetActive(true);
                 currentTarget = target;
             }
             else
             {
-                catchButton.gameObject.SetActive(false);
                 currentTarget = null;
             }
+        }
+        else
+        {
+            currentTarget = null;
         }
     }
 
@@ -58,33 +62,28 @@ public class ARObjectCatch : MonoBehaviour
 
                 if (entry != null)
                 {
+                    int requiredCurrency = spawnedObject.NoonsongEntry.requiredNoonsongs;
+
                     if (!entry.isDiscovered)
                     {
-                        noonsongManager.DiscoverItem(entry);
-                        entry.isDiscovered = true; // Update the isDiscovered property
-                        Debug.Log($"{entry.noonsongName} has been discovered.");
-                    }
-                    else
-                    {
-                        Debug.Log($"{entry.noonsongName} is already discovered.");
+                        if (currencyManager.HasEnoughCurrency(requiredCurrency))
+                        {
+                            noonsongManager.DiscoverItem(entry);
+                            entry.isDiscovered = true;
+                            currencyManager.UseCurrency(requiredCurrency); // 통화 차감
+                        }
+                        else
+                        {
+                            Debug.Log("Not enough currency to discover this item.");
+                        }
                     }
 
                     Destroy(currentTarget);
-                    arObjectSpawn.SpawnedObjects.Remove(spawnedObject); // Remove the SpawnedObject instance
-                    catchButton.gameObject.SetActive(false);
+                    arObjectSpawn.SpawnedObjects.Remove(spawnedObject);
                 }
-                else
-                {
-                    Debug.Log("No NoonsongEntry associated with the target.");
-                }
-            }
-            else
-            {
-                Debug.Log("Current target is not found in the spawned objects list.");
             }
         }
     }
 }
-
 
 
