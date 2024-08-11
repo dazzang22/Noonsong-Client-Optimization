@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 public class GPSManager : MonoBehaviour
 {
-    //public Text textUI; // UI에 현재 위치를 표시하기 위한 텍스트 UI 요소
-    //public GameObject[] popUps; // 팝업 UI 요소를 관리하기 위한 배열
     public bool[] isVisited; // 각 위치의 방문 여부를 저장하는 배열
     public double[] lats; // 각 위치의 위도를 저장하는 배열
     public double[] longs; // 각 위치의 경도를 저장하는 배열
@@ -60,8 +58,10 @@ public class GPSManager : MonoBehaviour
         }
     }
 
-    void Update()
+    void LateUpdate()
     {
+        int nextIndex = currentIndex + 1; // 다음 위치의 인덱스를 설정
+
         // 위치 서비스가 실행 중인 경우
         if (Input.location.status == LocationServiceStatus.Running)
         {
@@ -74,11 +74,14 @@ public class GPSManager : MonoBehaviour
                 double remainDistance = distance(myLat, myLong, lats[currentIndex], longs[currentIndex]);
 
                 // 지정된 거리 내에 도착하면
-                if (remainDistance <= 100f) // 1m
+                if (remainDistance <= 10f) // 10m 이내
                 {
-                    isVisited[currentIndex] = true; // 방문 여부를 true로 설정
-                    TriggerDialog(currentIndex); // 해당 위치의 다이얼로그 호출
-                    currentIndex++; // 다음 위치로 인덱스 증가
+                    if (talkDialogue.IsDialogTriggered(currentIndex))
+                    {
+                        isVisited[currentIndex] = true; // 방문 여부를 true로 설정
+                        TriggerDialog(nextIndex); // 해당 위치의 다이얼로그 호출
+                        currentIndex++; // 다음 위치로 인덱스 증가
+                    }
                 }
             }
         }
