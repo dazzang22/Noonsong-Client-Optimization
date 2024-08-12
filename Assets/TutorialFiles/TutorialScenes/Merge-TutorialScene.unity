@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44402182, g: 0.49316454, b: 0.5722313, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -180,14 +180,14 @@ MonoBehaviour:
   noonDung: {fileID: 919132148703345117}
   snowflake: {fileID: 6222285499136765894}
   roro: {fileID: 919132149518357686}
-  noonkyeol: {fileID: 7090679849431873696}
+  noonkyeol: {fileID: 544061149}
   kkotsong: {fileID: 919132147672673308}
   noonsong: {fileID: 3640834977697319150}
   turi: {fileID: 1533450724841734373}
   ParticlePanel: {fileID: 1143066780}
   StudentIdPanel: {fileID: 1401575326}
   StudentId: {fileID: 917415204}
-  arCamera: {fileID: 292023010}
+  arCamera: {fileID: 1152842875}
   moveDuration: 2
   dialogTriggered: 00000000
   noonDungSound: {fileID: 8300000, guid: 0810046202cc68940b755d6972c03295, type: 3}
@@ -466,11 +466,6 @@ PrefabInstance:
 --- !u!20 &292023007 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 20563867695608054, guid: 35e76f6e52f5c4252a0b703cc2019a37, type: 3}
-  m_PrefabInstance: {fileID: 292023006}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &292023010 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4066601245629192, guid: 35e76f6e52f5c4252a0b703cc2019a37, type: 3}
   m_PrefabInstance: {fileID: 292023006}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &313488631
@@ -1165,13 +1160,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isVisited: 000000
   lats:
-  - 37.545204
-  - 37.545087
-  - 37.545068
+  - 37.563491314102
+  - 37.563491314102
+  - 37.563491314102
   longs:
-  - 126.965001
-  - 126.965075
-  - 126.964737
+  - 126.96987163675
+  - 126.96987163675
+  - 126.96987163675
   talkDialogue: {fileID: 222053710}
 --- !u!4 &741253266
 Transform:
@@ -4221,14 +4216,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8127517739738244803}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.101391196, y: 0.9616021, z: 0.255031, w: 0.0007037856}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2854733089182288074}
   m_Father: {fileID: 2165169171677157983}
-  m_LocalEulerAnglesHint: {x: -150.619, y: 3.3130035, z: 167.093}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &919132147672673308
 GameObject:
   m_ObjectHideFlags: 0
@@ -5442,7 +5437,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1538046468569854479
 GameObject:
   m_ObjectHideFlags: 0
@@ -6520,8 +6515,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533450724841734373}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40025702, y: -0.08049294, z: 0.007919312, w: 0.91282666}
-  m_LocalPosition: {x: -8.026721, y: 0.0030373037, z: 0.013740376}
+  m_LocalRotation: {x: -0.6246115, y: 0.028664047, z: -0.036533225, w: 0.7795539}
+  m_LocalPosition: {x: -8.132121, y: -0.27874476, z: -0.22579002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6540,7 +6535,7 @@ Transform:
   - {fileID: 7295978365397530385}
   - {fileID: 1261332836657447216}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 47.055, y: -11.911, z: -4.207}
+  m_LocalEulerAnglesHint: {x: -76.347, y: 22.499, z: -23.142}
 --- !u!223 &2168895030251621591
 Canvas:
   m_ObjectHideFlags: 0
@@ -14802,7 +14797,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7090679849431873696}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -14827,7 +14822,7 @@ Transform:
   - {fileID: 8796134991796749146}
   - {fileID: 1100010254770321469}
   m_Father: {fileID: 544061150}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7601781277895378534
 GameObject:
   m_ObjectHideFlags: 0
