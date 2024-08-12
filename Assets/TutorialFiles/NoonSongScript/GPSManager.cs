@@ -77,7 +77,8 @@ public class GPSManager : MonoBehaviour
                 double remainDistance = distance(myLat, myLong, lats[currentIndex], longs[currentIndex]);
 
                 // 지정된 거리 내에 도착하면
-                if (remainDistance <= 5f) // 10m 이내
+                //if (remainDistance <= 5f) // 5m 이내
+                if (remainDistance <= 10f) // 10m 이내
                 {
                     if (talkDialogue.IsDialogTriggered(currentIndex))
                     {

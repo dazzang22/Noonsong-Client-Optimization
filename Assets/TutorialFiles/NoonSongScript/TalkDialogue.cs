@@ -99,7 +99,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         SecondDialog.Add(new DialogData("/color:black//emote:Hello/저기,, 안녕하세요! 처음 보는 분이네요..!", "NoonGyeol", () => { noonkyeol.SetActive(true); StartCoroutine(MoveObject(noonkyeol, arCamera.TransformPoint(new Vector3(1f, -0.5f, 5f)), arCamera.TransformPoint(new Vector3(0f, -0.5f, 3f)))); })); // 오른쪽에서 천천히 등장 눈결이 시작));
         SecondDialog.Add(new DialogData("/color:black/눈결이 안녕! 혹시 근처에서 눈송이 못봤어?", "NoonDung", () => ChangeAnimation(noonkyeolAnimator, "standing")));
         SecondDialog.Add(new DialogData("/color:black/눈송이 말인가요? 음... 못 봤어요. 무슨 일이신데요?", "NoonGyeol"));
-        SecondDialog.Add(new DialogData("/color:black/[(눈결이에거 사정을 설명한다)]", "User"));
+        SecondDialog.Add(new DialogData("/color:black/[(눈결이에게 사정을 설명한다)]", "User"));
         SecondDialog.Add(new DialogData("/color:black//emote:Look/앗, 그렇다면 이게 도움이 될 거예요!", "NoonGyeol", () => ChangeAnimation(noonkyeolAnimator, "standing")));
         SecondDialog.Add(new DialogData("/color:black//emote:Study/저는 지도를 잘 보거든요. 그 외에 이것저것 많은 것을 알고 있으니까, 제 지식이 도움이 될 수 있을 것 같아요.", "NoonGyeol"));
         SecondDialog.Add(new DialogData("/color:black/[(그럼 혹시 도와줄 수 있냐고 묻는다.)]", "User"));
@@ -192,6 +192,17 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         };
 
         FirstDialog();
+    }
+
+    private void Update()
+    {
+        noonDung.transform.LookAt(arCamera); // 눈덩이가 카메라를 바라보게 함
+        snowflake.transform.LookAt(arCamera); // 눈꽃송이가 카메라를 바라보게 함
+        roro.transform.LookAt(arCamera); // 로로가 카메라를 바라보게 함
+        noonkyeol.transform.LookAt(arCamera); // 눈결이가 카메라를 바라보게 함
+        kkotsong.transform.LookAt(arCamera); // 꽃송이가 카메라를 바라보게 함
+        noonsong.transform.LookAt(arCamera); // 눈송이가 카메라를 바라보게 함
+        turi.transform.LookAt(arCamera); // 튜리가 카메라를 바라보게 함
     }
 
     // 애니메이션 변경 함수 (애니메이터 이름, trigger 문자열) 받음
