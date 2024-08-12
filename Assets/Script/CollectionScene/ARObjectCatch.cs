@@ -62,7 +62,7 @@ public class ARObjectCatch : MonoBehaviour
 
                 if (entry != null)
                 {
-                    int requiredCurrency = spawnedObject.NoonsongEntry.requiredNoonsongs;
+                    int requiredCurrency = entry.requiredNoonsongs; // 필요한 통화를 가져옵니다.
 
                     if (!entry.isDiscovered)
                     {
@@ -85,5 +85,6 @@ public class ARObjectCatch : MonoBehaviour
         }
     }
 }
+
 
 

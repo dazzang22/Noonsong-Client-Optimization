@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class CurrencyManager : MonoBehaviour
 {
@@ -7,7 +8,8 @@ public class CurrencyManager : MonoBehaviour
 
     public int noonsongCurrency;
 
-    [SerializeField] private TextMeshProUGUI currencyText; // TextMeshPro UGUI 컴포넌트
+    // 여러 TextMeshProUGUI 컴포넌트를 관리하기 위한 리스트
+    [SerializeField] private List<TextMeshProUGUI> currencyTexts = new List<TextMeshProUGUI>();
 
     private void Awake()
     {
@@ -49,9 +51,23 @@ public class CurrencyManager : MonoBehaviour
 
     private void UpdateCurrencyUI()
     {
-        if (currencyText != null)
+        // 등록된 모든 TextMeshProUGUI 컴포넌트를 업데이트
+        foreach (var currencyText in currencyTexts)
         {
-            currencyText.text = noonsongCurrency.ToString();
+            if (currencyText != null)
+            {
+                currencyText.text = noonsongCurrency.ToString();
+            }
+        }
+    }
+
+    // TextMeshProUGUI 컴포넌트를 등록하는 메서드
+    public void RegisterCurrencyText(TextMeshProUGUI newCurrencyText)
+    {
+        if (!currencyTexts.Contains(newCurrencyText))
+        {
+            currencyTexts.Add(newCurrencyText);
+            newCurrencyText.text = noonsongCurrency.ToString(); // 등록 시 초기화
         }
     }
 }
