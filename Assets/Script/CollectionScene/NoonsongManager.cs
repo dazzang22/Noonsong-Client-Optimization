@@ -13,6 +13,9 @@ public class NoonsongManager : MonoBehaviour
     public TextMeshProUGUI detailsNameText;     // 상세 정보의 이름 텍스트
     public TextMeshProUGUI detailsDescriptionText;
     public Image detailsImage;
+    public Button view3DButton;
+    public Canvas collectionCanvas;
+    public Camera renderCamera;                // 3D 프리팹을 렌더링할 카메라
 
     [SerializeField]
     private NoonsongEntryManager noonsongEntryManager; // NoonsongEntryManager 참조
@@ -107,6 +110,14 @@ public class NoonsongManager : MonoBehaviour
 
                 Debug.Log($"Details panel updated with entry: {entry.noonsongName}");
             }
+
+            if (view3DButton != null)
+            {
+                view3DButton.onClick.RemoveAllListeners();
+                view3DButton.onClick.AddListener(() => Open3DView(entry));
+                Debug.Log("3D View button click event added!");
+            }
+        
         }
         else
         {
@@ -126,6 +137,46 @@ public class NoonsongManager : MonoBehaviour
         // 마지막으로 클릭된 항목을 현재 항목으로 설정
         lastClickedEntry = clickedEntry;
     }
+    public void Open3DView(NoonsongEntry entry)
+    {
+        Debug.Log($"Open3DView called for entry: {entry.noonsongName}");
+
+        // CollectionCanvas를 비활성화
+        if (collectionCanvas != null)
+        {
+            collectionCanvas.gameObject.SetActive(false);
+            Debug.Log("CollectionCanvas is now deactivated.");
+        }
+        else
+        {
+            Debug.LogError("CollectionCanvas is not set in the inspector!");
+            return;
+        }
+
+        // 카메라 뷰 내의 랜덤 위치 계산 (휴대폰 화면 내)
+        if (renderCamera != null && entry.prefab != null)
+        {
+            // 카메라 뷰포트에서 랜덤 좌표 생성 (휴대폰 화면 범위 내)
+            float randomX = Random.Range(0.1f, 0.9f); // X축에서 0.1~0.9의 범위
+            float randomY = Random.Range(0.1f, 0.9f); // Y축에서 0.1~0.9의 범위
+
+            // 휴대폰 화면의 랜덤 좌표를 월드 좌표로 변환
+            Vector3 randomViewportPosition = new Vector3(randomX, randomY, renderCamera.nearClipPlane + 2f); // 카메라 앞 2 단위 거리
+            Vector3 randomWorldPosition = renderCamera.ViewportToWorldPoint(randomViewportPosition);
+
+            // 3D 프리팹을 랜덤한 위치에 생성
+            GameObject entryInstance = Instantiate(entry.prefab, randomWorldPosition, Quaternion.identity);
+            Debug.Log($"Prefab instantiated at random position in screen: {randomWorldPosition}");
+
+            // 필요하다면 프리팹의 크기나 회전 설정
+            entryInstance.transform.LookAt(renderCamera.transform); // 카메라를 바라보게 설정
+        }
+        else
+        {
+            Debug.LogError("RenderCamera or entry.prefab is not set!");
+        }
+    }
+
 }
 
 
