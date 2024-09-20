@@ -135,5 +135,4 @@ public class FriendsManager : MonoBehaviour
             Debug.LogError("DetailsPanel is not set in the inspector!");
         }
     }
-
 }
