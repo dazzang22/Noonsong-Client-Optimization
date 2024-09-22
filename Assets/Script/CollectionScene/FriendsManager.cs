@@ -13,14 +13,17 @@ public class FriendsManager : MonoBehaviour
     public TextMeshProUGUI detailsNameText;     // 상세 정보의 이름 텍스트
     public TextMeshProUGUI detailsDescriptionText;
     public Image detailsImage;
-    public Camera renderCamera;                // 3D 프리팹을 렌더링할 카메라
-    public RenderTexture renderTexture;        // 3D 프리팹을 렌더링할 Render Texture
+    public Button view3DButton;                 // 3D 보기 버튼
+    public Canvas collectionCanvas;             // Collection 화면
+    public Canvas cameraCanvas;                 // 3D 보기 화면
+    public Camera renderCamera;             // 3D 프리팹을 렌더링할 Render Texture
 
     [SerializeField]
     private NoonsongFriendsEntryManager noonsongFriendsEntryManager; // NoonsongFriendsEntryManager 참조
 
     private List<NoonsongFriendsEntry> entries; // 모든 도감 항목 리스트
     private GameObject lastClickedEntry = null; // 마지막 클릭된 항목
+    private GameObject currentNoonsongObject;
 
     void Start()
     {
@@ -128,11 +131,65 @@ public class FriendsManager : MonoBehaviour
                 detailsImage.rectTransform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                 Debug.Log($"Details panel updated with entry: {entry.noonsongFriendName}");
+                if (view3DButton != null)
+                {
+                    view3DButton.onClick.RemoveAllListeners();
+                    view3DButton.onClick.AddListener(() => Open3DView(entry));
+                }
             }
         }
         else
         {
             Debug.LogError("DetailsPanel is not set in the inspector!");
+        }
+    }
+    public void Open3DView(NoonsongFriendsEntry entry)
+    {
+        // CollectionCanvas를 비활성화
+        if (collectionCanvas != null)
+        {
+            collectionCanvas.gameObject.SetActive(false);
+        }
+
+        // CameraCanvas를 활성화
+        if (cameraCanvas != null)
+        {
+            cameraCanvas.gameObject.SetActive(true);
+        }
+
+        if (renderCamera != null && entry.prefab != null)
+        {
+            // 카메라 뷰포트에서 중앙 좌표 설정 (0.5, 0.5)
+            Vector3 randomViewportPosition = new Vector3(0.5f, 0.5f, renderCamera.nearClipPlane + 2f);
+            Vector3 randomWorldPosition = renderCamera.ViewportToWorldPoint(randomViewportPosition);
+
+            // 3D 오브젝트 생성 및 참조 저장
+            currentNoonsongObject = Instantiate(entry.prefab, randomWorldPosition, Quaternion.identity);
+            currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);
+            currentNoonsongObject.transform.localScale = new Vector3(4f, 4f, 4f);
+            currentNoonsongObject.transform.LookAt(renderCamera.transform);
+        }
+    }
+
+    // Back 버튼이 눌렸을 때 호출될 메서드
+    public void OnBackButtonPressed()
+    {
+        // CameraCanvas를 비활성화
+        if (cameraCanvas != null)
+        {
+            cameraCanvas.gameObject.SetActive(false);
+        }
+
+        // CollectionCanvas를 활성화
+        if (collectionCanvas != null)
+        {
+            collectionCanvas.gameObject.SetActive(true);
+        }
+
+        // 생성된 3D 오브젝트 제거
+        if (currentNoonsongObject != null)
+        {
+            Destroy(currentNoonsongObject);
         }
     }
 }

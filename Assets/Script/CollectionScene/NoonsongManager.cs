@@ -170,7 +170,7 @@ public class NoonsongManager : MonoBehaviour
             currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);
 
             //3D 오브젝트 scale 설정
-            currentNoonsongObject.transform.localScale = new Vector3(5f, 5f, 5f);
+            currentNoonsongObject.transform.localScale = new Vector3(4f, 4f, 4f);
 
             // 오브젝트가 카메라를 바라보게 설정
             currentNoonsongObject.transform.LookAt(renderCamera.transform);
