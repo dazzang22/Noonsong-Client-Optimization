@@ -166,6 +166,12 @@ public class NoonsongManager : MonoBehaviour
             // 3D 오브젝트 생성 및 참조 저장
             currentNoonsongObject = Instantiate(entry.prefab, randomWorldPosition, Quaternion.identity);
 
+            //3D 오브젝트 position 설정
+            currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);
+
+            //3D 오브젝트 scale 설정
+            currentNoonsongObject.transform.localScale = new Vector3(5f, 5f, 5f);
+
             // 오브젝트가 카메라를 바라보게 설정
             currentNoonsongObject.transform.LookAt(renderCamera.transform);
         }
