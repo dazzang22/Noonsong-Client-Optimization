@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class StartSceneManager : MonoBehaviour
 {
@@ -11,7 +12,11 @@ public class StartSceneManager : MonoBehaviour
     public Canvas loginCanvas;  
     public Canvas fadeCanvas;  
 
-    
+    public GameObject letsgoPanel;
+    public GameObject loginPanel;
+
+    public Button transparentButton;
+
     public void SceneChanger()
     {
         StartCoroutine(FadeAndLoadScene());
@@ -31,6 +36,28 @@ public class StartSceneManager : MonoBehaviour
         }
 
         SceneManager.LoadScene("EventScene");
+    }
+
+    public void ClickletsgoPanel()
+    {
+        letsgoPanel.SetActive(true);
+    }
+
+    public void ClickloginPanel()
+    {
+        loginPanel.SetActive(true);
+        transparentButton.gameObject.SetActive(true); 
+    }
+    
+    public void HidePanels()
+    {
+        loginPanel.SetActive(false);
+        transparentButton.gameObject.SetActive(false); 
+    }
+
+    public void clickNoBtn()
+    {
+        letsgoPanel.SetActive(false);
     }
 
    
