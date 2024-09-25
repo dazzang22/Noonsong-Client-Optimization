@@ -133,7 +133,7 @@ public class GPSManager : MonoBehaviour
                 break;
             case 3:
                 if (talkDialogue.IsDialogTriggered(2)) // 이전 다이얼로그가 호출되었는지 확인
-                    talkDialogue.ForthDialog();
+                    talkDialogue.FourthDialog();
                 break;
         }
     }
