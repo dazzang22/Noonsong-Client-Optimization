@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -759,7 +759,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &518269561345051097
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1050,23 +1050,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2132223801611131782, guid: fe920870c8b4d8441b352f36ef24f26c, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2132223801611131782, guid: fe920870c8b4d8441b352f36ef24f26c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2132223801611131782, guid: fe920870c8b4d8441b352f36ef24f26c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2132223801611131782, guid: fe920870c8b4d8441b352f36ef24f26c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -437.7352
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2132223801611131782, guid: fe920870c8b4d8441b352f36ef24f26c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1319.7928
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2132223801611131782, guid: fe920870c8b4d8441b352f36ef24f26c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1094,7 +1094,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7372039700528915138, guid: fe920870c8b4d8441b352f36ef24f26c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -2908,7 +2908,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &3485157445209505019
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3019,7 +3019,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &3836090427095681938
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3214,8 +3214,10 @@ MonoBehaviour:
   detailsNameText: {fileID: 7014339891722302119}
   detailsDescriptionText: {fileID: 5216963127373371583}
   detailsImage: {fileID: 2599635727267337454}
+  view3DButton: {fileID: 1832397439949972344}
+  collectionCanvas: {fileID: 557265556581059072}
+  cameraCanvas: {fileID: 4832640112415076693}
   renderCamera: {fileID: 5815090711000784149}
-  renderTexture: {fileID: 8400000, guid: 71b5535c3536e7b489a2bec8e34ae534, type: 2}
   noonsongFriendsEntryManager: {fileID: 3012986114539779538}
 --- !u!1 &4116209186571149351
 GameObject:
@@ -4060,7 +4062,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &5252715833934018660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4927,6 +4929,7 @@ MonoBehaviour:
   detailsImage: {fileID: 2599635727267337454}
   view3DButton: {fileID: 1832397439949972344}
   collectionCanvas: {fileID: 557265556581059072}
+  cameraCanvas: {fileID: 0}
   renderCamera: {fileID: 5815090711000784149}
   noonsongEntryManager: {fileID: 8845941076759529387}
 --- !u!114 &6248917797454564320
