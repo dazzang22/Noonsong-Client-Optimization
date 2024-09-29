@@ -6,28 +6,28 @@ using System.Collections.Generic;
 
 public class FriendsManager : MonoBehaviour
 {
-    public GameObject discoveredEntryPrefab;    // ¹ß°ßµÈ Ç×¸ñ ÇÁ¸®ÆÕ
-    public GameObject undiscoveredEntryPrefab;  // ¹ß°ßµÇÁö ¾ÊÀº Ç×¸ñ ÇÁ¸®ÆÕ
-    public Transform entryParent;               // µµ°¨ Ç×¸ñÀÇ ºÎ¸ð ¿ÀºêÁ§Æ®
-    public GameObject detailsPanel;             // ¿£Æ®¸® »ó¼¼ Á¤º¸¸¦ Ç¥½ÃÇÒ ÆÐ³Î
-    public TextMeshProUGUI detailsNameText;     // »ó¼¼ Á¤º¸ÀÇ ÀÌ¸§ ÅØ½ºÆ®
+    public GameObject discoveredEntryPrefab;    // ï¿½ß°ßµï¿½ ï¿½×¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public GameObject undiscoveredEntryPrefab;  // ï¿½ß°ßµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public Transform entryParent;               // ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+    public GameObject detailsPanel;             // ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½
+    public TextMeshProUGUI detailsNameText;     // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½Ø½ï¿½Æ®
     public TextMeshProUGUI detailsDescriptionText;
     public Image detailsImage;
-    public Button view3DButton;                 // 3D º¸±â ¹öÆ°
-    public Canvas collectionCanvas;             // Collection È­¸é
-    public Canvas cameraCanvas;                 // 3D º¸±â È­¸é
-    public Camera renderCamera;             // 3D ÇÁ¸®ÆÕÀ» ·»´õ¸µÇÒ Render Texture
+    public Button view3DButton;                 // 3D ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
+    public Canvas collectionCanvas;             // Collection È­ï¿½ï¿½
+    public Canvas cameraCanvas;                 // 3D ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½
+    public Camera renderCamera;             // 3D ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Render Texture
 
     [SerializeField]
-    private NoonsongFriendsEntryManager noonsongFriendsEntryManager; // NoonsongFriendsEntryManager ÂüÁ¶
+    private NoonsongFriendsEntryManager noonsongFriendsEntryManager; // NoonsongFriendsEntryManager ï¿½ï¿½ï¿½ï¿½
 
-    private List<NoonsongFriendsEntry> entries; // ¸ðµç µµ°¨ Ç×¸ñ ¸®½ºÆ®
-    private GameObject lastClickedEntry = null; // ¸¶Áö¸· Å¬¸¯µÈ Ç×¸ñ
+    private List<NoonsongFriendsEntry> entries; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+    private GameObject lastClickedEntry = null; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½
     private GameObject currentNoonsongObject;
 
     void Start()
     {
-        // entries ¸®½ºÆ®¸¦ NoonsongFriendsEntryManager¿¡¼­ °¡Á®¿È
+        // entries ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ NoonsongFriendsEntryManagerï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (noonsongFriendsEntryManager != null)
         {
             entries = new List<NoonsongFriendsEntry>(noonsongFriendsEntryManager.GetNoonsongEntries());
@@ -42,13 +42,13 @@ public class FriendsManager : MonoBehaviour
 
     public void PopulateNoonsong()
     {
-        // ±âÁ¸ÀÇ ¸ðµç Ç×¸ñ Á¦°Å
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ ï¿½ï¿½ï¿½ï¿½
         foreach (Transform child in entryParent)
         {
             Destroy(child.gameObject);
         }
 
-        // »õ·Î¿î Ç×¸ñ »ý¼º ¹× UI ¾÷µ¥ÀÌÆ®
+        // ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½×¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         foreach (var entry in entries)
         {
             GameObject newEntry;
@@ -84,7 +84,7 @@ public class FriendsManager : MonoBehaviour
     {
         Debug.Log($"OnEntryClick called for entry: {entry.noonsongFriendName}");
 
-        // ÀÌÀü¿¡ Å¬¸¯µÈ Ç×¸ñÀÌ ÀÖÀ¸¸é ¿ø·¡ ÀÌ¹ÌÁö¿Í ½ºÄÉÀÏ·Î µÇµ¹¸²
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½Çµï¿½ï¿½ï¿½
         if (lastClickedEntry != null && lastClickedEntry != newEntry)
         {
             var lastEntryImage = lastClickedEntry.transform.Find("NoonsongFriendImage").GetComponent<Image>();
@@ -94,23 +94,23 @@ public class FriendsManager : MonoBehaviour
                 if (lastEntryScript != null)
                 {
                     lastEntryImage.sprite = lastEntryScript.noonsongSprite;
-                    lastEntryImage.rectTransform.localScale = Vector3.one; // ½ºÄÉÀÏÀ» ¿ø·¡ Å©±â·Î µÇµ¹¸²
+                    lastEntryImage.rectTransform.localScale = Vector3.one; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ ï¿½Çµï¿½ï¿½ï¿½
                 }
             }
         }
 
-        // ÇöÀç Å¬¸¯µÈ Ç×¸ñÀÇ ÀÌ¹ÌÁö¸¦ º¯°æÇÏ°í ½ºÄÉÀÏÀ» Å°¿ò
+        // ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å°ï¿½ï¿½
         var currentEntryImage = newEntry.transform.Find("NoonsongFriendImage").GetComponent<Image>();
         if (currentEntryImage != null)
         {
             currentEntryImage.sprite = entry.clickedNoonsongSprite;
-            currentEntryImage.rectTransform.localScale = new Vector3(1.3f, 1.3f, 1.3f); // ½ºÄÉÀÏÀ» 1.3¹è·Î Å°¿ò
+            currentEntryImage.rectTransform.localScale = new Vector3(1.3f, 1.3f, 1.3f); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1.3ï¿½ï¿½ï¿½ Å°ï¿½ï¿½
         }
 
-        // »ó¼¼ Á¤º¸ ÆÐ³Î ¾÷µ¥ÀÌÆ®
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         ShowDetails(entry);
 
-        // ÇöÀç Ç×¸ñÀ» ¸¶Áö¸· Å¬¸¯ Ç×¸ñÀ¸·Î ¼³Á¤
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         lastClickedEntry = newEntry;
     }
 
@@ -127,7 +127,7 @@ public class FriendsManager : MonoBehaviour
                 detailsDescriptionText.text = entry.description;
                 detailsImage.sprite = entry.displaySprite;
 
-                // ½ºÄÉÀÏ Á¶Á¤
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 detailsImage.rectTransform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                 Debug.Log($"Details panel updated with entry: {entry.noonsongFriendName}");
@@ -145,13 +145,13 @@ public class FriendsManager : MonoBehaviour
     }
     public void Open3DView(NoonsongFriendsEntry entry)
     {
-        // CollectionCanvas¸¦ ºñÈ°¼ºÈ­
+        // CollectionCanvasï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         if (collectionCanvas != null)
         {
             collectionCanvas.gameObject.SetActive(false);
         }
 
-        // CameraCanvas¸¦ È°¼ºÈ­
+        // CameraCanvasï¿½ï¿½ È°ï¿½ï¿½È­
         if (cameraCanvas != null)
         {
             cameraCanvas.gameObject.SetActive(true);
@@ -159,11 +159,11 @@ public class FriendsManager : MonoBehaviour
 
         if (renderCamera != null && entry.prefab != null)
         {
-            // Ä«¸Þ¶ó ºäÆ÷Æ®¿¡¼­ Áß¾Ó ÁÂÇ¥ ¼³Á¤ (0.5, 0.5)
+            // Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ß¾ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ (0.5, 0.5)
             Vector3 randomViewportPosition = new Vector3(0.5f, 0.5f, renderCamera.nearClipPlane + 2f);
             Vector3 randomWorldPosition = renderCamera.ViewportToWorldPoint(randomViewportPosition);
 
-            // 3D ¿ÀºêÁ§Æ® »ý¼º ¹× ÂüÁ¶ ÀúÀå
+            // 3D ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             currentNoonsongObject = Instantiate(entry.prefab, randomWorldPosition, Quaternion.identity);
             currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);
             currentNoonsongObject.transform.localScale = new Vector3(4f, 4f, 4f);
@@ -171,22 +171,22 @@ public class FriendsManager : MonoBehaviour
         }
     }
 
-    // Back ¹öÆ°ÀÌ ´­·ÈÀ» ¶§ È£ÃâµÉ ¸Þ¼­µå
+    // Back ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
     public void OnBackButtonPressed()
     {
-        // CameraCanvas¸¦ ºñÈ°¼ºÈ­
+        // CameraCanvasï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         if (cameraCanvas != null)
         {
             cameraCanvas.gameObject.SetActive(false);
         }
 
-        // CollectionCanvas¸¦ È°¼ºÈ­
+        // CollectionCanvasï¿½ï¿½ È°ï¿½ï¿½È­
         if (collectionCanvas != null)
         {
             collectionCanvas.gameObject.SetActive(true);
         }
 
-        // »ý¼ºµÈ 3D ¿ÀºêÁ§Æ® Á¦°Å
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 3D ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         if (currentNoonsongObject != null)
         {
             Destroy(currentNoonsongObject);
