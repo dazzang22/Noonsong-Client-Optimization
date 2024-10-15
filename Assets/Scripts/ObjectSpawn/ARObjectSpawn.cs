@@ -89,7 +89,7 @@ public class ARObjectSpawn : MonoBehaviour
         if (probability < 0.6f) // 60% probability for majorNoonsong
         {
             NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
-            int randomIndex = Random.Range(0, 3);
+            int randomIndex = Random.Range(0, entries.Length);
             return new SpawnedObject(entries[randomIndex].prefab, entries[randomIndex]);
 
         }
