@@ -10,12 +10,14 @@ public class ARObjectCatch : MonoBehaviour
     private NoonsongManager noonsongManager;
 
     [SerializeField]
-    private CurrencyManager currencyManager; // CurrencyManager 추가
+    private CurrencyManager currencyManager;
 
     [SerializeField]
     private Button catchButton;
 
     private GameObject currentTarget;
+
+    private const int generalNoonsongCost = 5; //임의 지정
 
     void Start()
     {
@@ -38,6 +40,8 @@ public class ARObjectCatch : MonoBehaviour
             if (onScreen)
             {
                 currentTarget = target;
+
+                target.transform.LookAt(Camera.main.transform);
             }
             else
             {
@@ -60,26 +64,41 @@ public class ARObjectCatch : MonoBehaviour
             {
                 NoonsongEntry entry = spawnedObject.NoonsongEntry;
 
+                // MajorNoonsong 인 경우
                 if (entry != null)
                 {
-                    int requiredCurrency = entry.requiredNoonsongs; // 필요한 통화를 가져옵니다.
+                    int requiredCurrency = entry.requiredNoonsongs; 
 
                     if (!entry.isDiscovered)
                     {
                         if (currencyManager.HasEnoughCurrency(requiredCurrency))
                         {
-                            noonsongManager.DiscoverItem(entry);
+                            noonsongManager.DiscoverItem(entry); 
                             entry.isDiscovered = true;
-                            currencyManager.UseCurrency(requiredCurrency); // 통화 차감
+                            currencyManager.UseCurrency(requiredCurrency); 
                         }
                         else
                         {
                             Debug.Log("Not enough currency to discover this item.");
                         }
                     }
-
                     Destroy(currentTarget);
                     arObjectSpawn.SpawnedObjects.Remove(spawnedObject);
+                }
+                else
+                {
+                    // generalNoonsong인 경우
+                    if (currencyManager.HasEnoughCurrency(generalNoonsongCost))
+                    {
+                        currencyManager.UseCurrency(generalNoonsongCost);  
+                       
+                        Destroy(currentTarget);
+                        arObjectSpawn.SpawnedObjects.Remove(spawnedObject);
+                    }
+                    else
+                    {
+                        Debug.Log("Not enough currency to catch the generalNoonsong.");
+                    }
                 }
             }
         }

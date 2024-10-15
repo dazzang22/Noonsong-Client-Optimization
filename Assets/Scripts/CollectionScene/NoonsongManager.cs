@@ -16,13 +16,15 @@ public class NoonsongManager : MonoBehaviour
     public Button view3DButton;
     public Canvas collectionCanvas;
     public Canvas cameraCanvas;
-    public Camera renderCamera;                // 3D 프리팹을 렌더링할 카메라
+    public Camera renderCamera;                
+    public Button[] categoryButtons;           
+    public string selectedCategory = "All";
 
     [SerializeField]
-    private NoonsongEntryManager noonsongEntryManager; // NoonsongEntryManager 참조
+    private NoonsongEntryManager noonsongEntryManager;
 
-    private List<NoonsongEntry> entries;         // 모든 도감 항목 리스트
-    private GameObject lastClickedEntry;         // 마지막으로 클릭된 항목을 추적
+    private List<NoonsongEntry> entries;        
+    private GameObject lastClickedEntry;         
     private GameObject currentNoonsongObject;
 
     void Start()
@@ -36,8 +38,17 @@ public class NoonsongManager : MonoBehaviour
         {
             Debug.LogError("NoonsongEntryManager is not assigned in the inspector!");
         }
+        foreach (var button in categoryButtons)
+        {
+            button.onClick.AddListener(() => OnCategoryButtonClicked(button.name));
+        }
 
         PopulateNoonsong();
+    }
+    public void OnCategoryButtonClicked(string category)
+    {
+        selectedCategory = category;
+        PopulateNoonsong(); 
     }
 
     public void PopulateNoonsong()
@@ -49,24 +60,27 @@ public class NoonsongManager : MonoBehaviour
 
         foreach (var entry in entries)
         {
-            GameObject newEntry;
-            if (entry.isDiscovered)
+            if (selectedCategory == "All" || entry.university == selectedCategory)
             {
-                newEntry = Instantiate(discoveredEntryPrefab, entryParent);
-
-                var eventTrigger = newEntry.GetComponent<EventTrigger>();
-                if (eventTrigger == null)
+                GameObject newEntry;
+                if (entry.isDiscovered)
                 {
-                    eventTrigger = newEntry.AddComponent<EventTrigger>();
-                }
-                AddEventTriggerListener(eventTrigger, EventTriggerType.PointerClick, () => ShowDetails(entry, newEntry));
+                    newEntry = Instantiate(discoveredEntryPrefab, entryParent);
 
-                var noonsongImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
-                if (noonsongImage != null) noonsongImage.sprite = entry.noonsongSprite;
-            }
-            else
-            {
-                newEntry = Instantiate(undiscoveredEntryPrefab, entryParent);
+                    var eventTrigger = newEntry.GetComponent<EventTrigger>();
+                    if (eventTrigger == null)
+                    {
+                        eventTrigger = newEntry.AddComponent<EventTrigger>();
+                    }
+                    AddEventTriggerListener(eventTrigger, EventTriggerType.PointerClick, () => ShowDetails(entry, newEntry));
+
+                    var noonsongImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
+                    if (noonsongImage != null) noonsongImage.sprite = entry.noonsongSprite;
+                }
+                else
+                {
+                    newEntry = Instantiate(undiscoveredEntryPrefab, entryParent);
+                }
             }
         }
     }
@@ -90,7 +104,6 @@ public class NoonsongManager : MonoBehaviour
 
         if (lastClickedEntry != null && lastClickedEntry != clickedEntry)
         {
-            // 이전에 클릭된 항목의 배경을 원래 상태로 되돌림
             var lastBackground = lastClickedEntry.transform.Find("BackgroundImage").gameObject;
             var lastHighlight = lastClickedEntry.transform.Find("HighlightBackground").gameObject;
 
@@ -119,14 +132,13 @@ public class NoonsongManager : MonoBehaviour
                 view3DButton.onClick.AddListener(() => Open3DView(entry));
                 Debug.Log("3D View button click event added!");
             }
-        
+
         }
         else
         {
             Debug.LogError("DetailsPanel is not set in the inspector!");
         }
 
-        // 현재 클릭된 항목의 배경을 변경
         var background = clickedEntry.transform.Find("BackgroundImage").gameObject;
         var highlight = clickedEntry.transform.Find("HighlightBackground").gameObject;
 
@@ -136,18 +148,15 @@ public class NoonsongManager : MonoBehaviour
             highlight.SetActive(true);
         }
 
-        // 마지막으로 클릭된 항목을 현재 항목으로 설정
         lastClickedEntry = clickedEntry;
     }
     public void Open3DView(NoonsongEntry entry)
     {
-        // CollectionCanvas를 비활성화
         if (collectionCanvas != null)
         {
             collectionCanvas.gameObject.SetActive(false);
         }
 
-        // CameraCanvas를 활성화
         if (cameraCanvas != null)
         {
             cameraCanvas.gameObject.SetActive(true);
@@ -177,22 +186,18 @@ public class NoonsongManager : MonoBehaviour
         }
     }
 
-    // Back 버튼이 눌렸을 때 호출될 메서드
     public void OnBackButtonPressed()
     {
-        // CameraCanvas를 비활성화
         if (cameraCanvas != null)
         {
             cameraCanvas.gameObject.SetActive(false);
         }
 
-        // CollectionCanvas를 활성화
         if (collectionCanvas != null)
         {
             collectionCanvas.gameObject.SetActive(true);
         }
 
-        // 생성된 3D 오브젝트를 제거
         if (currentNoonsongObject != null)
         {
             Destroy(currentNoonsongObject);
