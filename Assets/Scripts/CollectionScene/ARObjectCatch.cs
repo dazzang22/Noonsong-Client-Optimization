@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class ARObjectCatch : MonoBehaviour
 {
-    [SerializeField]
     private ARObjectSpawn arObjectSpawn;
 
     [SerializeField]
@@ -26,7 +25,26 @@ public class ARObjectCatch : MonoBehaviour
 
     void Update()
     {
-        CheckForObjectInView();
+        UpdateARObjectSpawnReference();
+
+        if (arObjectSpawn != null)
+        {
+            CheckForObjectInView();
+        }
+    }
+    void UpdateARObjectSpawnReference()
+    {
+        string activeScriptName = ScriptActivationController.activatedScriptName;
+        GameObject activeObject = GameObject.Find(activeScriptName); 
+
+        if (activeObject != null)
+        {
+            arObjectSpawn = activeObject.GetComponent<ARObjectSpawn>(); 
+        }
+        else
+        {
+            arObjectSpawn = null; // 활성화된 스크립트가 없을 경우 null로 설정
+        }
     }
 
     void CheckForObjectInView()
