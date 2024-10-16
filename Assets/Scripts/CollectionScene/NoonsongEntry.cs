@@ -9,5 +9,6 @@ public class NoonsongEntry : ScriptableObject
   public Sprite noonsongSprite;     
   public bool isDiscovered;         // 발견 여부
   public GameObject prefab;         
-  public int requiredNoonsongs;     
+  public int requiredNoonsongs;
+  public string buildingName;
 }
