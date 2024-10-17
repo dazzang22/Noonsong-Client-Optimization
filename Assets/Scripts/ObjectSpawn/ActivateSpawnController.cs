@@ -36,6 +36,11 @@ public class ScriptActivationController : MonoBehaviour
             return;
         }
 
+        if (scriptToActivate != null)
+        {
+            scriptToActivate.enabled = false;
+        }
+
         StartCoroutine(WaitForLocationService());
     }
 
