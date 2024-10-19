@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour
@@ -13,5 +14,10 @@ public class ButtonManager : MonoBehaviour
     public void NoShowPopup()
     {
         popupPanel.SetActive(false);
+    }
+
+    public void GoScene()
+    {
+        SceneManager.LoadScene("Merge-TutorialScene");
     }
 }
