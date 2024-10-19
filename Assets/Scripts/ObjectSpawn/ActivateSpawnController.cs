@@ -21,6 +21,8 @@ public class ScriptActivationController : MonoBehaviour
     [SerializeField]
     GameObject spawnObject; // 스폰할 오브젝트
 
+    public static string activatedScriptName;
+
     private bool isLocationServiceInitialized = false;
     private bool isXROriginPositionSet = false; // XR Origin 위치가 설정되었는지 여부
     private bool isObjectSpawned = false; // 오브젝트가 스폰되었는지 여부
@@ -32,6 +34,11 @@ public class ScriptActivationController : MonoBehaviour
         {
             Debug.LogError("You must specify exactly 4 vertices for the rectangle.");
             return;
+        }
+
+        if (scriptToActivate != null)
+        {
+            scriptToActivate.enabled = false;
         }
 
         StartCoroutine(WaitForLocationService());
@@ -96,6 +103,8 @@ public class ScriptActivationController : MonoBehaviour
             if (scriptToActivate != null && !scriptToActivate.enabled)
             {
                 scriptToActivate.enabled = true; // 스크립트 활성화
+
+                activatedScriptName = GetActivatedScriptName();
                 Debug.Log("Script activated.");
             }
 
@@ -184,4 +193,10 @@ public class ScriptActivationController : MonoBehaviour
         instance.transform.localScale = new Vector3(1, 1, 1);
         Debug.Log("Object spawned at: " + worldPosition);
     }
+
+    string GetActivatedScriptName()
+    {
+        return scriptToActivate.GetType().Name;
+    }
+
 }

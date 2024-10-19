@@ -88,9 +88,19 @@ public class ARObjectSpawn : MonoBehaviour
         float probability = Random.Range(0f, 1f); // Generate a random float between 0 and 1
         if (probability < 0.6f) // 60% probability for majorNoonsong
         {
-            NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
-            int randomIndex = Random.Range(0, 3);
-            return new SpawnedObject(entries[randomIndex].prefab, entries[randomIndex]);
+            List<NoonsongEntry> filteredEntries = GetFilteredNoonsongEntries();
+
+            if (filteredEntries.Count > 0)
+            {
+                int randomIndex = Random.Range(0, filteredEntries.Count);
+                return new SpawnedObject(filteredEntries[randomIndex].prefab, filteredEntries[randomIndex]);
+            }
+            else
+            {
+                int randomIndex = Random.Range(0, generalNoonsong.Length);
+                return new SpawnedObject(generalNoonsong[randomIndex], null);
+            }
+            
 
         }
         else // 40% probability for generalNoonsong
@@ -98,6 +108,18 @@ public class ARObjectSpawn : MonoBehaviour
             int randomIndex = Random.Range(0, generalNoonsong.Length);
             return new SpawnedObject(generalNoonsong[randomIndex], null);
         }
+    }
+
+    List<NoonsongEntry> GetFilteredNoonsongEntries()
+    {
+        string buildingName = GetBuildingNameFromScript(ScriptActivationController.activatedScriptName);
+
+        if (!string.IsNullOrEmpty(buildingName))
+        {
+            return GetNoonsongEntriesByBuildingName(buildingName);
+        }
+
+        return new List<NoonsongEntry>();
     }
 
     void Update()
@@ -128,5 +150,54 @@ public class ARObjectSpawn : MonoBehaviour
 
         // Spawn a new marker at the new position with a new prefab
         SpawnMarkerAtRandomLocation();
+    }
+
+    List<NoonsongEntry> GetNoonsongEntriesByBuildingName(string buildingName)
+    {
+        List<NoonsongEntry> filteredEntries = new List<NoonsongEntry>();
+
+        NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
+
+        foreach (var entry in entries)
+        {
+            if (entry.buildingName == buildingName)
+            {
+                filteredEntries.Add(entry);
+            }
+        }
+
+        return filteredEntries; 
+    }
+
+    string GetBuildingNameFromScript(string activatedScriptName)
+    {
+        switch (activatedScriptName)
+        {
+            case "Sunheon Bldg":
+                return "순헌관";
+            case "Suryeon Bldg":
+                return "수련교수회관";
+            case "Haengpa Faculty Bldg":
+                return "행파교수회관";
+            case "Veritas Bldg":
+                return "진리관";
+            case "Myungshin Bldg":
+                return "명신관";
+            case "Wisdom Bldg":
+                return "지혜문";
+            case "Saehim Bldg":
+                return "세힘관";
+            case "Acministration Bldg":
+                return "행정관";
+            case "Peace Bldg":
+                return "평화문";
+            case "Student Union Bldg":
+                return "학생회관";
+            case "Arena Theater Bldg":
+                return "원형극장";
+
+            default:
+                return null;
+        }
     }
 }
