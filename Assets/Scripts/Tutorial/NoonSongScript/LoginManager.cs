@@ -1,44 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using BackEnd;
 
 public class LoginManager : MonoBehaviour
 {
-    //로그인 화면 Root 
     public GameObject LoginView;
-
     public InputField inputField_ID;
     public InputField inputField_PW;
-    public Button Button_Login;
 
-    //Test를 위해 임의로 사용자 아이디랑 비번을 추가했음
+    ButtonManager buttonManager;
+    private string inputID = "";
+    private string inputPW = "";
+
     private string user = "NoonSong";
     private string password = "1906";
 
-
-
-    public BackendLogin backendLogin;
-    
-
-
-    /// <summary>
-    /// 우측 하단의 하늘색 로그인 버튼 클릭시 실행
-    /// </summary>
-    public void LoginButtonClick()
+    private void Start()
     {
-        //BackendLogin.Instance.CustomSignUp("NoonSong", "1906"); // [추가] 뒤끝 로그인
+        inputField_ID.onEndEdit.AddListener(OnIDFieldEndEdit);
+        inputField_PW.onEndEdit.AddListener(OnPasswordFieldEndEdit);
 
-        //BackendLogin.Instance.CustomLogin(inputField_ID.text, inputField_PW.text); // [추가] 뒤끝 로그인
+        buttonManager = FindObjectOfType<ButtonManager>();
+    }
 
-        if (inputField_ID.text == user && inputField_PW.text == password)
+    private void OnIDFieldEndEdit(string input)
+    {
+        // ID 입력 완료 시 동작이 필요하다면 이곳에 작성
+    }
+
+    private void OnPasswordFieldEndEdit(string input)
+    {
+        TryLogin();
+    }
+
+    private void TryLogin()
+    {
+        inputID = inputField_ID.text;
+        inputPW = inputField_PW.text;
+
+        if (inputID == user && inputPW == password)
         {
             Debug.Log("로그인 성공!");
-            //로그인 성공시 Main Scene 로드
-            //SceneManager.LoadScene("MainScene"); // replace "MainScene" 으로 이동
-            SceneManager.LoadScene("Merge-TutorialScene"); // replace "Merge-TutorialScene" 으로 이동
+            buttonManager.GoScene(); // 씬 전환
         }
         else
         {
