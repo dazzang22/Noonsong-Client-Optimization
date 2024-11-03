@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using BackEnd;
 
 public class LoginManager : MonoBehaviour
 {
@@ -11,9 +12,6 @@ public class LoginManager : MonoBehaviour
     ButtonManager buttonManager;
     private string inputID = "";
     private string inputPW = "";
-
-    private string user = "NoonSong";
-    private string password = "1906";
 
     private void Start()
     {
@@ -38,14 +36,6 @@ public class LoginManager : MonoBehaviour
         inputID = inputField_ID.text;
         inputPW = inputField_PW.text;
 
-        if (inputID == user && inputPW == password)
-        {
-            Debug.Log("로그인 성공!");
-            buttonManager.GoScene(); // 씬 전환
-        }
-        else
-        {
-            Debug.Log("로그인 실패");
-        }
+        BackendLogin.Instance.CustomLogin(inputID, inputPW);
     }
 }
