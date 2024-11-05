@@ -29,6 +29,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     public GameObject turi;      // part7 튜리 등장
 
     public GameObject ParticlePanel; // ParticlePanel 오브젝트
+    public GameObject Count;
     public GameObject StudentIdPanel;
     public GameObject StudentId;
 
@@ -251,7 +252,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         {
             yield return null; // 한 프레임을 대기
         }
-
+        Count.SetActive(true);
         Time.timeScale = 1f; // 시간 재개
     }
 
