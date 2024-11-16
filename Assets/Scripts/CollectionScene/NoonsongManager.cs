@@ -183,6 +183,10 @@ public class NoonsongManager : MonoBehaviour
 
             // 오브젝트가 카메라를 바라보게 설정
             currentNoonsongObject.transform.LookAt(renderCamera.transform);
+
+            // PhotoManager 스크립트를 추가하여 오브젝트 조작 가능하게 설정
+            var photoManager = currentNoonsongObject.AddComponent<PhotoManager>();
+
         }
     }
 
