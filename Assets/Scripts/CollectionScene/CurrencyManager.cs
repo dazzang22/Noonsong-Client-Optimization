@@ -6,9 +6,8 @@ public class CurrencyManager : MonoBehaviour
 {
     public static CurrencyManager Instance { get; private set; }
 
-    public int noonsongCurrency;
-
-    // 여러 TextMeshProUGUI 컴포넌트를 관리하기 위한 리스트
+    private Dictionary<string, int> currencies = new Dictionary<string, int>();
+    private string activeCurrencyType = "default";
     [SerializeField] private List<TextMeshProUGUI> currencyTexts = new List<TextMeshProUGUI>();
 
     private void Awake()
@@ -26,50 +25,127 @@ public class CurrencyManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateCurrencyUI(); // 초기화 시 UI 업데이트
+        // 추후 수정 필요
+        if (!currencies.ContainsKey("default"))
+            currencies["default"] = 0;
+
+        UpdateCurrencyUI();
+    }
+
+    public void SwitchCurrencyType(string currencyType)
+    {
+        if (!currencies.ContainsKey(currencyType))
+        {
+            currencies[currencyType] = 0;
+        }
+        activeCurrencyType = currencyType;
+        UpdateCurrencyUI();
     }
 
     public bool HasEnoughCurrency(int amount)
     {
-        return noonsongCurrency >= amount;
+        return currencies.ContainsKey(activeCurrencyType) && currencies[activeCurrencyType] >= amount;
     }
 
     public void UseCurrency(int amount)
     {
         if (HasEnoughCurrency(amount))
         {
-            noonsongCurrency -= amount;
-            UpdateCurrencyUI(); // 통화 사용 후 UI 업데이트
+            currencies[activeCurrencyType] -= amount;
+            UpdateCurrencyUI();
         }
     }
 
-    public void AddCurrency(int amount)
+    public void AddCurrency(string currencyType, int amount)
     {
-        noonsongCurrency += amount;
-        UpdateCurrencyUI(); // 통화 추가 후 UI 업데이트
+        if (!currencies.ContainsKey(currencyType))
+        {
+            currencies[currencyType] = 0;
+        }
+        currencies[currencyType] += amount;
+
+        if (currencyType == activeCurrencyType)
+        {
+            UpdateCurrencyUI();
+        }
+    }
+
+    public void SetCurrency(string currencyType, int amount)
+    {
+        if (!currencies.ContainsKey(currencyType))
+        {
+            currencies[currencyType] = 0;
+        }
+        currencies[currencyType] = amount;
+
+        if (currencyType == activeCurrencyType)
+        {
+            UpdateCurrencyUI();
+        }
+    }
+
+    public void IncreaseCurrency(string currencyType, int amount)
+    {
+        if (!currencies.ContainsKey(currencyType))
+        {
+            currencies[currencyType] = 0;
+        }
+        currencies[currencyType] += amount;
+
+        if (currencyType == activeCurrencyType)
+        {
+            UpdateCurrencyUI();
+        }
+    }
+
+    public bool DecreaseCurrency(string currencyType, int amount)
+    {
+        if (currencies.ContainsKey(currencyType) && currencies[currencyType] >= amount)
+        {
+            currencies[currencyType] -= amount;
+
+            if (currencyType == activeCurrencyType)
+            {
+                UpdateCurrencyUI();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public int GetCurrencyAmount(string currencyType)
+    {
+        if (currencies.ContainsKey(currencyType))
+        {
+            return currencies[currencyType];
+        }
+        return 0;
     }
 
     private void UpdateCurrencyUI()
     {
-        // 등록된 모든 TextMeshProUGUI 컴포넌트를 업데이트
         foreach (var currencyText in currencyTexts)
         {
             if (currencyText != null)
             {
-                currencyText.text = noonsongCurrency.ToString();
+                currencyText.text = currencies.ContainsKey(activeCurrencyType)
+                    ? currencies[activeCurrencyType].ToString()
+                    : "0";
             }
         }
     }
 
-    // TextMeshProUGUI 컴포넌트를 등록하는 메서드
     public void RegisterCurrencyText(TextMeshProUGUI newCurrencyText)
     {
         if (!currencyTexts.Contains(newCurrencyText))
         {
             currencyTexts.Add(newCurrencyText);
-            newCurrencyText.text = noonsongCurrency.ToString(); // 등록 시 초기화
+            newCurrencyText.text = currencies.ContainsKey(activeCurrencyType)
+                ? currencies[activeCurrencyType].ToString()
+                : "0";
         }
     }
 }
+
 
 
