@@ -30,6 +30,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
     public GameObject ParticlePanel; // ParticlePanel 오브젝트
     public GameObject Count;
+    public GameObject getMapPanel;
+    public GameObject MapPanel;
     public GameObject StudentIdPanel;
     public GameObject StudentId;
 
@@ -106,7 +108,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         SecondDialog.Add(new DialogData("/color:black/눈결이 안녕! 혹시 근처에서 눈송이 못봤어?", "NoonDung", () => ChangeAnimation(noonkyeolAnimator, "standing")));
         SecondDialog.Add(new DialogData("/color:black/눈송이 말인가요? 음... 못 봤어요. 무슨 일이신데요?", "NoonGyeol"));
         SecondDialog.Add(new DialogData("/color:black/[(눈결이에게 사정을 설명한다)]", "User"));
-        SecondDialog.Add(new DialogData("/color:black//emote:Look/앗, 그렇다면 이게 도움이 될 거예요!", "NoonGyeol", () => ChangeAnimation(noonkyeolAnimator, "standing")));
+        SecondDialog.Add(new DialogData("/color:black//emote:Look/앗, 그렇다면 이게 도움이 될 거예요!", "NoonGyeol", () => { ChangeAnimation(noonkyeolAnimator, "standing"); StartCoroutine(ShowPanelSecond());}));
         SecondDialog.Add(new DialogData("/color:black//emote:Study/저는 지도를 잘 보거든요. 그 외에 이것저것 많은 것을 알고 있으니까, 제 지식이 도움이 될 수 있을 것 같아요.", "NoonGyeol"));
         SecondDialog.Add(new DialogData("/color:black/[(그럼 혹시 도와줄 수 있냐고 묻는다.)]", "User"));
         SecondDialog.Add(new DialogData("/color:black/물론이에요..! 저도 동행할게요.", "NoonGyeol"));
@@ -169,7 +171,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FourthDialog.Add(new DialogData("/color:black/바로 /color:blue/특별한 눈의 결정/color:black/! 특별한 눈송이들의 마음도 사로잡을 수 있는 대단한 아이템이야!", "Turi", () => ChangeAnimation(turiAnimator, "standing")));
         FourthDialog.Add(new DialogData("/color:black/어때? 가지고 싶지? 그 대신, 특별한 눈의 결정을 만들기 위해서는 눈의 결정이 많이 필요해.", "Turi"));
         FourthDialog.Add(new DialogData("/color:blue/제2캠퍼스 원형 광장/color:black/에 있는 내 연구실에 오면 다양한 특별한 눈의 결정으로 바꿔줄게! 잊지 말고 놀러 와~!", "Turi", () => turi.SetActive(false)));
-        FourthDialog.Add(new DialogData("/color:black/튜토리얼을 성공적으로 마친 당신에게 이것을 드립니다!", "Narrator", () => StartCoroutine(ShowPanelSecond())));
+        FourthDialog.Add(new DialogData("/color:black/튜토리얼을 성공적으로 마친 당신에게 이것을 드립니다!", "Narrator", () => StartCoroutine(ShowPanelThird())));
         FourthDialog.Add(new DialogData("/color:black//wait:0.5/다양한 눈송이들과 친구가 되어 완벽한 학생증을 완성하는 것을 목표로 힘을 내 봐요!", "Narrator"));
         FourthDialog.Add(new DialogData("/color:black/도감을 다 채우고 학생증을 완성한다면, 특별한 선물이 있을 지도…!?", "Narrator", () => StartCoroutine(ShowPanel3())));
         DialogManager.Show(FourthDialog);
@@ -257,6 +259,20 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     }
 
     private IEnumerator ShowPanelSecond()
+    {
+        Time.timeScale = 0f; // 시간 정지
+                             // 패널 활성화
+        getMapPanel.SetActive(true);
+
+        while (!Input.GetMouseButtonDown(0)) // 마우스 클릭을 기다림
+        {
+            yield return null; // 한 프레임을 대기
+        }
+        MapPanel.SetActive(true);
+        Time.timeScale = 1f; // 시간 재개
+    }
+
+    private IEnumerator ShowPanelThird()
     {
         Time.timeScale = 0f; // 시간 정지
                              // 패널 활성화
