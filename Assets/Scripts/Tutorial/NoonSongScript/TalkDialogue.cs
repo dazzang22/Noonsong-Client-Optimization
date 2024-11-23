@@ -30,7 +30,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
     public GameObject ParticlePanel; // ParticlePanel 오브젝트
     public GameObject Count;
-    public GameObject mapPanel;
+    public GameObject getMapPanel;
+    public GameObject MapPanel;
     public GameObject StudentIdPanel;
     public GameObject StudentId;
 
@@ -261,13 +262,13 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     {
         Time.timeScale = 0f; // 시간 정지
                              // 패널 활성화
-        mapPanel.SetActive(true);
+        getMapPanel.SetActive(true);
 
         while (!Input.GetMouseButtonDown(0)) // 마우스 클릭을 기다림
         {
             yield return null; // 한 프레임을 대기
         }
-
+        MapPanel.SetActive(true);
         Time.timeScale = 1f; // 시간 재개
     }
 
