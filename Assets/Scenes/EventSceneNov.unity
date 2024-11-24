@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -576,6 +576,7 @@ MonoBehaviour:
   - 37.5447780, 126.9653007
   - 37.5444388, 126.9655331
   - 37.5440869, 126.9656598
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -583,7 +584,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 394482077}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &150974492
 GameObject:
   m_ObjectHideFlags: 0
@@ -1175,6 +1178,7 @@ MonoBehaviour:
   - 37.5451837, 126.9640069
   - 37.5451353, 126.9638084
   - 37.5451204, 126.9635949
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -1182,7 +1186,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 846294394}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &220466891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1790,6 +1796,7 @@ MonoBehaviour:
   - 37.5439385, 126.9662871
   - 37.5442416, 126.9656625
   - 37.5439566, 126.9658959
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -1797,7 +1804,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1152029565}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &371857024
 GameObject:
   m_ObjectHideFlags: 0
@@ -1876,6 +1885,7 @@ MonoBehaviour:
   - 37.5455099, 126.9648780
   - 37.5453777, 126.9649041
   - 37.5453777, 126.9649041
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -1883,7 +1893,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 679781326}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &394482075
 GameObject:
   m_ObjectHideFlags: 0
@@ -2106,6 +2118,7 @@ MonoBehaviour:
   - 37.5460628, 126.9649571
   - 37.5459222, 126.9650717
   - 37.5459599, 126.9653044
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -2113,7 +2126,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 9949422}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &416921107
 GameObject:
   m_ObjectHideFlags: 0
@@ -2692,6 +2707,7 @@ MonoBehaviour:
   - 37.5463432, 126.9634701
   - 37.5464420, 126.9635108
   - 37.5464836, 126.9638550
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -2699,7 +2715,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1940660748}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &565768068
 GameObject:
   m_ObjectHideFlags: 0
@@ -2774,6 +2792,7 @@ MonoBehaviour:
   - 37.5449896, 126.9648531
   - 37.5449870, 126.9649443
   - 37.5449840, 126.9647231
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -2781,7 +2800,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1138391874}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &567532945
 GameObject:
   m_ObjectHideFlags: 0
@@ -2895,6 +2916,7 @@ MonoBehaviour:
   - 37.5444710, 126.9642453
   - 37.5443176, 126.9642614
   - 37.5441158, 126.9642664
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -2902,7 +2924,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 220466893}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &672066549
 GameObject:
   m_ObjectHideFlags: 0
@@ -2983,6 +3007,7 @@ MonoBehaviour:
   - 37.5437030, 126.9641011
   - 37.5436825, 126.9636726
   - 37.5436700, 126.9638825
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -2990,7 +3015,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1977350445}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &679781324
 GameObject:
   m_ObjectHideFlags: 0
@@ -3797,6 +3824,7 @@ MonoBehaviour:
   - 37.5467877, 126.9643824
   - 37.5467619, 126.9642235
   - 37.5467093, 126.9641266
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -3804,7 +3832,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1624599189}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &816870409
 GameObject:
   m_ObjectHideFlags: 0
@@ -3883,6 +3913,7 @@ MonoBehaviour:
   - 37.5454870, 126.9644485
   - 37.5454854, 126.9642939
   - 37.5453841, 126.9643422
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -3890,7 +3921,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 227958891}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &826034247
 GameObject:
   m_ObjectHideFlags: 0
@@ -3972,6 +4005,7 @@ MonoBehaviour:
   - 37.5459347, 126.9632623
   - 37.5457858, 126.9632773
   - 37.5457310, 126.9633511
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -3979,7 +4013,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1938027725}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &830463235 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9092502386466995667, guid: 69924a7003f5c884f947855d6a9a980b, type: 3}
@@ -4449,6 +4485,7 @@ MonoBehaviour:
   - 37.5442533, 126.9663629
   - 37.5443692, 126.9663294
   - 37.5445473, 126.9660397
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -4456,7 +4493,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1370498869}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &890842654
 GameObject:
   m_ObjectHideFlags: 0
@@ -4820,6 +4859,87 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1033475415}
   m_CullTransparentMesh: 1
+--- !u!21 &1054917323
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Standard
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _ZWrite: 1
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1071442849
 GameObject:
   m_ObjectHideFlags: 0
@@ -6282,6 +6402,7 @@ MonoBehaviour:
   - 37.5450715, 126.9648049
   - 37.5450853, 126.9649252
   - 37.5450904, 126.9650168
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -6289,7 +6410,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1219003739}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &1167216071
 GameObject:
   m_ObjectHideFlags: 0
@@ -6662,6 +6785,7 @@ MonoBehaviour:
   - 37.5449346, 126.9641447
   - 37.5449362, 126.9640451
   - 37.5448878, 126.9639429
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -6669,7 +6793,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1791892451}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &1205013431
 GameObject:
   m_ObjectHideFlags: 0
@@ -6703,6 +6829,54 @@ Transform:
   - {fileID: 1138391873}
   m_Father: {fileID: 1747064970}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!28 &1207829081
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 2
+  m_Width: 1
+  m_Height: 1
+  m_CompleteImageSize: 4
+  m_MipsStripped: 0
+  m_TextureFormat: 4
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 0
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_LightmapFormat: 0
+  m_ColorSpace: 1
+  m_PlatformBlob: 
+  image data: 4
+  _typelessdata: cdcdcdcd
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!1 &1214978999
 GameObject:
   m_ObjectHideFlags: 0
@@ -7191,6 +7365,7 @@ MonoBehaviour:
   - 37.5439340, 126.9651240
   - 37.5439494, 126.9656561
   - 37.5440488, 126.9653088
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -7198,7 +7373,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1167216073}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &1288218835
 GameObject:
   m_ObjectHideFlags: 0
@@ -7435,6 +7612,7 @@ MonoBehaviour:
   - 37.5439574, 126.9647110
   - 37.5439465, 126.9644347
   - 37.5439430, 126.9648739
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -7442,7 +7620,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 90901603}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &1319035424
 GameObject:
   m_ObjectHideFlags: 0
@@ -7953,6 +8133,7 @@ Transform:
   - {fileID: 7987418703738885227}
   - {fileID: 8164857999117093188}
   - {fileID: 3323370842217285353}
+  - {fileID: 4980791399565589994}
   - {fileID: 287381640}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8464,6 +8645,7 @@ MonoBehaviour:
   - 37.5456904, 126.9631808
   - 37.5456781, 126.9632304
   - 37.5456853, 126.9632978
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -8471,7 +8653,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1623480117}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &1509732210
 GameObject:
   m_ObjectHideFlags: 0
@@ -8666,6 +8850,7 @@ MonoBehaviour:
   - 37.5467127, 126.9648069
   - 37.5467393, 126.9649933
   - 37.5466667, 126.9652553
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -8673,7 +8858,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1224949020}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &1550942694
 GameObject:
   m_ObjectHideFlags: 0
@@ -8914,6 +9101,7 @@ MonoBehaviour:
   - 37.5452520, 126.9647187
   - 37.5452480, 126.9649453
   - 37.5452089, 126.9650194
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -8921,7 +9109,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1382936286}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &1613067559
 GameObject:
   m_ObjectHideFlags: 0
@@ -9563,6 +9753,7 @@ MonoBehaviour:
   - 37.5446783, 126.9656337
   - 37.5447873, 126.9656742
   - 37.5449163, 126.9655203
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -9570,7 +9761,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 2027125131}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &1758545781
 GameObject:
   m_ObjectHideFlags: 0
@@ -10983,6 +11176,7 @@ MonoBehaviour:
   - 37.5442963, 126.9646104
   - 37.5445725, 126.9644227
   - 37.5447344, 126.9645450
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -10990,7 +11184,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1788941365}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &2014489264
 GameObject:
   m_ObjectHideFlags: 0
@@ -11104,6 +11300,7 @@ MonoBehaviour:
   - 37.5445925, 126.9650154
   - 37.5446656, 126.9647928
   - 37.5446672, 126.9649574
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -11111,7 +11308,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 797742908}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!1 &2027125129
 GameObject:
   m_ObjectHideFlags: 0
@@ -12461,6 +12660,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5205988137624115380}
   m_CullTransparentMesh: 1
+--- !u!114 &1035217738604540482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4666595633367591260}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520926a668cad314f9213ad70446e483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rectangleVertices:
+  - x: 37.5440491
+    y: 126.9647117
+  - x: 37.5440119
+    y: 126.9642926
+  - x: 37.5448346
+    y: 126.9642798
+  - x: 37.5448447
+    y: 126.9646399
+  scriptToActivate: {fileID: 1355858125839042830}
+  map: {fileID: 3396351918808886509}
+  xrOrigin: {fileID: 6968467379698492718}
+  spawnObject: {fileID: 5238565483845898040}
 --- !u!224 &1074695233705302893
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12680,6 +12904,7 @@ MonoBehaviour:
   - 37.5463860, 126.9652763
   - 37.5464530, 126.9653017
   - 37.5465570, 126.9653058
+  _locations: []
   _spawnScale: 12
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
@@ -12687,7 +12912,9 @@ MonoBehaviour:
   - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
   _map: {fileID: 1115938684466537567}
   _anchorManager: {fileID: 3438923195463911640}
+  _spawnedObjects: []
   changeInterval: 15
+  timer: 0
 --- !u!222 &1141406044609376837
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12873,6 +13100,29 @@ RectTransform:
   m_AnchoredPosition: {x: 50, y: 0}
   m_SizeDelta: {x: 100, y: 60}
   m_Pivot: {x: 1, y: 0.5}
+--- !u!114 &1355858125839042830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4666595633367591260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 30
+  spawnScale: 10
+  noonsongManager: {fileID: 6243891260929364228}
+  noonsongEntryManager: {fileID: 8845941076759529387}
+  generalNoonsong:
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 3396351918808886509}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 10
 --- !u!222 &1419579936549967212
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13107,6 +13357,21 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
+--- !u!4 &1733816879373443874
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853553095284540225}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -50, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4980791399565589994}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1734068381079429215
 GameObject:
   m_ObjectHideFlags: 0
@@ -14726,6 +14991,22 @@ Transform:
   - {fileID: 1747064970}
   m_Father: {fileID: 1377719884}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3325381906006337058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4980791399565589994}
+  m_Layer: 0
+  m_Name: EventBldg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!222 &3353538556060552346
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14781,6 +15062,136 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &3396351918808886509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853553095284540225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd961b1c9541a4cee99686069ecce852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _options:
+    locationOptions:
+      latitudeLongitude: 37.5451396, 126.9648397
+      zoom: 21
+    extentOptions:
+      extentType: 1
+      defaultExtents:
+        cameraBoundsOptions:
+          camera: {fileID: 0}
+          visibleBuffer: 0
+          disposeBuffer: 0
+        rangeAroundCenterOptions:
+          west: 0
+          north: 0
+          east: 0
+          south: 0
+        rangeAroundTransformOptions:
+          targetTransform: {fileID: 0}
+          visibleBuffer: 0
+          disposeBuffer: 0
+    placementOptions:
+      placementType: 1
+      snapMapToZero: 0
+    scalingOptions:
+      scalingType: 1
+      unityTileSize: 1000
+    loadingTexture: {fileID: 1207829081}
+    tileMaterial: {fileID: 1054917323}
+  _initializeOnStart: 1
+  _imagery:
+    _layerProperty:
+      sourceType: 0
+      sourceOptions:
+        isActive: 1
+        layerSource:
+          Name: Streets
+          Id: mapbox://styles/mapbox/streets-v10
+          Modified: 
+          UserName: 
+      rasterOptions:
+        useRetina: 0
+        useCompression: 0
+        useMipMap: 0
+  _terrain:
+    _layerProperty:
+      sourceType: 0
+      sourceOptions:
+        isActive: 1
+        layerSource:
+          Name: 
+          Id: mapbox.terrain-rgb
+          Modified: 
+          UserName: 
+      elevationLayerType: 0
+      requiredOptions:
+        exaggerationFactor: 1
+      colliderOptions:
+        addCollider: 0
+      modificationOptions:
+        sampleCount: 10
+        useRelativeHeight: 0
+        earthRadius: 1000
+      unityLayerOptions:
+        addToLayer: 0
+        layerId: 0
+      sideWallOptions:
+        isActive: 0
+        wallHeight: 10
+        wallMaterial: {fileID: 0}
+  _vectorData:
+    _layerProperty:
+      tileJsonData:
+        tileJSONLoaded: 0
+        LayerDisplayNames:
+        - admin
+        - aeroway
+        - airport_label
+        - barrier_line
+        - building
+        - country_label
+        - housenum_label
+        - landuse
+        - landuse_overlay
+        - marine_label
+        - motorway_junction
+        - mountain_peak_label
+        - place_label
+        - poi_label
+        - rail_station_label
+        - road
+        - road_label
+        - state_label
+        - water
+        - water_label
+        - waterway
+        - waterway_label
+      _sourceType: 1
+      sourceOptions:
+        isActive: 1
+        layerSource:
+          Name: Mapbox Streets v7
+          Id: mapbox.mapbox-streets-v7
+          Modified: 
+          UserName: 
+      useOptimizedStyle: 0
+      optimizedStyle:
+        Name: 
+        Id: 
+        Modified: 
+        UserName: 
+      performanceOptions:
+        isEnabled: 1
+        entityPerCoroutine: 20
+      vectorSubLayers: []
+      locationPrefabList: []
+  _tileProvider: {fileID: 0}
+  _previewOptions:
+    isPreviewEnabled: 0
 --- !u!224 &3401473438877193488
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15708,6 +16119,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &4666595633367591260
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7703081756541848576}
+  - component: {fileID: 1035217738604540482}
+  - component: {fileID: 1355858125839042830}
+  m_Layer: 0
+  m_Name: Bldg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!114 &4696562558429647893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15887,6 +16316,23 @@ MonoBehaviour:
   audioSource: {fileID: 967323661436790345}
   shutterSound: {fileID: 8300000, guid: 89d4e52b75baf4ef1840d4e72d0bc1b0, type: 3}
   arCameraManager: {fileID: 3284113218055113721}
+--- !u!4 &4980791399565589994
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3325381906006337058}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7703081756541848576}
+  - {fileID: 1733816879373443874}
+  m_Father: {fileID: 1377719884}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &5001764522512432192
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18658,6 +19104,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!4 &7703081756541848576
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4666595633367591260}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4980791399565589994}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &7727150338538448011
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18705,6 +19166,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1657347445126109459}
   m_CullTransparentMesh: 1
+--- !u!1 &7853553095284540225
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1733816879373443874}
+  - component: {fileID: 3396351918808886509}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!224 &7862953468157094580
 RectTransform:
   m_ObjectHideFlags: 0
