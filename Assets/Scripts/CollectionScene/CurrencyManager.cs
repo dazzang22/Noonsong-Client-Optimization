@@ -1,14 +1,17 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class CurrencyManager : MonoBehaviour
 {
     public static CurrencyManager Instance { get; private set; }
 
     private Dictionary<string, int> currencies = new Dictionary<string, int>();
-    private string activeCurrencyType = "default";
+    private string activeCurrencyType = "Default";
+    
     [SerializeField] private List<TextMeshProUGUI> currencyTexts = new List<TextMeshProUGUI>();
+    [SerializeField] private Button[] currencyButtons;
 
     private void Awake()
     {
@@ -25,10 +28,38 @@ public class CurrencyManager : MonoBehaviour
 
     private void Start()
     {
-        // 추후 수정 필요
-        if (!currencies.ContainsKey("default"))
-            currencies["default"] = 0;
+        foreach (var button in currencyButtons)
+        {
+            string currencyType = button.name; 
+            if (!currencies.ContainsKey(currencyType))
+            {
+                SetCurrency(currencyType, 998); 
+            }
+        }
 
+        UpdateCurrencyUI();
+    }
+
+    public Button[] GetCurrencyButtons()
+    {
+        return currencyButtons;
+    }
+
+    public void SetAllCurrenciesTo999(Button[] currencyButtons)
+    {
+        foreach (var button in currencyButtons)
+        {
+            string currencyType = button.name;
+
+            if (!currencies.ContainsKey(currencyType))
+            {
+                SetCurrency(currencyType, 999);
+            }
+            else
+            {
+                SetCurrency(currencyType, 999); 
+            }
+        }
         UpdateCurrencyUI();
     }
 
@@ -78,10 +109,11 @@ public class CurrencyManager : MonoBehaviour
         }
         currencies[currencyType] = amount;
 
-        if (currencyType == activeCurrencyType)
+        /*if (currencyType == activeCurrencyType)
         {
             UpdateCurrencyUI();
-        }
+        }*/
+        UpdateCurrencyUI();
     }
 
     public void IncreaseCurrency(string currencyType, int amount)

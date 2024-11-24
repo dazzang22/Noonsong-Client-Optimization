@@ -21,8 +21,6 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     private float pressStartTime = 0f;
     private float shortPressThreshold = 0.3f;
 
-    [SerializeField]
-    private Button[] canvasButtons;
 
     void Start()
     {
@@ -36,9 +34,11 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         if (targetCanvas != null)
             targetCanvas.SetActive(false);
 
-        foreach (Button button in canvasButtons)
+        Button[] currencyButtons = CurrencyManager.Instance.GetCurrencyButtons();
+
+        foreach (Button button in currencyButtons)
         {
-            string buttonCurrencyType = button.name; // 버튼 이름을 통화 유형으로 사용
+            string buttonCurrencyType = button.name;
             button.onClick.AddListener(() => SwitchCurrency(buttonCurrencyType));
         }
     }
