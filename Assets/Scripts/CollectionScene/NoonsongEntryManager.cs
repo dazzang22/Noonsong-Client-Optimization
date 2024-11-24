@@ -57,6 +57,19 @@ public class NoonsongEntryManager : MonoBehaviour
         Debug.Log($"Retrieving all entries. Total count: {noonsongEntries.Count}");
         return noonsongEntries.ToArray();
     }
+
+    public void SetAllEntriesDiscovered()
+    {
+        foreach (var entry in noonsongEntries)
+        {
+            if (entry != null)
+            {
+                entry.isDiscovered = true;
+                Debug.Log($"Entry '{entry.noonsongName}' has been marked as discovered.");
+            }
+        }
+    }
+    
 }
 
 
