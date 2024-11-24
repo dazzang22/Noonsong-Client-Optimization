@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement; 
 
 public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
@@ -32,14 +33,22 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             onCatchButtonClicked = new UnityEvent();
 
         if (targetCanvas != null)
-            targetCanvas.SetActive(false);
-
-        Button[] currencyButtons = CurrencyManager.Instance.GetCurrencyButtons();
-
-        foreach (Button button in currencyButtons)
         {
-            string buttonCurrencyType = button.name;
-            button.onClick.AddListener(() => SwitchCurrency(buttonCurrencyType));
+            targetCanvas.SetActive(false);
+        }
+
+        // 현재 씬 이름이 "Merge-TutorialScene-Friends_noonsong"이 아닐 때만 실행
+        if (SceneManager.GetActiveScene().name != "Merge-TutorialScene-Friends_noonsong")
+        {
+            if (CurrencyManager.Instance != null)
+            {
+                Button[] currencyButtons = CurrencyManager.Instance.GetCurrencyButtons();
+                foreach (Button button in currencyButtons)
+                {
+                    string buttonCurrencyType = button.name;
+                    button.onClick.AddListener(() => SwitchCurrency(buttonCurrencyType));
+                }
+            }
         }
     }
 
