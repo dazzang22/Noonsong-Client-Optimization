@@ -17,7 +17,7 @@ public class FriendsManager : MonoBehaviour
     public Canvas collectionCanvas;             // Collection ȭ��
     public Canvas cameraCanvas;                 // 3D ���� ȭ��
     public Camera renderCamera;             // 3D �������� �������� Render Texture
-
+    
     [SerializeField]
     private NoonsongFriendsEntryManager noonsongFriendsEntryManager; // NoonsongFriendsEntryManager ����
 

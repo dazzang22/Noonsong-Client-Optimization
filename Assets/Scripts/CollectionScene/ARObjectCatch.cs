@@ -3,7 +3,8 @@ using UnityEngine.UI;
 
 public class ARObjectCatch : MonoBehaviour
 {
-    private ARObjectSpawn arObjectSpawn;
+    //private ARObjectSpawn arObjectSpawn;
+    private PlayerObjectSpawn playerObjectSpawn;
 
     [SerializeField]
     private NoonsongManager noonsongManager;
@@ -16,7 +17,7 @@ public class ARObjectCatch : MonoBehaviour
 
     private GameObject currentTarget;
 
-    private const int generalNoonsongCost = 5; //ÀÓÀÇ ÁöÁ¤
+    private const int generalNoonsongCost = 5; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     void Start()
     {
@@ -27,7 +28,8 @@ public class ARObjectCatch : MonoBehaviour
     {
         UpdateARObjectSpawnReference();
 
-        if (arObjectSpawn != null)
+        // if (arObjectSpawn != null)
+        if(playerObjectSpawn != null)
         {
             CheckForObjectInView();
         }
@@ -37,21 +39,30 @@ public class ARObjectCatch : MonoBehaviour
         string activeScriptName = ScriptActivationController.activatedScriptName;
         GameObject activeObject = GameObject.Find(activeScriptName); 
 
-        if (activeObject != null)
+        // if (activeObject != null)
+        // {
+        //     arObjectSpawn = activeObject.GetComponent<ARObjectSpawn>(); 
+        // }
+        // else
+        // {
+        //     arObjectSpawn = null; // È°ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ nullï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // }
+        if (playerObjectSpawn != null)
         {
-            arObjectSpawn = activeObject.GetComponent<ARObjectSpawn>(); 
+            playerObjectSpawn = activeObject.GetComponent<PlayerObjectSpawn>(); 
         }
         else
         {
-            arObjectSpawn = null; // È°¼ºÈ­µÈ ½ºÅ©¸³Æ®°¡ ¾øÀ» °æ¿ì null·Î ¼³Á¤
+            playerObjectSpawn = null; // È°ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ nullï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
     }
 
     void CheckForObjectInView()
     {
-        if (arObjectSpawn != null && arObjectSpawn.SpawnedObjects.Count > 0)
+        //if (arObjectSpawn != null && arObjectSpawn.SpawnedObjects.Count > 0)
+        if (playerObjectSpawn != null && playerObjectSpawn.SpawnedObjects.Count > 0)
         {
-            GameObject target = arObjectSpawn.SpawnedObjects[0].GameObject;
+            GameObject target = playerObjectSpawn.SpawnedObjects[0].GameObject;
             Vector3 screenPoint = Camera.main.WorldToViewportPoint(target.transform.position);
             bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
 
@@ -76,13 +87,13 @@ public class ARObjectCatch : MonoBehaviour
     {
         if (currentTarget != null)
         {
-            SpawnedObject spawnedObject = arObjectSpawn.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
-
+           // SpawnedObject spawnedObject = arObjectSpawn.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
+            SpawnedObject spawnedObject = playerObjectSpawn.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
             if (spawnedObject != null)
             {
                 NoonsongEntry entry = spawnedObject.NoonsongEntry;
 
-                // MajorNoonsong ÀÎ °æ¿ì
+                // MajorNoonsong ï¿½ï¿½ ï¿½ï¿½ï¿½
                 if (entry != null)
                 {
                     int requiredCurrency = entry.requiredNoonsongs; 
@@ -101,17 +112,19 @@ public class ARObjectCatch : MonoBehaviour
                         }
                     }
                     Destroy(currentTarget);
-                    arObjectSpawn.SpawnedObjects.Remove(spawnedObject);
+                    //arObjectSpawn.SpawnedObjects.Remove(spawnedObject);
+                    playerObjectSpawn.SpawnedObjects.Remove(spawnedObject);
                 }
                 else
                 {
-                    // generalNoonsongÀÎ °æ¿ì
+                    // generalNoonsongï¿½ï¿½ ï¿½ï¿½ï¿½
                     if (currencyManager.HasEnoughCurrency(generalNoonsongCost))
                     {
                         currencyManager.UseCurrency(generalNoonsongCost);  
                        
-                        Destroy(currentTarget);
-                        arObjectSpawn.SpawnedObjects.Remove(spawnedObject);
+                        Destroy(currentTarget);                      
+                        //arObjectSpawn.SpawnedObjects.Remove(spawnedObject);
+                        playerObjectSpawn.SpawnedObjects.Remove(spawnedObject);
                     }
                     else
                     {
