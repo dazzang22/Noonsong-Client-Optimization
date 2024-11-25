@@ -10,47 +10,74 @@ public class EventStaffController : MonoBehaviour
     [SerializeField]
     private Button targetButton;
 
+    [SerializeField]
+    private float timeLimit = 5f; // 제한 시간 (초)
 
-    private const int requiredClicks = 5; 
+    private float timer = 0f;
+    private bool isTimerActive = false;
+
+    private const int requiredClicks = 5;
 
     void Start()
     {
         if (targetButton != null)
         {
-            targetButton.onClick.AddListener(OnButtonClick); 
+            targetButton.onClick.AddListener(OnButtonClick);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // 추가적인 로직이 필요하면 여기에 작성
+        if (isTimerActive)
+        {
+            timer += Time.deltaTime;
+
+            if (timer >= timeLimit)
+            {
+                ResetClickCount();
+            }
+        }
     }
 
     private void OnButtonClick()
     {
-        buttonClickCount++; 
+        if (!isTimerActive)
+        {
+            isTimerActive = true;
+            timer = 0f;
+        }
+
+        buttonClickCount++;
 
         if (buttonClickCount >= requiredClicks)
         {
-            //통화 999로 초기화
-            Button[] currencyButtons = CurrencyManager.Instance.GetCurrencyButtons();
-            CurrencyManager.Instance.SetAllCurrenciesTo999(currencyButtons);
-
-            //도감 전체 해금
-            NoonsongEntryManager entryManager = FindObjectOfType<NoonsongEntryManager>();  
-            if (entryManager != null)
-            {
-                entryManager.SetAllEntriesDiscovered(); 
-            }
-            else
-            {
-                Debug.LogError("NoonsongEntryManager not found in the scene.");
-            }
-
-            // 클릭 횟수 초기화
-            buttonClickCount = 0;  
+            PerformEventActions();
+            ResetClickCount();
         }
     }
+
+    private void PerformEventActions()
+    {
+        Button[] currencyButtons = CurrencyManager.Instance.GetCurrencyButtons();
+        CurrencyManager.Instance.SetAllCurrenciesTo999(currencyButtons);
+
+        NoonsongEntryManager entryManager = FindObjectOfType<NoonsongEntryManager>();
+        if (entryManager != null)
+        {
+            entryManager.SetAllEntriesDiscovered();
+        }
+        else
+        {
+            Debug.LogError("NoonsongEntryManager not found in the scene.");
+        }
+    }
+
+    private void ResetClickCount()
+    {
+        buttonClickCount = 0;
+        timer = 0f;
+        isTimerActive = false;
+    }
 }
+
 
