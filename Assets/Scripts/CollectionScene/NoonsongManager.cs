@@ -84,6 +84,45 @@ public class NoonsongManager : MonoBehaviour
             }
         }
     }
+    public bool AreAllItemsDiscoveredInCategory(string category)
+    {
+        foreach (var entry in entries)
+        {
+            if (entry.university == category && !entry.isDiscovered)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public bool AreAllEntriesDiscoveredInCampus1()
+    {
+        string[] campus1Buildings = { "순헌관", "명신관", "진리관", "수련교수회관" };
+        return AreAllEntriesInBuildingGroupDiscovered(campus1Buildings);
+    }
+
+    public bool AreAllEntriesDiscoveredInCampus2()
+    {
+        string[] campus2Buildings = { "과학관", "사회교육관", "르네상스플라자", "미술대학", "약학대학", "음악대학" };
+        return AreAllEntriesInBuildingGroupDiscovered(campus2Buildings);
+    }
+
+    private bool AreAllEntriesInBuildingGroupDiscovered(string[] buildingGroup)
+    {
+        foreach (var entry in entries)
+        {
+            if (System.Array.Exists(buildingGroup, building => building == entry.buildingName))
+            {
+                if (!entry.isDiscovered)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     void AddEventTriggerListener(EventTrigger trigger, EventTriggerType eventType, System.Action action)
     {
