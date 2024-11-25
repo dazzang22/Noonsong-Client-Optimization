@@ -21,6 +21,9 @@ public class ScriptActivationController : MonoBehaviour
     [SerializeField]
     GameObject spawnObject; // 스폰할 오브젝트
 
+    [SerializeField]
+    Canvas cameraCanvas; // 카메라 캔버스를 참조
+
     public static string activatedScriptName;
 
     private bool isLocationServiceInitialized = false;
@@ -37,8 +40,9 @@ public class ScriptActivationController : MonoBehaviour
         }
 
         if (scriptToActivate != null)
-        {
+        {   
             scriptToActivate.enabled = false;
+            Debug.Log("Start : script deactivated.");
         }
 
         StartCoroutine(WaitForLocationService());
@@ -137,6 +141,16 @@ public class ScriptActivationController : MonoBehaviour
                 Debug.Log("Script deactivated.");
             }
         }
+
+        // CameraCanvas 활성화 상태에 따른 XR Origin 위치 설정
+        if (cameraCanvas != null)
+        {
+            if (cameraCanvas.gameObject.activeSelf) // CameraCanvas가 활성화된 경우
+            {
+                xrOrigin.position = Vector3.zero; // XR Origin 위치를 (0, 0, 0)으로 설정
+                Debug.Log("CameraCanvas is active. XR Origin set to (0,0,0).");
+            }
+        }
     }
 
     bool IsLocationInsideRectangle(Vector2d point, Vector2d[] vertices)
@@ -198,5 +212,4 @@ public class ScriptActivationController : MonoBehaviour
     {
         return scriptToActivate.GetType().Name;
     }
-
 }
