@@ -8,19 +8,27 @@ public class CanvasChanger : MonoBehaviour
     [SerializeField] private Canvas mainCanvas;
     [SerializeField] private Canvas popupCanvas;
     [SerializeField] private Canvas turyCanvas;
+    [SerializeField] private Canvas mapCanvas;
     [SerializeField] private Button popupButton;
     [SerializeField] private Button backButton;
     [SerializeField] private Button turyButton;
+    [SerializeField] private Button mapButton;
+    [SerializeField] private Button mapbackButton;
+
+    public MapManager mapManager;
 
     private void Start()
     {
         mainCanvas.gameObject.SetActive(true);
         popupCanvas.gameObject.SetActive(false);
         turyCanvas.gameObject.SetActive(false);
+        mapCanvas.gameObject.SetActive(false);
 
         popupButton.onClick.AddListener(ShowPopup);
         backButton.onClick.AddListener(HidePopup);
-        turyButton.onClick.AddListener(ToggleTuryCanvas); 
+        turyButton.onClick.AddListener(ToggleTuryCanvas);
+        mapButton.onClick.AddListener(ToggleMapCanvas);
+        mapbackButton.onClick.AddListener(ToggleMapCanvas);
     }
 
     private void ShowPopup()
@@ -39,5 +47,12 @@ public class CanvasChanger : MonoBehaviour
     {
         // 현재 활성 상태를 반전
         turyCanvas.gameObject.SetActive(!turyCanvas.gameObject.activeSelf);
+    }
+
+    private void ToggleMapCanvas()
+    {
+        // 현재 활성 상태를 반전
+        mapCanvas.gameObject.SetActive(!mapCanvas.gameObject.activeSelf);
+        mapManager.LoadMapState();
     }
 }

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    public GameObject UI;
     public GameObject mapUI;
     //public GameObject messageUI;
     public GameObject[] regions;
     public bool[] regionUnlocked;
+    private NoonsongManager noonsongManager;
 
     private Vector2 startTouchPosition;
     private Vector2 currentTouchPosition;
@@ -16,31 +16,23 @@ public class MapManager : MonoBehaviour
 
     void Start()
     {
+        noonsongManager = FindObjectOfType<NoonsongManager>();
+        if (noonsongManager == null)
+        {
+            Debug.LogError("NoonsongManager could not be found in the scene!");
+            return;
+        }
+
         LoadMapState();
-        mapUI.SetActive(false);
+        CheckAndUnlockRegions();
     }
 
     void Update()
     {
         HandleTouchInput();
-        HandleBackButton();
     }
 
-    public void OpenMap()
-    {
-        UI.SetActive(false);
-        mapUI.SetActive(true);
-        Debug.Log("Map UI opened.");
-    }
-
-    public void CloseMap()
-    {
-        UI.SetActive(true);
-        mapUI.SetActive(false);
-        Debug.Log("Returning to game.");
-    }
-
-    private void LoadMapState()
+    public void LoadMapState()
     {
         for (int i = 0; i < regions.Length; i++)
         {
@@ -139,11 +131,20 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    private void HandleBackButton()
+    public void CheckAndUnlockRegions()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        // 1구역 해금 조건
+        if (noonsongManager.AreAllEntriesDiscoveredInCampus1())
         {
-            CloseMap();
+            Debug.Log("All items discovered in Campus 1! Unlocking Region 1...");
+            UnlockRegion(0); // 0번 구역 해금
+        }
+
+        // 2구역 해금 조건
+        if (noonsongManager.AreAllEntriesDiscoveredInCampus2())
+        {
+            Debug.Log("All items discovered in Campus 2! Unlocking Region 2...");
+            UnlockRegion(1); // 1번 구역 해금
         }
     }
 }
