@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public Image[] gauges;
-    public float holdTime = 1f;
+    public float holdTime = 5f;
     private bool isHolding = false;
     private float holdCounter = 0f;
     private AudioSource audioSource;
@@ -64,24 +64,24 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
                 gauges[i].gameObject.SetActive(i <= gaugeIndex);
             }
 
-            if (gaugeIndex >= gauges.Length - 1)
+            if (holdCounter >= holdTime)
             {
-                holdCounter = holdTime * gauges.Length;
+                holdCounter = holdTime; 
+                if (!soundPlayed) 
+                {
+                    onCatchButtonClicked?.Invoke();
+                    soundPlayed = true; 
+                }
             }
         }
         else
         {
             holdCounter = 0f;
+            soundPlayed = false;
             foreach (var gauge in gauges)
             {
                 gauge.gameObject.SetActive(false);
             }
-        }
-
-        if (soundPlayed && !audioSource.isPlaying)
-        {
-            soundPlayed = false;
-            onCatchButtonClicked?.Invoke();
         }
     }
 
@@ -93,7 +93,6 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         if (audioSource != null && clickSound != null && !audioSource.isPlaying)
         {
             audioSource.Play();
-            soundPlayed = true;
         }
     }
 
@@ -111,7 +110,6 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         if (audioSource != null && audioSource.isPlaying)
         {
             audioSource.Stop();
-            soundPlayed = false;
         }
     }
 
