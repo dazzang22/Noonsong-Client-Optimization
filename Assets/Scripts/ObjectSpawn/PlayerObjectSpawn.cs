@@ -32,10 +32,11 @@ public class PlayerObjectSpawn : MonoBehaviour
     private List<SpawnedObject> _spawnedObjects;
 
     public Transform xrOrigin; // XR Origin 참조
-    public Camera arCamera; // AR 카메라 참조
+    [SerializeField]
+    private Camera arCamera; // AR 카메라 참조
 
     [SerializeField]
-    float changeInterval = 10f; // 오브젝트가 재스폰되는 시간(초)
+    float changeInterval = 20f; // 오브젝트가 재스폰되는 시간(초)
     private float timer;
 
     public List<SpawnedObject> SpawnedObjects => _spawnedObjects;
@@ -76,29 +77,42 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     void SpawnObjectNearUser()
     {
-        // XR Origin의 위치를 기반으로 오브젝트를 스폰
         Vector3 userPosition = xrOrigin.position;
         Vector3 randomOffset = GetRandomOffset();
-
         Vector3 spawnPosition = userPosition + randomOffset;
         spawnPosition.y = -5; // Y축 고정
 
-        // 랜덤한 프리팹 선택
+        Debug.Log($"Attempting to spawn object at {spawnPosition}");
+
         var spawnedObject = GetRandomPrefab();
         GameObject prefab = spawnedObject.GameObject;
-        NoonsongEntry entry = spawnedObject.NoonsongEntry;
+
+        if (prefab == null)
+        {
+            Debug.LogError("Prefab is null! Cannot spawn object.");
+            return;
+        }
+
         GameObject instance = Instantiate(prefab, spawnPosition, Quaternion.identity);
+        Debug.Log($"Prefab {prefab.name} instantiated successfully.");
+
         instance.transform.localScale = new Vector3(spawnScale, spawnScale, spawnScale);
 
         // ARAnchor 추가
         ARAnchor anchor = instance.AddComponent<ARAnchor>();
 
+        if (anchor == null)
+        {
+            Debug.LogError("Failed to attach ARAnchor to the instance.");
+        }
+
         // Anchor를 통해 안정적으로 위치 고정
         instance.transform.parent = anchor.transform;
 
-        _spawnedObjects.Add(new SpawnedObject(instance, entry));
-        Debug.Log($"Object spawned near user at: {spawnPosition}");
+        _spawnedObjects.Add(new SpawnedObject(instance, spawnedObject.NoonsongEntry));
+        Debug.Log($"Object added to _spawnedObjects list. Total count: {_spawnedObjects.Count}");
     }
+
 
     Vector3 GetRandomOffset()
     {
@@ -116,7 +130,7 @@ public class PlayerObjectSpawn : MonoBehaviour
         float probability = Random.Range(0f, 1f); // Generate a random float between 0 and 1
         if (probability < 0.6f) // 60% probability for majorNoonsong
         {
-            List<NoonsongEntry> filteredEntries = GetFilteredNoonsongEntries();
+            /*List<NoonsongEntry> filteredEntries = GetFilteredNoonsongEntries();
 
             if (filteredEntries.Count > 0)
             {
@@ -127,7 +141,13 @@ public class PlayerObjectSpawn : MonoBehaviour
             {
                 int randomIndex = Random.Range(0, generalNoonsong.Length);
                 return new SpawnedObject(generalNoonsong[randomIndex], null);
-            }
+            }*/
+
+            //여기서부터 3줄 행사용
+            NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
+            int randomIndex = Random.Range(0, entries.Length);
+            return new SpawnedObject(entries[randomIndex].prefab, entries[randomIndex]);
+
         }
         else // 40% probability for generalNoonsong
         {
