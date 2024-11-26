@@ -122,7 +122,7 @@ public class MapManager : MonoBehaviour
         UnlockRegion(regionIndex);
     }
 
-    private void UnlockRegion(int regionIndex)
+    public void UnlockRegion(int regionIndex)
     {
         if (!regionUnlocked[regionIndex])
         {

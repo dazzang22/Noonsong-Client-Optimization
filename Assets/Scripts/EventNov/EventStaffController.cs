@@ -70,6 +70,17 @@ public class EventStaffController : MonoBehaviour
         {
             Debug.LogError("NoonsongEntryManager not found in the scene.");
         }
+
+        MapManager mapManager = FindObjectOfType<MapManager>();
+        if (mapManager != null)
+        {
+            mapManager.UnlockRegion(0);
+            mapManager.UnlockRegion(1);
+        }
+        else
+        {
+            Debug.LogError("mapManager not found in the scene.");
+        }
     }
 
     private void ResetClickCount()
