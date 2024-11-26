@@ -67,15 +67,21 @@ public class NoonsongManager : MonoBehaviour
                 {
                     newEntry = Instantiate(discoveredEntryPrefab, entryParent);
 
-                    var eventTrigger = newEntry.GetComponent<EventTrigger>();
-                    if (eventTrigger == null)
+                    // 버튼 클릭 이벤트 연결
+                    Button button = newEntry.GetComponent<Button>();
+                    if (button == null)
                     {
-                        eventTrigger = newEntry.AddComponent<EventTrigger>();
+                        button = newEntry.AddComponent<Button>(); // 없으면 추가
                     }
-                    AddEventTriggerListener(eventTrigger, EventTriggerType.PointerClick, () => ShowDetails(entry, newEntry));
+                    button.onClick.RemoveAllListeners(); // 기존 이벤트 제거
+                    button.onClick.AddListener(() => ShowDetails(entry, newEntry));
 
+                    // 이미지 설정
                     var noonsongImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
-                    if (noonsongImage != null) noonsongImage.sprite = entry.noonsongSprite;
+                    if (noonsongImage != null)
+                    {
+                        noonsongImage.sprite = entry.noonsongSprite;
+                    }
                 }
                 else
                 {
@@ -84,6 +90,27 @@ public class NoonsongManager : MonoBehaviour
             }
         }
     }
+
+
+    public void SetAllEntriesDiscovered()
+    {
+        if (noonsongEntryManager != null)
+        {
+            entries = new List<NoonsongEntry>(noonsongEntryManager.GetNoonsongEntries());
+        }
+
+        foreach (var entry in entries)
+        {
+            if (entry != null)
+            {
+                entry.isDiscovered = true;
+                Debug.Log($"Entry '{entry.noonsongName}' has been marked as discovered.");
+            }
+        }
+
+        PopulateNoonsong();
+    }
+
     public bool AreAllItemsDiscoveredInCategory(string category)
     {
         foreach (var entry in entries)
@@ -127,9 +154,18 @@ public class NoonsongManager : MonoBehaviour
     void AddEventTriggerListener(EventTrigger trigger, EventTriggerType eventType, System.Action action)
     {
         EventTrigger.Entry entry = new EventTrigger.Entry { eventID = eventType };
-        entry.callback.AddListener((eventData) => action());
+        entry.callback.AddListener((eventData) => {
+            action();
+            ExecuteEvents.ExecuteHierarchy<IScrollHandler>(
+                ((PointerEventData)eventData).pointerPress,
+                (PointerEventData)eventData,
+                ExecuteEvents.scrollHandler
+            );
+        });
         trigger.triggers.Add(entry);
     }
+
+
 
     public void DiscoverItem(NoonsongEntry entry)
     {
