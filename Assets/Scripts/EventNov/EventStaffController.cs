@@ -58,10 +58,12 @@ public class EventStaffController : MonoBehaviour
 
     private void PerformEventActions()
     {
+        //재화 999개로 설정
         Button[] currencyButtons = CurrencyManager.Instance.GetCurrencyButtons();
         CurrencyManager.Instance.SetAllCurrenciesTo999(currencyButtons);
 
-        NoonsongEntryManager entryManager = FindObjectOfType<NoonsongEntryManager>();
+        //모든 눈송이 발견 처리
+        NoonsongManager entryManager = FindObjectOfType<NoonsongManager>();
         if (entryManager != null)
         {
             entryManager.SetAllEntriesDiscovered();
@@ -71,6 +73,7 @@ public class EventStaffController : MonoBehaviour
             Debug.LogError("NoonsongEntryManager not found in the scene.");
         }
 
+        //지도 잠금 해제
         MapManager mapManager = FindObjectOfType<MapManager>();
         if (mapManager != null)
         {
