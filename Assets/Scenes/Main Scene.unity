@@ -263,6 +263,54 @@ MonoBehaviour:
   _tileProvider: {fileID: 0}
   _previewOptions:
     isPreviewEnabled: 0
+--- !u!28 &22992723
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 2
+  m_Width: 1
+  m_Height: 1
+  m_CompleteImageSize: 4
+  m_MipsStripped: 0
+  m_TextureFormat: 4
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 0
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_LightmapFormat: 0
+  m_ColorSpace: 1
+  m_PlatformBlob: 
+  image data: 4
+  _typelessdata: cdcdcdcd
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!1 &55898315
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,6 +561,7 @@ GameObject:
   - component: {fileID: 119683420}
   - component: {fileID: 119683422}
   - component: {fileID: 119683421}
+  - component: {fileID: 119683423}
   m_Layer: 0
   m_Name: Innovation Hall Bldg
   m_TagString: Untagged
@@ -556,10 +605,11 @@ MonoBehaviour:
     y: 126.9658077
   - x: 37.5448091
     y: 126.9653229
-  scriptToActivate: {fileID: 119683422}
+  scriptToActivate: {fileID: 119683423}
   map: {fileID: 394482077}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &119683422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -572,18 +622,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5447780, 126.9653007
-  - 37.5444388, 126.9655331
-  - 37.5440869, 126.9656598
-  _spawnScale: 12
+--- !u!114 &119683423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119683419}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 394482077}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 394482077}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &150974492
 GameObject:
   m_ObjectHideFlags: 0
@@ -890,6 +951,7 @@ GameObject:
   - component: {fileID: 207275640}
   - component: {fileID: 207275642}
   - component: {fileID: 207275641}
+  - component: {fileID: 207275643}
   m_Layer: 0
   m_Name: Saehim Bldg
   m_TagString: Untagged
@@ -933,10 +995,11 @@ MonoBehaviour:
     y: 126.9640636
   - x: 37.545734
     y: 126.9639918
-  scriptToActivate: {fileID: 207275642}
+  scriptToActivate: {fileID: 207275643}
   map: {fileID: 846294394}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &207275642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -949,22 +1012,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5457114, 126.9638175
-  - 37.5456771, 126.9639667
-  - 37.5454870, 126.9639720
-  - 37.5453461, 126.9639968
-  - 37.5451837, 126.9640069
-  - 37.5451353, 126.9638084
-  - 37.5451204, 126.9635949
-  _spawnScale: 12
+--- !u!114 &207275643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207275639}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 846294394}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 846294394}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &220466891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1457,6 +1527,7 @@ GameObject:
   - component: {fileID: 343129443}
   - component: {fileID: 343129445}
   - component: {fileID: 343129444}
+  - component: {fileID: 343129446}
   m_Layer: 0
   m_Name: Main Library Bldg
   m_TagString: Untagged
@@ -1500,10 +1571,11 @@ MonoBehaviour:
     y: 126.9666388
   - x: 37.544648
     y: 126.9658871
-  scriptToActivate: {fileID: 343129445}
+  scriptToActivate: {fileID: 343129446}
   map: {fileID: 1152029565}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &343129445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1516,25 +1588,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5441972, 126.9661171
-  - 37.5442849, 126.9660420
-  - 37.5443971, 126.9660575
-  - 37.5444590, 126.9659478
-  - 37.5444782, 126.9656870
-  - 37.5441836, 126.9662885
-  - 37.5440475, 126.9664041
-  - 37.5439385, 126.9662871
-  - 37.5442416, 126.9656625
-  - 37.5439566, 126.9658959
-  _spawnScale: 12
+--- !u!114 &343129446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343129442}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1152029565}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1152029565}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &371857024
 GameObject:
   m_ObjectHideFlags: 0
@@ -1546,6 +1622,7 @@ GameObject:
   - component: {fileID: 371857025}
   - component: {fileID: 371857027}
   - component: {fileID: 371857026}
+  - component: {fileID: 371857028}
   m_Layer: 0
   m_Name: Student Union Bldg
   m_TagString: Untagged
@@ -1589,10 +1666,11 @@ MonoBehaviour:
     y: 126.9652263
   - x: 37.545752
     y: 126.9652297
-  scriptToActivate: {fileID: 371857027}
+  scriptToActivate: {fileID: 371857028}
   map: {fileID: 679781326}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &371857027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1605,22 +1683,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5457060, 126.9648937
-  - 37.5457021, 126.9650503
-  - 37.5457060, 126.9651861
-  - 37.5456056, 126.9648585
-  - 37.5455099, 126.9648780
-  - 37.5453777, 126.9649041
-  - 37.5453777, 126.9649041
-  _spawnScale: 12
+--- !u!114 &371857028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371857024}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 679781326}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 679781326}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &394482075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1772,6 +1857,7 @@ GameObject:
   - component: {fileID: 412720552}
   - component: {fileID: 412720554}
   - component: {fileID: 412720553}
+  - component: {fileID: 412720555}
   m_Layer: 0
   m_Name: Arena Theater Bldg
   m_TagString: Untagged
@@ -1815,10 +1901,11 @@ MonoBehaviour:
     y: 126.9653634
   - x: 37.5463164
     y: 126.9653416
-  scriptToActivate: {fileID: 412720554}
+  scriptToActivate: {fileID: 412720555}
   map: {fileID: 9949422}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &412720554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1831,26 +1918,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5461649, 126.9640941
-  - 37.5460317, 126.9639657
-  - 37.5458036, 126.9640210
-  - 37.5459578, 126.9640867
-  - 37.5458517, 126.9641984
-  - 37.5460702, 126.9642262
-  - 37.5460163, 126.9643519
-  - 37.5459211, 126.9645504
-  - 37.5460628, 126.9649571
-  - 37.5459222, 126.9650717
-  - 37.5459599, 126.9653044
-  _spawnScale: 12
+--- !u!114 &412720555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412720551}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 9949422}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 9949422}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &416921107
 GameObject:
   m_ObjectHideFlags: 0
@@ -2253,6 +2343,7 @@ GameObject:
   - component: {fileID: 535147801}
   - component: {fileID: 535147803}
   - component: {fileID: 535147802}
+  - component: {fileID: 535147804}
   m_Layer: 0
   m_Name: Veritas  Bldg
   m_TagString: Untagged
@@ -2296,10 +2387,11 @@ MonoBehaviour:
     y: 126.964133
   - x: 37.5465322
     y: 126.964088
-  scriptToActivate: {fileID: 535147803}
+  scriptToActivate: {fileID: 535147804}
   map: {fileID: 1940660748}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &535147803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2312,22 +2404,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5462959, 126.9640884
-  - 37.5462816, 126.9639871
-  - 37.5462712, 126.9638014
-  - 37.5462667, 126.9635583
-  - 37.5463432, 126.9634701
-  - 37.5464420, 126.9635108
-  - 37.5464836, 126.9638550
-  _spawnScale: 12
+--- !u!114 &535147804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535147800}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1940660748}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1940660748}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &565768068
 GameObject:
   m_ObjectHideFlags: 0
@@ -2339,6 +2438,7 @@ GameObject:
   - component: {fileID: 565768069}
   - component: {fileID: 565768071}
   - component: {fileID: 565768070}
+  - component: {fileID: 565768072}
   m_Layer: 0
   m_Name: Prime Complex Bldg
   m_TagString: Untagged
@@ -2382,10 +2482,11 @@ MonoBehaviour:
     y: 126.9649806
   - x: 37.5450167
     y: 126.9649668
-  scriptToActivate: {fileID: 565768071}
+  scriptToActivate: {fileID: 565768072}
   map: {fileID: 1138391874}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &565768071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2398,18 +2499,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5449896, 126.9648531
-  - 37.5449870, 126.9649443
-  - 37.5449840, 126.9647231
-  _spawnScale: 12
+--- !u!114 &565768072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565768068}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1138391874}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1138391874}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &567532945
 GameObject:
   m_ObjectHideFlags: 0
@@ -2454,6 +2566,7 @@ GameObject:
   - component: {fileID: 656194790}
   - component: {fileID: 656194792}
   - component: {fileID: 656194791}
+  - component: {fileID: 656194793}
   m_Layer: 0
   m_Name: College of Music Bldg
   m_TagString: Untagged
@@ -2497,10 +2610,11 @@ MonoBehaviour:
     y: 126.9642986
   - x: 37.5444954
     y: 126.9642587
-  scriptToActivate: {fileID: 656194792}
+  scriptToActivate: {fileID: 656194793}
   map: {fileID: 220466893}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &656194792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2513,24 +2627,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5440188, 126.9640763
-  - 37.5440257, 126.9642460
-  - 37.5440188, 126.9640763
-  - 37.5441754, 126.9639432
-  - 37.5451837, 126.9640069
-  - 37.5444609, 126.9639157
-  - 37.5444710, 126.9642453
-  - 37.5443176, 126.9642614
-  - 37.5441158, 126.9642664
-  _spawnScale: 12
+--- !u!114 &656194793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 656194789}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 220466893}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 220466893}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &672066549
 GameObject:
   m_ObjectHideFlags: 0
@@ -2542,6 +2661,7 @@ GameObject:
   - component: {fileID: 672066550}
   - component: {fileID: 672066552}
   - component: {fileID: 672066551}
+  - component: {fileID: 672066553}
   m_Layer: 0
   m_Name: Center for Continuing Education  Bldg
   m_TagString: Untagged
@@ -2585,10 +2705,11 @@ MonoBehaviour:
     y: 126.9641883
   - x: 37.543938
     y: 126.9641615
-  scriptToActivate: {fileID: 672066552}
+  scriptToActivate: {fileID: 672066553}
   map: {fileID: 1977350445}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &672066552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2601,24 +2722,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5439138, 126.9636301
-  - 37.5439178, 126.9637974
-  - 37.5439383, 126.9640099
-  - 37.5439242, 126.9641387
-  - 37.5438165, 126.9641652
-  - 37.5437219, 126.9641732
-  - 37.5437030, 126.9641011
-  - 37.5436825, 126.9636726
-  - 37.5436700, 126.9638825
-  _spawnScale: 12
+--- !u!114 &672066553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672066549}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1977350445}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1977350445}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &679781324
 GameObject:
   m_ObjectHideFlags: 0
@@ -3051,6 +3177,7 @@ GameObject:
   - component: {fileID: 812544127}
   - component: {fileID: 812544129}
   - component: {fileID: 812544128}
+  - component: {fileID: 812544130}
   m_Layer: 0
   m_Name: Suryeon Bldg
   m_TagString: Untagged
@@ -3094,10 +3221,11 @@ MonoBehaviour:
     y: 126.9645651
   - x: 37.5466604
     y: 126.9645926
-  scriptToActivate: {fileID: 812544129}
+  scriptToActivate: {fileID: 812544130}
   map: {fileID: 1624599189}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &812544129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3110,20 +3238,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5466984, 126.9645786
-  - 37.5467696, 126.9645169
-  - 37.5467877, 126.9643824
-  - 37.5467619, 126.9642235
-  - 37.5467093, 126.9641266
-  _spawnScale: 12
+--- !u!114 &812544130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812544126}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1624599189}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1624599189}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &816870409
 GameObject:
   m_ObjectHideFlags: 0
@@ -3135,6 +3272,7 @@ GameObject:
   - component: {fileID: 816870410}
   - component: {fileID: 816870412}
   - component: {fileID: 816870411}
+  - component: {fileID: 816870413}
   m_Layer: 0
   m_Name: Administration Bldg
   m_TagString: Untagged
@@ -3178,10 +3316,11 @@ MonoBehaviour:
     y: 126.9648116
   - x: 37.5456345
     y: 126.9647475
-  scriptToActivate: {fileID: 816870412}
+  scriptToActivate: {fileID: 816870413}
   map: {fileID: 227958891}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &816870412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3194,22 +3333,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5453065, 126.9645075
-  - 37.5453296, 126.9647080
-  - 37.5454290, 126.9647640
-  - 37.5455630, 126.9647385
-  - 37.5454870, 126.9644485
-  - 37.5454854, 126.9642939
-  - 37.5453841, 126.9643422
-  _spawnScale: 12
+--- !u!114 &816870413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816870409}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 227958891}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 227958891}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &826034247
 GameObject:
   m_ObjectHideFlags: 0
@@ -3221,6 +3367,7 @@ GameObject:
   - component: {fileID: 826034248}
   - component: {fileID: 826034250}
   - component: {fileID: 826034249}
+  - component: {fileID: 826034251}
   m_Layer: 0
   m_Name: Myungshin Bldg
   m_TagString: Untagged
@@ -3264,10 +3411,11 @@ MonoBehaviour:
     y: 126.963215
   - x: 37.5457095
     y: 126.9632183
-  scriptToActivate: {fileID: 826034250}
+  scriptToActivate: {fileID: 826034251}
   map: {fileID: 1938027725}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &826034250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3280,25 +3428,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5458017, 126.9638202
-  - 37.5458982, 126.9638111
-  - 37.5460152, 126.9637826
-  - 37.5461322, 126.9637662
-  - 37.5462210, 126.9636636
-  - 37.5461989, 126.9634587
-  - 37.5461295, 126.9633262
-  - 37.5459347, 126.9632623
-  - 37.5457858, 126.9632773
-  - 37.5457310, 126.9633511
-  _spawnScale: 12
+--- !u!114 &826034251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826034247}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1938027725}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1938027725}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &830463235 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9092502386466995667, guid: 69924a7003f5c884f947855d6a9a980b, type: 3}
@@ -3700,6 +3852,7 @@ GameObject:
   - component: {fileID: 852235198}
   - component: {fileID: 852235200}
   - component: {fileID: 852235199}
+  - component: {fileID: 852235201}
   m_Layer: 0
   m_Name: College of Science Bldg
   m_TagString: Untagged
@@ -3743,10 +3896,11 @@ MonoBehaviour:
     y: 126.9666019
   - x: 37.5446924
     y: 126.9667076
-  scriptToActivate: {fileID: 852235200}
+  scriptToActivate: {fileID: 852235201}
   map: {fileID: 1370498869}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &852235200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3759,23 +3913,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5447825, 126.9659237
-  - 37.5447363, 126.9661718
-  - 37.5446119, 126.9657507
-  - 37.5447363, 126.9661718
-  - 37.5441895, 126.9665617
-  - 37.5442533, 126.9663629
-  - 37.5443692, 126.9663294
-  - 37.5445473, 126.9660397
-  _spawnScale: 12
+--- !u!114 &852235201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852235197}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1370498869}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1370498869}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &890842654
 GameObject:
   m_ObjectHideFlags: 0
@@ -4859,6 +5019,87 @@ MonoBehaviour:
   _tileProvider: {fileID: 0}
   _previewOptions:
     isPreviewEnabled: 0
+--- !u!21 &1146030031
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Standard
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _ZWrite: 1
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1152029563
 GameObject:
   m_ObjectHideFlags: 0
@@ -5010,6 +5251,7 @@ GameObject:
   - component: {fileID: 1160387167}
   - component: {fileID: 1160387169}
   - component: {fileID: 1160387168}
+  - component: {fileID: 1160387170}
   m_Layer: 0
   m_Name: Freedom Gate  Bldg
   m_TagString: Untagged
@@ -5053,10 +5295,11 @@ MonoBehaviour:
     y: 126.9650369
   - x: 37.5451114
     y: 126.9650469
-  scriptToActivate: {fileID: 1160387169}
+  scriptToActivate: {fileID: 1160387170}
   map: {fileID: 1219003739}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &1160387169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5069,20 +5312,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5450883, 126.9646406
-  - 37.5450768, 126.9646681
-  - 37.5450715, 126.9648049
-  - 37.5450853, 126.9649252
-  - 37.5450904, 126.9650168
-  _spawnScale: 12
+--- !u!114 &1160387170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160387166}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1219003739}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1219003739}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &1167216071
 GameObject:
   m_ObjectHideFlags: 0
@@ -5387,6 +5639,7 @@ GameObject:
   - component: {fileID: 1202782758}
   - component: {fileID: 1202782760}
   - component: {fileID: 1202782759}
+  - component: {fileID: 1202782761}
   m_Layer: 0
   m_Name: Renaissance Plaza Bldg
   m_TagString: Untagged
@@ -5430,10 +5683,11 @@ MonoBehaviour:
     y: 126.9638812
   - x: 37.5445045
     y: 126.9639083
-  scriptToActivate: {fileID: 1202782760}
+  scriptToActivate: {fileID: 1202782761}
   map: {fileID: 1791892451}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &1202782760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5446,23 +5700,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5445377, 126.9642553
-  - 37.5446068, 126.9642775
-  - 37.5447132, 126.9642788
-  - 37.5448328, 126.9642664
-  - 37.5448923, 126.9642128
-  - 37.5449346, 126.9641447
-  - 37.5449362, 126.9640451
-  - 37.5448878, 126.9639429
-  _spawnScale: 12
+--- !u!114 &1202782761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1202782757}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1791892451}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1791892451}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &1205013431
 GameObject:
   m_ObjectHideFlags: 0
@@ -5912,6 +6172,7 @@ GameObject:
   - component: {fileID: 1234999906}
   - component: {fileID: 1234999908}
   - component: {fileID: 1234999907}
+  - component: {fileID: 1234999909}
   m_Layer: 0
   m_Name: Centennial Hall  Bldg
   m_TagString: Untagged
@@ -5955,10 +6216,11 @@ MonoBehaviour:
     y: 126.965808
   - x: 37.5440986
     y: 126.9656783
-  scriptToActivate: {fileID: 1234999908}
+  scriptToActivate: {fileID: 1234999909}
   map: {fileID: 1167216073}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &1234999908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5971,27 +6233,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5436286, 126.9652437
-  - 37.5436498, 126.9656082
-  - 37.5436488, 126.9654281
-  - 37.5437591, 126.9657597
-  - 37.5438263, 126.9650412
-  - 37.5436182, 126.9650060
-  - 37.5439959, 126.9652987
-  - 37.5440390, 126.9654885
-  - 37.5439574, 126.9654801
-  - 37.5439340, 126.9651240
-  - 37.5439494, 126.9656561
-  - 37.5440488, 126.9653088
-  _spawnScale: 12
+--- !u!114 &1234999909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1234999905}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1167216073}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1167216073}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &1288218835
 GameObject:
   m_ObjectHideFlags: 0
@@ -6069,6 +6333,7 @@ GameObject:
   - component: {fileID: 1318416050}
   - component: {fileID: 1318416052}
   - component: {fileID: 1318416051}
+  - component: {fileID: 1318416053}
   m_Layer: 0
   m_Name: College of Pharmacy Bldg
   m_TagString: Untagged
@@ -6112,10 +6377,11 @@ MonoBehaviour:
     y: 126.9649276
   - x: 37.5439733
     y: 126.9649145
-  scriptToActivate: {fileID: 1318416052}
+  scriptToActivate: {fileID: 1318416053}
   map: {fileID: 90901603}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &1318416052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6128,24 +6394,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5439117, 126.9642101
-  - 37.5437373, 126.9642168
-  - 37.5437282, 126.9643197
-  - 37.5437309, 126.9645035
-  - 37.5437415, 126.9648371
-  - 37.5438508, 126.9649108
-  - 37.5439574, 126.9647110
-  - 37.5439465, 126.9644347
-  - 37.5439430, 126.9648739
-  _spawnScale: 12
+--- !u!114 &1318416053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318416049}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 90901603}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 90901603}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!114 &1319035426 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4097942048267550958, guid: ffd7fbe20c5fd45d08d650cf397bfc13, type: 3}
@@ -6438,6 +6709,7 @@ Transform:
   - {fileID: 7987418703738885227}
   - {fileID: 8164857999117093188}
   - {fileID: 3323370842217285353}
+  - {fileID: 2081783498207766427}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1382936284
@@ -6712,6 +6984,7 @@ GameObject:
   - component: {fileID: 1508375807}
   - component: {fileID: 1508375809}
   - component: {fileID: 1508375808}
+  - component: {fileID: 1508375810}
   m_Layer: 0
   m_Name: Wisdom Bldg
   m_TagString: Untagged
@@ -6755,10 +7028,11 @@ MonoBehaviour:
     y: 126.963332
   - x: 37.5457233
     y: 126.9633156
-  scriptToActivate: {fileID: 1508375809}
+  scriptToActivate: {fileID: 1508375810}
   map: {fileID: 1623480117}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &1508375809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6771,18 +7045,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5456904, 126.9631808
-  - 37.5456781, 126.9632304
-  - 37.5456853, 126.9632978
-  _spawnScale: 12
+--- !u!114 &1508375810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508375806}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1623480117}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1623480117}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &1529739842
 GameObject:
   m_ObjectHideFlags: 0
@@ -6794,6 +7079,7 @@ GameObject:
   - component: {fileID: 1529739843}
   - component: {fileID: 1529739845}
   - component: {fileID: 1529739844}
+  - component: {fileID: 1529739846}
   m_Layer: 0
   m_Name: Haengpa Bldg
   m_TagString: Untagged
@@ -6837,10 +7123,11 @@ MonoBehaviour:
     y: 126.965291
   - x: 37.5468272
     y: 126.9651567
-  scriptToActivate: {fileID: 1529739845}
+  scriptToActivate: {fileID: 1529739846}
   map: {fileID: 1224949020}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &1529739845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6853,18 +7140,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5467127, 126.9648069
-  - 37.5467393, 126.9649933
-  - 37.5466667, 126.9652553
-  _spawnScale: 12
+--- !u!114 &1529739846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529739842}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1224949020}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1224949020}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &1550942694
 GameObject:
   m_ObjectHideFlags: 0
@@ -7041,6 +7339,7 @@ GameObject:
   - component: {fileID: 1601879455}
   - component: {fileID: 1601879457}
   - component: {fileID: 1601879456}
+  - component: {fileID: 1601879458}
   m_Layer: 0
   m_Name: Peace Bldg
   m_TagString: Untagged
@@ -7084,10 +7383,11 @@ MonoBehaviour:
     y: 126.9650466
   - x: 37.545289
     y: 126.9650476
-  scriptToActivate: {fileID: 1601879457}
+  scriptToActivate: {fileID: 1601879458}
   map: {fileID: 1382936286}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &1601879457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7100,19 +7400,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5452100, 126.9646657
-  - 37.5452520, 126.9647187
-  - 37.5452480, 126.9649453
-  - 37.5452089, 126.9650194
-  _spawnScale: 12
+--- !u!114 &1601879458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601879454}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1382936286}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1382936286}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &1613067559
 GameObject:
   m_ObjectHideFlags: 0
@@ -7688,6 +7998,7 @@ GameObject:
   - component: {fileID: 1757617577}
   - component: {fileID: 1757617579}
   - component: {fileID: 1757617578}
+  - component: {fileID: 1757617580}
   m_Layer: 0
   m_Name: Multicomplex Hall Bldg
   m_TagString: Untagged
@@ -7731,10 +8042,11 @@ MonoBehaviour:
     y: 126.965751
   - x: 37.5450582
     y: 126.965347
-  scriptToActivate: {fileID: 1757617579}
+  scriptToActivate: {fileID: 1757617580}
   map: {fileID: 2027125131}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &1757617579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7747,21 +8059,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5450250, 126.9653450
-  - 37.5449051, 126.9652934
-  - 37.5447496, 126.9654241
-  - 37.5446783, 126.9656337
-  - 37.5447873, 126.9656742
-  - 37.5449163, 126.9655203
-  _spawnScale: 12
+--- !u!114 &1757617580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1757617576}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 2027125131}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 2027125131}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!114 &1758545783 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 91693205617466612, guid: ffd7fbe20c5fd45d08d650cf397bfc13, type: 3}
@@ -8891,6 +9211,7 @@ GameObject:
   - component: {fileID: 2007119354}
   - component: {fileID: 2007119356}
   - component: {fileID: 2007119355}
+  - component: {fileID: 2007119357}
   m_Layer: 0
   m_Name: Snowflake Square Hall  Bldg
   m_TagString: Untagged
@@ -8934,10 +9255,11 @@ MonoBehaviour:
     y: 126.9646882
   - x: 37.5447748
     y: 126.9646453
-  scriptToActivate: {fileID: 2007119356}
+  scriptToActivate: {fileID: 2007119357}
   map: {fileID: 1788941365}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 0}
 --- !u!114 &2007119356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8950,20 +9272,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5444053, 126.9643794
-  - 37.5440834, 126.9645216
-  - 37.5442963, 126.9646104
-  - 37.5445725, 126.9644227
-  - 37.5447344, 126.9645450
-  _spawnScale: 12
+--- !u!114 &2007119357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007119353}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1788941365}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1788941365}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &2014489264
 GameObject:
   m_ObjectHideFlags: 0
@@ -9008,6 +9339,7 @@ GameObject:
   - component: {fileID: 2015824762}
   - component: {fileID: 2015824764}
   - component: {fileID: 2015824763}
+  - component: {fileID: 2015824765}
   m_Layer: 0
   m_Name: College of Fine Arts Bldg
   m_TagString: Untagged
@@ -9051,10 +9383,11 @@ MonoBehaviour:
     y: 126.9650929
   - x: 37.5446948
     y: 126.9650352
-  scriptToActivate: {fileID: 2015824764}
+  scriptToActivate: {fileID: 2015824765}
   map: {fileID: 797742908}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &2015824764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9067,24 +9400,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5445553, 126.9647519
-  - 37.5443532, 126.9647797
-  - 37.5440978, 126.9647965
-  - 37.5439978, 126.9648786
-  - 37.5440116, 126.9650520
-  - 37.5441895, 126.9650560
-  - 37.5445925, 126.9650154
-  - 37.5446656, 126.9647928
-  - 37.5446672, 126.9649574
-  _spawnScale: 12
+--- !u!114 &2015824765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2015824761}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 797742908}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 797742908}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!1 &2027125129
 GameObject:
   m_ObjectHideFlags: 0
@@ -9357,6 +9695,7 @@ GameObject:
   - component: {fileID: 2053817443197987547}
   - component: {fileID: 1140723586681854663}
   - component: {fileID: 4182486723371200402}
+  - component: {fileID: 4182486723371200403}
   m_Layer: 0
   m_Name: Sunheon Bldg
   m_TagString: Untagged
@@ -10533,25 +10872,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationStrings:
-  - 37.5463945, 126.9641491
-  - 37.5463174, 126.9641662
-  - 37.5463039, 126.9642567
-  - 37.5463076, 126.9644230
-  - 37.5463363, 126.9647298
-  - 37.5463621, 126.9649373
-  - 37.5463717, 126.9651968
-  - 37.5463860, 126.9652763
-  - 37.5464530, 126.9653017
-  - 37.5465570, 126.9653058
-  _spawnScale: 12
-  noonsongManager: {fileID: 6243891260929364228}
-  noonsongEntryManager: {fileID: 8845941076759529387}
-  generalNoonsong:
-  - {fileID: 8904473918275398181, guid: e73d193cdd0433b458048be37f75deaf, type: 3}
-  _map: {fileID: 1115938684466537567}
-  _anchorManager: {fileID: 3438923195463911640}
-  changeInterval: 15
 --- !u!222 &1141406044609376837
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10646,9 +10966,13 @@ MonoBehaviour:
   mainCanvas: {fileID: 4236928903332085412}
   popupCanvas: {fileID: 557265556581059072}
   turyCanvas: {fileID: 1121102426}
+  mapCanvas: {fileID: 0}
   popupButton: {fileID: 5082065817287187382}
   backButton: {fileID: 1970697073087725945}
   turyButton: {fileID: 6884546405950352098}
+  mapButton: {fileID: 0}
+  mapbackButton: {fileID: 0}
+  mapManager: {fileID: 0}
 --- !u!1 &1264591763784113461
 GameObject:
   m_ObjectHideFlags: 0
@@ -11089,6 +11413,21 @@ RectTransform:
   m_AnchoredPosition: {x: -76.4, y: 138}
   m_SizeDelta: {x: 38, y: 38}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!4 &1858044198122341680
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8576255131365629281}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2081783498207766427}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!222 &1867241825486506616
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11309,6 +11648,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &2081783498207766427
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8193499409828532693}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1858044198122341680}
+  - {fileID: 7669732396246604841}
+  m_Father: {fileID: 1377719884}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2104484199063823839
 GameObject:
   m_ObjectHideFlags: 0
@@ -12573,6 +12929,23 @@ MonoBehaviour:
   m_LightEstimation: 0
   m_FacingDirection: 1
   m_RenderMode: 0
+--- !u!1 &3285945270274352332
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7669732396246604841}
+  - component: {fileID: 9153094401779864003}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &3323370842217285353
 Transform:
   m_ObjectHideFlags: 0
@@ -13173,10 +13546,34 @@ MonoBehaviour:
     y: 126.9653306
   - x: 37.5465697
     y: 126.9653004
-  scriptToActivate: {fileID: 1140723586681854663}
+  scriptToActivate: {fileID: 4182486723371200403}
   map: {fileID: 1115938684466537567}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
+--- !u!114 &4182486723371200403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148423736278687802}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
+  noonsongManager: {fileID: 6243891260929364228}
+  noonsongEntryManager: {fileID: 8845941076759529387}
+  generalNoonsong:
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 1115938684466537567}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 300
 --- !u!223 &4236928903332085412
 Canvas:
   m_ObjectHideFlags: 0
@@ -13356,6 +13753,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &4347343577441645306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8576255131365629281}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520926a668cad314f9213ad70446e483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rectangleVertices:
+  - x: 37.5440491
+    y: 126.9647117
+  - x: 37.5440119
+    y: 126.9642926
+  - x: 37.5448346
+    y: 126.9642798
+  - x: 37.5448447
+    y: 126.9646399
+  scriptToActivate: {fileID: 8823680749508035176}
+  map: {fileID: 9153094401779864003}
+  xrOrigin: {fileID: 6968467379698492718}
+  spawnObject: {fileID: 5238565483845898040}
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!222 &4401434420192948897
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -16619,6 +17042,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!4 &7669732396246604841
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3285945270274352332}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -50, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2081783498207766427}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &7727150338538448011
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16964,6 +17402,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &8193499409828532693
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2081783498207766427}
+  m_Layer: 0
+  m_Name: TestBldg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!114 &8194046851768201694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17180,6 +17634,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &8576255131365629281
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1858044198122341680}
+  - component: {fileID: 4347343577441645306}
+  - component: {fileID: 8823680749508035176}
+  m_Layer: 0
+  m_Name: Bldg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!224 &8578259129899856231
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17531,6 +18003,29 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8823680749508035176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8576255131365629281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnRadius: 20
+  spawnScale: 10
+  noonsongManager: {fileID: 6243891260929364228}
+  noonsongEntryManager: {fileID: 8845941076759529387}
+  generalNoonsong:
+  - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
+  map: {fileID: 9153094401779864003}
+  anchorManager: {fileID: 3438923195463911640}
+  xrOrigin: {fileID: 6968467379698492718}
+  arCamera: {fileID: 5815090711000784149}
+  changeInterval: 20
 --- !u!114 &8828451931102233490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17895,6 +18390,136 @@ RectTransform:
   m_AnchoredPosition: {x: 55, y: 203}
   m_SizeDelta: {x: 51, y: 58}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &9153094401779864003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3285945270274352332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd961b1c9541a4cee99686069ecce852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _options:
+    locationOptions:
+      latitudeLongitude: 37.5451396, 126.9648397
+      zoom: 21
+    extentOptions:
+      extentType: 1
+      defaultExtents:
+        cameraBoundsOptions:
+          camera: {fileID: 0}
+          visibleBuffer: 0
+          disposeBuffer: 0
+        rangeAroundCenterOptions:
+          west: 0
+          north: 0
+          east: 0
+          south: 0
+        rangeAroundTransformOptions:
+          targetTransform: {fileID: 0}
+          visibleBuffer: 0
+          disposeBuffer: 0
+    placementOptions:
+      placementType: 1
+      snapMapToZero: 0
+    scalingOptions:
+      scalingType: 1
+      unityTileSize: 1000
+    loadingTexture: {fileID: 22992723}
+    tileMaterial: {fileID: 1146030031}
+  _initializeOnStart: 1
+  _imagery:
+    _layerProperty:
+      sourceType: 0
+      sourceOptions:
+        isActive: 1
+        layerSource:
+          Name: Streets
+          Id: mapbox://styles/mapbox/streets-v10
+          Modified: 
+          UserName: 
+      rasterOptions:
+        useRetina: 0
+        useCompression: 0
+        useMipMap: 0
+  _terrain:
+    _layerProperty:
+      sourceType: 0
+      sourceOptions:
+        isActive: 1
+        layerSource:
+          Name: 
+          Id: mapbox.terrain-rgb
+          Modified: 
+          UserName: 
+      elevationLayerType: 0
+      requiredOptions:
+        exaggerationFactor: 1
+      colliderOptions:
+        addCollider: 0
+      modificationOptions:
+        sampleCount: 10
+        useRelativeHeight: 0
+        earthRadius: 1000
+      unityLayerOptions:
+        addToLayer: 0
+        layerId: 0
+      sideWallOptions:
+        isActive: 0
+        wallHeight: 10
+        wallMaterial: {fileID: 0}
+  _vectorData:
+    _layerProperty:
+      tileJsonData:
+        tileJSONLoaded: 0
+        LayerDisplayNames:
+        - admin
+        - aeroway
+        - airport_label
+        - barrier_line
+        - building
+        - country_label
+        - housenum_label
+        - landuse
+        - landuse_overlay
+        - marine_label
+        - motorway_junction
+        - mountain_peak_label
+        - place_label
+        - poi_label
+        - rail_station_label
+        - road
+        - road_label
+        - state_label
+        - water
+        - water_label
+        - waterway
+        - waterway_label
+      _sourceType: 1
+      sourceOptions:
+        isActive: 1
+        layerSource:
+          Name: Mapbox Streets v7
+          Id: mapbox.mapbox-streets-v7
+          Modified: 
+          UserName: 
+      useOptimizedStyle: 0
+      optimizedStyle:
+        Name: 
+        Id: 
+        Modified: 
+        UserName: 
+      performanceOptions:
+        isEnabled: 1
+        entityPerCoroutine: 20
+      vectorSubLayers: []
+      locationPrefabList: []
+  _tileProvider: {fileID: 0}
+  _previewOptions:
+    isPreviewEnabled: 0
 --- !u!114 &9160253928793541560
 MonoBehaviour:
   m_ObjectHideFlags: 0
