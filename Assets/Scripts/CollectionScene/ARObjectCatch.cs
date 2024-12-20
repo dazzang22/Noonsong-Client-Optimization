@@ -42,6 +42,7 @@ public class ARObjectCatch : MonoBehaviour
         }
 
     }
+
     void UpdateARObjectSpawnReference()
     {
         string activeScriptName = ScriptActivationController.activatedScriptName;

@@ -53,9 +53,10 @@ public class ScreenshotHandler : MonoBehaviour
 
     void Start()
     {
-        // 처음에는 후면 카메라로 시작
+        // 처음에는 후면모드 카메라로 시작
         SetCameraFacingDirection(isUsingFrontCamera);
     }
+
 
     // 스크린샷 촬영 함수
     public void CaptureScreen()

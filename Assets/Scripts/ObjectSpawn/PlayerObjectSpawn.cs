@@ -50,6 +50,15 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("Is3DViewActive: " + noonsongManager.Is3DViewActive());
+
+        if (noonsongManager.Is3DViewActive())
+        {
+            Debug.Log("3D view is active. Skipping object spawn.");
+            ClearSpawnedObjects();
+            return;
+        }
+
         // Increment timer
         timer += Time.deltaTime;
 
@@ -86,6 +95,7 @@ public class PlayerObjectSpawn : MonoBehaviour
 
         var spawnedObject = GetRandomPrefab();
         GameObject prefab = spawnedObject.GameObject;
+
 
         if (prefab == null)
         {

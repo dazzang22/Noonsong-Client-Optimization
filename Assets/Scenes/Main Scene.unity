@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -636,6 +636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -1026,6 +1027,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -1602,6 +1604,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -1697,6 +1700,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -1932,6 +1936,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -2418,6 +2423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -2513,6 +2519,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -2641,6 +2648,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -2736,6 +2744,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -3252,6 +3261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -3347,6 +3357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -3442,6 +3453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -3927,6 +3939,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -5326,6 +5339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -5335,6 +5349,52 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   arCamera: {fileID: 5815090711000784149}
   changeInterval: 300
+--- !u!1 &1165737422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1165737423}
+  - component: {fileID: 1165737424}
+  m_Layer: 0
+  m_Name: StaffControler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1165737423
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165737422}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1377719884}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1165737424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165737422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3717c1b8451324143bb1ed0bfd3af936, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetButton: {fileID: 173311586053747249}
+  timeLimit: 5
 --- !u!1 &1167216071
 GameObject:
   m_ObjectHideFlags: 0
@@ -5714,6 +5774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -6247,6 +6308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -6408,6 +6470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -6710,6 +6773,7 @@ Transform:
   - {fileID: 8164857999117093188}
   - {fileID: 3323370842217285353}
   - {fileID: 2081783498207766427}
+  - {fileID: 1165737423}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1382936284
@@ -7059,6 +7123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -7154,6 +7219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -7414,6 +7480,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -8073,6 +8140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -9286,6 +9354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -9414,6 +9483,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -10966,12 +11036,12 @@ MonoBehaviour:
   mainCanvas: {fileID: 4236928903332085412}
   popupCanvas: {fileID: 557265556581059072}
   turyCanvas: {fileID: 1121102426}
-  mapCanvas: {fileID: 0}
+  mapCanvas: {fileID: 557265556581059072}
   popupButton: {fileID: 5082065817287187382}
   backButton: {fileID: 1970697073087725945}
   turyButton: {fileID: 6884546405950352098}
-  mapButton: {fileID: 0}
-  mapbackButton: {fileID: 0}
+  mapButton: {fileID: 850727886}
+  mapbackButton: {fileID: 850727886}
   mapManager: {fileID: 0}
 --- !u!1 &1264591763784113461
 GameObject:
@@ -13202,7 +13272,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &3836090427095681938
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13565,6 +13635,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -13760,20 +13831,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8576255131365629281}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 520926a668cad314f9213ad70446e483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rectangleVertices:
-  - x: 37.5440491
-    y: 126.9647117
-  - x: 37.5440119
-    y: 126.9642926
-  - x: 37.5448346
-    y: 126.9642798
-  - x: 37.5448447
-    y: 126.9646399
+  - x: 53.33047
+    y: -6.27958
+  - x: 53.33041
+    y: -6.27906
+  - x: 53.33015
+    y: -6.27916
+  - x: 53.33021
+    y: -6.27959
   scriptToActivate: {fileID: 8823680749508035176}
   map: {fileID: 9153094401779864003}
   xrOrigin: {fileID: 6968467379698492718}
@@ -14642,7 +14713,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &5252715833934018660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17417,7 +17488,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &8194046851768201694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18010,13 +18081,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8576255131365629281}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d504419e79e474b0ea7f5c2ed3e2f8ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
+  friendsManager: {fileID: 4110327246192508997}
   noonsongManager: {fileID: 6243891260929364228}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
@@ -18404,7 +18476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _options:
     locationOptions:
-      latitudeLongitude: 37.5451396, 126.9648397
+      latitudeLongitude: 53.330309295437594, -6.279341327658632
       zoom: 21
     extentOptions:
       extentType: 1

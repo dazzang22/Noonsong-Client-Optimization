@@ -22,7 +22,7 @@ public class CanvasChanger : MonoBehaviour
         mainCanvas.gameObject.SetActive(true);
         popupCanvas.gameObject.SetActive(false);
         turyCanvas.gameObject.SetActive(false);
-        mapCanvas.gameObject.SetActive(false);
+        //mapCanvas.gameObject.SetActive(false);
 
         popupButton.onClick.AddListener(ShowPopup);
         backButton.onClick.AddListener(HidePopup);
@@ -53,6 +53,6 @@ public class CanvasChanger : MonoBehaviour
     {
         // 현재 활성 상태를 반전
         mapCanvas.gameObject.SetActive(!mapCanvas.gameObject.activeSelf);
-        mapManager.LoadMapState();
+        //mapManager.LoadMapState();
     }
 }
