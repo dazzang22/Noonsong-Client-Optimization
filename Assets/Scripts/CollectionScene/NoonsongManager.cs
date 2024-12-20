@@ -16,16 +16,18 @@ public class NoonsongManager : MonoBehaviour
     public Button view3DButton;
     public Canvas collectionCanvas;
     public Canvas cameraCanvas;
-    public Camera renderCamera;                
-    public Button[] categoryButtons;           
+    public Camera renderCamera;
+    public Button[] categoryButtons;
     public string selectedCategory = "All";
 
     [SerializeField]
     private NoonsongEntryManager noonsongEntryManager;
 
-    private List<NoonsongEntry> entries;        
-    private GameObject lastClickedEntry;         
+    private List<NoonsongEntry> entries;
+    private GameObject lastClickedEntry;
     private GameObject currentNoonsongObject;
+
+    private bool is3DViewActive = false;
 
     void Start()
     {
@@ -45,10 +47,18 @@ public class NoonsongManager : MonoBehaviour
 
         PopulateNoonsong();
     }
+    public bool View3DButtonPressed()
+    {
+        // 3D 뷰가 활성화되었음을 알려줌
+        is3DViewActive = true;
+        Debug.Log("View 3D Button pressed.");
+        return true;
+    }
+
     public void OnCategoryButtonClicked(string category)
     {
         selectedCategory = category;
-        PopulateNoonsong(); 
+        PopulateNoonsong();
     }
 
     public void PopulateNoonsong()
@@ -154,7 +164,8 @@ public class NoonsongManager : MonoBehaviour
     void AddEventTriggerListener(EventTrigger trigger, EventTriggerType eventType, System.Action action)
     {
         EventTrigger.Entry entry = new EventTrigger.Entry { eventID = eventType };
-        entry.callback.AddListener((eventData) => {
+        entry.callback.AddListener((eventData) =>
+        {
             action();
             ExecuteEvents.ExecuteHierarchy<IScrollHandler>(
                 ((PointerEventData)eventData).pointerPress,
@@ -204,10 +215,14 @@ public class NoonsongManager : MonoBehaviour
             if (view3DButton != null)
             {
                 view3DButton.onClick.RemoveAllListeners();
-                view3DButton.onClick.AddListener(() => Open3DView(entry));
+                view3DButton.onClick.AddListener(() =>
+                {
+                    View3DButtonPressed();
+                    Open3DView(entry);
+
+                });
                 Debug.Log("3D View button click event added!");
             }
-
         }
         else
         {
@@ -264,7 +279,6 @@ public class NoonsongManager : MonoBehaviour
 
         }
     }
-
     public void OnBackButtonPressed()
     {
         if (cameraCanvas != null)
@@ -281,5 +295,11 @@ public class NoonsongManager : MonoBehaviour
         {
             Destroy(currentNoonsongObject);
         }
+        is3DViewActive = false;
+        Debug.Log("Back Button pressed, 3D View is now inactive.");
+    }
+    public bool Is3DViewActive()
+    {
+        return is3DViewActive;
     }
 }
