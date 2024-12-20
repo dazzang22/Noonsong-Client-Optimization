@@ -47,7 +47,7 @@ public class UIController : MonoBehaviour
     private void SkipTutorial()
     {
         // "MainScene"으로 전환
-        SceneManager.LoadScene("EventSceneNov");
+        SceneManager.LoadScene("Main Scene");
     }
 
     private void HideSkipCanvas()
