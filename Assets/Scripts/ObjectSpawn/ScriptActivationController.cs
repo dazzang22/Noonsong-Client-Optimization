@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using Mapbox.Utils;
 using Mapbox.Unity.Map;
+using UnityEngine.Android;
 using System.Collections;
 
 public class ScriptActivationController : MonoBehaviour
@@ -53,6 +54,13 @@ public class ScriptActivationController : MonoBehaviour
 
     IEnumerator WaitForLocationService()
     {
+        //Android 권한 요청
+         while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+         {
+             yield return null;
+            Permission.RequestUserPermission(Permission.FineLocation);
+         }
+
         if (!Input.location.isEnabledByUser)
         {
             Debug.LogError("Location services are not enabled by the user.");
@@ -110,8 +118,6 @@ public class ScriptActivationController : MonoBehaviour
             if (scriptToActivate != null && !scriptToActivate.enabled)
             {
                 scriptToActivate.enabled = true; // 스크립트 활성화
-
-                //activatedScriptName = GetActivatedScriptName();
                 Debug.Log("Script activated.");
             }
 
@@ -209,10 +215,5 @@ public class ScriptActivationController : MonoBehaviour
         GameObject instance = Instantiate(spawnObject, worldPosition, Quaternion.identity);
         instance.transform.localScale = new Vector3(1, 1, 1);
         Debug.Log("Object spawned at: " + worldPosition);
-    }
-
-    string GetActivatedScriptName()
-    {
-        return scriptToActivate.GetType().Name;
     }
 }

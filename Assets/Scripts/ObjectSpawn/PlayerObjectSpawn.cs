@@ -18,6 +18,9 @@ public class PlayerObjectSpawn : MonoBehaviour
     NoonsongManager noonsongManager;
 
     [SerializeField]
+    FriendsManager friendsManager;
+
+    [SerializeField]
     NoonsongEntryManager noonsongEntryManager;
 
     [SerializeField]
@@ -53,7 +56,7 @@ public class PlayerObjectSpawn : MonoBehaviour
         var activationController = GetComponentInParent<ScriptActivationController>();
         if (activationController != null && activationController.IsActive())
         {
-            if (noonsongManager.Is3DViewActive())
+            if (noonsongManager.Is3DViewActive() || friendsManager.Is3DViewActive())
             {
                 ClearSpawnedObjects();
                 return;
@@ -199,7 +202,6 @@ public class PlayerObjectSpawn : MonoBehaviour
                viewportPoint.y >= 0 && viewportPoint.y <= 1 &&
                viewportPoint.z > 0;
     }
-
     void LookAtCamera(SpawnedObject obj)
     {
         // 오브젝트의 GameObject를 카메라 방향으로 회전

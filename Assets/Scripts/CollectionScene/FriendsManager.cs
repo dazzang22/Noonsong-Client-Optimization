@@ -132,7 +132,6 @@ public class FriendsManager : MonoBehaviour
                     {
                         View3DButtonPressed();
                         Open3DView(entry);
-
                     });
                 }
             }

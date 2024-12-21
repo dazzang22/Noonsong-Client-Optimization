@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class ARObjectCatch : MonoBehaviour
 {
-    //private ARObjectSpawn arObjectSpawn;
     private PlayerObjectSpawn playerObjectSpawn;
 
     [SerializeField]
@@ -54,7 +53,6 @@ public class ARObjectCatch : MonoBehaviour
 
     void CheckForObjectInView()
     {
-        //if (arObjectSpawn != null && arObjectSpawn.SpawnedObjects.Count > 0)
         if (playerObjectSpawn != null && playerObjectSpawn.SpawnedObjects.Count > 0)
         {
             Debug.Log($"SpawnedObjects Count: {playerObjectSpawn.SpawnedObjects.Count}");
