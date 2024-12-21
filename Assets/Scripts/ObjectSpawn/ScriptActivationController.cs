@@ -24,7 +24,7 @@ public class ScriptActivationController : MonoBehaviour
     [SerializeField]
     Canvas cameraCanvas; // 카메라 캔버스를 참조
 
-    public static string activatedScriptName;
+    public string ActivatedScriptName { get; private set; }
 
     private bool isLocationServiceInitialized = false;
     private bool isXROriginPositionSet = false; // XR Origin 위치가 설정되었는지 여부
@@ -42,10 +42,13 @@ public class ScriptActivationController : MonoBehaviour
         if (scriptToActivate != null)
         {   
             scriptToActivate.enabled = false;
-            Debug.Log("Start : script deactivated.");
         }
 
         StartCoroutine(WaitForLocationService());
+    }
+    public bool IsActive()
+    {
+        return scriptToActivate != null && scriptToActivate.enabled;
     }
 
     IEnumerator WaitForLocationService()
@@ -108,7 +111,7 @@ public class ScriptActivationController : MonoBehaviour
             {
                 scriptToActivate.enabled = true; // 스크립트 활성화
 
-                activatedScriptName = GetActivatedScriptName();
+                //activatedScriptName = GetActivatedScriptName();
                 Debug.Log("Script activated.");
             }
 
