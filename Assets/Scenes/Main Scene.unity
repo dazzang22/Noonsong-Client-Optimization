@@ -20,9 +20,9 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
-  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientGroundColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
@@ -559,7 +559,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 119683420}
-  - component: {fileID: 119683422}
   - component: {fileID: 119683421}
   - component: {fileID: 119683423}
   m_Layer: 0
@@ -610,18 +609,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &119683422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119683419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &119683423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -636,8 +623,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -950,7 +937,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 207275640}
-  - component: {fileID: 207275642}
   - component: {fileID: 207275641}
   - component: {fileID: 207275643}
   m_Layer: 0
@@ -1001,18 +987,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &207275642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 207275639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &207275643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1027,8 +1001,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -1527,7 +1501,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 343129443}
-  - component: {fileID: 343129445}
   - component: {fileID: 343129444}
   - component: {fileID: 343129446}
   m_Layer: 0
@@ -1578,18 +1551,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &343129445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 343129442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &343129446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1604,8 +1565,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -1623,7 +1584,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 371857025}
-  - component: {fileID: 371857027}
   - component: {fileID: 371857026}
   - component: {fileID: 371857028}
   m_Layer: 0
@@ -1674,18 +1634,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &371857027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 371857024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &371857028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1700,8 +1648,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -1859,7 +1807,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 412720552}
-  - component: {fileID: 412720554}
   - component: {fileID: 412720553}
   - component: {fileID: 412720555}
   m_Layer: 0
@@ -1910,18 +1857,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &412720554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 412720551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &412720555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1936,8 +1871,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -2346,7 +2281,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 535147801}
-  - component: {fileID: 535147803}
   - component: {fileID: 535147802}
   - component: {fileID: 535147804}
   m_Layer: 0
@@ -2397,18 +2331,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &535147803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 535147800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &535147804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2423,8 +2345,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -2442,7 +2364,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 565768069}
-  - component: {fileID: 565768071}
   - component: {fileID: 565768070}
   - component: {fileID: 565768072}
   m_Layer: 0
@@ -2493,18 +2414,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &565768071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 565768068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &565768072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2519,8 +2428,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -2571,7 +2480,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 656194790}
-  - component: {fileID: 656194792}
   - component: {fileID: 656194791}
   - component: {fileID: 656194793}
   m_Layer: 0
@@ -2622,18 +2530,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &656194792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 656194789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &656194793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2648,8 +2544,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -2667,7 +2563,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 672066550}
-  - component: {fileID: 672066552}
   - component: {fileID: 672066551}
   - component: {fileID: 672066553}
   m_Layer: 0
@@ -2718,18 +2613,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &672066552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 672066549}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &672066553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2744,8 +2627,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -3184,7 +3067,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 812544127}
-  - component: {fileID: 812544129}
   - component: {fileID: 812544128}
   - component: {fileID: 812544130}
   m_Layer: 0
@@ -3235,18 +3117,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &812544129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 812544126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &812544130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3261,8 +3131,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -3280,7 +3150,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 816870410}
-  - component: {fileID: 816870412}
   - component: {fileID: 816870411}
   - component: {fileID: 816870413}
   m_Layer: 0
@@ -3331,18 +3200,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &816870412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 816870409}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &816870413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3357,8 +3214,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -3376,7 +3233,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 826034248}
-  - component: {fileID: 826034250}
   - component: {fileID: 826034249}
   - component: {fileID: 826034251}
   m_Layer: 0
@@ -3427,18 +3283,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &826034250
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 826034247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &826034251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3453,8 +3297,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -3862,7 +3706,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 852235198}
-  - component: {fileID: 852235200}
   - component: {fileID: 852235199}
   - component: {fileID: 852235201}
   m_Layer: 0
@@ -3913,18 +3756,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &852235200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 852235197}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &852235201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3939,8 +3770,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -5262,7 +5093,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1160387167}
-  - component: {fileID: 1160387169}
   - component: {fileID: 1160387168}
   - component: {fileID: 1160387170}
   m_Layer: 0
@@ -5313,18 +5143,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &1160387169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160387166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1160387170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5339,8 +5157,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -5697,7 +5515,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1202782758}
-  - component: {fileID: 1202782760}
   - component: {fileID: 1202782759}
   - component: {fileID: 1202782761}
   m_Layer: 0
@@ -5748,18 +5565,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &1202782760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1202782757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1202782761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5774,8 +5579,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -6231,7 +6036,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1234999906}
-  - component: {fileID: 1234999908}
   - component: {fileID: 1234999907}
   - component: {fileID: 1234999909}
   m_Layer: 0
@@ -6282,18 +6086,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &1234999908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1234999905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1234999909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6308,8 +6100,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -6393,7 +6185,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1318416050}
-  - component: {fileID: 1318416052}
   - component: {fileID: 1318416051}
   - component: {fileID: 1318416053}
   m_Layer: 0
@@ -6444,18 +6235,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &1318416052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318416049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1318416053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6470,8 +6249,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -7046,7 +6825,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1508375807}
-  - component: {fileID: 1508375809}
   - component: {fileID: 1508375808}
   - component: {fileID: 1508375810}
   m_Layer: 0
@@ -7097,18 +6875,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &1508375809
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508375806}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1508375810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7123,8 +6889,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -7142,7 +6908,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1529739843}
-  - component: {fileID: 1529739845}
   - component: {fileID: 1529739844}
   - component: {fileID: 1529739846}
   m_Layer: 0
@@ -7193,18 +6958,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &1529739845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1529739842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1529739846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7219,8 +6972,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -7403,7 +7156,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1601879455}
-  - component: {fileID: 1601879457}
   - component: {fileID: 1601879456}
   - component: {fileID: 1601879458}
   m_Layer: 0
@@ -7454,18 +7206,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &1601879457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601879454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1601879458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7480,8 +7220,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -8063,7 +7803,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1757617577}
-  - component: {fileID: 1757617579}
   - component: {fileID: 1757617578}
   - component: {fileID: 1757617580}
   m_Layer: 0
@@ -8114,18 +7853,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &1757617579
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1757617576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1757617580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8140,8 +7867,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -9277,7 +9004,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2007119354}
-  - component: {fileID: 2007119356}
   - component: {fileID: 2007119355}
   - component: {fileID: 2007119357}
   m_Layer: 0
@@ -9327,19 +9053,7 @@ MonoBehaviour:
   map: {fileID: 1788941365}
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
-  cameraCanvas: {fileID: 0}
---- !u!114 &2007119356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2007119353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  cameraCanvas: {fileID: 4832640112415076693}
 --- !u!114 &2007119357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9354,8 +9068,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -9406,7 +9120,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2015824762}
-  - component: {fileID: 2015824764}
   - component: {fileID: 2015824763}
   - component: {fileID: 2015824765}
   m_Layer: 0
@@ -9457,18 +9170,6 @@ MonoBehaviour:
   xrOrigin: {fileID: 6968467379698492718}
   spawnObject: {fileID: 5238565483845898040}
   cameraCanvas: {fileID: 4832640112415076693}
---- !u!114 &2015824764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2015824761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2015824765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9483,8 +9184,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -9763,7 +9464,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2053817443197987547}
-  - component: {fileID: 1140723586681854663}
   - component: {fileID: 4182486723371200402}
   - component: {fileID: 4182486723371200403}
   m_Layer: 0
@@ -10785,7 +10485,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _options:
     locationOptions:
-      latitudeLongitude: 37.5451396, 126.9648397
+      latitudeLongitude: 53.33030817528451, -6.279336631229627
       zoom: 21
     extentOptions:
       extentType: 1
@@ -10930,18 +10630,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -473.5}
   m_SizeDelta: {x: 0, y: -947}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1140723586681854663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148423736278687802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af625ff2ad8534728b9d37f543bea027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &1141406044609376837
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13272,7 +12960,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &3836090427095681938
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13608,14 +13296,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rectangleVertices:
-  - x: 37.5465235
-    y: 126.9641082
-  - x: 37.5462582
-    y: 126.9641574
-  - x: 37.546365
-    y: 126.9653306
-  - x: 37.5465697
-    y: 126.9653004
+  - x: 53.33047
+    y: -6.27958
+  - x: 53.33041
+    y: -6.27906
+  - x: 53.33015
+    y: -6.27916
+  - x: 53.33021
+    y: -6.27959
   scriptToActivate: {fileID: 4182486723371200403}
   map: {fileID: 1115938684466537567}
   xrOrigin: {fileID: 6968467379698492718}
@@ -13635,8 +13323,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 0}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 4110327246192508997}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}
@@ -13848,7 +13536,7 @@ MonoBehaviour:
   scriptToActivate: {fileID: 8823680749508035176}
   map: {fileID: 9153094401779864003}
   xrOrigin: {fileID: 6968467379698492718}
-  spawnObject: {fileID: 5238565483845898040}
+  spawnObject: {fileID: 0}
   cameraCanvas: {fileID: 4832640112415076693}
 --- !u!222 &4401434420192948897
 CanvasRenderer:
@@ -17488,7 +17176,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &8194046851768201694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18088,8 +17776,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnScale: 10
-  friendsManager: {fileID: 4110327246192508997}
   noonsongManager: {fileID: 6243891260929364228}
+  friendsManager: {fileID: 0}
   noonsongEntryManager: {fileID: 8845941076759529387}
   generalNoonsong:
   - {fileID: 919132149155446097, guid: 2a587171cf4424130be11318b5729ebb, type: 3}

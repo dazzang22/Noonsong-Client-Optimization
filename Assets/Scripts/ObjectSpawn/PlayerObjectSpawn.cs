@@ -18,6 +18,9 @@ public class PlayerObjectSpawn : MonoBehaviour
     NoonsongManager noonsongManager;
 
     [SerializeField]
+    FriendsManager friendsManager;
+
+    [SerializeField]
     NoonsongEntryManager noonsongEntryManager;
 
     [SerializeField]
@@ -50,36 +53,30 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Is3DViewActive: " + noonsongManager.Is3DViewActive());
-
-        if (noonsongManager.Is3DViewActive())
+        var activationController = GetComponentInParent<ScriptActivationController>();
+        if (activationController != null && activationController.IsActive())
         {
-            Debug.Log("3D view is active. Skipping object spawn.");
-            ClearSpawnedObjects();
-            return;
-        }
-
-        // Increment timer
-        timer += Time.deltaTime;
-
-        // Check if it's time to change the marker position and prefab
-        if (timer >= changeInterval)
-        {
-            // 기존 오브젝트 제거
-            ClearSpawnedObjects();
-
-            // 새 위치에 오브젝트 스폰
-            SpawnObjectNearUser();
-            
-            timer = 0f; // Reset timer
-        }
-
-        // 스폰된 오브젝트가 카메라를 바라보도록 설정
-        foreach (var obj in _spawnedObjects)
-        {
-            if (IsObjectInView(obj))
+            if (noonsongManager.Is3DViewActive() || friendsManager.Is3DViewActive())
             {
-                LookAtCamera(obj);
+                ClearSpawnedObjects();
+                return;
+            }
+
+            timer += Time.deltaTime;
+
+            if (timer >= changeInterval)
+            {
+                ClearSpawnedObjects();
+                SpawnObjectNearUser();
+                timer = 0f;
+            }
+
+            foreach (var obj in _spawnedObjects)
+            {
+                if (IsObjectInView(obj))
+                {
+                    LookAtCamera(obj);
+                }
             }
         }
     }
@@ -140,7 +137,7 @@ public class PlayerObjectSpawn : MonoBehaviour
         float probability = Random.Range(0f, 1f); // Generate a random float between 0 and 1
         if (probability < 0.6f) // 60% probability for majorNoonsong
         {
-            /*List<NoonsongEntry> filteredEntries = GetFilteredNoonsongEntries();
+            List<NoonsongEntry> filteredEntries = GetFilteredNoonsongEntries();
 
             if (filteredEntries.Count > 0)
             {
@@ -151,13 +148,12 @@ public class PlayerObjectSpawn : MonoBehaviour
             {
                 int randomIndex = Random.Range(0, generalNoonsong.Length);
                 return new SpawnedObject(generalNoonsong[randomIndex], null);
-            }*/
+            }
 
             //여기서부터 3줄 행사용
-            NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
-            int randomIndex = Random.Range(0, entries.Length);
-            return new SpawnedObject(entries[randomIndex].prefab, entries[randomIndex]);
-
+            //NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
+            //int randomIndex = Random.Range(0, entries.Length);
+            //return new SpawnedObject(entries[randomIndex].prefab, entries[randomIndex]);
         }
         else // 40% probability for generalNoonsong
         {
@@ -168,7 +164,8 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     List<NoonsongEntry> GetFilteredNoonsongEntries()
     {
-        string buildingName = GetBuildingNameFromScript(ScriptActivationController.activatedScriptName);
+        var activationController = GetComponentInParent<ScriptActivationController>();
+        string buildingName = activationController != null ? activationController.gameObject.name : null;
 
         if (!string.IsNullOrEmpty(buildingName))
         {
@@ -192,39 +189,7 @@ public class PlayerObjectSpawn : MonoBehaviour
             }
         }
 
-        return filteredEntries; 
-    }
-
-    string GetBuildingNameFromScript(string activatedScriptName)
-    {
-        switch (activatedScriptName)
-        {
-            case "Sunheon Bldg":
-                return "�����";
-            case "Suryeon Bldg":
-                return "���ñ���ȸ��";
-            case "Haengpa Faculty Bldg":
-                return "���ı���ȸ��";
-            case "Veritas Bldg":
-                return "������";
-            case "Myungshin Bldg":
-                return "���Ű�";
-            case "Wisdom Bldg":
-                return "������";
-            case "Saehim Bldg":
-                return "������";
-            case "Acministration Bldg":
-                return "������";
-            case "Peace Bldg":
-                return "��ȭ��";
-            case "Student Union Bldg":
-                return "�л�ȸ��";
-            case "Arena Theater Bldg":
-                return "��������";
-
-            default:
-                return null;
-        }
+        return filteredEntries;
     }
 
     bool IsObjectInView(SpawnedObject obj)
@@ -237,7 +202,6 @@ public class PlayerObjectSpawn : MonoBehaviour
                viewportPoint.y >= 0 && viewportPoint.y <= 1 &&
                viewportPoint.z > 0;
     }
-
     void LookAtCamera(SpawnedObject obj)
     {
         // 오브젝트의 GameObject를 카메라 방향으로 회전
@@ -245,7 +209,6 @@ public class PlayerObjectSpawn : MonoBehaviour
         directionToCamera.y = 0; // 수평 회전을 제한
         obj.GameObject.transform.rotation = Quaternion.LookRotation(directionToCamera);
     }
-
     void ClearSpawnedObjects()
     {
         // 기존 스폰된 오브젝트 제거

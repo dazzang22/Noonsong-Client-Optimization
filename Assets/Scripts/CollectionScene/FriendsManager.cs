@@ -25,9 +25,10 @@ public class FriendsManager : MonoBehaviour
     private GameObject lastClickedEntry = null; // ������ Ŭ���� �׸�
     private GameObject currentNoonsongObject;
 
+    private bool isFriends3DViewActive = false;
+
     void Start()
     {
-        // entries ����Ʈ�� NoonsongFriendsEntryManager���� ������
         if (noonsongFriendsEntryManager != null)
         {
             entries = new List<NoonsongFriendsEntry>(noonsongFriendsEntryManager.GetNoonsongEntries());
@@ -42,13 +43,11 @@ public class FriendsManager : MonoBehaviour
 
     public void PopulateNoonsong()
     {
-        // ������ ��� �׸� ����
         foreach (Transform child in entryParent)
         {
             Destroy(child.gameObject);
         }
 
-        // ���ο� �׸� ���� �� UI ������Ʈ
         foreach (var entry in entries)
         {
             GameObject newEntry;
@@ -84,7 +83,6 @@ public class FriendsManager : MonoBehaviour
     {
         Debug.Log($"OnEntryClick called for entry: {entry.noonsongFriendName}");
 
-        // ������ Ŭ���� �׸��� ������ ���� �̹����� �����Ϸ� �ǵ���
         if (lastClickedEntry != null && lastClickedEntry != newEntry)
         {
             var lastEntryImage = lastClickedEntry.transform.Find("NoonsongFriendImage").GetComponent<Image>();
@@ -99,7 +97,6 @@ public class FriendsManager : MonoBehaviour
             }
         }
 
-        // ���� Ŭ���� �׸��� �̹����� �����ϰ� �������� Ű��
         var currentEntryImage = newEntry.transform.Find("NoonsongFriendImage").GetComponent<Image>();
         if (currentEntryImage != null)
         {
@@ -107,10 +104,8 @@ public class FriendsManager : MonoBehaviour
             currentEntryImage.rectTransform.localScale = new Vector3(1.3f, 1.3f, 1.3f); // �������� 1.3��� Ű��
         }
 
-        // �� ���� �г� ������Ʈ
         ShowDetails(entry);
 
-        // ���� �׸��� ������ Ŭ�� �׸����� ����
         lastClickedEntry = newEntry;
     }
 
@@ -127,14 +122,17 @@ public class FriendsManager : MonoBehaviour
                 detailsDescriptionText.text = entry.description;
                 detailsImage.sprite = entry.displaySprite;
 
-                // ������ ����
                 detailsImage.rectTransform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
                 Debug.Log($"Details panel updated with entry: {entry.noonsongFriendName}");
                 if (view3DButton != null)
                 {
                     view3DButton.onClick.RemoveAllListeners();
-                    view3DButton.onClick.AddListener(() => Open3DView(entry));
+                    view3DButton.onClick.AddListener(() =>
+                    {
+                        View3DButtonPressed();
+                        Open3DView(entry);
+                    });
                 }
             }
         }
@@ -143,15 +141,21 @@ public class FriendsManager : MonoBehaviour
             Debug.LogError("DetailsPanel is not set in the inspector!");
         }
     }
+    public bool View3DButtonPressed()
+    {
+        // 3D 뷰가 활성화되었음을 알려줌
+        isFriends3DViewActive = true;
+        Debug.Log("View 3D Button pressed.");
+        return true;
+    }
+
     public void Open3DView(NoonsongFriendsEntry entry)
     {
-        // CollectionCanvas�� ��Ȱ��ȭ
         if (collectionCanvas != null)
         {
             collectionCanvas.gameObject.SetActive(false);
         }
 
-        // CameraCanvas�� Ȱ��ȭ
         if (cameraCanvas != null)
         {
             cameraCanvas.gameObject.SetActive(true);
@@ -159,11 +163,9 @@ public class FriendsManager : MonoBehaviour
 
         if (renderCamera != null && entry.prefab != null)
         {
-            // ī�޶� ����Ʈ���� �߾� ��ǥ ���� (0.5, 0.5)
             Vector3 randomViewportPosition = new Vector3(0.5f, 0.5f, renderCamera.nearClipPlane + 2f);
             Vector3 randomWorldPosition = renderCamera.ViewportToWorldPoint(randomViewportPosition);
 
-            // 3D ������Ʈ ���� �� ���� ����
             currentNoonsongObject = Instantiate(entry.prefab, randomWorldPosition, Quaternion.identity);
             currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);
             currentNoonsongObject.transform.localScale = new Vector3(4f, 4f, 4f);
@@ -174,25 +176,28 @@ public class FriendsManager : MonoBehaviour
         }
     }
 
-    // Back ��ư�� ������ �� ȣ��� �޼���
     public void OnBackButtonPressed()
     {
-        // CameraCanvas�� ��Ȱ��ȭ
         if (cameraCanvas != null)
         {
             cameraCanvas.gameObject.SetActive(false);
         }
 
-        // CollectionCanvas�� Ȱ��ȭ
         if (collectionCanvas != null)
         {
             collectionCanvas.gameObject.SetActive(true);
         }
 
-        // ������ 3D ������Ʈ ����
         if (currentNoonsongObject != null)
         {
             Destroy(currentNoonsongObject);
         }
+        isFriends3DViewActive = false;
+        Debug.Log("Back Button pressed, 3D View is now inactive.");
+    }
+
+    public bool Is3DViewActive()
+    {
+        return isFriends3DViewActive;
     }
 }

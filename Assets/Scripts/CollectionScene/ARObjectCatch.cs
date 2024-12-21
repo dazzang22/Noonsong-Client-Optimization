@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class ARObjectCatch : MonoBehaviour
 {
-    //private ARObjectSpawn arObjectSpawn;
     private PlayerObjectSpawn playerObjectSpawn;
 
     [SerializeField]
@@ -18,24 +17,18 @@ public class ARObjectCatch : MonoBehaviour
 
     private GameObject currentTarget;
 
-    private const int generalNoonsongCost = 5; //���� ����
+    private const int generalNoonsongCost = 5;
 
 
     void Start()
     {
-        //행사장 : 밑 3줄 추가 
-        playerObjectSpawn = FindObjectOfType<PlayerObjectSpawn>();
-        if (playerObjectSpawn == null)
-        {
-            Debug.LogError("PlayerObjectSpawn not found in the scene.");
-        }
-
-
         catchButton.onClick.AddListener(OnCatchButtonClicked);
     }
 
     void Update()
     {
+        UpdateActivePlayerObjectSpawn();
+
         if (playerObjectSpawn != null)
         {
             CheckForObjectInView();
@@ -43,35 +36,26 @@ public class ARObjectCatch : MonoBehaviour
 
     }
 
-    void UpdateARObjectSpawnReference()
+    void UpdateActivePlayerObjectSpawn()
     {
-        string activeScriptName = ScriptActivationController.activatedScriptName;
-        GameObject activeObject = GameObject.Find(activeScriptName); 
+        var activeControllers = FindObjectsOfType<ScriptActivationController>();
+        foreach (var controller in activeControllers)
+        {
+            if (controller.IsActive())
+            {
+                playerObjectSpawn = controller.GetComponentInChildren<PlayerObjectSpawn>();
+                return;
+            }
+        }
 
-        // if (activeObject != null)
-        // {
-        //     arObjectSpawn = activeObject.GetComponent<ARObjectSpawn>(); 
-        // }
-        // else
-        // {
-        //     arObjectSpawn = null; // Ȱ��ȭ�� ��ũ��Ʈ�� ���� ��� null�� ����
-        // }
-        if (playerObjectSpawn != null)
-        {
-            playerObjectSpawn = activeObject.GetComponent<PlayerObjectSpawn>(); 
-        }
-        else
-        {
-            playerObjectSpawn = null; // Ȱ��ȭ�� ��ũ��Ʈ�� ���� ��� null�� ����
-        }
+        playerObjectSpawn = null;
     }
 
     void CheckForObjectInView()
     {
-        //if (arObjectSpawn != null && arObjectSpawn.SpawnedObjects.Count > 0)
         if (playerObjectSpawn != null && playerObjectSpawn.SpawnedObjects.Count > 0)
         {
-            Debug.Log($"SpawnedObjects Count: {playerObjectSpawn.SpawnedObjects.Count}"); 
+            Debug.Log($"SpawnedObjects Count: {playerObjectSpawn.SpawnedObjects.Count}");
 
             GameObject target = playerObjectSpawn.SpawnedObjects[0].GameObject;
             Vector3 screenPoint = Camera.main.WorldToViewportPoint(target.transform.position);
@@ -99,13 +83,11 @@ public class ARObjectCatch : MonoBehaviour
     {
         if (currentTarget != null)
         {
-            // SpawnedObject spawnedObject = arObjectSpawn.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
-            SpawnedObject spawnedObject = playerObjectSpawn.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
+            var spawnedObject = playerObjectSpawn.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
             if (spawnedObject != null)
             {
                 NoonsongEntry entry = spawnedObject.NoonsongEntry;
 
-                // MajorNoonsong �� ���
                 if (entry != null && currencyManager.GetActiveCurrencyType() == entry.university)
                 {
                     int requiredCurrency = entry.requiredNoonsongs;
@@ -126,12 +108,10 @@ public class ARObjectCatch : MonoBehaviour
                         }
                     }
                     Destroy(currentTarget);
-                    //arObjectSpawn.SpawnedObjects.Remove(spawnedObject);
                     playerObjectSpawn.SpawnedObjects.Remove(spawnedObject);
                 }
                 else if (entry == null && currencyManager.GetActiveCurrencyType() == "Default")
                 {
-                    // generalNoonsong�� ���
                     if (currencyManager.HasEnoughCurrency("Default", generalNoonsongCost))
                     {
                         currencyManager.UseCurrency("Default", generalNoonsongCost);
@@ -147,6 +127,3 @@ public class ARObjectCatch : MonoBehaviour
         }
     }
 }
-
-
-
