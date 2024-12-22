@@ -4,23 +4,30 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
+    [SerializeField]
+    private PlayerObjectSpawn playerObjectSpawn;
+
     public GameObject mapUI;
     //public GameObject messageUI;
     public GameObject[] regions;
     public bool[] regionUnlocked;
-    private NoonsongManager noonsongManager;
 
     private Vector2 startTouchPosition;
     private Vector2 currentTouchPosition;
     private bool isScrolling = false;
 
+    private List<string> buildingNames = new List<string> { "Sunheon Bldg", "Myungshin Bldg", "Suryeon Bldg", "Wisdom Bldg", "Renaissance Plaza Bldg", "College of Science Bldg", "College of Music Bldg", "College of Fine Arts Bldg", "Center for Continuing Education  Bldg", "College of Pharmacy Bldg" };
+
     void Start()
     {
-        noonsongManager = FindObjectOfType<NoonsongManager>();
-        if (noonsongManager == null)
+        if (playerObjectSpawn == null)
         {
-            Debug.LogError("NoonsongManager could not be found in the scene!");
-            return;
+            playerObjectSpawn = FindObjectOfType<PlayerObjectSpawn>();
+            if (playerObjectSpawn == null)
+            {
+                Debug.LogError("PlayerObjectSpawn is not assigned and cannot be found in the scene.");
+                return;
+            }
         }
 
         LoadMapState();
@@ -133,18 +140,28 @@ public class MapManager : MonoBehaviour
 
     public void CheckAndUnlockRegions()
     {
-        // 1구역 해금 조건
-        if (noonsongManager.AreAllEntriesDiscoveredInCampus1())
+        for (int i = 0; i < regions.Length; i++)
         {
-            Debug.Log("All items discovered in Campus 1! Unlocking Region 1...");
-            UnlockRegion(0); // 0번 구역 해금
-        }
+            string buildingName = buildingNames[i];
 
-        // 2구역 해금 조건
-        if (noonsongManager.AreAllEntriesDiscoveredInCampus2())
-        {
-            Debug.Log("All items discovered in Campus 2! Unlocking Region 2...");
-            UnlockRegion(1); // 1번 구역 해금
+            bool allDiscovered = playerObjectSpawn.AreAllEntriesDiscoveredForBuilding(buildingName);
+
+            if (allDiscovered)
+            {
+                Debug.Log($"Building {buildingName} completed. Unlocking region {i}.");
+                UnlockRegion(i);
+            }
+            else
+            {
+                Debug.Log($"Building {buildingName} not yet completed.");
+            }
         }
+    }
+
+    public void ActivateMapUI()
+    {
+        CheckAndUnlockRegions(); // 지역 해금 상태를 갱신
+        LoadMapState();         // 지도 상태를 업데이트
+        mapUI.SetActive(true);  // 지도 UI를 활성화
     }
 }
