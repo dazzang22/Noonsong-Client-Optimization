@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
@@ -158,10 +159,12 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public void ActivateMapUI()
+    public bool AreAllRegionsUnlocked()
     {
-        CheckAndUnlockRegions(); // 지역 해금 상태를 갱신
-        LoadMapState();         // 지도 상태를 업데이트
-        mapUI.SetActive(true);  // 지도 UI를 활성화
+        foreach (bool unlocked in regionUnlocked)
+        {
+            if (!unlocked) return false; // 하나라도 해금되지 않으면 false 반환
+        }
+        return true; // 모든 구역이 해금되었으면 true 반환
     }
 }

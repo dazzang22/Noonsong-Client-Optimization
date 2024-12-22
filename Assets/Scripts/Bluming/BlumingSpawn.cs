@@ -13,6 +13,9 @@ public class BlumingSpawn : MonoBehaviour
 
     private bool locationServiceInitialized = false;
 
+    [SerializeField]
+    private MapManager mapManager;
+
     void Start()
     {
         StartCoroutine(StartLocationService());
@@ -53,9 +56,9 @@ public class BlumingSpawn : MonoBehaviour
 
         Debug.Log($"현재 위치: {currentLatitude}, {currentLongitude}");
 
-        if (IsWithinProximity(currentLatitude, currentLongitude, targetLatitude, targetLongitude))
+        if (IsWithinProximity(currentLatitude, currentLongitude, targetLatitude, targetLongitude) && mapManager.AreAllRegionsUnlocked())
         {
-            Debug.Log("목표 위치에 도달했습니다. 씬을 전환합니다.");
+            Debug.Log("목표 위치에 도달하고 모든 구역이 해금되었습니다. 씬을 전환합니다.");
             SceneManager.LoadScene(nextScene);
         }
     }
