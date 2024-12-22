@@ -2570,7 +2570,7 @@ MonoBehaviour:
   targetLongitude: 126.96447
   proximityRange: 0.01
   nextScene: Bluming
-  previousScene: EventSceneNov
+  mapManager: {fileID: 1162336004}
 --- !u!4 &531635131
 Transform:
   m_ObjectHideFlags: 0
@@ -3163,11 +3163,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684090251}
   m_CullTransparentMesh: 1
---- !u!1 &718707681 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7827413833436666312, guid: 557584c83a406484f90292a47b333cca, type: 3}
-  m_PrefabInstance: {fileID: 3658161278348659315}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &730441389
 GameObject:
   m_ObjectHideFlags: 0
@@ -3271,11 +3266,6 @@ RectTransform:
   m_AnchoredPosition: {x: 400, y: 865.4206}
   m_SizeDelta: {x: 1080, y: 2336.6355}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &733228791 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4486890582531225517, guid: 557584c83a406484f90292a47b333cca, type: 3}
-  m_PrefabInstance: {fileID: 3658161278348659315}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &738726695
 GameObject:
   m_ObjectHideFlags: 0
@@ -4207,19 +4197,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 850727887}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6826157691200239374}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &850727887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14881,9 +14859,89 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 241970917036459101, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: Student Union Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 241970917036459101, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 494905618033502004, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: Main Library Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 494905618033502004, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 837694448773639564, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: Suryeon Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000695021063916541, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: Sunheon Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874509299290306903, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: Myungshin Bldg
+      objectReference: {fileID: 0}
     - target: {fileID: 2004843559275139740, guid: 557584c83a406484f90292a47b333cca, type: 3}
       propertyPath: m_Name
       value: MapCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 2004843559275139740, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256611197550022324, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: Center for Continuing Education  Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256611197550022324, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323484165945852939, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2356753453464733291, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: Wisdom Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 2975118121983439566, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: College of Science Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 2975118121983439566, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435625418947609271, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: Centennial Hall  Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435625418947609271, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4515053258111883731, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: College of Pharmacy Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 4515053258111883731, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4583531435391908629, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: College of Music Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 4583531435391908629, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5022886074579662482, guid: 557584c83a406484f90292a47b333cca, type: 3}
       propertyPath: m_Pivot.x
@@ -14965,11 +15023,89 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6014370298352334384, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7136920198296731687, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: Blind9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7136920198296731687, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8792208215556868393, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: College of Fine Arts Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 8792208215556868393, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9018835846968686559, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_Name
+      value: Renaissance Plaza Bldg
+      objectReference: {fileID: 0}
+    - target: {fileID: 9018835846968686559, guid: 557584c83a406484f90292a47b333cca, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 557584c83a406484f90292a47b333cca, type: 3}
+--- !u!1 &3658161278348659316 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4515053258111883731, guid: 557584c83a406484f90292a47b333cca, type: 3}
+  m_PrefabInstance: {fileID: 3658161278348659315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3658161278348659317 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2256611197550022324, guid: 557584c83a406484f90292a47b333cca, type: 3}
+  m_PrefabInstance: {fileID: 3658161278348659315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3658161278348659318 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8792208215556868393, guid: 557584c83a406484f90292a47b333cca, type: 3}
+  m_PrefabInstance: {fileID: 3658161278348659315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3658161278348659319 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4583531435391908629, guid: 557584c83a406484f90292a47b333cca, type: 3}
+  m_PrefabInstance: {fileID: 3658161278348659315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3658161278348659320 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2975118121983439566, guid: 557584c83a406484f90292a47b333cca, type: 3}
+  m_PrefabInstance: {fileID: 3658161278348659315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3658161278348659321 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9018835846968686559, guid: 557584c83a406484f90292a47b333cca, type: 3}
+  m_PrefabInstance: {fileID: 3658161278348659315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3658161278348659322 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2356753453464733291, guid: 557584c83a406484f90292a47b333cca, type: 3}
+  m_PrefabInstance: {fileID: 3658161278348659315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3658161278348659323 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 837694448773639564, guid: 557584c83a406484f90292a47b333cca, type: 3}
+  m_PrefabInstance: {fileID: 3658161278348659315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3658161278348659324 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1874509299290306903, guid: 557584c83a406484f90292a47b333cca, type: 3}
+  m_PrefabInstance: {fileID: 3658161278348659315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3658161278348659325 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1000695021063916541, guid: 557584c83a406484f90292a47b333cca, type: 3}
+  m_PrefabInstance: {fileID: 3658161278348659315}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3807428222413071331
 GameObject:
   m_ObjectHideFlags: 0
@@ -15695,13 +15831,57 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6826157691200239374}
     - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
+      propertyPath: regions.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
       propertyPath: regions.Array.data[0]
       value: 
-      objectReference: {fileID: 733228791}
+      objectReference: {fileID: 3658161278348659325}
     - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
       propertyPath: regions.Array.data[1]
       value: 
-      objectReference: {fileID: 718707681}
+      objectReference: {fileID: 3658161278348659324}
+    - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
+      propertyPath: regions.Array.data[2]
+      value: 
+      objectReference: {fileID: 3658161278348659323}
+    - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
+      propertyPath: regions.Array.data[3]
+      value: 
+      objectReference: {fileID: 3658161278348659322}
+    - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
+      propertyPath: regions.Array.data[4]
+      value: 
+      objectReference: {fileID: 3658161278348659321}
+    - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
+      propertyPath: regions.Array.data[5]
+      value: 
+      objectReference: {fileID: 3658161278348659320}
+    - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
+      propertyPath: regions.Array.data[6]
+      value: 
+      objectReference: {fileID: 3658161278348659319}
+    - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
+      propertyPath: regions.Array.data[7]
+      value: 
+      objectReference: {fileID: 3658161278348659318}
+    - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
+      propertyPath: regions.Array.data[8]
+      value: 
+      objectReference: {fileID: 3658161278348659317}
+    - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
+      propertyPath: regions.Array.data[9]
+      value: 
+      objectReference: {fileID: 3658161278348659316}
+    - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
+      propertyPath: regionUnlocked.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5749532548475057427, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
+      propertyPath: regionUnlocked.Array.data[4]
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7033188808827829903, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
       propertyPath: m_Name
       value: MapManager
