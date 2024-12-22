@@ -191,6 +191,26 @@ public class PlayerObjectSpawn : MonoBehaviour
 
         return filteredEntries;
     }
+    public bool AreAllEntriesDiscoveredForBuilding(string buildingName)
+    {
+        if (!string.IsNullOrEmpty(buildingName))
+        {
+            List<NoonsongEntry> entries = GetNoonsongEntriesByBuildingName(buildingName);
+
+            foreach (var entry in entries)
+            {
+                if (!entry.isDiscovered)
+                {
+                    return false; // 발견되지 않은 항목이 있으면 false 반환
+                }
+            }
+
+            return true; // 모든 항목이 발견된 경우 true 반환
+        }
+
+        return false; // 건물 이름이 없으면 false 반환
+    }
+
 
     bool IsObjectInView(SpawnedObject obj)
     {
