@@ -173,7 +173,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FourthDialog.Add(new DialogData("/color:blue/제2캠퍼스 원형 광장/color:black/에 있는 내 연구실에 오면 다양한 특별한 눈의 결정으로 바꿔줄게! 잊지 말고 놀러 와~!", "Turi", () => turi.SetActive(false)));
         FourthDialog.Add(new DialogData("/color:black/튜토리얼을 성공적으로 마친 당신에게 이것을 드립니다!", "Narrator", () => StartCoroutine(ShowPanelThird())));
         FourthDialog.Add(new DialogData("/color:black//wait:0.5/다양한 눈송이들과 친구가 되어 완벽한 학생증을 완성하는 것을 목표로 힘을 내 봐요!", "Narrator"));
-        FourthDialog.Add(new DialogData("/color:black/도감을 다 채우고 학생증을 완성한다면, 특별한 선물이 있을 지도…!?", "Narrator", () => StartCoroutine(ShowPanel3())));
+        FourthDialog.Add(new DialogData("/color:black/도감을 다 채우고 학생증을 완성한다면, 특별한 선물이 있을 지도…!?", "Narrator", () => { CompleteTutorial(); StartCoroutine(ShowPanel3());}));
         DialogManager.Show(FourthDialog);
     }
 
@@ -290,5 +290,14 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     {
         StudentId.SetActive(true);
         yield return null;
+    }
+
+    private void CompleteTutorial()
+    {
+        // 튜토리얼 완료 상태 저장
+        PlayerPrefs.SetInt("TutorialCompleted", 1);
+        PlayerPrefs.Save();
+
+        Debug.Log("튜토리얼 완료");
     }
 }
