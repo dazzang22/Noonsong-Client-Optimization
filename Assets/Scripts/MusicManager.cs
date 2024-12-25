@@ -15,11 +15,11 @@ public class MusicManager : MonoBehaviour
     public AudioClip area2EveningClip;
     public AudioClip area2NightClip;
 
-    public Vector2 area1Center = new Vector2(37.546033f, 126.964657f); // 1Ä·
-    public float area1Radius = 0.01f; // ¹Ý°æ 0.01µµ (¾à 1km)
+    public Vector2 area1Center = new Vector2(37.545991f, 126.964693f); // 1Ä·
+    public float area1Radius = 0.007f; // ¹Ý°æ 0.01µµ = ¾à 1km)
 
-    public Vector2 area2Center = new Vector2(37.544392f, 126.965341f); // 2Ä·
-    public float area2Radius = 0.01f;
+    public Vector2 area2Center = new Vector2(37.544362f, 126.964912f); // 2Ä·
+    public float area2Radius = 0.007f;
 
     private bool isInArea1 = false;
     private bool isInArea2 = false;
