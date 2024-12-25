@@ -77,8 +77,10 @@ public class EventStaffController : MonoBehaviour
         MapManager mapManager = FindObjectOfType<MapManager>();
         if (mapManager != null)
         {
-            mapManager.UnlockRegion(0);
-            mapManager.UnlockRegion(1);
+            for (int i = 0; i <= 9; i++)
+            {
+                mapManager.UnlockRegion(i);
+            }
         }
         else
         {
