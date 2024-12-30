@@ -2,21 +2,27 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using BackEnd;
+using TMPro;
 
 public class LoginManager : MonoBehaviour
 {
     public GameObject LoginView;
     public InputField inputField_ID;
     public InputField inputField_PW;
+    public TMP_Text resultText;
 
     ButtonManager buttonManager;
+
+    public Button loginButton;
     private string inputID = "";
     private string inputPW = "";
 
     private void Start()
     {
-        inputField_ID.onEndEdit.AddListener(OnIDFieldEndEdit);
-        inputField_PW.onEndEdit.AddListener(OnPasswordFieldEndEdit);
+        inputField_ID.onValueChanged.AddListener(OnIDFieldEndEdit);
+        inputField_PW.onValueChanged.AddListener(OnPasswordFieldEndEdit);
+
+        loginButton.onClick.AddListener(TryLogin);
 
         buttonManager = FindObjectOfType<ButtonManager>();
     }
@@ -28,7 +34,7 @@ public class LoginManager : MonoBehaviour
 
     private void OnPasswordFieldEndEdit(string input)
     {
-        TryLogin();
+        // 비밀번호 입력 완료 시 동작이 필요하다면 이곳에 작성
     }
 
     private void TryLogin()
@@ -36,6 +42,17 @@ public class LoginManager : MonoBehaviour
         inputID = inputField_ID.text;
         inputPW = inputField_PW.text;
 
-        BackendLogin.Instance.CustomLogin(inputID, inputPW);
+        var bro = Backend.BMember.CustomLogin(inputID, inputPW);
+
+        if (bro.IsSuccess())
+        {
+            SceneManager.LoadScene("Merge-TutorialScene");
+        }
+        else
+        {
+            resultText.text = "로그인에 실패했습니다.";
+            resultText.color = Color.red;
+
+        }
     }
 }

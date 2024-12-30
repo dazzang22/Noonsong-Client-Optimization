@@ -54,9 +54,6 @@ public class BackendLogin
             Debug.Log("로그인이 성공했습니다. : " + bro);
 
 
-
-            SceneManager.LoadScene("Merge-TutorialScene"); // replace "Merge-TutorialScene" 으로 이동
-
         }
         else
         {
