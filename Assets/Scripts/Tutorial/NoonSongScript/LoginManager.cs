@@ -50,7 +50,12 @@ public class LoginManager : MonoBehaviour
         }
         else
         {
-            resultText.text = "로그인에 실패했습니다.";
+            string googlehash = Backend.Utils.GetGoogleHash();
+
+            Debug.Log("구글 해시 키 : " + googlehash);
+            //resultText.text = $"로그인 실패: {bro.GetMessage()}";
+            resultText.text = $"로그인 실패: {bro.GetMessage()},{googlehash}";
+
             resultText.color = Color.red;
 
         }
