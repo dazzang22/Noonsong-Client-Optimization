@@ -8,6 +8,7 @@ public class NoonsongManager : MonoBehaviour
 {
     public GameObject discoveredEntryPrefab;    // 발견된 항목 프리팹
     public GameObject undiscoveredEntryPrefab;  // 발견되지 않은 항목 프리팹
+    public GameObject placeholderPrefab;        // 빈 항목 프리팹
     public Transform entryParent;               // 도감 항목의 부모 오브젝트
     public GameObject detailsPanel;             // 엔트리 상세 정보를 표시할 패널
     public TextMeshProUGUI detailsNameText;     // 상세 정보의 이름 텍스트
@@ -68,6 +69,8 @@ public class NoonsongManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        int itemCount = 0;
+
         foreach (var entry in entries)
         {
             if (selectedCategory == "All" || entry.university == selectedCategory)
@@ -97,6 +100,16 @@ public class NoonsongManager : MonoBehaviour
                 {
                     newEntry = Instantiate(undiscoveredEntryPrefab, entryParent);
                 }
+                itemCount++; 
+            }
+        }
+
+        if (itemCount < 3)
+        {
+            int placeholdersNeeded = 3 - itemCount; // 필요한 Placeholder 수 계산
+            for (int i = 0; i < placeholdersNeeded; i++)
+            {
+                Instantiate(placeholderPrefab, entryParent); 
             }
         }
     }
