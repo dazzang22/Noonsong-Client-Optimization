@@ -18,6 +18,14 @@ public class ButtonManager : MonoBehaviour
 
     public void GoScene()
     {
-        SceneManager.LoadScene("Merge-TutorialScene");
+        if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 1)
+        {
+            // 튜토리얼이 완료되었으므로 main Scene으로 바로 이동
+            SceneManager.LoadScene("Main Scene");
+        }
+        else
+        {
+            SceneManager.LoadScene("Merge-TutorialScene");
+        }
     }
 }

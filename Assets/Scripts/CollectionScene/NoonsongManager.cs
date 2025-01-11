@@ -8,6 +8,7 @@ public class NoonsongManager : MonoBehaviour
 {
     public GameObject discoveredEntryPrefab;    // 발견된 항목 프리팹
     public GameObject undiscoveredEntryPrefab;  // 발견되지 않은 항목 프리팹
+    public GameObject placeholderPrefab;        // 빈 항목 프리팹
     public Transform entryParent;               // 도감 항목의 부모 오브젝트
     public GameObject detailsPanel;             // 엔트리 상세 정보를 표시할 패널
     public TextMeshProUGUI detailsNameText;     // 상세 정보의 이름 텍스트
@@ -16,16 +17,18 @@ public class NoonsongManager : MonoBehaviour
     public Button view3DButton;
     public Canvas collectionCanvas;
     public Canvas cameraCanvas;
-    public Camera renderCamera;                
-    public Button[] categoryButtons;           
+    public Camera renderCamera;
+    public Button[] categoryButtons;
     public string selectedCategory = "All";
 
     [SerializeField]
     private NoonsongEntryManager noonsongEntryManager;
 
-    private List<NoonsongEntry> entries;        
-    private GameObject lastClickedEntry;         
+    private List<NoonsongEntry> entries;
+    private GameObject lastClickedEntry;
     private GameObject currentNoonsongObject;
+
+    private bool is3DViewActive = false;
 
     void Start()
     {
@@ -45,10 +48,18 @@ public class NoonsongManager : MonoBehaviour
 
         PopulateNoonsong();
     }
+    public bool View3DButtonPressed()
+    {
+        // 3D 뷰가 활성화되었음을 알려줌
+        is3DViewActive = true;
+        Debug.Log("View 3D Button pressed.");
+        return true;
+    }
+
     public void OnCategoryButtonClicked(string category)
     {
         selectedCategory = category;
-        PopulateNoonsong(); 
+        PopulateNoonsong();
     }
 
     public void PopulateNoonsong()
@@ -57,6 +68,8 @@ public class NoonsongManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+
+        int itemCount = 0;
 
         foreach (var entry in entries)
         {
@@ -67,30 +80,89 @@ public class NoonsongManager : MonoBehaviour
                 {
                     newEntry = Instantiate(discoveredEntryPrefab, entryParent);
 
-                    var eventTrigger = newEntry.GetComponent<EventTrigger>();
-                    if (eventTrigger == null)
+                    // 버튼 클릭 이벤트 연결
+                    Button button = newEntry.GetComponent<Button>();
+                    if (button == null)
                     {
-                        eventTrigger = newEntry.AddComponent<EventTrigger>();
+                        button = newEntry.AddComponent<Button>(); // 없으면 추가
                     }
-                    AddEventTriggerListener(eventTrigger, EventTriggerType.PointerClick, () => ShowDetails(entry, newEntry));
+                    button.onClick.RemoveAllListeners(); // 기존 이벤트 제거
+                    button.onClick.AddListener(() => ShowDetails(entry, newEntry));
 
+                    // 이미지 설정
                     var noonsongImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
-                    if (noonsongImage != null) noonsongImage.sprite = entry.noonsongSprite;
+                    if (noonsongImage != null)
+                    {
+                        noonsongImage.sprite = entry.noonsongSprite;
+                    }
                 }
                 else
                 {
                     newEntry = Instantiate(undiscoveredEntryPrefab, entryParent);
                 }
+                itemCount++; 
+            }
+        }
+
+        if (itemCount < 3)
+        {
+            int placeholdersNeeded = 3 - itemCount; // 필요한 Placeholder 수 계산
+            for (int i = 0; i < placeholdersNeeded; i++)
+            {
+                Instantiate(placeholderPrefab, entryParent); 
             }
         }
     }
 
+
+    public void SetAllEntriesDiscovered()
+    {
+        if (noonsongEntryManager != null)
+        {
+            entries = new List<NoonsongEntry>(noonsongEntryManager.GetNoonsongEntries());
+        }
+
+        foreach (var entry in entries)
+        {
+            if (entry != null)
+            {
+                entry.isDiscovered = true;
+                Debug.Log($"Entry '{entry.noonsongName}' has been marked as discovered.");
+            }
+        }
+
+        PopulateNoonsong();
+    }
+
+    public bool AreAllItemsDiscoveredInCategory(string category)
+    {
+        foreach (var entry in entries)
+        {
+            if (entry.university == category && !entry.isDiscovered)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     void AddEventTriggerListener(EventTrigger trigger, EventTriggerType eventType, System.Action action)
     {
         EventTrigger.Entry entry = new EventTrigger.Entry { eventID = eventType };
-        entry.callback.AddListener((eventData) => action());
+        entry.callback.AddListener((eventData) =>
+        {
+            action();
+            ExecuteEvents.ExecuteHierarchy<IScrollHandler>(
+                ((PointerEventData)eventData).pointerPress,
+                (PointerEventData)eventData,
+                ExecuteEvents.scrollHandler
+            );
+        });
         trigger.triggers.Add(entry);
     }
+
+
 
     public void DiscoverItem(NoonsongEntry entry)
     {
@@ -129,10 +201,14 @@ public class NoonsongManager : MonoBehaviour
             if (view3DButton != null)
             {
                 view3DButton.onClick.RemoveAllListeners();
-                view3DButton.onClick.AddListener(() => Open3DView(entry));
+                view3DButton.onClick.AddListener(() =>
+                {
+                    View3DButtonPressed();
+                    Open3DView(entry);
+
+                });
                 Debug.Log("3D View button click event added!");
             }
-
         }
         else
         {
@@ -183,9 +259,12 @@ public class NoonsongManager : MonoBehaviour
 
             // 오브젝트가 카메라를 바라보게 설정
             currentNoonsongObject.transform.LookAt(renderCamera.transform);
+
+            // PhotoManager 스크립트를 추가하여 오브젝트 조작 가능하게 설정
+            var photoManager = currentNoonsongObject.AddComponent<PhotoManager>();
+
         }
     }
-
     public void OnBackButtonPressed()
     {
         if (cameraCanvas != null)
@@ -202,5 +281,11 @@ public class NoonsongManager : MonoBehaviour
         {
             Destroy(currentNoonsongObject);
         }
+        is3DViewActive = false;
+        Debug.Log("Back Button pressed, 3D View is now inactive.");
+    }
+    public bool Is3DViewActive()
+    {
+        return is3DViewActive;
     }
 }

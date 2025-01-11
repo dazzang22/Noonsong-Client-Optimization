@@ -57,6 +57,7 @@ public class NoonsongEntryManager : MonoBehaviour
         Debug.Log($"Retrieving all entries. Total count: {noonsongEntries.Count}");
         return noonsongEntries.ToArray();
     }
+    
 }
 
 

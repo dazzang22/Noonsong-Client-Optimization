@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5173212613526847845
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1746687171341769706}
+  - component: {fileID: 5575404029903027467}
+  m_Layer: 0
+  m_Name: MusicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1746687171341769706
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5173212613526847845}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1892.2971, y: 961.1721, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5575404029903027467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5173212613526847845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5250976ad63dbbf4ab3e4c2440d13cbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  area1MorningClip: {fileID: 8300000, guid: af7f2a0c4abb881479708678c2aec1f4, type: 3}
+  area1AfternoonClip: {fileID: 8300000, guid: b9abbbe6b33882e4b9f5d9633b7ec3e9, type: 3}
+  area1EveningClip: {fileID: 8300000, guid: c4b649bbd88f3314381816977185e4c1, type: 3}
+  area1NightClip: {fileID: 8300000, guid: 68e87156c75e8384289684b307a1d972, type: 3}
+  area2MorningClip: {fileID: 8300000, guid: 1a861053497a90a498dcce455f29eceb, type: 3}
+  area2AfternoonClip: {fileID: 8300000, guid: 10160eefcf5c62a45865783ff8f205fa, type: 3}
+  area2EveningClip: {fileID: 8300000, guid: b4602b022b9f2d247b5ba888880433f8, type: 3}
+  area2NightClip: {fileID: 8300000, guid: f5b862a5434940942817a4a4143cdf57, type: 3}
+  area1Center: {x: 37.546032, y: 126.96466}
+  area1Radius: 0.01
+  area2Center: {x: 37.54439, y: 126.96534}
+  area2Radius: 0.01

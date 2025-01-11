@@ -1,15 +1,17 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class CurrencyManager : MonoBehaviour
 {
     public static CurrencyManager Instance { get; private set; }
 
-    public int noonsongCurrency;
+    private Dictionary<string, int> currencies = new Dictionary<string, int>();
+    private string activeCurrencyType = "Default";
 
-    // 여러 TextMeshProUGUI 컴포넌트를 관리하기 위한 리스트
     [SerializeField] private List<TextMeshProUGUI> currencyTexts = new List<TextMeshProUGUI>();
+    [SerializeField] private Button[] currencyButtons;
 
     private void Awake()
     {
@@ -26,50 +28,160 @@ public class CurrencyManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateCurrencyUI(); // 초기화 시 UI 업데이트
-    }
-
-    public bool HasEnoughCurrency(int amount)
-    {
-        return noonsongCurrency >= amount;
-    }
-
-    public void UseCurrency(int amount)
-    {
-        if (HasEnoughCurrency(amount))
+        foreach (var button in currencyButtons)
         {
-            noonsongCurrency -= amount;
-            UpdateCurrencyUI(); // 통화 사용 후 UI 업데이트
+            string currencyType = button.name;
+            if (!currencies.ContainsKey(currencyType))
+            {
+                SetCurrency(currencyType, 998); // 기본적으로 998로 설정
+            }
+        }
+
+        UpdateCurrencyUI();
+    }
+
+    public Button[] GetCurrencyButtons()
+    {
+        return currencyButtons;
+    }
+    public void SetAllCurrenciesTo999(Button[] currencyButtons)
+    {
+        foreach (var button in currencyButtons)
+        {
+            string currencyType = button.name;
+
+            if (!currencies.ContainsKey(currencyType))
+            {
+                SetCurrency(currencyType, 999);
+            }
+            else
+            {
+                SetCurrency(currencyType, 999);
+            }
+        }
+        UpdateCurrencyUI();
+    }
+
+    public void SwitchCurrencyType(string currencyType)
+    {
+        if (!currencies.ContainsKey(currencyType))
+        {
+            currencies[currencyType] = 0;
+        }
+        activeCurrencyType = currencyType;
+        UpdateCurrencyUI();
+    }
+
+    // 특정 화폐(대학명)에 대한 충분한 양이 있는지 확인
+    public bool HasEnoughCurrency(string currencyType, int amount)
+    {
+        return currencies.ContainsKey(currencyType) && currencies[currencyType] >= amount;
+    }
+
+    // 특정 화폐(대학명)을 사용
+    public void UseCurrency(string currencyType, int amount)
+    {
+        if (HasEnoughCurrency(currencyType, amount))
+        {
+            currencies[currencyType] -= amount;
+            UpdateCurrencyUI();
         }
     }
 
-    public void AddCurrency(int amount)
+    // 특정 화폐에 양 추가
+    public void AddCurrency(string currencyType, int amount)
     {
-        noonsongCurrency += amount;
-        UpdateCurrencyUI(); // 통화 추가 후 UI 업데이트
+        if (!currencies.ContainsKey(currencyType))
+        {
+            currencies[currencyType] = 0;
+        }
+        currencies[currencyType] += amount;
+
+        if (currencyType == activeCurrencyType)
+        {
+            UpdateCurrencyUI();
+        }
     }
 
+    // 특정 화폐의 양 설정
+    public void SetCurrency(string currencyType, int amount)
+    {
+        if (!currencies.ContainsKey(currencyType))
+        {
+            currencies[currencyType] = 0;
+        }
+        currencies[currencyType] = amount;
+        UpdateCurrencyUI();
+    }
+
+    // 화폐 양 증가
+    public void IncreaseCurrency(string currencyType, int amount)
+    {
+        if (!currencies.ContainsKey(currencyType))
+        {
+            currencies[currencyType] = 0;
+        }
+        currencies[currencyType] += amount;
+
+        if (currencyType == activeCurrencyType)
+        {
+            UpdateCurrencyUI();
+        }
+    }
+
+    // 화폐 양 감소
+    public bool DecreaseCurrency(string currencyType, int amount)
+    {
+        if (currencies.ContainsKey(currencyType) && currencies[currencyType] >= amount)
+        {
+            currencies[currencyType] -= amount;
+            if (currencyType == activeCurrencyType)
+            {
+                UpdateCurrencyUI();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    // 특정 화폐의 양 가져오기
+    public int GetCurrencyAmount(string currencyType)
+    {
+        if (currencies.ContainsKey(currencyType))
+        {
+            return currencies[currencyType];
+        }
+        return 0;
+    }
+
+    // UI 업데이트
     private void UpdateCurrencyUI()
     {
-        // 등록된 모든 TextMeshProUGUI 컴포넌트를 업데이트
         foreach (var currencyText in currencyTexts)
         {
             if (currencyText != null)
             {
-                currencyText.text = noonsongCurrency.ToString();
+                currencyText.text = currencies.ContainsKey(activeCurrencyType)
+                    ? currencies[activeCurrencyType].ToString()
+                    : "0";
             }
         }
     }
 
-    // TextMeshProUGUI 컴포넌트를 등록하는 메서드
+    // 새 화폐 텍스트 등록
     public void RegisterCurrencyText(TextMeshProUGUI newCurrencyText)
     {
         if (!currencyTexts.Contains(newCurrencyText))
         {
             currencyTexts.Add(newCurrencyText);
-            newCurrencyText.text = noonsongCurrency.ToString(); // 등록 시 초기화
+            newCurrencyText.text = currencies.ContainsKey(activeCurrencyType)
+                ? currencies[activeCurrencyType].ToString()
+                : "0";
         }
     }
+    public string GetActiveCurrencyType()
+    {
+        return activeCurrencyType;
+    }
+
 }
-
-

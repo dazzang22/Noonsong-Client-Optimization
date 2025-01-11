@@ -1,54 +1,83 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement; 
 
-// 이 클래스는 버튼을 길게 누를 때 게이지를 채우고, 버튼을 떼면 게이지를 초기화하는 기능을 함
 public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    // 게이지 이미지 배열
     public Image[] gauges;
-    // 게이지가 하나씩 채워지는 데 걸리는 시간
-    public float holdTime = 1f;
-    // 버튼이 눌려 있는지 여부를 나타내는 변수
+    public float holdTime = 5f;
     private bool isHolding = false;
-    // 버튼이 눌려진 시간을 누적하는 변수
     private float holdCounter = 0f;
-    // 오디오 소스 컴포넌트
     private AudioSource audioSource;
-    // 재생할 사운드 클립
     public AudioClip clickSound;
+    private bool soundPlayed = false;
+
+    public UnityEvent onCatchButtonClicked;
+
+    [SerializeField]
+    private GameObject targetCanvas;
+
+    private float pressStartTime = 0f;
+    private float shortPressThreshold = 0.3f;
+
 
     void Start()
     {
-        // AudioSource 컴포넌트를 가져옴
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.clip = clickSound;
+        audioSource.playOnAwake = false;
+
+        if (onCatchButtonClicked == null)
+            onCatchButtonClicked = new UnityEvent();
+
+        if (targetCanvas != null)
+        {
+            targetCanvas.SetActive(false);
+        }
+
+        // 현재 씬 이름이 "Merge-TutorialScene-Friends_noonsong"이 아닐 때만 실행
+        if (SceneManager.GetActiveScene().name != "Merge-TutorialScene-Friends_noonsong")
+        {
+            if (CurrencyManager.Instance != null)
+            {
+                Button[] currencyButtons = CurrencyManager.Instance.GetCurrencyButtons();
+                foreach (Button button in currencyButtons)
+                {
+                    string buttonCurrencyType = button.name;
+                    button.onClick.AddListener(() => SwitchCurrency(buttonCurrencyType));
+                }
+            }
+        }
     }
 
     void Update()
     {
-        // 버튼이 눌려있는 상태라면
         if (isHolding)
         {
-            // 시간을 누적
             holdCounter += Time.deltaTime;
-            // 현재 게이지 인덱스를 계산
             int gaugeIndex = Mathf.FloorToInt(holdCounter / holdTime * gauges.Length);
-            // 게이지 이미지를 활성화 또는 비활성화
+
             for (int i = 0; i < gauges.Length; i++)
             {
                 gauges[i].gameObject.SetActive(i <= gaugeIndex);
             }
-            // 게이지가 모두 채워졌다면, 최대 시간을 유지
-            if (gaugeIndex >= gauges.Length - 1)
+
+            if (holdCounter >= holdTime)
             {
-                holdCounter = holdTime * gauges.Length;
+                holdCounter = holdTime; 
+                if (!soundPlayed) 
+                {
+                    onCatchButtonClicked?.Invoke();
+                    soundPlayed = true; 
+                }
             }
         }
         else
         {
-            // 버튼이 눌려있지 않다면, 시간을 초기화하고 모든 게이지를 비활성화
             holdCounter = 0f;
+            soundPlayed = false;
             foreach (var gauge in gauges)
             {
                 gauge.gameObject.SetActive(false);
@@ -56,20 +85,46 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         }
     }
 
-    // 버튼이 눌렸을 때 호출
     public void OnPointerDown(PointerEventData eventData)
     {
         isHolding = true;
-        // 버튼이 눌리면 사운드를 재생
-        if (audioSource != null && clickSound != null)
+        pressStartTime = Time.time;
+
+        if (audioSource != null && clickSound != null && !audioSource.isPlaying)
         {
             audioSource.Play();
         }
     }
 
-    // 버튼이 떼어졌을 때 호출
     public void OnPointerUp(PointerEventData eventData)
     {
         isHolding = false;
+
+        float pressDuration = Time.time - pressStartTime;
+
+        if (pressDuration <= shortPressThreshold)
+        {
+            HandleShortPress();
+        }
+
+        if (audioSource != null && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+    }
+
+    private void HandleShortPress()
+    {
+        Debug.Log("Short press detected!");
+        if (targetCanvas != null)
+        {
+            targetCanvas.SetActive(!targetCanvas.activeSelf);
+        }
+    }
+
+    private void SwitchCurrency(string currencyType)
+    {
+        Debug.Log($"Switching to currency type: {currencyType}");
+        CurrencyManager.Instance.SwitchCurrencyType(currencyType);
     }
 }
