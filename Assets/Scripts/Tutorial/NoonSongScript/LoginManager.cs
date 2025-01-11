@@ -1,24 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using BackEnd;
+using TMPro;
 
 public class LoginManager : MonoBehaviour
 {
     public GameObject LoginView;
     public InputField inputField_ID;
     public InputField inputField_PW;
+    public TMP_Text resultText;
 
     ButtonManager buttonManager;
+
+    public Button loginButton;
     private string inputID = "";
     private string inputPW = "";
 
-    private string user = "NoonSong";
-    private string password = "1906";
-
     private void Start()
     {
-        inputField_ID.onEndEdit.AddListener(OnIDFieldEndEdit);
-        inputField_PW.onEndEdit.AddListener(OnPasswordFieldEndEdit);
+        inputField_ID.onValueChanged.AddListener(OnIDFieldEndEdit);
+        inputField_PW.onValueChanged.AddListener(OnPasswordFieldEndEdit);
+
+        loginButton.onClick.AddListener(TryLogin);
 
         buttonManager = FindObjectOfType<ButtonManager>();
     }
@@ -30,7 +34,7 @@ public class LoginManager : MonoBehaviour
 
     private void OnPasswordFieldEndEdit(string input)
     {
-        TryLogin();
+        // 비밀번호 입력 완료 시 동작이 필요하다면 이곳에 작성
     }
 
     private void TryLogin()
@@ -38,14 +42,22 @@ public class LoginManager : MonoBehaviour
         inputID = inputField_ID.text;
         inputPW = inputField_PW.text;
 
-        if (inputID == user && inputPW == password)
+        var bro = Backend.BMember.CustomLogin(inputID, inputPW);
+
+        if (bro.IsSuccess())
         {
-            Debug.Log("로그인 성공!");
-            buttonManager.GoScene(); // 씬 전환
+            SceneManager.LoadScene("Merge-TutorialScene");
         }
         else
         {
-            Debug.Log("로그인 실패");
+            string googlehash = Backend.Utils.GetGoogleHash();
+
+            Debug.Log("구글 해시 키 : " + googlehash);
+            //resultText.text = $"로그인 실패: {bro.GetMessage()}";
+            resultText.text = $"로그인 실패: {bro.GetMessage()},{googlehash}";
+
+            resultText.color = Color.red;
+
         }
     }
 }
