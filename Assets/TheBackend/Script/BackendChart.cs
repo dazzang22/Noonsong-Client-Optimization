@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using BackEnd;
-using System.Threading.Tasks;
+using System.Collections;
 
 //뒤끝 차트에서 받은 상점 데이터 정보용 클래스
 public class ShopItem
@@ -13,15 +12,11 @@ public class ShopItem
     public string ItemInfo { get; set; }
 }
 
-public class BackendChart
+public class BackendChart : MonoBehaviour
 {
     //인스턴스
     private static BackendChart _instance = null;
     private static readonly object _lock = new object();
-
-    //상점 관련
-    public List<ShopItem> shopItems = new List<ShopItem>(); //상점 데이터 저장 리스트
-    private BackendReturnObject chartData; //차트 상점 데이터 저장 필드
 
     public static BackendChart Instance
     {
@@ -31,24 +26,45 @@ public class BackendChart
             {
                 if (_instance == null)
                 {
-                    _instance = new BackendChart();
+                    _instance = FindObjectOfType<BackendChart>();
+                    if (_instance == null)
+                    {
+                        GameObject backendChartObj = new GameObject("BackendChart");
+                        _instance = backendChartObj.AddComponent<BackendChart>();
+                    }
                 }
-
                 return _instance;
             }
         }
     }
 
+    //상점 관련
+    public List<ShopItem> shopItems = new List<ShopItem>(); //상점 데이터 저장 리스트
+    private BackendReturnObject chartData; //차트 상점 데이터 저장 필드
+
+    private void Awake()
+    {
+        // 싱글톤 초기화 및 파괴 방지
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     public void InitializeShopInfo(System.Action onComplete)
     {
-        GetChartAsync("160546");
+        StartCoroutine(LoadChartDataCoroutine("160546", onComplete));
         SetShopInfo();
         onComplete?.Invoke();
-
     }
 
     //차트 불러오기 함수
-    private void GetChartAsync(string chartId)
+    private IEnumerator LoadChartDataCoroutine(string chartId, System.Action onComplete)
     {
         Debug.Log($"{chartId}의 차트 불러오기를 요청합니다.");
 
@@ -58,10 +74,11 @@ public class BackendChart
         if (chartData.IsSuccess() == false)
         {
             Debug.LogError($"{chartId}의 차트를 불러오는 중, 에러가 발생했습니다. : {chartData}");
-            return;
+            yield break;
         }
 
         Debug.Log("차트 불러오기에 성공했습니다. : {chartData}");
+        yield return null;
     }
 
     //상점 정보 가져오는 함수

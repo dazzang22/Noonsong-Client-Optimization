@@ -23,11 +23,10 @@ public class BackendManager : MonoBehaviour
 
         Test();
 
-        // BackendChart 초기화 완료 후 TuriShopManager 실행
         BackendChart.Instance.InitializeShopInfo(() =>
         {
-            Debug.Log("차트 데이터 로드 완료 후 TuriShopManager 호출");
-            TuriShopManager.Instance.DisplayShopItems();
+            //Debug.Log("차트 데이터 로드 완료 후 TuriShopManager 호출");
+            //TuriShopManager.Instance.DisplayShopItems(); //테스트
         });
     }
 
