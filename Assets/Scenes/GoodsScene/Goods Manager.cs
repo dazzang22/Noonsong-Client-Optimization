@@ -10,7 +10,7 @@ public class GoodsManager : MonoBehaviour
     private TextMeshProUGUI dispatchTimeText; // 남은 시간 텍스트
 
     private const int DEFAULT_INCREMENT = 3;   // 5분마다 추가할 재화 양
-    private const float INTERVAL = 300f;       // 5분(300초)
+    private const float INTERVAL = 10f;       // 5분(300초)
     private const int DISPATCH_DURATION = 10; // 파견 총 시간(10분)
    private int remainingMinutes = DISPATCH_DURATION; // 초기 남은 시간(10분)
 
@@ -91,6 +91,6 @@ public class GoodsManager : MonoBehaviour
             dispatchTimeText.text = "파견 완료!";
         }
     }
-    
+
 
 }
