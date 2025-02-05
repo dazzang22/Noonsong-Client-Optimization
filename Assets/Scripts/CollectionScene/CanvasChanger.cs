@@ -12,6 +12,7 @@ public class CanvasChanger : MonoBehaviour
     [SerializeField] private Button popupButton;
     [SerializeField] private Button backButton;
     [SerializeField] private Button turyButton;
+    [SerializeField] private Button turyBackButton;
     [SerializeField] private Button mapButton;
     [SerializeField] private Button mapbackButton;
 
@@ -27,8 +28,10 @@ public class CanvasChanger : MonoBehaviour
         popupButton.onClick.AddListener(ShowPopup);
         backButton.onClick.AddListener(HidePopup);
         turyButton.onClick.AddListener(ToggleTuryCanvas);
+        turyBackButton.onClick.AddListener(ToggleTuryCanvas);
         mapButton.onClick.AddListener(ToggleMapCanvas);
         mapbackButton.onClick.AddListener(ToggleMapCanvas);
+
     }
 
     private void ShowPopup()
