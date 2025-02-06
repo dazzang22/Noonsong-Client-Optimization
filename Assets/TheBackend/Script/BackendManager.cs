@@ -18,9 +18,16 @@ public class BackendManager : MonoBehaviour
         else
         {
             Debug.LogError("초기화 실패 : " + bro); // 실패일 경우 statusCode 400대 에러 발생
-        }
+        } 
+       
 
         Test();
+
+        BackendChart.Instance.InitializeShopInfo(() =>
+        {
+            //Debug.Log("차트 데이터 로드 완료 후 TuriShopManager 호출");
+            //TuriShopManager.Instance.DisplayShopItems(); //테스트
+        });
     }
 
     // =======================================================
@@ -37,5 +44,9 @@ public class BackendManager : MonoBehaviour
         //BackendLogin.Instance.CustomLogin("user1", "1234"); // [추가] 뒤끝 로그인
         //BackendLogin.Instance.UpdateNickname("Noonsong"); // [추가] 닉네임 변겅
         //Debug.Log("테스트를 종료합니다.");
+
+        BackendLogin.Instance.CustomLogin("asdfasdf", "123456");
     }
+
+    
 }
