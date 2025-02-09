@@ -3,74 +3,38 @@ using UnityEngine.UI;
 
 public class ScrollViewManager : MonoBehaviour
 {
-    public GameObject[] scrollViews;  // 3°³ÀÇ ½ºÅ©·Ñºä¸¦ ´ãÀ» ¹è¿­
-    public Button[] buttons;          // 3°³ÀÇ ¹öÆ°À» ´ãÀ» ¹è¿­
-    public Sprite[] buttonSprites;    // °¢ ¹öÆ°¿¡ ÇÒ´çÇÒ ÀÌ¹ÌÁö (ºñÈ°¼º/È°¼º)
+  public GameObject[] scrollViews;  // ê° ìŠ¤í¬ë¡¤ë·°ë¥¼ ë‹´ì€ ë°°ì—´
+  public Toggle[] toggles;          // ê° í† ê¸€ì„ ë‹´ì€ ë°°ì—´
 
-    void Start()
+  void Start()
+  {
+    // ì´ˆê¸° ì„¤ì •: ì²« ë²ˆì§¸ ìŠ¤í¬ë¡¤ë·°ë§Œ í™œì„±í™”
+    for (int i = 0; i < scrollViews.Length; i++)
     {
-        // ÃÊ±â ¼³Á¤: Ã¹ ¹øÂ° ½ºÅ©·Ñºä¸¸ È°¼ºÈ­
-        for (int i = 0; i < scrollViews.Length; i++)
-        {
-            scrollViews[i].SetActive(i == 0);
-        }
-
-        // ¹öÆ° Å¬¸¯ ÀÌº¥Æ® ¸®½º³Ê Ãß°¡
-        for (int i = 0; i < buttons.Length; i++)
-        {
-            int index = i;
-            Debug.Log($"Adding listener to button {index}");
-            buttons[i].onClick.AddListener(() => OnButtonClicked(index));
-        }
+      scrollViews[i].SetActive(i == 0);
     }
 
-    void OnButtonClicked(int index)
+    // í† ê¸€ ê°’ ë³€ê²½ ì´ë²¤íŠ¸ ë¦¬ìŠ¤ë„ˆ ì¶”ê°€
+    for (int i = 0; i < toggles.Length; i++)
     {
-        Debug.Log($"Button {index} clicked");
-
-        for (int i = 0; i < scrollViews.Length; i++)
-        {
-            scrollViews[i].SetActive(i == index);
-        }
-
-        // ¹öÆ° ÀÌ¹ÌÁö º¯°æ
-        for (int i = 0; i < buttons.Length; i++)
-        {
-            Image buttonImage = buttons[i].GetComponent<Image>();
-            if (buttonImage != null)
-            {
-                if (i * 2 < buttonSprites.Length)
-                {
-                    buttonImage.sprite = buttonSprites[i * 2]; // ºñÈ°¼ºÈ­ ÀÌ¹ÌÁö
-                    Debug.Log($"Button {i} set to inactive sprite.");
-                }
-                else
-                {
-                    Debug.LogError($"No inactive sprite for button {i}.");
-                }
-            }
-            else
-            {
-                Debug.LogError($"No Image component found on button {i}.");
-            }
-        }
-
-        Image activeButtonImage = buttons[index].GetComponent<Image>();
-        if (activeButtonImage != null)
-        {
-            if (index * 2 + 1 < buttonSprites.Length)
-            {
-                activeButtonImage.sprite = buttonSprites[index * 2 + 1]; // È°¼ºÈ­ ÀÌ¹ÌÁö
-                Debug.Log($"Button {index} set to active sprite.");
-            }
-            else
-            {
-                Debug.LogError($"No active sprite for button {index}.");
-            }
-        }
-        else
-        {
-            Debug.LogError($"No Image component found on button {index}.");
-        }
+      int index = i;
+      toggles[i].onValueChanged.AddListener((isOn) => OnToggleChanged(index, isOn));
     }
+  }
+
+  void OnToggleChanged(int index, bool isOn)
+  {
+    // í† ê¸€ì´ í™œì„±í™” ë˜ì—ˆì„ ë•Œë§Œ ì²˜ë¦¬
+    if (isOn)
+    {
+      Debug.Log($"Toggle {index} activated");
+
+      // í•´ë‹¹ ìŠ¤í¬ë¡¤ë·°ë§Œ í™œì„±í™”
+      for (int i = 0; i < scrollViews.Length; i++)
+      {
+        scrollViews[i].SetActive(false);
+      }
+      scrollViews[index].SetActive(true);
+    }
+  }
 }
