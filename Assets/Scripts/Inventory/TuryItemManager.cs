@@ -3,9 +3,12 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using System;
 
 public class TuryItemManager : MonoBehaviour
 {
+  public InventoryManager inventoryManager;
+
   public List<ItemEntry> itemEntries;  // 아이템 리스트 (스크립터블 오브젝트)
   public Transform contentPanel;       // 스크롤뷰의 Content 오브젝트
   public GameObject itemPrefab;        // 아이템 UI 프리팹
@@ -128,12 +131,16 @@ public class TuryItemManager : MonoBehaviour
   {
     if (selectedItem != null && CurrencyManager.Instance.UseCurrency(selectedItem.itemPrice))
     {
-      Debug.Log($"{selectedItem.itemName}을(를) 구매했습니다!");
-      selectedItem.itemCount++;
+      selectedItem.itemCount++; // ⭐ 아이템 개수 증가
+      //UpdateItemCountUI(selectedItem);
+      Debug.Log($"{selectedItem.itemName}을(를) 구매했습니다! 현재 보유량: {selectedItem.itemCount}");
+
+      FindObjectOfType<InventoryManager>().UpdateInventory(); // ⭐ 인벤토리 업데이트
     }
 
     CloseAllPopups();
   }
+
 
   void CloseAllPopups()
   {
