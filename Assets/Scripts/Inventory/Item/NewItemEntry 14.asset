@@ -12,7 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16407a38e03c8734c9a329b711db90ee, type: 3}
   m_Name: NewItemEntry 14
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
+  itemID: 15
+  itemName: "\uD734\uB300\uC6A9 \uC804\uC790\uC2DC\uACC4"
+  description: "\uD0C0\uC774\uBA38, \uC2A4\uD1B1\uC6CC\uCE58 \uB4F1\uC73C\uB85C \uC0AC\uC6A9\uD560
+    \uC218  \uC788\uB294 \uB2E4\uC6A9\uB3C4 \uD734\uB300\uC6A9 \uC804\uC790 \uC2DC\uACC4."
+  itemPrice: 0
+  itemCount: 0
   itemSprite: {fileID: 0}
-  preferences: []
+  preferences:
+  - departmentNames:
+    - Science
+    - Pharmacy
+    - SocialSciences
+    preference: 0
+  - departmentNames:
+    - Music
+    - Media
+    preference: 1
+  - departmentNames:
+    - LiberalArts
+    preference: 3

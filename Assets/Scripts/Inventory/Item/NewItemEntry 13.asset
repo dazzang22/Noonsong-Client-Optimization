@@ -12,7 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16407a38e03c8734c9a329b711db90ee, type: 3}
   m_Name: NewItemEntry 13
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
+  itemID: 14
+  itemName: "\uB208\uC758 \uACB0\uC815 \uD0A4\uCEA1"
+  description: "\uB208\uC758 \uACB0\uC815\uC774 \uADF8\uB824\uC9C4 \uADC0\uC5EC\uC6B4
+    \uD0A4\uCEA1."
+  itemPrice: 0
+  itemCount: 1
   itemSprite: {fileID: 0}
-  preferences: []
+  preferences:
+  - departmentNames:
+    - Engineering
+    - Media
+    - English
+    preference: 0
+  - departmentNames:
+    - Art
+    - Music
+    preference: 1
+  - departmentNames:
+    - GlobalService
+    - SocialSciences
+    preference: 3

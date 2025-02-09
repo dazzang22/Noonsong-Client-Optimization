@@ -12,7 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16407a38e03c8734c9a329b711db90ee, type: 3}
   m_Name: NewItemEntry 11
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
+  itemID: 12
+  itemName: "\uB208\uC1A1\uB9AC\uC790"
+  description: "\uC720\uBA85\uD55C \uBA85\uD654\uB97C \uC624\uB9C8\uC8FC\uD588\uB2E4.
+    made by \uB208\uC1A1."
+  itemPrice: 0
+  itemCount: 1
   itemSprite: {fileID: 0}
-  preferences: []
+  preferences:
+  - departmentNames:
+    - Art
+    - SocialSciences
+    preference: 0
+  - departmentNames:
+    - LiberalArts
+    - Business
+    - GlobalConvergence
+    preference: 1
+  - departmentNames:
+    - Engineering
+    - Science
+    - Music
+    - Media
+    preference: 2
+  - departmentNames:
+    - Law
+    - HumanEcology
+    preference: 3

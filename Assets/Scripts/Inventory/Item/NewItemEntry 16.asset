@@ -12,7 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16407a38e03c8734c9a329b711db90ee, type: 3}
   m_Name: NewItemEntry 16
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
+  itemID: 17
+  itemName: MP3
+  description: "\uB178\uC774\uC988 \uCE94\uC2AC\uB9C1 \uAE30\uB2A5\uC774 \uC788\uB294
+    \uC774\uC5B4\uD3F0\uACFC mp3 \uD55C \uC30D. \uACF5\uBD80\uD560 \uB54C\uB098 \uC74C\uC545\uC744
+    \uB4E4\uC744 \uB54C \uB4F1 \uC5EC\uB290 \uB54C\uB098 \uC720\uC6A9\uD558\uB2E4."
+  itemPrice: 0
+  itemCount: 0
   itemSprite: {fileID: 0}
-  preferences: []
+  preferences:
+  - departmentNames:
+    - Music
+    - LiberalArts
+    preference: 0
+  - departmentNames:
+    - English
+    preference: 2
+  - departmentNames:
+    - Science
+    - HumanEcology
+    - GlobalConvergence
+    preference: 3

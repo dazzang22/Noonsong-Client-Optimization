@@ -76,6 +76,7 @@ public class InventoryManager : MonoBehaviour
         inventoryItems.Remove(item);
       }
     }
+    PopulateInventory();
   }
   void ShowItemDescription(ItemEntry item)
   {

@@ -135,7 +135,7 @@ public class TuryItemManager : MonoBehaviour
       //UpdateItemCountUI(selectedItem);
       Debug.Log($"{selectedItem.itemName}을(를) 구매했습니다! 현재 보유량: {selectedItem.itemCount}");
 
-      FindObjectOfType<InventoryManager>().UpdateInventory(); // ⭐ 인벤토리 업데이트
+      inventoryManager.UpdateInventory(); // ⭐ 인벤토리 업데이트
     }
 
     CloseAllPopups();

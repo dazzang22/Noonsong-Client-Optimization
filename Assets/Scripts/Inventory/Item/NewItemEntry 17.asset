@@ -12,7 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16407a38e03c8734c9a329b711db90ee, type: 3}
   m_Name: NewItemEntry 17
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
+  itemID: 18
+  itemName: "\uBC18\uC9DD \uC5F0\uD544 "
+  description: "\uC660\uC9C0 \uC7A1\uC73C\uBA74 \uCC3D\uC791\uC695\uC774 \uC0D8\uC19F\uB294
+    \uC5F0\uD544. \uC606\uBA74\uC5D0 \u2018Motivation\u2019\uC774\uB77C\uB294 \uAE00\uC790\uAC00
+    \uC0C8\uACA8\uC838 \uC788\uB2E4."
+  itemPrice: 0
+  itemCount: 0
   itemSprite: {fileID: 0}
-  preferences: []
+  preferences:
+  - departmentNames:
+    - Music
+    - English
+    - Media
+    - GlobalService
+    preference: 0
+  - departmentNames:
+    - LiberalArts
+    - Art
+    preference: 1
+  - departmentNames:
+    - Engineering
+    - GlobalConvergence
+    preference: 2
+  - departmentNames:
+    - Business
+    - Pharmacy
+    - SocialSciences
+    preference: 3
