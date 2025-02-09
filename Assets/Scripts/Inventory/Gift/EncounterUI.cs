@@ -14,7 +14,7 @@ public class EncounterUI : MonoBehaviour
     [SerializeField] private GameObject dialoguePopup;
 
     [SerializeField] private GiftInventory giftInventory;
-    [SerializeField] private Inventory playerInventory;
+    [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private GameObject giftPopup;
     [SerializeField] private TextMeshProUGUI giftItemName;
     [SerializeField] private Image giftItemImage;
@@ -59,22 +59,16 @@ public class EncounterUI : MonoBehaviour
 
     public void OpenGiftInventory()
     {
-        if (playerInventory == null)
-        {
-            Debug.LogError("플레이어 인벤토리가 null입니다! 초기화 순서를 확인하세요.");
-            return;
-        }
-
-        giftInventory.Initialize(playerInventory, this);
-        giftInventory.SyncWithPlayerInventory();
+        giftInventory.Initialize(inventoryManager, this);
+        giftInventory.SyncWithInventoryManager();
         giftInventory.ToggleGiftInventory();
     }
 
-    public void ShowGiftPopup(Item item)
+    public void ShowGiftPopup(ItemEntry item)
     {
         giftItemName.text = item.itemName;
-        giftItemImage.sprite = item.itemImage;
-        giftItemDescription.text = item.itemDescription;
+        giftItemImage.sprite = item.itemSprite;
+        giftItemDescription.text = item.description;
         giftPopup.SetActive(true);
     }
 
@@ -83,10 +77,10 @@ public class EncounterUI : MonoBehaviour
         giftPopup.SetActive(false);
     }
 
-    public void GiveGift(Item item)
+    public void GiveGift(ItemEntry item)
     {
-        Debug.Log($"{item.itemName}을(를) 선물함");
-        giftInventory.SyncWithPlayerInventory();
+        Debug.Log($"{item.itemName}을(를) 선물");
+        giftInventory.SyncWithInventoryManager();
         giftPopup.SetActive(false);
     }
 

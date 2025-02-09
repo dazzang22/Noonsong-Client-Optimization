@@ -8,18 +8,18 @@ public class GiftInventory : MonoBehaviour
     public GameObject giftSlotPrefab;
     public Transform giftSlotContainer;
 
-    private List<Item> giftItems = new List<Item>();
+    private List<ItemEntry> giftItems = new List<ItemEntry>();
+    private InventoryManager inventoryManager;
     private EncounterUI encounterUI;
-    private Inventory playerInventory;
 
-    private Item selectedGiftItem;
+    private ItemEntry selectedGiftItem;
     public GameObject giftPopup;
 
-    public void Initialize(Inventory inventory, EncounterUI ui)
+    public void Initialize(InventoryManager inventory, EncounterUI ui)
     {
-        playerInventory = inventory;
+        inventoryManager = inventory;
         encounterUI = ui;
-        SyncWithPlayerInventory();
+        SyncWithInventoryManager();
     }
 
     public void ToggleGiftInventory()
@@ -28,7 +28,7 @@ public class GiftInventory : MonoBehaviour
         giftPopup.SetActive(false);
     }
 
-    public void ShowGiftPopup(Item item)
+    public void ShowGiftPopup(ItemEntry item)
     {
         selectedGiftItem = item;
         encounterUI.ShowGiftPopup(item);
@@ -38,27 +38,36 @@ public class GiftInventory : MonoBehaviour
     {
         if (selectedGiftItem != null)
         {
-            giftItems.Remove(selectedGiftItem);
-            playerInventory.RemoveItem(selectedGiftItem);
-            encounterUI.GiveGift(selectedGiftItem);
+            selectedGiftItem.itemCount--;
+            if (selectedGiftItem.itemCount <= 0)
+            {
+                giftItems.Remove(selectedGiftItem);
+            }
 
-            SyncWithPlayerInventory();
-            UpdateGiftInventoryUI();
+            inventoryManager.UpdateInventory();
+            SyncWithInventoryManager();
+            encounterUI.GiveGift(selectedGiftItem);
+            giftPopup.SetActive(false);
         }
     }
 
-    public void SyncWithPlayerInventory()
+    public void SyncWithInventoryManager()
     {
-        if (playerInventory == null)
+        if (inventoryManager == null)
         {
-            Debug.LogError("Player Inventory가 null입니다! 초기화 확인 필요");
+            Debug.LogError("InventoryManager가 연결되지 않았습니다");
             return;
         }
 
-        giftItems = new List<Item>(playerInventory.GetItems());
+        giftItems = new List<ItemEntry>();
+        foreach (var item in inventoryManager.itemEntries)
+        {
+            if (item.itemCount > 0)
+            {
+                giftItems.Add(item);
+            }
+        }
         UpdateGiftInventoryUI();
-
-        Debug.Log($" 선물 인벤토리 동기화 완료. 현재 아이템 개수: {giftItems.Count}");
     }
 
     private void UpdateGiftInventoryUI()
@@ -68,7 +77,7 @@ public class GiftInventory : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        foreach (Item item in giftItems)
+        foreach (ItemEntry item in giftItems)
         {
             GameObject slot = Instantiate(giftSlotPrefab, giftSlotContainer);
             GiftSlot slotScript = slot.GetComponent<GiftSlot>();

@@ -8,15 +8,15 @@ public class GiftSlot : MonoBehaviour
 {
     public TextMeshProUGUI itemNameText;
     public Image itemImage;
-    private Item item;
+    private ItemEntry item;
     private GiftInventory giftInventory;
 
-    public void Setup(Item newItem, GiftInventory inventory)
+    public void Setup(ItemEntry newItem, GiftInventory inventory)
     {
         item = newItem;
         giftInventory = inventory;
         itemNameText.text = item.itemName;
-        itemImage.sprite = item.itemImage;
+        itemImage.sprite = item.itemSprite;
     }
 
     public void OnClick()
