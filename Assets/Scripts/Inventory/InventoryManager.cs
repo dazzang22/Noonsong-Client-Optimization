@@ -68,7 +68,7 @@ public class InventoryManager : MonoBehaviour
     {
       if (item.itemCount > 0)
       {
-        inventoryItems[item].transform.Find("Item_Count").GetComponent<TextMeshProUGUI>().text = $"보유 수량: {item.itemCount} 개";
+        //inventoryItems[item].transform.Find("Item_Count").GetComponent<TextMeshProUGUI>().text = $"보유 수량: {item.itemCount} 개";
       }
       else
       {
