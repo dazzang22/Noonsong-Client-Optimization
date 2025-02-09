@@ -113,7 +113,7 @@ public class GoodsManager : MonoBehaviour
             yield return new WaitForSeconds(INTERVAL); // 5분 대기
             if (currencyManager != null)
             {
-                currencyManager.IncreaseCurrency("Default", DEFAULT_INCREMENT);
+                currencyManager.AddCurrency(DEFAULT_INCREMENT);
                 Debug.Log($"5분 경과: {DEFAULT_INCREMENT}개의 재화 추가.");
             }
         }
@@ -186,7 +186,7 @@ public class GoodsManager : MonoBehaviour
     public void ReceiveBtnClick()
     {
         completePanel.gameObject.SetActive(false);
-        currencyManager.IncreaseCurrency("Default", randomReward);
+        currencyManager.AddCurrency(randomReward);
         Debug.Log($"파견 완료: {randomReward}개의 재화 지급.");
         if (rewardText != null)
         {
