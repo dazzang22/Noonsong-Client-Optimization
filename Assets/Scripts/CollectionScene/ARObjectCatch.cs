@@ -88,7 +88,7 @@ public class ARObjectCatch : MonoBehaviour
             {
                 NoonsongEntry entry = spawnedObject.NoonsongEntry;
 
-                if (entry != null && currencyManager.GetActiveCurrencyType() == entry.university)
+                if (entry != null)
                 {
                     int requiredCurrency = entry.requiredNoonsongs;
 
@@ -96,11 +96,11 @@ public class ARObjectCatch : MonoBehaviour
 
                     if (!entry.isDiscovered)
                     {
-                        if (currencyManager.HasEnoughCurrency(university, requiredCurrency))
+                        if (currencyManager.HasEnoughCurrency(requiredCurrency))
                         {
                             noonsongManager.DiscoverItem(entry);
                             entry.isDiscovered = true;
-                            currencyManager.UseCurrency(university, requiredCurrency);
+                            currencyManager.UseCurrency(requiredCurrency);
                         }
                         else
                         {
@@ -110,6 +110,7 @@ public class ARObjectCatch : MonoBehaviour
                     Destroy(currentTarget);
                     playerObjectSpawn.SpawnedObjects.Remove(spawnedObject);
                 }
+                /*
                 else if (entry == null && currencyManager.GetActiveCurrencyType() == "Default")
                 {
                     if (currencyManager.HasEnoughCurrency("Default", generalNoonsongCost))
@@ -122,7 +123,7 @@ public class ARObjectCatch : MonoBehaviour
                     {
                         Debug.Log("Not enough currency to catch the generalNoonsong.");
                     }
-                }
+                }*/
             }
         }
     }

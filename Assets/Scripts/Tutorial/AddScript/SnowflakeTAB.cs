@@ -36,7 +36,7 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         {
             targetCanvas.SetActive(false);
         }
-
+        /*
         // 현재 씬 이름이 "Merge-TutorialScene-Friends_noonsong"이 아닐 때만 실행
         if (SceneManager.GetActiveScene().name != "Merge-TutorialScene-Friends_noonsong")
         {
@@ -49,7 +49,7 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
                     button.onClick.AddListener(() => SwitchCurrency(buttonCurrencyType));
                 }
             }
-        }
+        }*/
     }
 
     void Update()
@@ -122,9 +122,10 @@ public class SnowflakeTAB : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         }
     }
 
+  /*
     private void SwitchCurrency(string currencyType)
     {
         Debug.Log($"Switching to currency type: {currencyType}");
         CurrencyManager.Instance.SwitchCurrencyType(currencyType);
-    }
+    }*/
 }

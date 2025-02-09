@@ -62,8 +62,8 @@ public class FriendsManager : MonoBehaviour
                 }
                 AddEventTriggerListener(eventTrigger, EventTriggerType.PointerClick, () => OnEntryClick(entry, newEntry));
 
-                var noonsongFriendImage = newEntry.transform.Find("NoonsongFriendImage").GetComponent<Image>();
-                if (noonsongFriendImage != null) noonsongFriendImage.sprite = entry.noonsongSprite;
+                var noonsongFriendImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
+                if (noonsongFriendImage != null) noonsongFriendImage.sprite = entry.displaySprite;
             }
             else
             {
@@ -81,32 +81,8 @@ public class FriendsManager : MonoBehaviour
 
     void OnEntryClick(NoonsongFriendsEntry entry, GameObject newEntry)
     {
-        Debug.Log($"OnEntryClick called for entry: {entry.noonsongFriendName}");
-
-        if (lastClickedEntry != null && lastClickedEntry != newEntry)
-        {
-            var lastEntryImage = lastClickedEntry.transform.Find("NoonsongFriendImage").GetComponent<Image>();
-            if (lastEntryImage != null)
-            {
-                var lastEntryScript = entries.Find(e => e.noonsongSprite == lastEntryImage.sprite || e.clickedNoonsongSprite == lastEntryImage.sprite);
-                if (lastEntryScript != null)
-                {
-                    lastEntryImage.sprite = lastEntryScript.noonsongSprite;
-                    lastEntryImage.rectTransform.localScale = Vector3.one; // �������� ���� ũ��� �ǵ���
-                }
-            }
-        }
-
-        var currentEntryImage = newEntry.transform.Find("NoonsongFriendImage").GetComponent<Image>();
-        if (currentEntryImage != null)
-        {
-            currentEntryImage.sprite = entry.clickedNoonsongSprite;
-            currentEntryImage.rectTransform.localScale = new Vector3(1.3f, 1.3f, 1.3f); // �������� 1.3��� Ű��
-        }
 
         ShowDetails(entry);
-
-        lastClickedEntry = newEntry;
     }
 
     public void ShowDetails(NoonsongFriendsEntry entry)

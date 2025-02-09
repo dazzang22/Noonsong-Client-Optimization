@@ -1,187 +1,76 @@
 using UnityEngine;
 using TMPro;
-using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class CurrencyManager : MonoBehaviour
 {
-    public static CurrencyManager Instance { get; private set; }
+  public static CurrencyManager Instance { get; private set; }
 
-    private Dictionary<string, int> currencies = new Dictionary<string, int>();
-    private string activeCurrencyType = "Default";
+  private int playerCurrency = 1000; // ‚≠ê Îã®Ïùº ÌôîÌèê (Ï¥àÍ∏∞Í∞í 1000)
+  [SerializeField] private TextMeshProUGUI currencyText; // UI ÌÖçÏä§Ìä∏
 
-    [SerializeField] private List<TextMeshProUGUI> currencyTexts = new List<TextMeshProUGUI>();
-    [SerializeField] private Button[] currencyButtons;
-
-    private void Awake()
+  private void Awake()
+  {
+    if (Instance == null)
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+      Instance = this;
+      DontDestroyOnLoad(gameObject);
     }
-
-    private void Start()
+    else
     {
-        foreach (var button in currencyButtons)
-        {
-            string currencyType = button.name;
-            if (!currencies.ContainsKey(currencyType))
-            {
-                SetCurrency(currencyType, 998); // ±‚∫ª¿˚¿∏∑Œ 998∑Œ º≥¡§
-            }
-        }
-
-        UpdateCurrencyUI();
+      Destroy(gameObject);
     }
+  }
 
-    public Button[] GetCurrencyButtons()
+  private void Start()
+  {
+    UpdateCurrencyUI();
+  }
+
+  public int GetCurrencyAmount()
+  {
+    return playerCurrency;
+  }
+
+  public bool HasEnoughCurrency(int amount)
+  {
+    return playerCurrency >= amount;
+  }
+
+  public bool UseCurrency(int amount)
+  {
+    if (HasEnoughCurrency(amount))
     {
-        return currencyButtons;
+      playerCurrency -= amount;
+      UpdateCurrencyUI();
+      return true;
     }
-    public void SetAllCurrenciesTo999(Button[] currencyButtons)
+    return false;
+  }
+
+  public void AddCurrency(int amount)
+  {
+    playerCurrency += amount;
+    UpdateCurrencyUI();
+  }
+
+  public void SetCurrency(int amount)
+  {
+    playerCurrency = amount;
+    UpdateCurrencyUI();
+  }
+
+  private void UpdateCurrencyUI()
+  {
+    if (currencyText != null)
     {
-        foreach (var button in currencyButtons)
-        {
-            string currencyType = button.name;
-
-            if (!currencies.ContainsKey(currencyType))
-            {
-                SetCurrency(currencyType, 999);
-            }
-            else
-            {
-                SetCurrency(currencyType, 999);
-            }
-        }
-        UpdateCurrencyUI();
+      currencyText.text = $"{playerCurrency} Gold";
     }
+  }
 
-    public void SwitchCurrencyType(string currencyType)
-    {
-        if (!currencies.ContainsKey(currencyType))
-        {
-            currencies[currencyType] = 0;
-        }
-        activeCurrencyType = currencyType;
-        UpdateCurrencyUI();
-    }
-
-    // ∆Ø¡§ »≠∆Û(¥Î«–∏Ì)ø° ¥Î«— √Ê∫–«— æÁ¿Ã ¿÷¥¬¡ˆ »Æ¿Œ
-    public bool HasEnoughCurrency(string currencyType, int amount)
-    {
-        return currencies.ContainsKey(currencyType) && currencies[currencyType] >= amount;
-    }
-
-    // ∆Ø¡§ »≠∆Û(¥Î«–∏Ì)¿ª ªÁøÎ
-    public void UseCurrency(string currencyType, int amount)
-    {
-        if (HasEnoughCurrency(currencyType, amount))
-        {
-            currencies[currencyType] -= amount;
-            UpdateCurrencyUI();
-        }
-    }
-
-    // ∆Ø¡§ »≠∆Ûø° æÁ √ﬂ∞°
-    public void AddCurrency(string currencyType, int amount)
-    {
-        if (!currencies.ContainsKey(currencyType))
-        {
-            currencies[currencyType] = 0;
-        }
-        currencies[currencyType] += amount;
-
-        if (currencyType == activeCurrencyType)
-        {
-            UpdateCurrencyUI();
-        }
-    }
-
-    // ∆Ø¡§ »≠∆Û¿« æÁ º≥¡§
-    public void SetCurrency(string currencyType, int amount)
-    {
-        if (!currencies.ContainsKey(currencyType))
-        {
-            currencies[currencyType] = 0;
-        }
-        currencies[currencyType] = amount;
-        UpdateCurrencyUI();
-    }
-
-    // »≠∆Û æÁ ¡ı∞°
-    public void IncreaseCurrency(string currencyType, int amount)
-    {
-        if (!currencies.ContainsKey(currencyType))
-        {
-            currencies[currencyType] = 0;
-        }
-        currencies[currencyType] += amount;
-
-        if (currencyType == activeCurrencyType)
-        {
-            UpdateCurrencyUI();
-        }
-    }
-
-    // »≠∆Û æÁ ∞®º“
-    public bool DecreaseCurrency(string currencyType, int amount)
-    {
-        if (currencies.ContainsKey(currencyType) && currencies[currencyType] >= amount)
-        {
-            currencies[currencyType] -= amount;
-            if (currencyType == activeCurrencyType)
-            {
-                UpdateCurrencyUI();
-            }
-            return true;
-        }
-        return false;
-    }
-
-    // ∆Ø¡§ »≠∆Û¿« æÁ ∞°¡Æø¿±‚
-    public int GetCurrencyAmount(string currencyType)
-    {
-        if (currencies.ContainsKey(currencyType))
-        {
-            return currencies[currencyType];
-        }
-        return 0;
-    }
-
-    // UI æ˜µ•¿Ã∆Æ
-    private void UpdateCurrencyUI()
-    {
-        foreach (var currencyText in currencyTexts)
-        {
-            if (currencyText != null)
-            {
-                currencyText.text = currencies.ContainsKey(activeCurrencyType)
-                    ? currencies[activeCurrencyType].ToString()
-                    : "0";
-            }
-        }
-    }
-
-    // ªı »≠∆Û ≈ÿΩ∫∆Æ µÓ∑œ
-    public void RegisterCurrencyText(TextMeshProUGUI newCurrencyText)
-    {
-        if (!currencyTexts.Contains(newCurrencyText))
-        {
-            currencyTexts.Add(newCurrencyText);
-            newCurrencyText.text = currencies.ContainsKey(activeCurrencyType)
-                ? currencies[activeCurrencyType].ToString()
-                : "0";
-        }
-    }
-    public string GetActiveCurrencyType()
-    {
-        return activeCurrencyType;
-    }
-
+  public void RegisterCurrencyText(TextMeshProUGUI newCurrencyText)
+  {
+    currencyText = newCurrencyText;
+    UpdateCurrencyUI();
+  }
 }
