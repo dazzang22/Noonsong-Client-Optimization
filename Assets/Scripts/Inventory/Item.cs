@@ -2,18 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class Item
+[CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item")]
+public class Item : ScriptableObject
 {
     public string itemName;
-    public Sprite icon;
-    public int quantity;
-
-    public Item(string name, Sprite icon, int quantity)
-    {
-        this.itemName = name;
-        this.icon = icon;
-        this.quantity = quantity;
-    }
+    public Sprite itemImage;
+    [TextArea]
+    public string itemDescription;
 }
-

@@ -4,31 +4,82 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public List<Item> items = new List<Item>();
+    public GameObject inventoryUI;
+    public GameObject slotPrefab;
+    public Transform slotContainer;
+    public GameObject popupPanel;
+    public TMPro.TextMeshProUGUI popupName;
+    public UnityEngine.UI.Image popupImage;
+    public TMPro.TextMeshProUGUI popupDescription;
+    public UnityEngine.UI.Button closePopupButton;
+    public UnityEngine.UI.Button inventoryToggleButton;
+    public UnityEngine.UI.Button backButton;
 
-    public void AddItem(Item newItem)
+    private List<Item> items = new List<Item>();
+
+    [Header("Test Items")]
+    public List<Item> TestItems;
+
+    private void Start()
     {
-        Item existingItem = items.Find(item => item.itemName == newItem.itemName);
-        if (existingItem != null)
+        inventoryUI.SetActive(false);
+        popupPanel.SetActive(false);
+        closePopupButton.onClick.AddListener(ClosePopup);
+        inventoryToggleButton.onClick.AddListener(ToggleInventory); 
+        backButton.onClick.AddListener(HideInventory);
+
+        foreach (Item item in TestItems)
         {
-            existingItem.quantity += newItem.quantity;
-        }
-        else
-        {
-            items.Add(newItem);
+            AddItem(item);
         }
     }
 
-    public void RemoveItem(string itemName, int quantity)
+    public void ToggleInventory()
     {
-        Item item = items.Find(i => i.itemName == itemName);
-        if (item != null)
+        inventoryUI.SetActive(!inventoryUI.activeSelf);
+    }
+
+    public void HideInventory()
+    {
+        inventoryUI.SetActive(false);
+    }
+
+    public void AddItem(Item newItem)
+    {
+        items.Add(newItem);
+        UpdateInventoryUI();
+    }
+
+    public List<Item> GetItems()
+    {
+        return items;
+    }
+
+    private void UpdateInventoryUI()
+    {
+        foreach (Transform child in slotContainer)
         {
-            item.quantity -= quantity;
-            if (item.quantity <= 0)
-            {
-                items.Remove(item);
-            }
+            Destroy(child.gameObject);
         }
+
+        foreach (Item item in items)
+        {
+            GameObject slot = Instantiate(slotPrefab, slotContainer);
+            Slot slotScript = slot.GetComponent<Slot>();
+            slotScript.Setup(item, this);
+        }
+    }
+
+    public void ShowItemDetails(Item item)
+    {
+        popupName.text = item.itemName;
+        popupImage.sprite = item.itemImage;
+        popupDescription.text = item.itemDescription;
+        popupPanel.SetActive(true);
+    }
+
+    private void ClosePopup()
+    {
+        popupPanel.SetActive(false);
     }
 }
