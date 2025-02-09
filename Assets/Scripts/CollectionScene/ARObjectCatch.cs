@@ -15,9 +15,15 @@ public class ARObjectCatch : MonoBehaviour
     [SerializeField]
     private Button catchButton;
 
+    [SerializeField]
+    private EncounterUI encounterUI;
+
     private GameObject currentTarget;
 
     private const int generalNoonsongCost = 5;
+
+    //테스트용 코드
+    [SerializeField] private NoonsongEntry testNoonsong;
 
 
     void Start()
@@ -34,6 +40,25 @@ public class ARObjectCatch : MonoBehaviour
             CheckForObjectInView();
         }
 
+        //테스트용 코드
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            TestEncounter();
+        }
+    }
+
+    //테스트용 코드
+    void TestEncounter()
+    {
+        if (testNoonsong != null)
+        {
+            Debug.Log("테스트 캐릭터 조우 UI 실행");
+            encounterUI.Show(testNoonsong, () => Debug.Log("테스트 캐릭터 수집 완료!"));
+        }
+        else
+        {
+            Debug.LogWarning("테스트용 NoonsongEntry가 설정되지 않았습니다!");
+        }
     }
 
     void UpdateActivePlayerObjectSpawn()
@@ -87,12 +112,40 @@ public class ARObjectCatch : MonoBehaviour
             if (spawnedObject != null)
             {
                 NoonsongEntry entry = spawnedObject.NoonsongEntry;
+                if (entry != null)
+                {
+                    encounterUI.Show(entry, CollectCharacter); // UI 닫힐 때 CollectCharacter 실행
+                }
+            }
+        }
+    }
+    /*
+    else if (entry == null && currencyManager.GetActiveCurrencyType() == "Default")
+    {
+        if (currencyManager.HasEnoughCurrency("Default", generalNoonsongCost))
+        {
+            currencyManager.UseCurrency("Default", generalNoonsongCost);
+            Destroy(currentTarget);
+            playerObjectSpawn.SpawnedObjects.Remove(spawnedObject);
+        }
+        else
+        {
+            Debug.Log("Not enough currency to catch the generalNoonsong.");
+        }
+    }*/
+
+    void CollectCharacter()
+    {
+        if (currentTarget != null)
+        {
+            var spawnedObject = playerObjectSpawn.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
+            if (spawnedObject != null)
+            {
+                NoonsongEntry entry = spawnedObject.NoonsongEntry;
 
                 if (entry != null)
                 {
                     int requiredCurrency = entry.requiredNoonsongs;
-
-                    string university = entry.university;
 
                     if (!entry.isDiscovered)
                     {
@@ -107,23 +160,10 @@ public class ARObjectCatch : MonoBehaviour
                             Debug.Log("Not enough currency to discover this item.");
                         }
                     }
-                    Destroy(currentTarget);
-                    playerObjectSpawn.SpawnedObjects.Remove(spawnedObject);
                 }
-                /*
-                else if (entry == null && currencyManager.GetActiveCurrencyType() == "Default")
-                {
-                    if (currencyManager.HasEnoughCurrency("Default", generalNoonsongCost))
-                    {
-                        currencyManager.UseCurrency("Default", generalNoonsongCost);
-                        Destroy(currentTarget);
-                        playerObjectSpawn.SpawnedObjects.Remove(spawnedObject);
-                    }
-                    else
-                    {
-                        Debug.Log("Not enough currency to catch the generalNoonsong.");
-                    }
-                }*/
+
+                Destroy(currentTarget);
+                playerObjectSpawn.SpawnedObjects.Remove(spawnedObject);
             }
         }
     }
