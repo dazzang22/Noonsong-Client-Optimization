@@ -114,6 +114,7 @@ public class ARObjectCatch : MonoBehaviour
                 NoonsongEntry entry = spawnedObject.NoonsongEntry;
                 if (entry != null)
                 {
+                    Debug.Log("Encounter UI showing...");
                     encounterUI.Show(entry, CollectCharacter); // UI ´ÝÈú ¶§ CollectCharacter ½ÇÇà
                 }
             }

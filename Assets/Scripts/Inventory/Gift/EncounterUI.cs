@@ -84,9 +84,15 @@ public class EncounterUI : MonoBehaviour
         giftPopup.SetActive(false);
     }
 
+    public void CloseAll()
+    {
+        encounterPanel.SetActive(true);
+    }
+
     public void CloseEncounter()
     {
-        gameObject.SetActive(false);
+        encounterPanel.SetActive(false);
+        dialogueWindow.SetActive(false);
         onCloseCallback?.Invoke();
     }
 }
