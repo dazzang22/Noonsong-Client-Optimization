@@ -36,7 +36,11 @@ public class NoonsongManager : MonoBehaviour
 
   private bool is3DViewActive = false;
 
-  void Start()
+    [SerializeField] private Image[] loveMeterImages;
+    [SerializeField] private Sprite loveSprite1;
+    [SerializeField] private Sprite loveSprite2;
+
+    void Start()
     {
     if (noonsongEntryManager != null)
     {
@@ -228,9 +232,18 @@ public class NoonsongManager : MonoBehaviour
             detailsPanel.SetActive(true);
             if (detailsNameText != null)
             {
-                detailsNameText.text = entry.noonsongName;
-                detailsDescriptionText.text = entry.description;
                 detailsImage.sprite = entry.noonsongSprite;
+
+                if (entry.loveLevel < 5)
+                {
+                    detailsNameText.text = "???";
+                    detailsDescriptionText.text = "???";
+                }
+                else
+                {
+                    detailsNameText.text = entry.noonsongName;
+                    detailsDescriptionText.text = entry.description;
+                }
 
                 Debug.Log($"Details panel updated with entry: {entry.noonsongName}");
             }
@@ -246,6 +259,7 @@ public class NoonsongManager : MonoBehaviour
                 });
                 Debug.Log("3D View button click event added!");
             }
+            UpdateLoveMeter(entry.loveLevel);
         }
         else
         {
@@ -263,6 +277,32 @@ public class NoonsongManager : MonoBehaviour
 
         lastClickedEntry = clickedEntry;
     }
+
+    private void UpdateLoveMeter(int loveLevel)
+    {
+        for (int i = 0; i < loveMeterImages.Length; i++)
+        {
+            loveMeterImages[i].enabled = false;
+            loveMeterImages[i].sprite = loveSprite1;
+        }
+
+        int secondSetCount = Mathf.Clamp(loveLevel - 5, 0, loveMeterImages.Length); 
+        int firstSetCount = Mathf.Clamp(loveLevel, 0, loveMeterImages.Length);
+
+        for (int i = 0; i < secondSetCount; i++)
+        {
+            loveMeterImages[i].enabled = true;
+            loveMeterImages[i].sprite = loveSprite2;
+        }
+
+        for (int i = secondSetCount; i < firstSetCount; i++)
+        {
+            loveMeterImages[i].enabled = true;
+            loveMeterImages[i].sprite = loveSprite1;
+        }
+    }
+
+
     public void Open3DView(NoonsongEntry entry)
     {
         if (collectionCanvas != null)

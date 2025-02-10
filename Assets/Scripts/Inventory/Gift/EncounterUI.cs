@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class EncounterUI : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class EncounterUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI greetingText;
 
     [SerializeField] private GameObject dialogueWindow;
-    [SerializeField] private GameObject dialoguePopup;
+    //[SerializeField] private GameObject dialoguePopup;
 
     [SerializeField] private GiftInventory giftInventory;
     [SerializeField] private InventoryManager inventoryManager;
@@ -44,17 +45,17 @@ public class EncounterUI : MonoBehaviour
     public void CloseDialogueWindow()
     {
         dialogueWindow.SetActive(false);
-        dialoguePopup.SetActive(false);
+        //dialoguePopup.SetActive(false);
     }
 
     public void ShowDialoguePopup()
     {
-        dialoguePopup.SetActive(true);
+        //dialoguePopup.SetActive(true);
     }
 
     public void CloseDialoguePopup()
     {
-        dialoguePopup.SetActive(false);
+        //dialoguePopup.SetActive(false);
     }
 
     public void OpenGiftInventory()
@@ -94,5 +95,15 @@ public class EncounterUI : MonoBehaviour
         encounterPanel.SetActive(false);
         dialogueWindow.SetActive(false);
         onCloseCallback?.Invoke();
+    }
+
+    public string GetCurrentNoonsongUniversity()
+    {
+        return currentCharacter.university;
+    }
+
+    public void UpdateNoonsongAffection(int amount)
+    {
+        currentCharacter.loveLevel += amount;
     }
 }

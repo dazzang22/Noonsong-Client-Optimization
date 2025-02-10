@@ -38,6 +38,25 @@ public class GiftInventory : MonoBehaviour
     {
         if (selectedGiftItem != null)
         {
+            string university = encounterUI.GetCurrentNoonsongUniversity();
+            ItemEntry.PreferenceLevel preference = selectedGiftItem.GetPreferenceForDepartment(university);
+
+            int affectionChange = 1;
+            switch (preference)
+            {
+                case ItemEntry.PreferenceLevel.Love:
+                    affectionChange = 5;
+                    break;
+                case ItemEntry.PreferenceLevel.Like:
+                    affectionChange = 3;
+                    break;
+                case ItemEntry.PreferenceLevel.Dislike:
+                    affectionChange = 0;
+                    break;
+            }
+
+            encounterUI.UpdateNoonsongAffection(affectionChange);
+
             selectedGiftItem.itemCount--;
             if (selectedGiftItem.itemCount <= 0)
             {
