@@ -19,8 +19,11 @@ public class CanvasChanger : MonoBehaviour
     [SerializeField] private Button inventoryButton;
     [SerializeField] private Button inventoryBackButton;
 
+    [SerializeField] public BookUI bookUI;
 
-  public MapManager mapManager;
+    private List<NoonsongEntry> discoveredNoonsongs = new List<NoonsongEntry>();
+
+    public MapManager mapManager;
 
   private void Start()
   {
@@ -45,6 +48,7 @@ public class CanvasChanger : MonoBehaviour
     {
         popupCanvas.gameObject.SetActive(true);
         mainCanvas.gameObject.SetActive(false);
+        bookUI.OpenBook(discoveredNoonsongs);
     }
 
     private void HidePopup()
