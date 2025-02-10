@@ -118,6 +118,13 @@ public class UserDataManager
         return gameDataItem;
     }
 
+    public string getUserID()
+    {
+        UserProfileData userProfileData=findUser(Backend.UserInDate);
+        string userid= userProfileData.getuserId();
+        return userid;
+    }
+
     //비밀번호 수정 -> 변경값을 전달
     public Param ChangePassword(string newPw)
     {
@@ -139,6 +146,11 @@ public class UserDataManager
     //회원정보 수정 반영 (업데이트) -> 수정 함수로 변경 결과 (Param)를 받아서 테이블 업데이트
     public void UpdateUserData(Param param)
     {   
+        if(param==null)
+        {
+            Debug.LogError("Param이 존재하지 않습니다.");
+            return;
+        }
         BackendReturnObject bro=null;
         if(string.IsNullOrEmpty(gameDataRowInDate))
         {

@@ -18,6 +18,7 @@ public class UserProfileData
     public string nickname=Backend.UserNickName;
     public string sookmyungMail;
     public string subscriptionType;
+    public List<string> university;
 
     public UserProfileData()
     {
@@ -59,6 +60,10 @@ public class UserProfileData
         this.sookmyungMail= smail;
     }
 
+    public string getuserId()
+    {
+        return this.userId;
+    }
 
     public override string ToString()
     {
