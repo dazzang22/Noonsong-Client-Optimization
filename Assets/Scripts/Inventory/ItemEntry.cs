@@ -20,10 +20,10 @@ public class ItemEntry : ScriptableObject
 
   public enum PreferenceLevel
   {
-    Love,    // 매우 좋아함 (+10)
-    Like,    // 좋아함 (+5)
-    Neutral, // 보통 (0)
-    Dislike  // 싫어함 (-5)
+    Love,    // 매우 좋아함 (+5)
+    Like,    // 좋아함 (+3)
+    Neutral, // 보통 (+1)
+    Dislike  // 싫어함 (0)
   }
 
   public List<NoonsongPreference> preferences; 
