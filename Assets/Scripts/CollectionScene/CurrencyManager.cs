@@ -6,7 +6,7 @@ public class CurrencyManager : MonoBehaviour
 {
   public static CurrencyManager Instance { get; private set; }
 
-  private int playerCurrency = 1000; // ⭐ 단일 화폐 (초기값 1000)
+  private int playerCurrency = 0; // ⭐ 단일 화폐 (초기값 0)
   [SerializeField] private TextMeshProUGUI currencyText; // UI 텍스트
 
   private void Awake()
@@ -64,7 +64,7 @@ public class CurrencyManager : MonoBehaviour
   {
     if (currencyText != null)
     {
-      currencyText.text = $"{playerCurrency} Gold";
+      currencyText.text = $"{playerCurrency}";
     }
   }
 
