@@ -158,6 +158,10 @@ public class EncounterUI : MonoBehaviour
                 IncreasePopUp.gameObject.SetActive(true);
                 currencyManager.AddCurrency(NOONSONG_INCREMENT);
                 Debug.Log($"기본눈송이 : {NOONSONG_INCREMENT}개의 재화 추가.");
+
+                Destroy(currentTarget);
+                CloseEncounter();
+
             }
             else
             {
