@@ -21,6 +21,10 @@ public class EncounterUI : MonoBehaviour
     [SerializeField] private Image giftItemImage;
     [SerializeField] private TextMeshProUGUI giftItemDescription;
 
+    [SerializeField] private GameObject friendRequestPopup;
+    [SerializeField] private Button yesButton;
+    [SerializeField] private Button noButton;
+
     private NoonsongEntry currentCharacter;
     private System.Action onCloseCallback;
 
@@ -184,6 +188,18 @@ public class EncounterUI : MonoBehaviour
 
     public void ConfirmExit()
     {
+        GameObject currentTarget = arObjectCatch.GetCurrentTarget();
+
+        if (currentTarget != null)
+        {
+            Destroy(currentTarget);
+            Debug.Log($"Destroyed: {currentTarget.name}");
+        }
+        else
+        {
+            Debug.LogWarning("currentTarget is null, cannot destroy.");
+        }
+
         CloseEncounter();
         exitPopup.SetActive(false);
     }
@@ -206,7 +222,7 @@ public class EncounterUI : MonoBehaviour
         }
         else
         {
-            giftInventory.Initialize(inventoryManager, this);
+            giftInventory.Initialize(inventoryManager, this, arObjectCatch);
             giftInventory.SyncWithInventoryManager();
             giftInventory.ToggleGiftInventory();
         }
@@ -223,7 +239,6 @@ public class EncounterUI : MonoBehaviour
     public void ShowGiftDialogue(string message)
     {
         dialogueText.text = message;
-        Debug.Log($"선물 대화 출력: {message}");
     }
 
     public void CloseGiftPopup()
@@ -240,12 +255,6 @@ public class EncounterUI : MonoBehaviour
 
     public void CloseEncounter()
     {
-        GameObject currentTarget = arObjectCatch.GetCurrentTarget();
-        if (currentTarget != null)
-        {
-            currentTarget.transform.SetParent(null); // 원래 부모로 복구
-        }
-
         encounterPanel.SetActive(false);
         dialogueWindow.SetActive(false);
         onCloseCallback?.Invoke();
@@ -256,8 +265,31 @@ public class EncounterUI : MonoBehaviour
         return currentCharacter.university;
     }
 
-    public void UpdateNoonsongAffection(int amount)
+    public int UpdateNoonsongAffection(int amount)
     {
         currentCharacter.loveLevel += amount;
+        return currentCharacter.loveLevel;
+    }
+
+    public void ShowFriendRequestPopup()
+    {
+        friendRequestPopup.SetActive(true);
+
+        yesButton.onClick.RemoveAllListeners();
+        yesButton.onClick.AddListener(() => BecomeFriends());
+
+        noButton.onClick.RemoveAllListeners();
+        noButton.onClick.AddListener(() => friendRequestPopup.SetActive(false));
+    }
+
+    public void BecomeFriends()
+    {
+        currentCharacter.isFriend = true;
+        friendRequestPopup.SetActive(false);
+    }
+
+    public NoonsongEntry GetCurrentNoonsongEntry()
+    {
+        return currentCharacter;
     }
 }

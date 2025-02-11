@@ -18,9 +18,6 @@ public class ARObjectCatch : MonoBehaviour
 
     private const int generalNoonsongCost = 5;
 
-    //�׽�Ʈ�� �ڵ�
-    [SerializeField] private NoonsongEntry testNoonsong;
-
     [SerializeField] private Button catchButton;
     [SerializeField] private EncounterUI encounterUI;
     [SerializeField] private GameObject exitPopup;
@@ -86,7 +83,6 @@ public class ARObjectCatch : MonoBehaviour
         }
         else
         {
-            Debug.Log("SpawnedObjects is null or empty.");
             currentTarget = null;
         }
     }
@@ -121,7 +117,6 @@ public class ARObjectCatch : MonoBehaviour
                 {
                     encounterUI.Show(entry, () => {
                         Debug.Log("대화 종료 후 캐릭터 수집 실행");
-                        CollectCharacter();
                     });
                 }
                 else
@@ -155,7 +150,7 @@ Debug.Log("Not enough currency to catch the generalNoonsong.");
 }
 }*/
 
-    void CollectCharacter()
+    public void CollectCharacter()
     {
         if (currentTarget != null)
         {
@@ -170,23 +165,18 @@ Debug.Log("Not enough currency to catch the generalNoonsong.");
 
                     if (!entry.isDiscovered)
                     {
-                        if (currencyManager.HasEnoughCurrency(requiredCurrency))
-                        {
-                            noonsongManager.DiscoverItem(entry);
-                            entry.isDiscovered = true;
-                            currencyManager.UseCurrency(requiredCurrency);
-                        }
-                        else
-                        {
-                            Debug.Log("Not enough currency to discover this item.");
-                        }
+                        Debug.Log($"첫 번째 발견: {entry.noonsongName}");
+
+                        noonsongManager.DiscoverItem(entry);
+                        entry.isDiscovered = true;
+                        currencyManager.UseCurrency(requiredCurrency);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"이미 발견된 눈송이: {entry.noonsongName}");
                     }
                 }
 
-                Destroy(currentTarget);
-                playerObjectSpawn.SpawnedObjects.Remove(spawnedObject);
-
-                currentTarget = null;
                 UpdateActivePlayerObjectSpawn();
                 CheckForObjectInView();
             }

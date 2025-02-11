@@ -21,10 +21,9 @@ public class InventoryManager : MonoBehaviour
   void Start()
   {
     descriptionPopup.SetActive(false);
-    PopulateInventory(); 
   }
 
-  void PopulateInventory()
+    void PopulateInventory()
   {
     foreach (Transform child in inventoryContentPanel)
     {

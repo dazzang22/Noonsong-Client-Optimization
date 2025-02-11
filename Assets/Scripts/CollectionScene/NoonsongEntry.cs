@@ -12,6 +12,7 @@ public class NoonsongEntry : ScriptableObject
     public int requiredNoonsongs;
     public string buildingName;
 
-    [Range(0, 10)]
+    [Range(0, 100)]
     public int loveLevel = 0;         // 호감도 (기본값 0)
+    public bool isFriend;
 }
