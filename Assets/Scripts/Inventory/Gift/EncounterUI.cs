@@ -9,6 +9,7 @@ public class EncounterUI : MonoBehaviour
 {
     [SerializeField] private GameObject encounterPanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
+    [SerializeField] private TextMeshProUGUI noonsongNameText;
 
     [SerializeField] private GameObject dialogueWindow;
     [SerializeField] private GameObject exitPopup;
@@ -24,6 +25,8 @@ public class EncounterUI : MonoBehaviour
     private System.Action onCloseCallback;
 
     private int dialogueIndex = 0;
+    private bool isDialogueActive = false;
+    [SerializeField] private Button dialogueButton;
     private Dictionary<int, List<string>> affectionDialogue = new Dictionary<int, List<string>>
     {
         { 0, new List<string> { "안녕!", "반가워!" } },
@@ -38,43 +41,89 @@ public class EncounterUI : MonoBehaviour
     [SerializeField] private CurrencyManager currencyManager;
     [SerializeField] private GameObject IncreasePopUp;
     [SerializeField] private GameObject noPopUp;
-     private const int NOONSONG_INCREMENT = 15; 
-    
+     private const int NOONSONG_INCREMENT = 15;
+
+    private void Start()
+    {
+        dialogueButton.interactable = false;
+    }
 
     public void Show(NoonsongEntry character, System.Action onClose)
     {
+        if (character == null)
+        {
+            Debug.LogError("character가 null입니다!");
+            return;
+        }
+
         currentCharacter = character;
+        Debug.Log($"currentCharacter 설정됨: {currentCharacter.name}");
         onCloseCallback = onClose;
         dialogueIndex = 0;
+        isDialogueActive = false;
+        dialogueButton.interactable = false;
+        noonsongNameText.text = currentCharacter.noonsongName;
 
         GameObject currentTarget = arObjectCatch.GetCurrentTarget();
         if (currentTarget != null)
         {
             originalParent = currentTarget.transform.parent;
             currentTarget.transform.SetParent(Camera.main.transform);
-            currentTarget.transform.localPosition = Vector3.forward * 2;
-            currentTarget.transform.localScale = Vector3.one * 0.7f;
+            currentTarget.transform.localPosition = new Vector3(0, 0, 3);
+            currentTarget.transform.localScale = Vector3.one * 1f;
+            currentTarget.transform.localRotation = Quaternion.identity;
         }
     
 
         encounterPanel.SetActive(true);
         dialogueWindow.SetActive(true);
-        OpenDialogueWindow();
+        dialogueText.text = "안녕! 반가워~"; // 초기 인사말, 추후 수정 예정
     }
 
-    public void OpenDialogueWindow()
+    public void ShowDefaultDialogue(GameObject noonsongPrefeb, System.Action onClose)
     {
-        if (currentCharacter == null)
-        {
-            Debug.LogError("currentCharacter가 null입니다! Show()가 먼저 호출되었는지 확인하세요.");
-            return;
-        }
+        currentCharacter = null;
+        onCloseCallback = onClose;
+        dialogueIndex = 0;
 
+        GameObject instance = Instantiate(noonsongPrefeb, Camera.main.transform);
+        instance.transform.localPosition = new Vector3(0, 0, 3);
+        instance.transform.localScale = Vector3.one * 1f;
+        instance.transform.localRotation = Quaternion.Euler(0, 180, 0);
+
+        noonsongNameText.text = "눈송이";
+
+        encounterPanel.SetActive(true);
+        dialogueWindow.SetActive(true);
+        dialogueText.text = "안녕! 반가워~";
+
+        onCloseCallback = () =>
+        {
+            Destroy(instance);
+            onClose?.Invoke();
+        };
+    }
+
+    public void OnDialogueButtonClicked()
+    {
+        if (!isDialogueActive)
+        {
+            isDialogueActive = true;
+            dialogueButton.interactable = true;
+            dialogueIndex = 0;
+        }
+        ShowNextDialogue();
+    }
+
+    public void ShowNextDialogue()
+    {
         if (affectionDialogue == null || affectionDialogue.Count == 0)
         {
             Debug.LogError("affectionDialogue 데이터가 없습니다!");
             return;
         }
+
+        if (!isDialogueActive) return;
 
         int affectionLevel = currentCharacter.loveLevel;
         int closestKey = affectionDialogue.Keys.OrderByDescending(k => k).FirstOrDefault(k => affectionLevel >= k);
@@ -89,11 +138,14 @@ public class EncounterUI : MonoBehaviour
         List<string> dialogues = affectionDialogue[closestKey];
         if (dialogueIndex >= dialogues.Count)
         {
-            dialogueIndex = 0;
+            Debug.Log("대화 종료!");
+            isDialogueActive = false;
+            return;
         }
 
         dialogueText.text = dialogues[dialogueIndex];
-        Debug.Log($"대화 출력: {dialogues[dialogueIndex]} (Index: {dialogueIndex})");
+        Debug.Log($"🗨️ 대화 출력: {dialogueText.text} (Index: {dialogueIndex})");
+        dialogueIndex++;
 
         GameObject currentTarget = arObjectCatch.GetCurrentTarget();
         Debug.Log(currentTarget.name);
@@ -109,21 +161,16 @@ public class EncounterUI : MonoBehaviour
         }
     }
 
-    public void OnDialogueButtonClicked()
-    {
-        dialogueIndex++;
-        OpenDialogueWindow();
-    }
-
     public void CloseDialogueWindow()
     {
         dialogueWindow.SetActive(false);
-        //dialoguePopup.SetActive(false);
+        isDialogueActive = false;
     }
 
     public void ShowExitConfirmation()
     {
         exitPopup.SetActive(true);
+        dialogueButton.interactable = false;
     }
 
     public void ConfirmExit()
@@ -140,6 +187,8 @@ public class EncounterUI : MonoBehaviour
 
     public void OpenGiftInventory()
     {
+        dialogueButton.interactable = false;
+
         GameObject currentTarget = arObjectCatch.GetCurrentTarget();
 
         if (currentTarget != null && currentTarget.name == "nunsong(Clone)")

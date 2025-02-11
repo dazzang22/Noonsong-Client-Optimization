@@ -14,6 +14,8 @@ public class ARObjectCatch : MonoBehaviour
 
     private GameObject currentTarget;
 
+    public GameObject noonsongPrefeb;
+
     private const int generalNoonsongCost = 5;
 
     //�׽�Ʈ�� �ڵ�
@@ -37,27 +39,8 @@ public class ARObjectCatch : MonoBehaviour
         {
             CheckForObjectInView();
         }
-
-        //�׽�Ʈ�� �ڵ�
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            TestEncounter();
-        }
     }
 
-    //�׽�Ʈ�� �ڵ�
-    void TestEncounter()
-    {
-        if (testNoonsong != null)
-        {
-            Debug.Log("�׽�Ʈ ĳ���� ���� UI ����");
-            encounterUI.Show(testNoonsong, () => Debug.Log("�׽�Ʈ ĳ���� ���� �Ϸ�!"));
-        }
-        else
-        {
-            Debug.LogWarning("�׽�Ʈ�� NoonsongEntry�� �������� �ʾҽ��ϴ�!");
-        }
-    }
 
     void UpdateActivePlayerObjectSpawn()
     {
@@ -78,8 +61,6 @@ public class ARObjectCatch : MonoBehaviour
     {
         if (playerObjectSpawn != null && playerObjectSpawn.SpawnedObjects.Count > 0)
         {
-            Debug.Log($"SpawnedObjects Count: {playerObjectSpawn.SpawnedObjects.Count}");
-
             foreach (var obj in playerObjectSpawn.SpawnedObjects)
             {
                 GameObject target = obj.GameObject;
@@ -117,6 +98,14 @@ public class ARObjectCatch : MonoBehaviour
         if (encounterUI.gameObject.activeSelf)
         {
             encounterUI.ShowExitConfirmation();
+            return;
+        }
+
+        if (currentTarget != null && currentTarget.name == "nunsong(Clone)")
+        {
+            encounterUI.ShowDefaultDialogue(noonsongPrefeb, () => {
+                Debug.Log("기본 대화 종료 후 로직 실행");
+            });
             return;
         }
 
