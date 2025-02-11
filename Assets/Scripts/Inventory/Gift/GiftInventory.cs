@@ -42,20 +42,25 @@ public class GiftInventory : MonoBehaviour
             ItemEntry.PreferenceLevel preference = selectedGiftItem.GetPreferenceForDepartment(university);
 
             int affectionChange = 1;
+            string giftReaction = "내 생각해서 주는 거야? 고마워.";
             switch (preference)
             {
                 case ItemEntry.PreferenceLevel.Love:
                     affectionChange = 5;
+                    giftReaction = "와! 나 이거 진짜 좋아하는데, 어떻게 알았어? 정말 고마워~";
                     break;
                 case ItemEntry.PreferenceLevel.Like:
                     affectionChange = 3;
+                    giftReaction = "오, 이거 좋은 걸? 선물해줘서 고마워!";
                     break;
                 case ItemEntry.PreferenceLevel.Dislike:
                     affectionChange = 0;
+                    giftReaction = "하하, 고마워.";
                     break;
             }
 
             encounterUI.UpdateNoonsongAffection(affectionChange);
+            encounterUI.ShowGiftDialogue(giftReaction);
 
             selectedGiftItem.itemCount--;
             if (selectedGiftItem.itemCount <= 0)
@@ -67,6 +72,7 @@ public class GiftInventory : MonoBehaviour
             SyncWithInventoryManager();
             encounterUI.GiveGift(selectedGiftItem);
             giftPopup.SetActive(false);
+            giftInventoryUI.SetActive(false);
         }
     }
 

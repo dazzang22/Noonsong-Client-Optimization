@@ -234,7 +234,7 @@ public class NoonsongManager : MonoBehaviour
             {
                 detailsImage.sprite = entry.noonsongSprite;
 
-                if (entry.loveLevel < 5)
+                if (entry.loveLevel < 2)
                 {
                     detailsNameText.text = "???";
                     detailsDescriptionText.text = "???";
