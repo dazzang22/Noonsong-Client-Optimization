@@ -135,7 +135,7 @@ public class PlayerObjectSpawn : MonoBehaviour
     SpawnedObject GetRandomPrefab()
     {
         float probability = Random.Range(0f, 1f); // Generate a random float between 0 and 1
-        if (probability < 0.6f) // 60% probability for majorNoonsong
+        if (probability < 0.7f) // 70% probability for majorNoonsong
         {
             List<NoonsongEntry> filteredEntries = GetFilteredNoonsongEntries();
 
@@ -155,7 +155,7 @@ public class PlayerObjectSpawn : MonoBehaviour
             //int randomIndex = Random.Range(0, entries.Length);
             //return new SpawnedObject(entries[randomIndex].prefab, entries[randomIndex]);
         }
-        else // 40% probability for generalNoonsong
+        else // 30% probability for generalNoonsong
         {
             int randomIndex = Random.Range(0, generalNoonsong.Length);
             return new SpawnedObject(generalNoonsong[randomIndex], null);
