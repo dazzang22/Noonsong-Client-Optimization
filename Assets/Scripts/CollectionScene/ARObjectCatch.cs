@@ -22,7 +22,7 @@ public class ARObjectCatch : MonoBehaviour
 
     private const int generalNoonsongCost = 5;
 
-    //Å×½ºÆ®¿ë ÄÚµå
+    //ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Úµï¿½
     [SerializeField] private NoonsongEntry testNoonsong;
 
 
@@ -40,24 +40,24 @@ public class ARObjectCatch : MonoBehaviour
             CheckForObjectInView();
         }
 
-        //Å×½ºÆ®¿ë ÄÚµå
+        //ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Úµï¿½
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             TestEncounter();
         }
     }
 
-    //Å×½ºÆ®¿ë ÄÚµå
+    //ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½Úµï¿½
     void TestEncounter()
     {
         if (testNoonsong != null)
         {
-            Debug.Log("Å×½ºÆ® Ä³¸¯ÅÍ Á¶¿ì UI ½ÇÇà");
-            encounterUI.Show(testNoonsong, () => Debug.Log("Å×½ºÆ® Ä³¸¯ÅÍ ¼öÁý ¿Ï·á!"));
+            Debug.Log("ï¿½×½ï¿½Æ® Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½");
+            encounterUI.Show(testNoonsong, () => Debug.Log("ï¿½×½ï¿½Æ® Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½!"));
         }
         else
         {
-            Debug.LogWarning("Å×½ºÆ®¿ë NoonsongEntry°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù!");
+            Debug.LogWarning("ï¿½×½ï¿½Æ®ï¿½ï¿½ NoonsongEntryï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½!");
         }
     }
 
@@ -115,7 +115,7 @@ public class ARObjectCatch : MonoBehaviour
                 if (entry != null)
                 {
                     Debug.Log("Encounter UI showing...");
-                    encounterUI.Show(entry, CollectCharacter); // UI ´ÝÈú ¶§ CollectCharacter ½ÇÇà
+                    encounterUI.Show(entry, CollectCharacter); // UI ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ CollectCharacter ï¿½ï¿½ï¿½ï¿½
                 }
             }
         }
@@ -167,5 +167,9 @@ public class ARObjectCatch : MonoBehaviour
                 playerObjectSpawn.SpawnedObjects.Remove(spawnedObject);
             }
         }
+    }
+    public GameObject GetCurrentTarget()
+    {
+        return currentTarget;
     }
 }
