@@ -95,7 +95,7 @@ public class EncounterUI : MonoBehaviour
         dialogueText.text = dialogues[dialogueIndex];
         Debug.Log($"대화 출력: {dialogues[dialogueIndex]} (Index: {dialogueIndex})");
 
-    GameObject currentTarget = arObjectCatch.GetCurrentTarget();
+        GameObject currentTarget = arObjectCatch.GetCurrentTarget();
         Debug.Log(currentTarget.name);
         if (currentTarget != null && currentTarget.name == "nunsong(Clone)")
         {
