@@ -24,6 +24,12 @@ public class EncounterUI : MonoBehaviour
     private NoonsongEntry currentCharacter;
     private System.Action onCloseCallback;
 
+    //ê¸°ë³¸ëˆˆì†¡ì´
+    [SerializeField] private ARObjectCatch arObjectCatch;
+    [SerializeField] private CurrencyManager currencyManager;
+    [SerializeField] private GameObject IncreasePopUp;
+    [SerializeField] private GameObject noPopUp;
+     private const int NOONSONG_INCREMENT = 15; 
     
 
     public void Show(NoonsongEntry character, System.Action onClose)
@@ -32,14 +38,25 @@ public class EncounterUI : MonoBehaviour
         onCloseCallback = onClose;
 
         characterImage.sprite = character.noonsongSprite;
-        greetingText.text = $"{character.noonsongName}: ¾È³ç! ³ª´Â {character.university} Ãâ½ÅÀÌ¾ß!";
+        greetingText.text = $"{character.noonsongName}: ï¿½È³ï¿½! ï¿½ï¿½ï¿½ï¿½ {character.university} ï¿½ï¿½ï¿½ï¿½Ì¾ï¿½!";
 
         encounterPanel.SetActive(true);
     }
 
     public void OpenDialogueWindow()
     {
-        dialogueWindow.SetActive(true);
+        GameObject currentTarget = arObjectCatch.GetCurrentTarget();
+        Debug.Log(currentTarget.name);
+        if (currentTarget != null && currentTarget.name == "nunsong(Clone)")
+        {
+            IncreasePopUp.gameObject.SetActive(true);
+            currencyManager.AddCurrency(NOONSONG_INCREMENT);
+            Debug.Log($"ê¸°ë³¸ëˆˆì†¡ì´ : {NOONSONG_INCREMENT}ê°œì˜ ì¬í™” ì¶”ê°€.");
+        }
+        else
+        {
+            dialogueWindow.SetActive(true);
+        }
     }
 
     public void CloseDialogueWindow()
@@ -60,9 +77,18 @@ public class EncounterUI : MonoBehaviour
 
     public void OpenGiftInventory()
     {
-        giftInventory.Initialize(inventoryManager, this);
-        giftInventory.SyncWithInventoryManager();
-        giftInventory.ToggleGiftInventory();
+        GameObject currentTarget = arObjectCatch.GetCurrentTarget();
+
+        if (currentTarget != null && currentTarget.name == "nunsong(Clone)")
+        {
+            noPopUp.gameObject.SetActive(true);
+        }
+        else
+        {
+            giftInventory.Initialize(inventoryManager, this);
+            giftInventory.SyncWithInventoryManager();
+            giftInventory.ToggleGiftInventory();
+        }
     }
 
     public void ShowGiftPopup(ItemEntry item)
@@ -80,7 +106,7 @@ public class EncounterUI : MonoBehaviour
 
     public void GiveGift(ItemEntry item)
     {
-        Debug.Log($"{item.itemName}À»(¸¦) ¼±¹°");
+        Debug.Log($"{item.itemName}ï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½");
         giftInventory.SyncWithInventoryManager();
         giftPopup.SetActive(false);
     }
