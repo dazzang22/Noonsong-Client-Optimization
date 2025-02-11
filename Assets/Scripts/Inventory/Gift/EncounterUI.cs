@@ -86,22 +86,21 @@ public class EncounterUI : MonoBehaviour
         onCloseCallback = onClose;
         dialogueIndex = 0;
 
-        GameObject instance = Instantiate(noonsongPrefeb, Camera.main.transform);
-        instance.transform.localPosition = new Vector3(0, 0, 3);
-        instance.transform.localScale = Vector3.one * 1f;
-        instance.transform.localRotation = Quaternion.Euler(0, 180, 0);
+        GameObject currentTarget = arObjectCatch.GetCurrentTarget();
+        if (currentTarget != null)
+        {
+            originalParent = currentTarget.transform.parent;
+            currentTarget.transform.SetParent(Camera.main.transform);
+            currentTarget.transform.localPosition = new Vector3(0, 0, 3);
+            currentTarget.transform.localScale = Vector3.one * 1f;
+            currentTarget.transform.localRotation = Quaternion.identity;
+        }
 
         noonsongNameText.text = "눈송이";
 
         encounterPanel.SetActive(true);
         dialogueWindow.SetActive(true);
         dialogueText.text = "안녕! 반가워~";
-
-        onCloseCallback = () =>
-        {
-            Destroy(instance);
-            onClose?.Invoke();
-        };
     }
 
     public void OnDialogueButtonClicked()
@@ -117,47 +116,53 @@ public class EncounterUI : MonoBehaviour
 
     public void ShowNextDialogue()
     {
-        if (affectionDialogue == null || affectionDialogue.Count == 0)
-        {
-            Debug.LogError("affectionDialogue 데이터가 없습니다!");
-            return;
-        }
-
         if (!isDialogueActive) return;
 
-        int affectionLevel = currentCharacter.loveLevel;
-        int closestKey = affectionDialogue.Keys.OrderByDescending(k => k).FirstOrDefault(k => affectionLevel >= k);
-
-        if (!affectionDialogue.ContainsKey(closestKey) || affectionDialogue[closestKey].Count == 0)
+        if (affectionDialogue == null || affectionDialogue.Count == 0)
         {
-            Debug.LogWarning("호감도 대사가 없음!");
-            dialogueText.text = "……";
-            return;
-        }
-
-        List<string> dialogues = affectionDialogue[closestKey];
-        if (dialogueIndex >= dialogues.Count)
-        {
-            Debug.Log("대화 종료!");
-            isDialogueActive = false;
-            return;
-        }
-
-        dialogueText.text = dialogues[dialogueIndex];
-        Debug.Log($"🗨️ 대화 출력: {dialogueText.text} (Index: {dialogueIndex})");
-        dialogueIndex++;
-
-        GameObject currentTarget = arObjectCatch.GetCurrentTarget();
-        Debug.Log(currentTarget.name);
-        if (currentTarget != null && currentTarget.name == "nunsong(Clone)")
-        {
-            IncreasePopUp.gameObject.SetActive(true);
-            currencyManager.AddCurrency(NOONSONG_INCREMENT);
-            Debug.Log($"기본눈송이 : {NOONSONG_INCREMENT}개의 재화 추가.");
+            Debug.LogWarning("affectionDialogue 데이터가 없지만, 기본 처리 진행.");
         }
         else
         {
-            dialogueWindow.SetActive(true);
+            int affectionLevel = currentCharacter != null ? currentCharacter.loveLevel : 0;
+            int closestKey = affectionDialogue.Keys.OrderByDescending(k => k).FirstOrDefault(k => affectionLevel >= k);
+
+            if (affectionDialogue.ContainsKey(closestKey) && affectionDialogue[closestKey].Count > 0)
+            {
+                List<string> dialogues = affectionDialogue[closestKey];
+                if (dialogueIndex < dialogues.Count)
+                {
+                    dialogueText.text = dialogues[dialogueIndex];
+                    Debug.Log($"🗨️ 대화 출력: {dialogueText.text} (Index: {dialogueIndex})");
+                    dialogueIndex++;
+                }
+                else
+                {
+                    Debug.Log("대화 종료!");
+                    isDialogueActive = false;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("호감도 대사가 없음!");
+                dialogueText.text = "……";
+            }
+        }
+
+        GameObject currentTarget = arObjectCatch.GetCurrentTarget();
+        if (currentTarget != null)
+        {
+            Debug.Log(currentTarget.name);
+            if (currentTarget.name == "nunsong(Clone)")
+            {
+                IncreasePopUp.gameObject.SetActive(true);
+                currencyManager.AddCurrency(NOONSONG_INCREMENT);
+                Debug.Log($"기본눈송이 : {NOONSONG_INCREMENT}개의 재화 추가.");
+            }
+            else
+            {
+                dialogueWindow.SetActive(true);
+            }
         }
     }
 
