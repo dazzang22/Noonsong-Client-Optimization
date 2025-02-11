@@ -53,8 +53,10 @@ public class EncounterUI : MonoBehaviour
             currencyManager.AddCurrency(NOONSONG_INCREMENT);
             Debug.Log($"기본눈송이 : {NOONSONG_INCREMENT}개의 재화 추가.");
         }
-
-        dialogueWindow.SetActive(true);
+        else
+        {
+            dialogueWindow.SetActive(true);
+        }
     }
 
     public void CloseDialogueWindow()
@@ -79,11 +81,14 @@ public class EncounterUI : MonoBehaviour
 
         if (currentTarget != null && currentTarget.name == "nunsong(Clone)")
         {
-            noPopUp.gameObject.SetActive(false);
+            noPopUp.gameObject.SetActive(true);
         }
-        giftInventory.Initialize(inventoryManager, this);
-        giftInventory.SyncWithInventoryManager();
-        giftInventory.ToggleGiftInventory();
+        else
+        {
+            giftInventory.Initialize(inventoryManager, this);
+            giftInventory.SyncWithInventoryManager();
+            giftInventory.ToggleGiftInventory();
+        }
     }
 
     public void ShowGiftPopup(ItemEntry item)
