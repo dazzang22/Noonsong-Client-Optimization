@@ -40,6 +40,8 @@ public class NoonsongManager : MonoBehaviour
     [SerializeField] private Sprite loveSprite1;
     [SerializeField] private Sprite loveSprite2;
 
+    [SerializeField] private Sprite noonsongdefaultSprite;
+
     void Start()
     {
     if (noonsongEntryManager != null)
@@ -121,8 +123,16 @@ public class NoonsongManager : MonoBehaviour
           var noonsongImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
           if (noonsongImage != null)
           {
-            noonsongImage.sprite = entry.noonsongSprite;
-          }
+                        // 호감도가 20 이상일 때만 이미지를 표시
+                        if (entry.loveLevel >= 20)
+                        {
+                            noonsongImage.sprite = entry.noonsongSprite;
+                        }
+                        else
+                        {
+                            noonsongImage.sprite = noonsongdefaultSprite;
+                        }
+                    }
         }
         else
         {
@@ -232,15 +242,15 @@ public class NoonsongManager : MonoBehaviour
             detailsPanel.SetActive(true);
             if (detailsNameText != null)
             {
-                detailsImage.sprite = entry.noonsongSprite;
-
                 if (entry.loveLevel >= 20)
                 {
                     detailsNameText.text = entry.noonsongName;
+                    detailsImage.sprite = entry.noonsongSprite;
                 }
                 else
                 {
                     detailsNameText.text = "???";
+                    detailsImage.sprite = noonsongdefaultSprite;
                 }
 
                 if (entry.loveLevel >= 50)

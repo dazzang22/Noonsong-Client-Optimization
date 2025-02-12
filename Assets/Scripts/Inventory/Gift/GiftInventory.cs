@@ -19,11 +19,22 @@ public class GiftInventory : MonoBehaviour
 
     public GameObject collectEffectPrefab;
 
+    public GameObject bestFriendPopup;
+    public Button bestFriendConfirmButton;
+    public ItemEntry bestFriendRewardItem;
+
     public void Initialize(InventoryManager inventory, EncounterUI ui, ARObjectCatch arCatch)
     {
         inventoryManager = inventory;
         encounterUI = ui;
         arObjectCatch = arCatch;
+
+        if (bestFriendConfirmButton != null)
+        {
+            bestFriendConfirmButton.onClick.RemoveAllListeners();
+            bestFriendConfirmButton.onClick.AddListener(HandleBestFriendConfirmation);
+        }
+
         SyncWithInventoryManager();
     }
 
@@ -137,7 +148,13 @@ public class GiftInventory : MonoBehaviour
 
             int updatedLoveLevel = encounterUI.UpdateNoonsongAffection(affectionChange);
 
-            if (updatedLoveLevel == 50 && !currentNoonsong.isFriend)
+            if (updatedLoveLevel >= 100)
+            {
+                Debug.Log("베프 팝업");
+                ShowBestFriendPopup();
+            }
+
+            else if (updatedLoveLevel == 50 && !currentNoonsong.isFriend)
             {
                 encounterUI.ShowFriendRequestPopup();
             }
@@ -155,6 +172,29 @@ public class GiftInventory : MonoBehaviour
             encounterUI.GiveGift(selectedGiftItem);
             giftPopup.SetActive(false);
             giftInventoryUI.SetActive(false);
+        }
+    }
+
+    private void ShowBestFriendPopup()
+    {
+        if (bestFriendPopup != null)
+        {
+            bestFriendPopup.SetActive(true);
+        }
+    }
+
+    private void HandleBestFriendConfirmation()
+    {
+        if (bestFriendPopup != null)
+        {
+            bestFriendPopup.SetActive(false);
+
+            // 보상 아이템 지급
+            if (bestFriendRewardItem != null)
+            {
+                bestFriendRewardItem.itemCount++;
+                inventoryManager.UpdateInventory();
+            }
         }
     }
 
