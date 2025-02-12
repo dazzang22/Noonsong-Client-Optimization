@@ -21,7 +21,7 @@ public class InventoryManager : MonoBehaviour
   void Start()
   {
     descriptionPopup.SetActive(false);
-        itemEntries[1].itemCount += 10;
+        //itemEntries[1].itemCount += 10;
     }
 
     void PopulateInventory()

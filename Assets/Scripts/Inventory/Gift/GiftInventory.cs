@@ -113,29 +113,31 @@ public class GiftInventory : MonoBehaviour
             };
 
             int baseAffection = affectionValues.ContainsKey(university) ? affectionValues[university] : 1;
-            int affectionChange = baseAffection;
+            int preferenceMultiplier = 1;
             string giftReaction = "내 생각해서 주는 거야? 고마워.";
             switch (preference)
             {
                 case ItemEntry.PreferenceLevel.Love:
-                    affectionChange = 5;
+                    preferenceMultiplier = 5;
                     giftReaction = currentNoonsong.isFriend
                         ? "역시 나를 잘 아는구나? 정말 고마워!"
                         : "와! 나 이거 진짜 좋아하는데, 어떻게 알았어? 정말 고마워~";
                     break;
                 case ItemEntry.PreferenceLevel.Like:
-                    affectionChange = 3;
+                    preferenceMultiplier = 3;
                     giftReaction = currentNoonsong.isFriend
                         ? "마음에 든다! 고마워~"
                         : "오, 이거 좋은 걸? 선물해줘서 고마워!";
                     break;
                 case ItemEntry.PreferenceLevel.Dislike:
-                    affectionChange = 0;
+                    preferenceMultiplier = 0;
                     giftReaction = currentNoonsong.isFriend
                         ? "고마워~"
                         : "하하, 고마워.";
                     break;
             }
+
+            int affectionChange = baseAffection * preferenceMultiplier;
 
             if (!currentNoonsong.isFriend)
             {
@@ -148,13 +150,14 @@ public class GiftInventory : MonoBehaviour
 
             int updatedLoveLevel = encounterUI.UpdateNoonsongAffection(affectionChange);
 
-            if (updatedLoveLevel >= 100)
+            if (updatedLoveLevel >= 100 && !currentNoonsong.isBestFriend)
             {
                 Debug.Log("베프 팝업");
                 ShowBestFriendPopup();
+                currentNoonsong.isBestFriend = true;
             }
 
-            else if (updatedLoveLevel == 50 && !currentNoonsong.isFriend)
+            if (updatedLoveLevel == 50 && !currentNoonsong.isFriend)
             {
                 encounterUI.ShowFriendRequestPopup();
             }

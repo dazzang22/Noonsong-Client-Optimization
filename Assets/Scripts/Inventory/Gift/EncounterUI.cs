@@ -66,7 +66,15 @@ public class EncounterUI : MonoBehaviour
         dialogueIndex = 0;
         isDialogueActive = false;
         dialogueButton.interactable = false;
-        noonsongNameText.text = currentCharacter.noonsongName;
+        if (currentCharacter.loveLevel >= 2)
+        {
+            noonsongNameText.text = currentCharacter.noonsongName;
+
+        }
+        else
+        {
+            noonsongNameText.text = "???";
+        }
 
         GameObject currentTarget = arObjectCatch.GetCurrentTarget();
         if (currentTarget != null)
