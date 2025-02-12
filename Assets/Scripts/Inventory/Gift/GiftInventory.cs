@@ -18,6 +18,10 @@ public class GiftInventory : MonoBehaviour
     public GameObject giftPopup;
 
     public GameObject collectEffectPrefab;
+    public GameObject giftEffectParticle1;
+    public GameObject giftEffectParticle2;
+    public GameObject giftEffectParticle3;
+    public GameObject giftEffectParticle4;
 
     public GameObject bestFriendPopup;
     public Button bestFriendConfirmButton;
@@ -50,17 +54,17 @@ public class GiftInventory : MonoBehaviour
         encounterUI.ShowGiftPopup(item);
     }
 
-    private IEnumerator DisableEffectAfterDelay(float delay)
+    private IEnumerator DisableEffectAfterDelay(float delay, GameObject effect)
     {
         yield return new WaitForSeconds(delay);
 
-        if (collectEffectPrefab != null)
+        if (effect != null)
         {
-            collectEffectPrefab.SetActive(false);
+            effect.SetActive(false);
         }
     }
 
-    public void GiveGift()
+        public void GiveGift()
     {
         if (selectedGiftItem != null)
         {
@@ -84,10 +88,9 @@ public class GiftInventory : MonoBehaviour
                 if (collectEffectPrefab != null)
                 {
                     collectEffectPrefab.SetActive(true);
+                    StartCoroutine(DisableEffectAfterDelay(5f, collectEffectPrefab));
                 }
                 arObjectCatch.CollectCharacter();
-
-                StartCoroutine(DisableEffectAfterDelay(5f));
             }
 
             string university = encounterUI.GetCurrentNoonsongUniversity();
@@ -115,6 +118,8 @@ public class GiftInventory : MonoBehaviour
             int baseAffection = affectionValues.ContainsKey(university) ? affectionValues[university] : 1;
             int preferenceMultiplier = 1;
             string giftReaction = "내 생각해서 주는 거야? 고마워.";
+            GameObject effectToActivate = null;
+
             switch (preference)
             {
                 case ItemEntry.PreferenceLevel.Love:
@@ -122,19 +127,31 @@ public class GiftInventory : MonoBehaviour
                     giftReaction = currentNoonsong.isFriend
                         ? "역시 나를 잘 아는구나? 정말 고마워!"
                         : "와! 나 이거 진짜 좋아하는데, 어떻게 알았어? 정말 고마워~";
+                    effectToActivate = giftEffectParticle4;
                     break;
                 case ItemEntry.PreferenceLevel.Like:
                     preferenceMultiplier = 3;
                     giftReaction = currentNoonsong.isFriend
                         ? "마음에 든다! 고마워~"
                         : "오, 이거 좋은 걸? 선물해줘서 고마워!";
+                    effectToActivate = giftEffectParticle3;
                     break;
                 case ItemEntry.PreferenceLevel.Dislike:
                     preferenceMultiplier = 0;
                     giftReaction = currentNoonsong.isFriend
                         ? "고마워~"
                         : "하하, 고마워.";
+                    effectToActivate = giftEffectParticle1;
                     break;
+                default:
+                    effectToActivate = giftEffectParticle2;
+                    break;
+            }
+
+            if (effectToActivate != null)
+            {
+                effectToActivate.SetActive(true);
+                StartCoroutine(DisableEffectAfterDelay(3f, effectToActivate));
             }
 
             int affectionChange = baseAffection * preferenceMultiplier;
