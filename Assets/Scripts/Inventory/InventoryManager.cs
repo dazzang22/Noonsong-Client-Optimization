@@ -21,10 +21,10 @@ public class InventoryManager : MonoBehaviour
   void Start()
   {
     descriptionPopup.SetActive(false);
-    PopulateInventory(); 
-  }
+        //itemEntries[1].itemCount += 10;
+    }
 
-  void PopulateInventory()
+    void PopulateInventory()
   {
     foreach (Transform child in inventoryContentPanel)
     {

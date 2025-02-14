@@ -40,6 +40,8 @@ public class NoonsongManager : MonoBehaviour
     [SerializeField] private Sprite loveSprite1;
     [SerializeField] private Sprite loveSprite2;
 
+    [SerializeField] private Sprite noonsongdefaultSprite;
+
     void Start()
     {
     if (noonsongEntryManager != null)
@@ -121,8 +123,16 @@ public class NoonsongManager : MonoBehaviour
           var noonsongImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
           if (noonsongImage != null)
           {
-            noonsongImage.sprite = entry.noonsongSprite;
-          }
+                        // 호감도가 20 이상일 때만 이미지를 표시
+                        if (entry.loveLevel >= 20)
+                        {
+                            noonsongImage.sprite = entry.noonsongSprite;
+                        }
+                        else
+                        {
+                            noonsongImage.sprite = noonsongdefaultSprite;
+                        }
+                    }
         }
         else
         {
@@ -232,20 +242,26 @@ public class NoonsongManager : MonoBehaviour
             detailsPanel.SetActive(true);
             if (detailsNameText != null)
             {
-                detailsImage.sprite = entry.noonsongSprite;
-
-                if (entry.loveLevel < 2)
+                if (entry.loveLevel >= 20)
                 {
-                    detailsNameText.text = "???";
-                    detailsDescriptionText.text = "???";
+                    detailsNameText.text = entry.noonsongName;
+                    detailsImage.sprite = entry.noonsongSprite;
                 }
                 else
                 {
-                    detailsNameText.text = entry.noonsongName;
-                    detailsDescriptionText.text = entry.description;
+                    detailsNameText.text = "???";
+                    detailsImage.sprite = noonsongdefaultSprite;
                 }
 
-                Debug.Log($"Details panel updated with entry: {entry.noonsongName}");
+                if (entry.loveLevel >= 50)
+                {
+                    detailsDescriptionText.text = entry.description;
+                }
+                else
+                {
+                    detailsDescriptionText.text = "???";
+                }
+
             }
 
             if (view3DButton != null)
@@ -286,19 +302,17 @@ public class NoonsongManager : MonoBehaviour
             loveMeterImages[i].sprite = loveSprite1;
         }
 
-        int secondSetCount = Mathf.Clamp(loveLevel - 5, 0, loveMeterImages.Length); 
-        int firstSetCount = Mathf.Clamp(loveLevel, 0, loveMeterImages.Length);
-
-        for (int i = 0; i < secondSetCount; i++)
+        for (int i = 0; i < loveMeterImages.Length; i++)
         {
-            loveMeterImages[i].enabled = true;
-            loveMeterImages[i].sprite = loveSprite2;
-        }
+            if (loveLevel >= (i + 1) * 10)
+            {
+                loveMeterImages[i].enabled = true;
 
-        for (int i = secondSetCount; i < firstSetCount; i++)
-        {
-            loveMeterImages[i].enabled = true;
-            loveMeterImages[i].sprite = loveSprite1;
+                if (loveLevel >= 60)  // 60 이상이면 loveSprite2 적용
+                    loveMeterImages[i].sprite = loveSprite2;
+                else
+                    loveMeterImages[i].sprite = loveSprite1;
+            }
         }
     }
 
