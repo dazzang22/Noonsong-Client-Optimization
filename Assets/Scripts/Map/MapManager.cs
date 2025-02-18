@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
@@ -17,6 +18,9 @@ public class MapManager : MonoBehaviour
     private Vector2 currentTouchPosition;
     private bool isScrolling = false;
 
+    public Button BlumingButton;
+    public GameObject popupUI;
+
     private List<string> buildingNames = new List<string> { "Sunheon Bldg", "Myungshin Bldg", "Suryeon Bldg", "Wisdom Bldg", "Renaissance Plaza Bldg", "College of Science Bldg", "College of Music Bldg", "College of Fine Arts Bldg", "Center for Continuing Education  Bldg", "College of Pharmacy Bldg" };
 
     void Start()
@@ -29,6 +33,12 @@ public class MapManager : MonoBehaviour
                 Debug.LogError("PlayerObjectSpawn is not assigned and cannot be found in the scene.");
                 return;
             }
+        }
+
+        if (BlumingButton != null)
+        {
+            BlumingButton.gameObject.SetActive(false);
+            BlumingButton.onClick.AddListener(OnBlumingButtonClicked);
         }
 
         LoadMapState();
@@ -52,6 +62,11 @@ public class MapManager : MonoBehaviour
             {
                 regions[i].SetActive(true);
             }
+        }
+
+        if (AreAllRegionsUnlocked())
+        {
+            ActivateBluming();
         }
     }
 
@@ -137,6 +152,11 @@ public class MapManager : MonoBehaviour
             regionUnlocked[regionIndex] = true;
             regions[regionIndex].SetActive(false);
         }
+
+        if (AreAllRegionsUnlocked())
+        {
+            ActivateBluming();
+        }
     }
 
     public void CheckAndUnlockRegions()
@@ -157,6 +177,11 @@ public class MapManager : MonoBehaviour
                 Debug.Log($"Building {buildingName} not yet completed.");
             }
         }
+
+        if (AreAllRegionsUnlocked())
+        {
+            ActivateBluming();
+        }
     }
 
     public bool AreAllRegionsUnlocked()
@@ -166,5 +191,33 @@ public class MapManager : MonoBehaviour
             if (!unlocked) return false; // 하나라도 해금되지 않으면 false 반환
         }
         return true; // 모든 구역이 해금되었으면 true 반환
+    }
+
+    private void ActivateBluming()
+    {
+        if (mapUI != null)
+        {
+            mapUI.SetActive(true);
+            popupUI.SetActive(true);
+        }
+
+        if (BlumingButton != null)
+        {
+            BlumingButton.gameObject.SetActive(true);
+            BlumingButton.interactable = true;  
+        }
+
+        Debug.Log("All regions unlocked! EndGame UI activated.");
+    }
+
+    public void ClosePopup()
+    {
+        popupUI.SetActive(false);
+    }
+
+    private void OnBlumingButtonClicked()
+    {
+        SceneManager.LoadScene("Bluming");
+        Debug.Log("Scene changed!");
     }
 }

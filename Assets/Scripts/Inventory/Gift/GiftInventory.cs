@@ -192,6 +192,7 @@ public class GiftInventory : MonoBehaviour
             encounterUI.GiveGift(selectedGiftItem);
             giftPopup.SetActive(false);
             giftInventoryUI.SetActive(false);
+            encounterUI.CloseEncounter();
         }
     }
 
