@@ -16,6 +16,7 @@ public class EncounterUI : MonoBehaviour
 
     [SerializeField] private GiftInventory giftInventory;
     [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private NoonsongCountUI noonsongCountUI;
     [SerializeField] private GameObject giftPopup;
     [SerializeField] private TextMeshProUGUI giftItemName;
     [SerializeField] private Image giftItemImage;
@@ -28,9 +29,14 @@ public class EncounterUI : MonoBehaviour
     private NoonsongEntry currentCharacter;
     private System.Action onCloseCallback;
 
-    private int dialogueIndex = 0;
+    public GameObject EffectPrefabs;
+
     private bool isDialogueActive = false;
     [SerializeField] private Button dialogueButton;
+
+    [SerializeField] private Button HiButton;
+    [SerializeField] private Button GiftButton;
+
     private Dictionary<int, List<string>> affectionDialogue = new Dictionary<int, List<string>>
     {
         { 0, new List<string> { "안녕! 반가워!" } },
@@ -74,10 +80,11 @@ public class EncounterUI : MonoBehaviour
             return;
         }
 
+        EffectPrefabs.SetActive(true);
+
         currentCharacter = character;
         Debug.Log($"currentCharacter 설정됨: {currentCharacter.name}");
         onCloseCallback = onClose;
-        dialogueIndex = 0;
         isDialogueActive = false;
         dialogueButton.interactable = false;
         if (currentCharacter.loveLevel >= 2)
@@ -120,7 +127,6 @@ public class EncounterUI : MonoBehaviour
     {
         currentCharacter = null;
         onCloseCallback = onClose;
-        dialogueIndex = 0;
 
         GameObject currentTarget = arObjectCatch.GetCurrentTarget();
         if (currentTarget != null)
@@ -145,7 +151,8 @@ public class EncounterUI : MonoBehaviour
         {
             isDialogueActive = true;
             dialogueButton.interactable = true;
-            dialogueIndex = 0;
+            HiButton.interactable = false;
+            GiftButton.interactable = false;
         }
         ShowNextDialogue();
     }
@@ -218,6 +225,7 @@ public class EncounterUI : MonoBehaviour
     public void CancelExit()
     {
         exitPopup.SetActive(false);
+        dialogueButton.interactable = true;
     }
 
 
@@ -262,12 +270,16 @@ public class EncounterUI : MonoBehaviour
         Debug.Log($"{item.itemName}��(��) ����");
         giftInventory.SyncWithInventoryManager();
         giftPopup.SetActive(false);
+        dialogueButton.interactable = true;
+        HiButton.interactable = false;
+        GiftButton.interactable = false;
     }
 
     public void CloseEncounter()
     {
         encounterPanel.SetActive(false);
         dialogueWindow.SetActive(false);
+        EffectPrefabs.SetActive(false);
         onCloseCallback?.Invoke();
     }
 
@@ -297,6 +309,7 @@ public class EncounterUI : MonoBehaviour
     {
         currentCharacter.isFriend = true;
         friendRequestPopup.SetActive(false);
+        noonsongCountUI.UpdateFriendCount();
     }
 
     public NoonsongEntry GetCurrentNoonsongEntry()

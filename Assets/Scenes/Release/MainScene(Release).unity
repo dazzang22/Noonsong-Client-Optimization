@@ -3367,7 +3367,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 224.18991, y: -50}
+  m_AnchoredPosition: {x: 225, y: -50}
   m_SizeDelta: {x: 260, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!82 &288823281
@@ -10074,6 +10074,51 @@ MonoBehaviour:
   xrOrigin: {fileID: 1381654041}
   spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
+--- !u!1 &1026678780
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1026678782}
+  - component: {fileID: 1026678781}
+  m_Layer: 0
+  m_Name: NoonsongCountUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1026678781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026678780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c4d04b53296a44da7f8627a4181ebc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  friendCountText: {fileID: 1169917089239903725}
+--- !u!4 &1026678782
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026678780}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1028862819
 GameObject:
   m_ObjectHideFlags: 0
@@ -14204,7 +14249,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 612.5697, y: -50}
+  m_AnchoredPosition: {x: 615, y: -50}
   m_SizeDelta: {x: 260, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!82 &1352487661
@@ -21701,6 +21746,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7545448130425156954, guid: 2c4dee17a6964d844a42e645f7e82b49, type: 3}
   m_PrefabInstance: {fileID: 1974024240}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1978596988 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2093920568255580789, guid: 005cc8ed2cc10e446a8deb3053ea15f0, type: 3}
+  m_PrefabInstance: {fileID: 1169966815}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1986483641
 GameObject:
   m_ObjectHideFlags: 0
@@ -21736,8 +21786,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 458.37982, y: -550}
-  m_SizeDelta: {x: 836.75964, y: 100}
+  m_AnchoredPosition: {x: 460, y: -550}
+  m_SizeDelta: {x: 840, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1986483643
 MonoBehaviour:
@@ -68055,6 +68105,7 @@ MonoBehaviour:
   exitPopup: {fileID: 904698597}
   giftInventory: {fileID: 1721020949}
   inventoryManager: {fileID: 425867099}
+  noonsongCountUI: {fileID: 0}
   giftPopup: {fileID: 3574710345276338607}
   giftItemName: {fileID: 884203175672457902}
   giftItemImage: {fileID: 6282791463634499021}
@@ -68062,7 +68113,10 @@ MonoBehaviour:
   friendRequestPopup: {fileID: 1602363558}
   yesButton: {fileID: 840230222}
   noButton: {fileID: 1690070281}
+  EffectPrefabs: {fileID: 1978596988}
   dialogueButton: {fileID: 783201761}
+  HiButton: {fileID: 1750719643643276228}
+  GiftButton: {fileID: 375457423685884200}
   arObjectCatch: {fileID: 1204400704}
   currencyManager: {fileID: 1261234043}
   IncreasePopUp: {fileID: 6530145479088046938}
@@ -71935,3 +71989,4 @@ SceneRoots:
   - {fileID: 1072866541}
   - {fileID: 1925273060}
   - {fileID: 1316353952}
+  - {fileID: 1026678782}
