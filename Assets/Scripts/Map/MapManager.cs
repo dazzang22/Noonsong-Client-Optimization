@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
@@ -18,11 +16,12 @@ public class MapManager : MonoBehaviour
     private Vector2 currentTouchPosition;
     private bool isScrolling = false;
 
-    public Button BlumingButton;
     public GameObject popupUI;
 
-    private List<string> buildingNames = new List<string> { "Sunheon Bldg", "Myungshin Bldg", "Suryeon Bldg", "Wisdom Bldg", "Renaissance Plaza Bldg", "College of Science Bldg", "College of Music Bldg", "College of Fine Arts Bldg", "Center for Continuing Education  Bldg", "College of Pharmacy Bldg" };
+    private List<string> buildingNames = new List<string> { "Sunheon Bldg", "Myungshin Bldg", "Suryeon Bldg", "Renaissance Plaza Bldg", "College of Science Bldg", "College of Music Bldg", "College of Fine Arts Bldg", "Center for Continuing Education  Bldg", "College of Pharmacy Bldg" };
 
+    //private BlumingController blumingController;
+    private TestBluming testBluming;
     void Start()
     {
         if (playerObjectSpawn == null)
@@ -35,11 +34,8 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        if (BlumingButton != null)
-        {
-            BlumingButton.gameObject.SetActive(false);
-            BlumingButton.onClick.AddListener(OnBlumingButtonClicked);
-        }
+        //blumingController = FindObjectOfType<BlumingController>();
+        testBluming = FindObjectOfType<TestBluming>();
 
         LoadMapState();
         CheckAndUnlockRegions();
@@ -195,29 +191,14 @@ public class MapManager : MonoBehaviour
 
     private void ActivateBluming()
     {
-        if (mapUI != null)
-        {
-            mapUI.SetActive(true);
-            popupUI.SetActive(true);
-        }
+        popupUI.SetActive(true);
+        //blumingController.ActivateHiddenObjects();
+        testBluming.ActivateHiddenObjects();
 
-        if (BlumingButton != null)
-        {
-            BlumingButton.gameObject.SetActive(true);
-            BlumingButton.interactable = true;  
-        }
-
-        Debug.Log("All regions unlocked! EndGame UI activated.");
     }
 
     public void ClosePopup()
     {
         popupUI.SetActive(false);
-    }
-
-    private void OnBlumingButtonClicked()
-    {
-        SceneManager.LoadScene("Bluming");
-        Debug.Log("Scene changed!");
     }
 }

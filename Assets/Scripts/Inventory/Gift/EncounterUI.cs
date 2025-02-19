@@ -72,6 +72,20 @@ public class EncounterUI : MonoBehaviour
         dialogueButton.interactable = false;
     }
 
+    private void Update()
+    {
+        GameObject currentTarget = arObjectCatch.GetCurrentTarget();
+
+        if (encounterPanel.activeSelf && currentCharacter == null)
+        {
+            if (currentTarget == null || currentTarget.name != "nunsong(Clone)")
+            {
+                Debug.LogWarning("currentCharacter가 null이고, 기본 눈송이가 아니므로 UI를 비활성화합니다.");
+                CloseEncounter();
+            }
+        }
+    }
+
     public void Show(NoonsongEntry character, System.Action onClose)
     {
         if (character == null)
