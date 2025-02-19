@@ -16,6 +16,7 @@ public class FriendsManager : MonoBehaviour
     public Button view3DButton;                 // 3D ���� ��ư
     public Canvas collectionCanvas;             // Collection ȭ��
     public Canvas cameraCanvas;                 // 3D ���� ȭ��
+    public GameObject cameraPopup;
     public Camera renderCamera;             // 3D �������� �������� Render Texture
 
     [SerializeField]
@@ -29,6 +30,7 @@ public class FriendsManager : MonoBehaviour
 
     void Start()
     {
+        PlayerPrefs.DeleteKey("CameraPopupActivated");
         if (noonsongFriendsEntryManager != null)
         {
             entries = new List<NoonsongFriendsEntry>(noonsongFriendsEntryManager.GetNoonsongEntries());
@@ -135,6 +137,23 @@ public class FriendsManager : MonoBehaviour
         if (cameraCanvas != null)
         {
             cameraCanvas.gameObject.SetActive(true);
+        }
+
+        if (PlayerPrefs.GetInt("CameraPopupActivated", 0) == 0) 
+        {
+            if (cameraPopup != null)
+            {
+                cameraPopup.gameObject.SetActive(true); // 최초 1회 활성화
+                PlayerPrefs.SetInt("CameraPopupActivated", 1); // 상태 저장
+                PlayerPrefs.Save(); // 저장 확정
+            }
+        }
+        else
+        {
+            if (cameraPopup != null)
+            {
+                cameraPopup.gameObject.SetActive(false); // 다시 실행해도 비활성화
+            }
         }
 
         if (renderCamera != null && entry.prefab != null)

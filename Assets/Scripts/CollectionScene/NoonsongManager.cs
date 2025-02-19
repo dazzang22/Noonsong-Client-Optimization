@@ -23,6 +23,7 @@ public class NoonsongManager : MonoBehaviour
   public Button view3DButton;
   public Canvas collectionCanvas;
   public Canvas cameraCanvas;
+  public GameObject cameraPopup;
   public Camera renderCamera;
   public Button[] categoryButtons;
   public string selectedCategory = "All";
@@ -327,6 +328,23 @@ public class NoonsongManager : MonoBehaviour
         if (cameraCanvas != null)
         {
             cameraCanvas.gameObject.SetActive(true);
+        }
+        
+        if (PlayerPrefs.GetInt("CameraPopupActivated", 0) == 0) 
+        {
+            if (cameraPopup != null)
+            {
+                cameraPopup.gameObject.SetActive(true); // 최초 1회 활성화
+                PlayerPrefs.SetInt("CameraPopupActivated", 1); // 상태 저장
+                PlayerPrefs.Save(); // 저장 확정
+            }
+        }
+        else
+        {
+            if (cameraPopup != null)
+            {
+                cameraPopup.gameObject.SetActive(false); // 다시 실행해도 비활성화
+            }
         }
 
         if (renderCamera != null && entry.prefab != null)
