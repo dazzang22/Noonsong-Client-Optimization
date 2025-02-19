@@ -16,6 +16,7 @@ public class EncounterUI : MonoBehaviour
 
     [SerializeField] private GiftInventory giftInventory;
     [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private NoonsongCountUI noonsongCountUI;
     [SerializeField] private GameObject giftPopup;
     [SerializeField] private TextMeshProUGUI giftItemName;
     [SerializeField] private Image giftItemImage;
@@ -28,15 +29,34 @@ public class EncounterUI : MonoBehaviour
     private NoonsongEntry currentCharacter;
     private System.Action onCloseCallback;
 
-    private int dialogueIndex = 0;
+    public GameObject EffectPrefabs;
+
     private bool isDialogueActive = false;
     [SerializeField] private Button dialogueButton;
+
+    [SerializeField] private Button HiButton;
+    [SerializeField] private Button GiftButton;
+
     private Dictionary<int, List<string>> affectionDialogue = new Dictionary<int, List<string>>
     {
-        { 0, new List<string> { "안녕!", "반가워!" } },
-        { 5, new List<string> { "안녕!", "보고 싶었어!", "더 자주 만나면 좋겠다." } },
-        { 10, new List<string> { "안녕!", "만나서 정말 좋아!", "우린 정말 좋은 친구야." } },
+        { 0, new List<string> { "안녕! 반가워!" } },
+        { 5, new List<string> { "안녕! 보고 싶었어! 더 자주 만나면 좋겠다." } },
+        { 10, new List<string> { "안녕! 만나서 정말 좋아! 우린 정말 좋은 친구야." } },
     };
+
+    private List<string> randomDialogue = new List<string>
+{
+    "다음에 또 보자!",
+    "오늘도 좋은 하루 보내~",
+    "대화 재밌었어! 다음에 만나~",
+    "조심히 가, 안녕!",
+    "다음에 만나면 또 놀자~",
+    "또 만나러 와 줄거지? 잘 가!",
+    "나 잊으면 안 돼~ 다음에 또 얘기하자!",
+    "안녕, 나중에 봐~",
+    "앗, 벌써 시간이... 아쉽지만 다음에 또 놀자!",
+    "너랑 노는 거 정말 재밌었어! 안녕~"
+};
 
     private Transform originalParent;
 
@@ -60,10 +80,11 @@ public class EncounterUI : MonoBehaviour
             return;
         }
 
+        EffectPrefabs.SetActive(true);
+
         currentCharacter = character;
         Debug.Log($"currentCharacter 설정됨: {currentCharacter.name}");
         onCloseCallback = onClose;
-        dialogueIndex = 0;
         isDialogueActive = false;
         dialogueButton.interactable = false;
         if (currentCharacter.loveLevel >= 2)
@@ -89,14 +110,23 @@ public class EncounterUI : MonoBehaviour
 
         encounterPanel.SetActive(true);
         dialogueWindow.SetActive(true);
-        dialogueText.text = "안녕! 반가워~"; // 초기 인사말, 추후 수정 예정
+
+        int affectionLevel = currentCharacter.loveLevel;
+        int closestKey = affectionDialogue.Keys.OrderByDescending(k => k).FirstOrDefault(k => affectionLevel >= k);
+        if (affectionDialogue.ContainsKey(closestKey) && affectionDialogue[closestKey].Count > 0)
+        {
+            dialogueText.text = affectionDialogue[closestKey][0];
+        }
+        else
+        {
+            dialogueText.text = "안녕! 반가워~";
+        }
     }
 
     public void ShowDefaultDialogue(GameObject noonsongPrefeb, System.Action onClose)
     {
         currentCharacter = null;
         onCloseCallback = onClose;
-        dialogueIndex = 0;
 
         GameObject currentTarget = arObjectCatch.GetCurrentTarget();
         if (currentTarget != null)
@@ -121,7 +151,8 @@ public class EncounterUI : MonoBehaviour
         {
             isDialogueActive = true;
             dialogueButton.interactable = true;
-            dialogueIndex = 0;
+            HiButton.interactable = false;
+            GiftButton.interactable = false;
         }
         ShowNextDialogue();
     }
@@ -136,29 +167,8 @@ public class EncounterUI : MonoBehaviour
         }
         else
         {
-            int affectionLevel = currentCharacter != null ? currentCharacter.loveLevel : 0;
-            int closestKey = affectionDialogue.Keys.OrderByDescending(k => k).FirstOrDefault(k => affectionLevel >= k);
-
-            if (affectionDialogue.ContainsKey(closestKey) && affectionDialogue[closestKey].Count > 0)
-            {
-                List<string> dialogues = affectionDialogue[closestKey];
-                if (dialogueIndex < dialogues.Count)
-                {
-                    dialogueText.text = dialogues[dialogueIndex];
-                    Debug.Log($"🗨️ 대화 출력: {dialogueText.text} (Index: {dialogueIndex})");
-                    dialogueIndex++;
-                }
-                else
-                {
-                    Debug.Log("대화 종료!");
-                    isDialogueActive = false;
-                }
-            }
-            else
-            {
-                Debug.LogWarning("호감도 대사가 없음!");
-                dialogueText.text = "……";
-            }
+            int randomIndex = Random.Range(0, randomDialogue.Count);
+            dialogueText.text = randomDialogue[randomIndex];
         }
 
         GameObject currentTarget = arObjectCatch.GetCurrentTarget();
@@ -215,6 +225,7 @@ public class EncounterUI : MonoBehaviour
     public void CancelExit()
     {
         exitPopup.SetActive(false);
+        dialogueButton.interactable = true;
     }
 
 
@@ -259,12 +270,16 @@ public class EncounterUI : MonoBehaviour
         Debug.Log($"{item.itemName}��(��) ����");
         giftInventory.SyncWithInventoryManager();
         giftPopup.SetActive(false);
+        dialogueButton.interactable = true;
+        HiButton.interactable = false;
+        GiftButton.interactable = false;
     }
 
     public void CloseEncounter()
     {
         encounterPanel.SetActive(false);
         dialogueWindow.SetActive(false);
+        EffectPrefabs.SetActive(false);
         onCloseCallback?.Invoke();
     }
 
@@ -294,6 +309,7 @@ public class EncounterUI : MonoBehaviour
     {
         currentCharacter.isFriend = true;
         friendRequestPopup.SetActive(false);
+        noonsongCountUI.UpdateFriendCount();
     }
 
     public NoonsongEntry GetCurrentNoonsongEntry()
