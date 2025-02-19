@@ -175,7 +175,7 @@ public class EncounterUI : MonoBehaviour
         if (currentTarget != null)
         {
             Debug.Log(currentTarget.name);
-            if (currentTarget.name == "nunsong(Clone)")
+            if (currentTarget.name == "noonsong remake 0202(Clone)")
             {
                 IncreasePopUp.gameObject.SetActive(true);
                 currencyManager.AddCurrency(NOONSONG_INCREMENT);
@@ -235,7 +235,7 @@ public class EncounterUI : MonoBehaviour
 
         GameObject currentTarget = arObjectCatch.GetCurrentTarget();
 
-        if (currentTarget != null && currentTarget.name == "nunsong(Clone)")
+        if (currentTarget != null && currentTarget.name == "noonsong remake 0202(Clone)")
         {
             noPopUp.gameObject.SetActive(true);
         }
