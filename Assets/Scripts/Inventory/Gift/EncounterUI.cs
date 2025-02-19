@@ -105,6 +105,17 @@ public class EncounterUI : MonoBehaviour
             currentTarget.transform.localPosition = new Vector3(0, 0, 3);
             currentTarget.transform.localScale = Vector3.one * 1f;
             currentTarget.transform.localRotation = Quaternion.identity;
+
+            NPCPatrol npcPatrol = currentTarget.GetComponent<NPCPatrol>();
+            if (npcPatrol != null)
+            {
+                Debug.Log("이동중지");
+                npcPatrol.StopAllCoroutines(); //  이동 중지
+            }
+            else
+            {
+                Debug.Log("npuPatrol null");
+            }
         }
     
 
@@ -136,6 +147,18 @@ public class EncounterUI : MonoBehaviour
             currentTarget.transform.localPosition = new Vector3(0, 0, 3);
             currentTarget.transform.localScale = Vector3.one * 1f;
             currentTarget.transform.localRotation = Quaternion.identity;
+            
+            NPCPatrol npcPatrol = currentTarget.GetComponent<NPCPatrol>();
+            if (npcPatrol != null)
+            {
+                Debug.Log("이동중지");
+                npcPatrol.StopAllCoroutines(); //  이동 중지
+            }
+            else
+            {
+                Debug.Log("npuPatrol null");
+            }
+
         }
 
         noonsongNameText.text = "눈송이";
@@ -175,7 +198,7 @@ public class EncounterUI : MonoBehaviour
         if (currentTarget != null)
         {
             Debug.Log(currentTarget.name);
-            if (currentTarget.name == "nunsong(Clone)")
+            if (currentTarget.name == "noonsong remake 0202(Clone)")
             {
                 IncreasePopUp.gameObject.SetActive(true);
                 currencyManager.AddCurrency(NOONSONG_INCREMENT);
@@ -235,7 +258,7 @@ public class EncounterUI : MonoBehaviour
 
         GameObject currentTarget = arObjectCatch.GetCurrentTarget();
 
-        if (currentTarget != null && currentTarget.name == "nunsong(Clone)")
+        if (currentTarget != null && currentTarget.name == "noonsong remake 0202(Clone)")
         {
             noPopUp.gameObject.SetActive(true);
         }

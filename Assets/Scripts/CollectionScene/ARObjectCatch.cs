@@ -97,7 +97,7 @@ public class ARObjectCatch : MonoBehaviour
             return;
         }
 
-        if (currentTarget != null && currentTarget.name == "nunsong(Clone)")
+        if (currentTarget != null && currentTarget.name == "noonsong remake 0202(Clone)")
         {
             encounterUI.ShowDefaultDialogue(noonsongPrefeb, () => {
                 Debug.Log("기본 대화 종료 후 로직 실행");
