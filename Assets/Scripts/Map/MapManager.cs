@@ -20,8 +20,7 @@ public class MapManager : MonoBehaviour
 
     private List<string> buildingNames = new List<string> { "Sunheon Bldg", "Myungshin Bldg", "Suryeon Bldg", "Renaissance Plaza Bldg", "College of Science Bldg", "College of Music Bldg", "College of Fine Arts Bldg", "Center for Continuing Education  Bldg", "College of Pharmacy Bldg" };
 
-    //private BlumingController blumingController;
-    private TestBluming testBluming;
+    public TestBluming testBluming;
     void Start()
     {
         if (playerObjectSpawn == null)
@@ -33,9 +32,6 @@ public class MapManager : MonoBehaviour
                 return;
             }
         }
-
-        //blumingController = FindObjectOfType<BlumingController>();
-        testBluming = FindObjectOfType<TestBluming>();
 
         LoadMapState();
         CheckAndUnlockRegions();
@@ -192,8 +188,7 @@ public class MapManager : MonoBehaviour
     private void ActivateBluming()
     {
         popupUI.SetActive(true);
-        //blumingController.ActivateHiddenObjects();
-        testBluming.ActivateHiddenObjects();
+        testBluming.UnlockBluming();
 
     }
 

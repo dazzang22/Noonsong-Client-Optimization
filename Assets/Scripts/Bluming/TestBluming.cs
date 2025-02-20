@@ -1,85 +1,80 @@
-using Mapbox.Examples;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using UnityEngine.XR.ARFoundation;
+using Mapbox.Unity.Map;
 
 public class TestBluming : MonoBehaviour
 {
-    public GameObject mapPrefab;
-    public float spawnDistance = 2.0f;
-    public float yOffset = -7.0f;
-    public Vector3 spawnScale = new Vector3(3, 3, 3);
+    [SerializeField]
+    GameObject spawnPrefab;
 
-    public Camera arCamera;
+    [SerializeField]
+    AbstractMap map;
 
-    public string alwaysActiveGroupName = "ActiveGroup";
-    public string initiallyInactiveGroupName = "HiddenGroup";
+    [SerializeField]
+    Transform xrOrigin;
 
-    private GameObject spawnedMap;
+    private GameObject spawnedObject;
+    private Transform othersObject;
 
-    void Start()
+    void Update()
     {
-        arCamera = Camera.main;
-
-        if (arCamera == null)
+        var activationController = GetComponentInParent<ScriptActivationController>();
+        if (activationController != null && activationController.IsActive())
         {
-            Debug.LogError("AR 카메라를 찾을 수 없습니다. ARSession 설정을 확인하세요.");
-            return;
-        }
-
-        SpawnMapAtCurrentLocation();
-    }
-
-    void SpawnMapAtCurrentLocation()
-    {
-        Vector3 spawnPosition = arCamera.transform.position + arCamera.transform.forward * spawnDistance;
-        spawnPosition.y += yOffset;
-
-        spawnedMap = Instantiate(mapPrefab, spawnPosition, Quaternion.identity);
-        spawnedMap.transform.localScale = spawnScale;
-
-        Debug.Log("맵이 현재 위치 앞에 스폰되었습니다!");
-
-        Transform activeGroup = spawnedMap.transform.Find(alwaysActiveGroupName);
-        if (activeGroup != null)
-        {
-            activeGroup.gameObject.SetActive(true);
-            Debug.Log($"{alwaysActiveGroupName} 그룹 활성화됨.");
+            if (spawnedObject == null)
+            {
+                SpawnObject();
+            }
         }
         else
         {
-            Debug.LogWarning($"{alwaysActiveGroupName} 그룹을 찾을 수 없음.");
-        }
-
-        Transform inactiveGroup = spawnedMap.transform.Find(initiallyInactiveGroupName);
-        if (inactiveGroup != null)
-        {
-            inactiveGroup.gameObject.SetActive(false);
-            Debug.Log($"{initiallyInactiveGroupName} 그룹 비활성화됨.");
-        }
-        else
-        {
-            Debug.LogWarning($"{initiallyInactiveGroupName} 그룹을 찾을 수 없음.");
+            if (spawnedObject != null)
+            {
+                Destroy(spawnedObject);
+                spawnedObject = null;
+            }
         }
     }
 
-    public void ActivateHiddenObjects()
+    void SpawnObject()
     {
-        if (spawnedMap == null)
+        Vector3 spawnPosition = xrOrigin.position;
+        spawnPosition.y -= 15;
+        spawnedObject = Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
+        spawnedObject.transform.localScale *= 2f;
+
+        Transform turiObject = spawnedObject.transform.Find("Turi");
+        othersObject = spawnedObject.transform.Find("Others");
+
+        if (turiObject != null)
         {
-            Debug.LogWarning("맵이 아직 스폰되지 않았습니다.");
-            return;
+            turiObject.gameObject.SetActive(true);
+        }
+        if (othersObject != null)
+        {
+            othersObject.gameObject.SetActive(false);
         }
 
-        Transform inactiveGroup = spawnedMap.transform.Find(initiallyInactiveGroupName);
-        if (inactiveGroup != null)
+        var mapManager = FindObjectOfType<MapManager>();
+        if (mapManager != null && mapManager.AreAllRegionsUnlocked())
         {
-            inactiveGroup.gameObject.SetActive(true);
-            Debug.Log($"{initiallyInactiveGroupName} 그룹이 활성화됨!");
+            UnlockBluming();
+        }
+
+        Debug.Log($"Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
+    }
+
+    public void UnlockBluming()
+    {
+        if (othersObject != null)
+        {
+            othersObject.gameObject.SetActive(true);
+            Debug.Log("Others 오브젝트 활성화됨!");
         }
         else
         {
-            Debug.LogWarning($"{initiallyInactiveGroupName} 그룹을 찾을 수 없음.");
+            Debug.LogWarning("Others 오브젝트를 찾을 수 없음!");
         }
     }
 }
