@@ -6,13 +6,20 @@ using Mapbox.Unity.Map;
 public class TestBluming : MonoBehaviour
 {
     [SerializeField]
+    float spawnRadius = 20f;
+
+    [SerializeField]
     GameObject spawnPrefab;
 
     [SerializeField]
     AbstractMap map;
 
     [SerializeField]
-    Transform xrOrigin;
+    ARAnchorManager anchorManager;
+
+    public Transform xrOrigin;
+    [SerializeField]
+    private Camera arCamera;
 
     private GameObject spawnedObject;
     private Transform othersObject;
@@ -39,7 +46,8 @@ public class TestBluming : MonoBehaviour
 
     void SpawnObject()
     {
-        Vector3 spawnPosition = xrOrigin.position;
+        Vector3 userPosition = xrOrigin.position;
+        Vector3 spawnPosition = userPosition;
         spawnPosition.y -= 15;
         spawnedObject = Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
         spawnedObject.transform.localScale *= 2f;
@@ -63,6 +71,10 @@ public class TestBluming : MonoBehaviour
         }
 
         Debug.Log($"Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
+
+        GameObject instance = Instantiate(spawnedObject, spawnPosition, Quaternion.identity);
+        ARAnchor anchor = instance.AddComponent<ARAnchor>();
+        instance.transform.parent = anchor.transform;
     }
 
     public void UnlockBluming()

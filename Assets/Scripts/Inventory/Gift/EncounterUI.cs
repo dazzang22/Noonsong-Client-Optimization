@@ -30,6 +30,7 @@ public class EncounterUI : MonoBehaviour
     private System.Action onCloseCallback;
 
     public GameObject EffectPrefabs;
+    public GameObject collectEffectPrefab;
 
     private bool isDialogueActive = false;
     [SerializeField] private Button dialogueButton;
@@ -351,10 +352,25 @@ public class EncounterUI : MonoBehaviour
         currentCharacter.isFriend = true;
         friendRequestPopup.SetActive(false);
         noonsongCountUI.UpdateFriendCount();
+        if (collectEffectPrefab != null)
+        {
+            collectEffectPrefab.SetActive(true);
+            StartCoroutine(DisableEffectAfterDelay(3f, collectEffectPrefab));
+        }
     }
 
     public NoonsongEntry GetCurrentNoonsongEntry()
     {
         return currentCharacter;
+    }
+
+    private IEnumerator DisableEffectAfterDelay(float delay, GameObject effect)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (effect != null)
+        {
+            effect.SetActive(false);
+        }
     }
 }
