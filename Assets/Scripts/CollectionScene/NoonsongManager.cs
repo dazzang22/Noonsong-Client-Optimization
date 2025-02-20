@@ -179,6 +179,9 @@ public class NoonsongManager : MonoBehaviour
             if (entry != null)
             {
                 entry.isDiscovered = true;
+                entry.isFriend = true;
+                entry.loveLevel = 100;
+                
                 Debug.Log($"Entry '{entry.noonsongName}' has been marked as discovered.");
             }
         }
