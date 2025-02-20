@@ -59,8 +59,10 @@ public class EventStaffController : MonoBehaviour
     private void PerformEventActions()
     {
         //재화 999개로 설정
-        //Button[] currencyButtons = CurrencyManager.Instance.GetCurrencyButtons();
-        //CurrencyManager.Instance.SetAllCurrenciesTo999(currencyButtons);
+        if (CurrencyManager.Instance != null)
+        {
+            CurrencyManager.Instance.SetCurrency(99999);
+        }
 
         //모든 눈송이 발견 처리
         NoonsongManager entryManager = FindObjectOfType<NoonsongManager>();
