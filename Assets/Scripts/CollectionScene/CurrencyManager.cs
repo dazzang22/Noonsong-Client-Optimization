@@ -1,76 +1,91 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class CurrencyManager : MonoBehaviour
 {
-  public static CurrencyManager Instance { get; private set; }
+    public static CurrencyManager Instance { get; private set; }
 
-  private int playerCurrency = 0; // ⭐ 단일 화폐 (초기값 0)
-  [SerializeField] private TextMeshProUGUI currencyText; // UI 텍스트
+    private int playerCurrency = 0;
+    [SerializeField] private List<TextMeshProUGUI> currencyTexts = new List<TextMeshProUGUI>(); // UI 텍스트 리스트
 
-  private void Awake()
-  {
-    if (Instance == null)
+    private void Awake()
     {
-      Instance = this;
-      DontDestroyOnLoad(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
-    else
+
+    private void Start()
     {
-      Destroy(gameObject);
+        UpdateCurrencyUI();
     }
-  }
 
-  private void Start()
-  {
-    UpdateCurrencyUI();
-  }
-
-  public int GetCurrencyAmount()
-  {
-    return playerCurrency;
-  }
-
-  public bool HasEnoughCurrency(int amount)
-  {
-    return playerCurrency >= amount;
-  }
-
-  public bool UseCurrency(int amount)
-  {
-    if (HasEnoughCurrency(amount))
+    public int GetCurrencyAmount()
     {
-      playerCurrency -= amount;
-      UpdateCurrencyUI();
-      return true;
+        return playerCurrency;
     }
-    return false;
-  }
 
-  public void AddCurrency(int amount)
-  {
-    playerCurrency += amount;
-    UpdateCurrencyUI();
-  }
-
-  public void SetCurrency(int amount)
-  {
-    playerCurrency = amount;
-    UpdateCurrencyUI();
-  }
-
-  private void UpdateCurrencyUI()
-  {
-    if (currencyText != null)
+    public bool HasEnoughCurrency(int amount)
     {
-      currencyText.text = $"{playerCurrency}";
+        return playerCurrency >= amount;
     }
-  }
 
-  public void RegisterCurrencyText(TextMeshProUGUI newCurrencyText)
-  {
-    currencyText = newCurrencyText;
-    UpdateCurrencyUI();
-  }
+    public bool UseCurrency(int amount)
+    {
+        if (HasEnoughCurrency(amount))
+        {
+            playerCurrency -= amount;
+            UpdateCurrencyUI();
+            return true;
+        }
+        return false;
+    }
+
+    public void AddCurrency(int amount)
+    {
+        playerCurrency += amount;
+        UpdateCurrencyUI();
+    }
+
+    public void SetCurrency(int amount)
+    {
+        playerCurrency = amount;
+        UpdateCurrencyUI();
+    }
+
+    private void UpdateCurrencyUI()
+    {
+        foreach (var text in currencyTexts)
+        {
+            if (text != null)
+            {
+                text.text = $"{playerCurrency}";
+            }
+        }
+    }
+
+    public void RegisterCurrencyText(TextMeshProUGUI newCurrencyText)
+    {
+        if (!currencyTexts.Contains(newCurrencyText))
+        {
+            currencyTexts.Add(newCurrencyText);
+            UpdateCurrencyUI();
+        }
+    }
+
+    public void UnregisterCurrencyText(TextMeshProUGUI currencyText)
+    {
+        if (currencyTexts.Contains(currencyText))
+        {
+            currencyTexts.Remove(currencyText);
+        }
+    }
 }
+

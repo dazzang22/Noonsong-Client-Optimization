@@ -64,10 +64,42 @@ public class ARObjectCatch : MonoBehaviour
                 if (target == null)
                     continue;
 
-                Vector3 screenPoint = Camera.main.WorldToViewportPoint(target.transform.position);
-                bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
+                Vector3 objectPosition = target.transform.position;
 
-                if (onScreen)
+                // 기본 반지름 설정 (콜라이더 없을 때 대비)
+                float boundingRadius = 0.5f;
+
+                // 콜라이더가 있으면 크기 기반으로 반지름 계산
+                Collider col = target.GetComponent<Collider>();
+                if (col != null)
+                {
+                    boundingRadius = col.bounds.extents.magnitude * 0.5f; 
+                }
+
+                Vector3[] checkPoints = new Vector3[]
+                {
+                objectPosition,  
+                objectPosition + new Vector3(boundingRadius, 0, 0), 
+                objectPosition - new Vector3(boundingRadius, 0, 0), 
+                objectPosition + new Vector3(0, boundingRadius, 0), 
+                objectPosition - new Vector3(0, boundingRadius, 0)  
+                };
+
+                bool isVisible = false;
+                foreach (Vector3 point in checkPoints)
+                {
+                    Vector3 screenPoint = Camera.main.WorldToScreenPoint(point);
+
+                    if (screenPoint.z > 0 &&
+                        screenPoint.x > -50 && screenPoint.x < Screen.width + 50 &&
+                        screenPoint.y > -50 && screenPoint.y < Screen.height + 50)
+                    {
+                        isVisible = true;
+                        break;
+                    }
+                }
+
+                if (isVisible)
                 {
                     currentTarget = target;
 
