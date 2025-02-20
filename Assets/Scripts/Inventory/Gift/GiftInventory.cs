@@ -17,7 +17,6 @@ public class GiftInventory : MonoBehaviour
     private ItemEntry selectedGiftItem;
     public GameObject giftPopup;
 
-    public GameObject collectEffectPrefab;
     public GameObject giftEffectParticle1;
     public GameObject giftEffectParticle2;
     public GameObject giftEffectParticle3;
@@ -85,11 +84,6 @@ public class GiftInventory : MonoBehaviour
             if (!currentNoonsong.isDiscovered)
             {
                 Debug.Log("눈송이 발견되지 않음. CollectCharacter() 실행");
-                if (collectEffectPrefab != null)
-                {
-                    collectEffectPrefab.SetActive(true);
-                    StartCoroutine(DisableEffectAfterDelay(5f, collectEffectPrefab));
-                }
                 arObjectCatch.CollectCharacter();
             }
 

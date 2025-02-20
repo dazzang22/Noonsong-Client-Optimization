@@ -30,6 +30,7 @@ public class EncounterUI : MonoBehaviour
     private System.Action onCloseCallback;
 
     public GameObject EffectPrefabs;
+    public GameObject collectEffectPrefab;
 
     private bool isDialogueActive = false;
     [SerializeField] private Button dialogueButton;
@@ -67,13 +68,24 @@ public class EncounterUI : MonoBehaviour
     [SerializeField] private GameObject noPopUp;
      private const int NOONSONG_INCREMENT = 15;
 
-    private void Start()
+    private void Update()
     {
-        dialogueButton.interactable = false;
+        GameObject currentTarget = arObjectCatch.GetCurrentTarget();
+
+        if (encounterPanel.activeSelf && currentCharacter == null)
+        {
+            if (currentTarget == null || currentTarget.name != "noonsong remake 0202(Clone)")
+            {
+                Debug.LogWarning("currentCharacter가 null이고, 기본 눈송이가 아니므로 UI를 비활성화합니다.");
+                CloseEncounter();
+            }
+        }
     }
 
     public void Show(NoonsongEntry character, System.Action onClose)
     {
+        
+
         if (character == null)
         {
             Debug.LogError("character가 null입니다!");
@@ -117,7 +129,6 @@ public class EncounterUI : MonoBehaviour
                 Debug.Log("npuPatrol null");
             }
         }
-    
 
         encounterPanel.SetActive(true);
         dialogueWindow.SetActive(true);
@@ -136,6 +147,10 @@ public class EncounterUI : MonoBehaviour
 
     public void ShowDefaultDialogue(GameObject noonsongPrefeb, System.Action onClose)
     {
+        HiButton.interactable = true;
+        GiftButton.interactable = true;
+        dialogueButton.interactable = false;
+
         currentCharacter = null;
         onCloseCallback = onClose;
 
@@ -300,6 +315,10 @@ public class EncounterUI : MonoBehaviour
 
     public void CloseEncounter()
     {
+        HiButton.interactable = true;
+        GiftButton.interactable = true;
+        dialogueButton.interactable = false;
+
         encounterPanel.SetActive(false);
         dialogueWindow.SetActive(false);
         EffectPrefabs.SetActive(false);
@@ -333,10 +352,25 @@ public class EncounterUI : MonoBehaviour
         currentCharacter.isFriend = true;
         friendRequestPopup.SetActive(false);
         noonsongCountUI.UpdateFriendCount();
+        if (collectEffectPrefab != null)
+        {
+            collectEffectPrefab.SetActive(true);
+            StartCoroutine(DisableEffectAfterDelay(3f, collectEffectPrefab));
+        }
     }
 
     public NoonsongEntry GetCurrentNoonsongEntry()
     {
         return currentCharacter;
+    }
+
+    private IEnumerator DisableEffectAfterDelay(float delay, GameObject effect)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (effect != null)
+        {
+            effect.SetActive(false);
+        }
     }
 }
