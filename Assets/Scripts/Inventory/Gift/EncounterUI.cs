@@ -116,13 +116,15 @@ public class EncounterUI : MonoBehaviour
             currentTarget.transform.SetParent(Camera.main.transform);
             currentTarget.transform.localPosition = new Vector3(0, 0, 3);
             currentTarget.transform.localScale = Vector3.one * 1f;
-            currentTarget.transform.localRotation = Quaternion.identity;
+            currentTarget.transform.localRotation = Quaternion.Euler(0, 180, 0);
+
 
             NPCPatrol npcPatrol = currentTarget.GetComponent<NPCPatrol>();
             if (npcPatrol != null)
             {
                 Debug.Log("이동중지");
                 npcPatrol.StopAllCoroutines(); //  이동 중지
+                npcPatrol.SetWalking(false);
             }
             else
             {
@@ -161,13 +163,15 @@ public class EncounterUI : MonoBehaviour
             currentTarget.transform.SetParent(Camera.main.transform);
             currentTarget.transform.localPosition = new Vector3(0, 0, 3);
             currentTarget.transform.localScale = Vector3.one * 1f;
-            currentTarget.transform.localRotation = Quaternion.identity;
+            // currentTarget.transform.localRotation = Quaternion.identity;
+            currentTarget.transform.localRotation = Quaternion.Euler(0, 180, 0);
             
             NPCPatrol npcPatrol = currentTarget.GetComponent<NPCPatrol>();
             if (npcPatrol != null)
             {
                 Debug.Log("이동중지");
                 npcPatrol.StopAllCoroutines(); //  이동 중지
+                npcPatrol.SetWalking(false);
             }
             else
             {
