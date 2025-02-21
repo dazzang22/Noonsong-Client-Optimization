@@ -44,6 +44,8 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     public List<SpawnedObject> SpawnedObjects => _spawnedObjects;
 
+    public GameObject chatUI;
+    public GameObject selectUI;
     void Start()
     {
         _spawnedObjects = new List<SpawnedObject>();
@@ -67,6 +69,8 @@ public class PlayerObjectSpawn : MonoBehaviour
             if (timer >= changeInterval)
             {
                 ClearSpawnedObjects();
+                chatUI.SetActive(false);
+                selectUI.SetActive(false);
                 SpawnObjectNearUser();
                 timer = 0f;
             }

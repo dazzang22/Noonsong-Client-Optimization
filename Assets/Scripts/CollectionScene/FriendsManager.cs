@@ -122,13 +122,14 @@ public class FriendsManager : MonoBehaviour
     public bool View3DButtonPressed()
     {
         // 3D 뷰가 활성화되었음을 알려줌
-        isFriends3DViewActive = true;
         Debug.Log("View 3D Button pressed.");
+        isFriends3DViewActive = true;
         return true;
     }
 
     public void Open3DView(NoonsongFriendsEntry entry)
     {
+        Debug.Log("Open3DView 활성화");
         if (collectionCanvas != null)
         {
             collectionCanvas.gameObject.SetActive(false);
