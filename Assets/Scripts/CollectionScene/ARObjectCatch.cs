@@ -103,10 +103,10 @@ public class ARObjectCatch : MonoBehaviour
                 {
                     currentTarget = target;
 
-                    Vector3 lookPosition = Camera.main.transform.position - target.transform.position;
-                    lookPosition.y = 0;
-                    Quaternion targetRotation = Quaternion.LookRotation(lookPosition);
-                    target.transform.rotation = Quaternion.Slerp(target.transform.rotation, targetRotation, Time.deltaTime * 5);
+                    // Vector3 lookPosition = Camera.main.transform.position - target.transform.position;
+                    // lookPosition.y = 0;
+                    // Quaternion targetRotation = Quaternion.LookRotation(lookPosition);
+                    // target.transform.rotation = Quaternion.Slerp(target.transform.rotation, targetRotation, Time.deltaTime * 5);
 
                     return;
                 }

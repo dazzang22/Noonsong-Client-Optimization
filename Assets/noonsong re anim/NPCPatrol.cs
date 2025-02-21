@@ -70,7 +70,7 @@ public class NPCPatrol : MonoBehaviour
         }
 
         transform.position = targetPosition;
-        animator.SetBool("isWalking", false);
+        // animator.SetBool("isWalking", false);
     }
 
     private IEnumerator Idle()
