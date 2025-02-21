@@ -362,6 +362,13 @@ public class NoonsongManager : MonoBehaviour
 
             // 3D 오브젝트 생성 및 참조 저장
             currentNoonsongObject = Instantiate(entry.prefab, randomWorldPosition, Quaternion.identity);
+            
+            NPCPatrol npcPatrol = currentNoonsongObject.GetComponent<NPCPatrol>();
+            if (npcPatrol != null)
+            {
+                Debug.Log("애니메이션 정지");
+                npcPatrol.enabled = false;
+            }
 
             //3D 오브젝트 position 설정
             currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);
