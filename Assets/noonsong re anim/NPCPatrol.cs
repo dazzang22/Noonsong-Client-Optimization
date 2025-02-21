@@ -100,6 +100,18 @@ public class NPCPatrol : MonoBehaviour
         transform.rotation = targetRotation;
     }
 
+    public void SetWalking(bool isWalking)
+    {
+        if (animator != null)
+        {
+            animator.SetBool("isWalking", isWalking);
+        }
+        else
+        {
+            Debug.LogError("Animator가 설정되지 않아 isWalking을 변경할 수 없습니다.");
+        }
+    }
+
     private void Update()
     {
         // ✅ NPC 캐릭터가 항상 정면을 유지하도록 로컬 회전 고정
