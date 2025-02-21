@@ -62,23 +62,23 @@ public class InventoryManager : MonoBehaviour
     }
   }
 
-    public void UpdateInventory()
+  public void UpdateInventory()
+  {
+    foreach (var item in inventoryItems.Keys)
     {
-        var keys = new List<ItemEntry>(inventoryItems.Keys); 
-        for (int i = 0; i < keys.Count; i++)
-        {
-            ItemEntry item = keys[i];
-            if (item.itemCount <= 0)
-            {
-                Destroy(inventoryItems[item]); 
-                inventoryItems.Remove(item); 
-            }
-        }
-
-        PopulateInventory();
+      if (item.itemCount > 0)
+      {
+        //inventoryItems[item].transform.Find("Item_Count").GetComponent<TextMeshProUGUI>().text = $"보유 수량: {item.itemCount} 개";
+      }
+      else
+      {
+        Destroy(inventoryItems[item]); // 보유 개수가 0이면 제거
+        inventoryItems.Remove(item);
+      }
     }
-
-    void ShowItemDescription(ItemEntry item)
+    PopulateInventory();
+  }
+  void ShowItemDescription(ItemEntry item)
   {
     popupItemName.text = item.itemName;
     popupItemDescription.text = item.description;
