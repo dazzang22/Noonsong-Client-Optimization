@@ -48,9 +48,13 @@ public class PlayerObjectSpawn : MonoBehaviour
     public GameObject selectUI;
     void Start()
     {
+        PlayerObjectSpawnManager.Instance.RegisterSpawnController(this);
         _spawnedObjects = new List<SpawnedObject>();
         // 첫 번째 오브젝트를 스폰
-        SpawnObjectNearUser();
+        if (PlayerObjectSpawnManager.Instance.CanSpawn())
+        {
+            SpawnObjectNearUser();
+        }
     }
 
     void Update()
@@ -71,7 +75,10 @@ public class PlayerObjectSpawn : MonoBehaviour
                 ClearSpawnedObjects();
                 chatUI.SetActive(false);
                 selectUI.SetActive(false);
-                SpawnObjectNearUser();
+                if (PlayerObjectSpawnManager.Instance.CanSpawn())
+                {
+                    SpawnObjectNearUser();
+                }
                 timer = 0f;
             }
             // foreach (var obj in _spawnedObjects)
@@ -86,6 +93,9 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     void SpawnObjectNearUser()
     {
+        if (!PlayerObjectSpawnManager.Instance.CanSpawn()) return; // 이미 스폰된 것이 있다면 중단
+
+        //사용자 위치에서 일정 범위 내 랜덤 위치를 생성
         Vector3 userPosition = xrOrigin.position;
         Vector3 randomOffset = GetRandomOffset();
         Vector3 spawnPosition = userPosition + randomOffset;
@@ -103,13 +113,17 @@ public class PlayerObjectSpawn : MonoBehaviour
             return;
         }
 
+        //오브젝트 생성
         GameObject instance = Instantiate(prefab, spawnPosition, Quaternion.identity);
         Debug.Log($"Prefab {prefab.name} instantiated successfully.");
 
+        //크기 조정
         instance.transform.localScale = new Vector3(spawnScale, spawnScale, spawnScale);
 
         // ARAnchor 추가
         ARAnchor anchor = instance.AddComponent<ARAnchor>();
+        anchor.transform.position = spawnPosition;
+        anchor.transform.rotation = Quaternion.identity;
 
         if (anchor == null)
         {
@@ -121,6 +135,8 @@ public class PlayerObjectSpawn : MonoBehaviour
 
         _spawnedObjects.Add(new SpawnedObject(instance, spawnedObject.NoonsongEntry));
         Debug.Log($"Object added to _spawnedObjects list. Total count: {_spawnedObjects.Count}");
+        PlayerObjectSpawnManager.Instance.OnObjectSpawned(); // 스폰되었음을 매니저에 알림
+
     }
 
 
@@ -240,5 +256,7 @@ public class PlayerObjectSpawn : MonoBehaviour
             Destroy(obj.GameObject); // GameObject 속성을 명시적으로 전달
         }
         _spawnedObjects.Clear();
+        PlayerObjectSpawnManager.Instance.OnObjectDestroyed(); // 삭제되었음을 매니저에 알림
+
     }
 }
