@@ -6,49 +6,77 @@ using System.Collections.Generic;
 
 public class NoonsongManager : MonoBehaviour
 {
-    public GameObject discoveredEntryPrefab;    // 발견된 항목 프리팹
-    public GameObject undiscoveredEntryPrefab;  // 발견되지 않은 항목 프리팹
-    public GameObject placeholderPrefab;        // 빈 항목 프리팹
-    public Transform entryParent;               // 도감 항목의 부모 오브젝트
-    public GameObject detailsPanel;             // 엔트리 상세 정보를 표시할 패널
-    public TextMeshProUGUI detailsNameText;     // 상세 정보의 이름 텍스트
-    public TextMeshProUGUI detailsDescriptionText;
-    public Image detailsImage;
-    public Button view3DButton;
-    public Canvas collectionCanvas;
-    public Canvas cameraCanvas;
-    public Camera renderCamera;
-    public Button[] categoryButtons;
-    public string selectedCategory = "All";
+  public GameObject discoveredEntryPrefab;    // 발견된 항목 프리팹
+  public GameObject undiscoveredEntryPrefab;  // 발견되지 않은 항목 프리팹
+  public GameObject placeholderPrefab;        // 빈 항목 프리팹
+  public Transform entryParent;               // 도감 항목의 부모 오브젝트
 
-    [SerializeField]
-    private NoonsongEntryManager noonsongEntryManager;
+  public GameObject categoryScrollView;       
+  public GameObject entryScrollView;          
+  public Button closeButton;
+  public TextMeshProUGUI progressText;
 
-    private List<NoonsongEntry> entries;
-    private GameObject lastClickedEntry;
-    private GameObject currentNoonsongObject;
+  public GameObject detailsPanel;             // 엔트리 상세 정보를 표시할 패널
+  public TextMeshProUGUI detailsNameText;     // 상세 정보의 이름 텍스트
+  public TextMeshProUGUI detailsDescriptionText;
+  public Image detailsImage;
+  public Button view3DButton;
+  public Canvas collectionCanvas;
+  public Canvas cameraCanvas;
+  public GameObject cameraPopup;
+  public Camera renderCamera;
+  public Button[] categoryButtons;
+  public string selectedCategory = "All";
 
-    private bool is3DViewActive = false;
+  [SerializeField]
+  private NoonsongEntryManager noonsongEntryManager;
+
+  private List<NoonsongEntry> entries;
+  private GameObject lastClickedEntry;
+  private GameObject currentNoonsongObject;
+
+  private bool is3DViewActive = false;
+
+    [SerializeField] private Image[] loveMeterImages;
+    [SerializeField] private Sprite loveSprite1;
+    [SerializeField] private Sprite loveSprite2;
+
+    [SerializeField] private Sprite noonsongdefaultSprite;
 
     void Start()
     {
-        // entries 리스트를 NoonsongEntryManager에서 가져옴
-        if (noonsongEntryManager != null)
-        {
-            entries = new List<NoonsongEntry>(noonsongEntryManager.GetNoonsongEntries());
-        }
-        else
-        {
-            Debug.LogError("NoonsongEntryManager is not assigned in the inspector!");
-        }
-        foreach (var button in categoryButtons)
-        {
-            button.onClick.AddListener(() => OnCategoryButtonClicked(button.name));
-        }
-
-        PopulateNoonsong();
+    if (noonsongEntryManager != null)
+    {
+      entries = new List<NoonsongEntry>(noonsongEntryManager.GetNoonsongEntries());
     }
-    public bool View3DButtonPressed()
+    else
+    {
+      Debug.LogError("NoonsongEntryManager is not assigned in the inspector!");
+    }
+
+    foreach (var button in categoryButtons)
+    {
+      button.onClick.AddListener(() => OnCategoryButtonClicked(button.name));
+    }
+
+    if (closeButton != null)
+    {
+      closeButton.onClick.AddListener(ShowCategoryScrollView);
+    }
+
+    ShowCategoryScrollView();
+  }
+  public void ShowCategoryScrollView()
+  {
+    categoryScrollView.SetActive(true);
+    entryScrollView.SetActive(false);
+    if (progressText != null)
+    {
+      progressText.gameObject.SetActive(false);
+    }
+  }
+
+  public bool View3DButtonPressed()
     {
         // 3D 뷰가 활성화되었음을 알려줌
         is3DViewActive = true;
@@ -56,66 +84,90 @@ public class NoonsongManager : MonoBehaviour
         return true;
     }
 
-    public void OnCategoryButtonClicked(string category)
+  public void OnCategoryButtonClicked(string category)
+  {
+    selectedCategory = category;
+    categoryScrollView.SetActive(false); // 카테고리 선택 화면 숨기기
+    entryScrollView.SetActive(true); // 도감 엔트리 목록 보이기
+    PopulateNoonsong();
+  }
+
+  public void PopulateNoonsong()
+  {
+    foreach (Transform child in entryParent)
     {
-        selectedCategory = category;
-        PopulateNoonsong();
+      if (child.gameObject != closeButton.gameObject)
+      {
+        Destroy(child.gameObject);
+      }
     }
 
-    public void PopulateNoonsong()
+    closeButton.transform.SetAsFirstSibling();
+
+    int totalItems = 0;
+    int discoveredItems = 0;
+
+    foreach (var entry in entries)
     {
-        foreach (Transform child in entryParent)
+      if (selectedCategory == "All" || entry.university == selectedCategory)
+      {
+        GameObject newEntry;
+        if (entry.isDiscovered)
         {
-            Destroy(child.gameObject);
-        }
+          newEntry = Instantiate(discoveredEntryPrefab, entryParent);
+          discoveredItems++; 
 
-        int itemCount = 0;
+          Button button = newEntry.GetComponent<Button>() ?? newEntry.AddComponent<Button>();
+          button.onClick.RemoveAllListeners();
+          button.onClick.AddListener(() => ShowDetails(entry, newEntry));
 
-        foreach (var entry in entries)
-        {
-            if (selectedCategory == "All" || entry.university == selectedCategory)
-            {
-                GameObject newEntry;
-                if (entry.isDiscovered)
-                {
-                    newEntry = Instantiate(discoveredEntryPrefab, entryParent);
-
-                    // 버튼 클릭 이벤트 연결
-                    Button button = newEntry.GetComponent<Button>();
-                    if (button == null)
-                    {
-                        button = newEntry.AddComponent<Button>(); // 없으면 추가
+          var noonsongImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
+          if (noonsongImage != null)
+          {
+                        // 호감도가 20 이상일 때만 이미지를 표시
+                        if (entry.loveLevel >= 20)
+                        {
+                            noonsongImage.sprite = entry.noonsongSprite;
+                        }
+                        else
+                        {
+                            noonsongImage.sprite = noonsongdefaultSprite;
+                        }
                     }
-                    button.onClick.RemoveAllListeners(); // 기존 이벤트 제거
-                    button.onClick.AddListener(() => ShowDetails(entry, newEntry));
-
-                    // 이미지 설정
-                    var noonsongImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
-                    if (noonsongImage != null)
-                    {
-                        noonsongImage.sprite = entry.noonsongSprite;
-                    }
-                }
-                else
-                {
-                    newEntry = Instantiate(undiscoveredEntryPrefab, entryParent);
-                }
-                itemCount++; 
-            }
         }
-
-        if (itemCount < 3)
+        else
         {
-            int placeholdersNeeded = 3 - itemCount; // 필요한 Placeholder 수 계산
-            for (int i = 0; i < placeholdersNeeded; i++)
-            {
-                Instantiate(placeholderPrefab, entryParent); 
-            }
+          newEntry = Instantiate(undiscoveredEntryPrefab, entryParent);
         }
+        totalItems++;  
+      }
     }
 
+    if (totalItems < 4)
+    {
+      int placeholdersNeeded = 4 - totalItems;
+      for (int i = 0; i < placeholdersNeeded; i++)
+      {
+        Instantiate(placeholderPrefab, entryParent);
+      }
+    }
 
-    public void SetAllEntriesDiscovered()
+    closeButton.transform.SetAsFirstSibling();
+
+    if (progressText != null)
+    {
+      progressText.text = $"{discoveredItems} / {totalItems}";
+      progressText.gameObject.SetActive(true);
+    }
+  }
+
+  public void OnCloseButtonClicked()
+  {
+    ShowCategoryScrollView();
+  }
+
+
+  public void SetAllEntriesDiscovered()
     {
         if (noonsongEntryManager != null)
         {
@@ -127,6 +179,9 @@ public class NoonsongManager : MonoBehaviour
             if (entry != null)
             {
                 entry.isDiscovered = true;
+                entry.isFriend = true;
+                entry.loveLevel = 100;
+                
                 Debug.Log($"Entry '{entry.noonsongName}' has been marked as discovered.");
             }
         }
@@ -191,11 +246,26 @@ public class NoonsongManager : MonoBehaviour
             detailsPanel.SetActive(true);
             if (detailsNameText != null)
             {
-                detailsNameText.text = entry.noonsongName;
-                detailsDescriptionText.text = entry.description;
-                detailsImage.sprite = entry.noonsongSprite;
+                if (entry.loveLevel >= 20)
+                {
+                    detailsNameText.text = entry.noonsongName;
+                    detailsImage.sprite = entry.noonsongSprite;
+                }
+                else
+                {
+                    detailsNameText.text = "???";
+                    detailsImage.sprite = noonsongdefaultSprite;
+                }
 
-                Debug.Log($"Details panel updated with entry: {entry.noonsongName}");
+                if (entry.loveLevel >= 50)
+                {
+                    detailsDescriptionText.text = entry.description;
+                }
+                else
+                {
+                    detailsDescriptionText.text = "???";
+                }
+
             }
 
             if (view3DButton != null)
@@ -209,6 +279,7 @@ public class NoonsongManager : MonoBehaviour
                 });
                 Debug.Log("3D View button click event added!");
             }
+            UpdateLoveMeter(entry.loveLevel);
         }
         else
         {
@@ -226,6 +297,30 @@ public class NoonsongManager : MonoBehaviour
 
         lastClickedEntry = clickedEntry;
     }
+
+    private void UpdateLoveMeter(int loveLevel)
+    {
+        for (int i = 0; i < loveMeterImages.Length; i++)
+        {
+            loveMeterImages[i].enabled = false;
+            loveMeterImages[i].sprite = loveSprite1;
+        }
+
+        for (int i = 0; i < loveMeterImages.Length; i++)
+        {
+            if (loveLevel >= (i + 1) * 10)
+            {
+                loveMeterImages[i].enabled = true;
+
+                if (loveLevel >= 60)  // 60 이상이면 loveSprite2 적용
+                    loveMeterImages[i].sprite = loveSprite2;
+                else
+                    loveMeterImages[i].sprite = loveSprite1;
+            }
+        }
+    }
+
+
     public void Open3DView(NoonsongEntry entry)
     {
         if (collectionCanvas != null)
@@ -236,6 +331,23 @@ public class NoonsongManager : MonoBehaviour
         if (cameraCanvas != null)
         {
             cameraCanvas.gameObject.SetActive(true);
+        }
+        
+        if (PlayerPrefs.GetInt("CameraPopupActivated", 0) == 0) 
+        {
+            if (cameraPopup != null)
+            {
+                cameraPopup.gameObject.SetActive(true); // 최초 1회 활성화
+                PlayerPrefs.SetInt("CameraPopupActivated", 1); // 상태 저장
+                PlayerPrefs.Save(); // 저장 확정
+            }
+        }
+        else
+        {
+            if (cameraPopup != null)
+            {
+                cameraPopup.gameObject.SetActive(false); // 다시 실행해도 비활성화
+            }
         }
 
         if (renderCamera != null && entry.prefab != null)
@@ -250,6 +362,13 @@ public class NoonsongManager : MonoBehaviour
 
             // 3D 오브젝트 생성 및 참조 저장
             currentNoonsongObject = Instantiate(entry.prefab, randomWorldPosition, Quaternion.identity);
+            
+            NPCPatrol npcPatrol = currentNoonsongObject.GetComponent<NPCPatrol>();
+            if (npcPatrol != null)
+            {
+                Debug.Log("애니메이션 정지");
+                npcPatrol.enabled = false;
+            }
 
             //3D 오브젝트 position 설정
             currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);

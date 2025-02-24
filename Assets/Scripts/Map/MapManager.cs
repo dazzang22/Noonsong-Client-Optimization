@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
@@ -17,8 +16,11 @@ public class MapManager : MonoBehaviour
     private Vector2 currentTouchPosition;
     private bool isScrolling = false;
 
-    private List<string> buildingNames = new List<string> { "Sunheon Bldg", "Myungshin Bldg", "Suryeon Bldg", "Wisdom Bldg", "Renaissance Plaza Bldg", "College of Science Bldg", "College of Music Bldg", "College of Fine Arts Bldg", "Center for Continuing Education  Bldg", "College of Pharmacy Bldg" };
+    public GameObject popupUI;
 
+    private List<string> buildingNames = new List<string> { "Sunheon Bldg", "Myungshin Bldg", "Suryeon Bldg", "Renaissance Plaza Bldg", "College of Science Bldg", "College of Music Bldg", "College of Fine Arts Bldg", "Center for Continuing Education  Bldg", "College of Pharmacy Bldg" };
+
+    public TestBluming testBluming;
     void Start()
     {
         if (playerObjectSpawn == null)
@@ -52,6 +54,11 @@ public class MapManager : MonoBehaviour
             {
                 regions[i].SetActive(true);
             }
+        }
+
+        if (AreAllRegionsUnlocked())
+        {
+            ActivateBluming();
         }
     }
 
@@ -137,6 +144,11 @@ public class MapManager : MonoBehaviour
             regionUnlocked[regionIndex] = true;
             regions[regionIndex].SetActive(false);
         }
+
+        if (AreAllRegionsUnlocked())
+        {
+            ActivateBluming();
+        }
     }
 
     public void CheckAndUnlockRegions()
@@ -157,6 +169,11 @@ public class MapManager : MonoBehaviour
                 Debug.Log($"Building {buildingName} not yet completed.");
             }
         }
+
+        if (AreAllRegionsUnlocked())
+        {
+            ActivateBluming();
+        }
     }
 
     public bool AreAllRegionsUnlocked()
@@ -166,5 +183,17 @@ public class MapManager : MonoBehaviour
             if (!unlocked) return false; // 하나라도 해금되지 않으면 false 반환
         }
         return true; // 모든 구역이 해금되었으면 true 반환
+    }
+
+    private void ActivateBluming()
+    {
+        popupUI.SetActive(true);
+        testBluming.UnlockBluming();
+
+    }
+
+    public void ClosePopup()
+    {
+        popupUI.SetActive(false);
     }
 }

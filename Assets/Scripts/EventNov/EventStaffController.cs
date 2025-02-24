@@ -11,7 +11,7 @@ public class EventStaffController : MonoBehaviour
     private Button targetButton;
 
     [SerializeField]
-    private float timeLimit = 5f; // Á¦ÇÑ ½Ã°£ (ÃÊ)
+    private float timeLimit = 5f; // ì œí•œ ì‹œê°„ (ì´ˆ)
 
     private float timer = 0f;
     private bool isTimerActive = false;
@@ -58,11 +58,13 @@ public class EventStaffController : MonoBehaviour
 
     private void PerformEventActions()
     {
-        //ÀçÈ­ 999°³·Î ¼³Á¤
-        Button[] currencyButtons = CurrencyManager.Instance.GetCurrencyButtons();
-        CurrencyManager.Instance.SetAllCurrenciesTo999(currencyButtons);
+        //ì¬í™” 999ê°œë¡œ ì„¤ì •
+        if (CurrencyManager.Instance != null)
+        {
+            CurrencyManager.Instance.SetCurrency(99999);
+        }
 
-        //¸ğµç ´«¼ÛÀÌ ¹ß°ß Ã³¸®
+        //ëª¨ë“  ëˆˆì†¡ì´ ë°œê²¬ ì²˜ë¦¬
         NoonsongManager entryManager = FindObjectOfType<NoonsongManager>();
         if (entryManager != null)
         {
@@ -73,19 +75,19 @@ public class EventStaffController : MonoBehaviour
             Debug.LogError("NoonsongEntryManager not found in the scene.");
         }
 
-        //Áöµµ Àá±İ ÇØÁ¦
-        MapManager mapManager = FindObjectOfType<MapManager>();
-        if (mapManager != null)
-        {
-            for (int i = 0; i <= 9; i++)
-            {
-                mapManager.UnlockRegion(i);
-            }
-        }
-        else
-        {
-            Debug.LogError("mapManager not found in the scene.");
-        }
+        // //ì§€ë„ ì ê¸ˆ í•´ì œ
+        // MapManager mapManager = FindObjectOfType<MapManager>();
+        // if (mapManager != null)
+        // {
+        //     for (int i = 0; i <= 9; i++)
+        //     {
+        //         mapManager.UnlockRegion(i);
+        //     }
+        // }
+        // else
+        // {
+        //     Debug.LogError("mapManager not found in the scene.");
+        // }
     }
 
     private void ResetClickCount()

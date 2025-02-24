@@ -44,6 +44,8 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     public List<SpawnedObject> SpawnedObjects => _spawnedObjects;
 
+    public GameObject chatUI;
+    public GameObject selectUI;
     void Start()
     {
         _spawnedObjects = new List<SpawnedObject>();
@@ -67,17 +69,18 @@ public class PlayerObjectSpawn : MonoBehaviour
             if (timer >= changeInterval)
             {
                 ClearSpawnedObjects();
+                chatUI.SetActive(false);
+                selectUI.SetActive(false);
                 SpawnObjectNearUser();
                 timer = 0f;
             }
-
-            foreach (var obj in _spawnedObjects)
-            {
-                if (IsObjectInView(obj))
-                {
-                    LookAtCamera(obj);
-                }
-            }
+            // foreach (var obj in _spawnedObjects)
+            // {
+            //     if (IsObjectInView(obj))
+            //     {
+            //         LookAtCamera(obj);
+            //     }
+            // }
         }
     }
 
@@ -135,7 +138,7 @@ public class PlayerObjectSpawn : MonoBehaviour
     SpawnedObject GetRandomPrefab()
     {
         float probability = Random.Range(0f, 1f); // Generate a random float between 0 and 1
-        if (probability < 0.6f) // 60% probability for majorNoonsong
+        if (probability < 0.7f) // 70% probability for majorNoonsong
         {
             List<NoonsongEntry> filteredEntries = GetFilteredNoonsongEntries();
 
@@ -155,7 +158,7 @@ public class PlayerObjectSpawn : MonoBehaviour
             //int randomIndex = Random.Range(0, entries.Length);
             //return new SpawnedObject(entries[randomIndex].prefab, entries[randomIndex]);
         }
-        else // 40% probability for generalNoonsong
+        else // 30% probability for generalNoonsong
         {
             int randomIndex = Random.Range(0, generalNoonsong.Length);
             return new SpawnedObject(generalNoonsong[randomIndex], null);
@@ -212,23 +215,23 @@ public class PlayerObjectSpawn : MonoBehaviour
     }
 
 
-    bool IsObjectInView(SpawnedObject obj)
-    {
-        // 오브젝트의 GameObject를 확인
-        Vector3 viewportPoint = arCamera.WorldToViewportPoint(obj.GameObject.transform.position);
+    // bool IsObjectInView(SpawnedObject obj)
+    // {
+    //     // 오브젝트의 GameObject를 확인
+    //     Vector3 viewportPoint = arCamera.WorldToViewportPoint(obj.GameObject.transform.position);
 
-        // 뷰포트 좌표가 0~1 사이이고 Z축(깊이)이 0보다 크면 카메라에 잡힌 것으로 판단
-        return viewportPoint.x >= 0 && viewportPoint.x <= 1 &&
-               viewportPoint.y >= 0 && viewportPoint.y <= 1 &&
-               viewportPoint.z > 0;
-    }
-    void LookAtCamera(SpawnedObject obj)
-    {
-        // 오브젝트의 GameObject를 카메라 방향으로 회전
-        Vector3 directionToCamera = arCamera.transform.position - obj.GameObject.transform.position;
-        directionToCamera.y = 0; // 수평 회전을 제한
-        obj.GameObject.transform.rotation = Quaternion.LookRotation(directionToCamera);
-    }
+    //     // 뷰포트 좌표가 0~1 사이이고 Z축(깊이)이 0보다 크면 카메라에 잡힌 것으로 판단
+    //     return viewportPoint.x >= 0 && viewportPoint.x <= 1 &&
+    //            viewportPoint.y >= 0 && viewportPoint.y <= 1 &&
+    //            viewportPoint.z > 0;
+    // }
+    // void LookAtCamera(SpawnedObject obj)
+    // {
+    //     // 오브젝트의 GameObject를 카메라 방향으로 회전
+    //     Vector3 directionToCamera = arCamera.transform.position - obj.GameObject.transform.position;
+    //     directionToCamera.y = 0; // 수평 회전을 제한
+    //     obj.GameObject.transform.rotation = Quaternion.LookRotation(directionToCamera);
+    // }
     void ClearSpawnedObjects()
     {
         // 기존 스폰된 오브젝트 제거

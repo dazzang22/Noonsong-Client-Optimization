@@ -16,6 +16,7 @@ public class FriendsManager : MonoBehaviour
     public Button view3DButton;                 // 3D ���� ��ư
     public Canvas collectionCanvas;             // Collection ȭ��
     public Canvas cameraCanvas;                 // 3D ���� ȭ��
+    public GameObject cameraPopup;
     public Camera renderCamera;             // 3D �������� �������� Render Texture
 
     [SerializeField]
@@ -29,6 +30,7 @@ public class FriendsManager : MonoBehaviour
 
     void Start()
     {
+        PlayerPrefs.DeleteKey("CameraPopupActivated");
         if (noonsongFriendsEntryManager != null)
         {
             entries = new List<NoonsongFriendsEntry>(noonsongFriendsEntryManager.GetNoonsongEntries());
@@ -62,8 +64,8 @@ public class FriendsManager : MonoBehaviour
                 }
                 AddEventTriggerListener(eventTrigger, EventTriggerType.PointerClick, () => OnEntryClick(entry, newEntry));
 
-                var noonsongFriendImage = newEntry.transform.Find("NoonsongFriendImage").GetComponent<Image>();
-                if (noonsongFriendImage != null) noonsongFriendImage.sprite = entry.noonsongSprite;
+                var noonsongFriendImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
+                if (noonsongFriendImage != null) noonsongFriendImage.sprite = entry.displaySprite;
             }
             else
             {
@@ -81,32 +83,8 @@ public class FriendsManager : MonoBehaviour
 
     void OnEntryClick(NoonsongFriendsEntry entry, GameObject newEntry)
     {
-        Debug.Log($"OnEntryClick called for entry: {entry.noonsongFriendName}");
-
-        if (lastClickedEntry != null && lastClickedEntry != newEntry)
-        {
-            var lastEntryImage = lastClickedEntry.transform.Find("NoonsongFriendImage").GetComponent<Image>();
-            if (lastEntryImage != null)
-            {
-                var lastEntryScript = entries.Find(e => e.noonsongSprite == lastEntryImage.sprite || e.clickedNoonsongSprite == lastEntryImage.sprite);
-                if (lastEntryScript != null)
-                {
-                    lastEntryImage.sprite = lastEntryScript.noonsongSprite;
-                    lastEntryImage.rectTransform.localScale = Vector3.one; // �������� ���� ũ��� �ǵ���
-                }
-            }
-        }
-
-        var currentEntryImage = newEntry.transform.Find("NoonsongFriendImage").GetComponent<Image>();
-        if (currentEntryImage != null)
-        {
-            currentEntryImage.sprite = entry.clickedNoonsongSprite;
-            currentEntryImage.rectTransform.localScale = new Vector3(1.3f, 1.3f, 1.3f); // �������� 1.3��� Ű��
-        }
 
         ShowDetails(entry);
-
-        lastClickedEntry = newEntry;
     }
 
     public void ShowDetails(NoonsongFriendsEntry entry)
@@ -144,13 +122,14 @@ public class FriendsManager : MonoBehaviour
     public bool View3DButtonPressed()
     {
         // 3D 뷰가 활성화되었음을 알려줌
-        isFriends3DViewActive = true;
         Debug.Log("View 3D Button pressed.");
+        isFriends3DViewActive = true;
         return true;
     }
 
     public void Open3DView(NoonsongFriendsEntry entry)
     {
+        Debug.Log("Open3DView 활성화");
         if (collectionCanvas != null)
         {
             collectionCanvas.gameObject.SetActive(false);
@@ -159,6 +138,23 @@ public class FriendsManager : MonoBehaviour
         if (cameraCanvas != null)
         {
             cameraCanvas.gameObject.SetActive(true);
+        }
+
+        if (PlayerPrefs.GetInt("CameraPopupActivated", 0) == 0) 
+        {
+            if (cameraPopup != null)
+            {
+                cameraPopup.gameObject.SetActive(true); // 최초 1회 활성화
+                PlayerPrefs.SetInt("CameraPopupActivated", 1); // 상태 저장
+                PlayerPrefs.Save(); // 저장 확정
+            }
+        }
+        else
+        {
+            if (cameraPopup != null)
+            {
+                cameraPopup.gameObject.SetActive(false); // 다시 실행해도 비활성화
+            }
         }
 
         if (renderCamera != null && entry.prefab != null)
