@@ -8,55 +8,44 @@ using System.Collections.Generic;
 
 public class PlayerObjectSpawn : MonoBehaviour
 {
-    [SerializeField]
-    float spawnRadius = 20f; // 사용자의 위치에서 스폰할 반경
+    [SerializeField] float spawnRadius = 10f; // 사용자의 위치에서 스폰할 반경
 
-    [SerializeField]
-    float spawnScale = 10f;
+    [SerializeField]  float spawnScale = 10f;
 
-    [SerializeField]
-    NoonsongManager noonsongManager;
+    [SerializeField] NoonsongManager noonsongManager;
 
-    [SerializeField]
-    FriendsManager friendsManager;
+    [SerializeField] FriendsManager friendsManager;
 
-    [SerializeField]
-    NoonsongEntryManager noonsongEntryManager;
+    [SerializeField] NoonsongEntryManager noonsongEntryManager;
 
-    [SerializeField]
-    GameObject[] generalNoonsong;
+    [SerializeField] GameObject[] generalNoonsong;
 
-    [SerializeField]
-    AbstractMap map;
+    [SerializeField] AbstractMap map;
 
-    [SerializeField]
-    ARAnchorManager anchorManager;
+    [SerializeField] ARAnchorManager anchorManager;
 
-    private List<SpawnedObject> _spawnedObjects;
+    [SerializeField] private Camera arCamera; // AR 카메라 참조
+
+    [SerializeField] float changeInterval = 20f; // 오브젝트가 재스폰되는 시간(초)
 
     public Transform xrOrigin; // XR Origin 참조
-    [SerializeField]
-    private Camera arCamera; // AR 카메라 참조
-
-    [SerializeField]
-    float changeInterval = 20f; // 오브젝트가 재스폰되는 시간(초)
     private float timer;
-
-    public List<SpawnedObject> SpawnedObjects => _spawnedObjects;
 
     public GameObject chatUI;
     public GameObject selectUI;
+
+
     void Start()
     {
         PlayerObjectSpawnManager.Instance.RegisterSpawnController(this);
-        _spawnedObjects = new List<SpawnedObject>();
+
         // 첫 번째 오브젝트를 스폰
         if (PlayerObjectSpawnManager.Instance.CanSpawn())
         {
             SpawnObjectNearUser();
         }
     }
-
+ 
     void Update()
     {
         var activationController = GetComponentInParent<ScriptActivationController>();
@@ -64,7 +53,7 @@ public class PlayerObjectSpawn : MonoBehaviour
         {
             if (noonsongManager.Is3DViewActive() || friendsManager.Is3DViewActive())
             {
-                ClearSpawnedObjects();
+                PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
                 return;
             }
 
@@ -72,7 +61,7 @@ public class PlayerObjectSpawn : MonoBehaviour
 
             if (timer >= changeInterval)
             {
-                ClearSpawnedObjects();
+                PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
                 chatUI.SetActive(false);
                 selectUI.SetActive(false);
                 if (PlayerObjectSpawnManager.Instance.CanSpawn())
@@ -93,7 +82,7 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     void SpawnObjectNearUser()
     {
-        if (!PlayerObjectSpawnManager.Instance.CanSpawn()) return; // 이미 스폰된 것이 있다면 중단
+        if (!PlayerObjectSpawnManager.Instance.CanSpawn()) return;
 
         //사용자 위치에서 일정 범위 내 랜덤 위치를 생성
         Vector3 userPosition = xrOrigin.position;
@@ -129,13 +118,10 @@ public class PlayerObjectSpawn : MonoBehaviour
         {
             Debug.LogError("Failed to attach ARAnchor to the instance.");
         }
-
         // Anchor를 통해 안정적으로 위치 고정
         instance.transform.parent = anchor.transform;
 
-        _spawnedObjects.Add(new SpawnedObject(instance, spawnedObject.NoonsongEntry));
-        Debug.Log($"Object added to _spawnedObjects list. Total count: {_spawnedObjects.Count}");
-        PlayerObjectSpawnManager.Instance.OnObjectSpawned(); // 스폰되었음을 매니저에 알림
+        PlayerObjectSpawnManager.Instance.AddSpawnedObject(new SpawnedObject(instance, spawnedObject.NoonsongEntry));
 
     }
 
@@ -248,15 +234,15 @@ public class PlayerObjectSpawn : MonoBehaviour
     //     directionToCamera.y = 0; // 수평 회전을 제한
     //     obj.GameObject.transform.rotation = Quaternion.LookRotation(directionToCamera);
     // }
-    void ClearSpawnedObjects()
-    {
-        // 기존 스폰된 오브젝트 제거
-        foreach (var obj in _spawnedObjects)
-        {
-            Destroy(obj.GameObject); // GameObject 속성을 명시적으로 전달
-        }
-        _spawnedObjects.Clear();
-        PlayerObjectSpawnManager.Instance.OnObjectDestroyed(); // 삭제되었음을 매니저에 알림
+    // void ClearSpawnedObjects()
+    // {
+    //     // 기존 스폰된 오브젝트 제거
+    //     foreach (var obj in _spawnedObjects)
+    //     {
+    //         Destroy(obj.GameObject); // GameObject 속성을 명시적으로 전달
+    //     }
+    //     _spawnedObjects.Clear();
+    //     PlayerObjectSpawnManager.Instance.OnObjectDestroyed(); // 삭제되었음을 매니저에 알림
 
-    }
+    // }
 }

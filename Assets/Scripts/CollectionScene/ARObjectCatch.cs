@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class ARObjectCatch : MonoBehaviour
 {
+    private PlayerObjectSpawnManager playerObjectSpawnManager;
     private PlayerObjectSpawn playerObjectSpawn;
 
     [SerializeField]
@@ -25,6 +26,13 @@ public class ARObjectCatch : MonoBehaviour
 
     void Start()
     {
+        playerObjectSpawnManager = PlayerObjectSpawnManager.Instance;
+
+        if (playerObjectSpawnManager == null)
+        {
+            Debug.LogError("PlayerObjectSpawnManager가 초기화되지 않았습니다!");
+        }
+    
         catchButton.onClick.AddListener(OnCatchButtonClicked);
     }
 
@@ -56,9 +64,9 @@ public class ARObjectCatch : MonoBehaviour
 
     void CheckForObjectInView()
     {
-        if (playerObjectSpawn != null && playerObjectSpawn.SpawnedObjects.Count > 0)
+        if (playerObjectSpawn != null && playerObjectSpawnManager.SpawnedObjects.Count > 0)
         {
-            foreach (var obj in playerObjectSpawn.SpawnedObjects)
+            foreach (var obj in playerObjectSpawnManager.SpawnedObjects)
             {
                 GameObject target = obj.GameObject;
                 if (target == null)
@@ -141,7 +149,7 @@ public class ARObjectCatch : MonoBehaviour
         {
             Debug.Log($"현재 타겟: {currentTarget.name}");
 
-            var spawnedObject = playerObjectSpawn.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
+            var spawnedObject = playerObjectSpawnManager.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
             if (spawnedObject != null)
             {
                 NoonsongEntry entry = spawnedObject.NoonsongEntry;
@@ -186,7 +194,7 @@ Debug.Log("Not enough currency to catch the generalNoonsong.");
     {
         if (currentTarget != null)
         {
-            var spawnedObject = playerObjectSpawn.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
+            var spawnedObject = playerObjectSpawnManager.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
             if (spawnedObject != null)
             {
                 NoonsongEntry entry = spawnedObject.NoonsongEntry;
