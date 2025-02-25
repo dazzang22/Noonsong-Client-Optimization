@@ -113,7 +113,7 @@ public class ScriptActivationController : MonoBehaviour
 
         if (IsLocationInsideRectangle(userLocation, rectangleVertices))
         {
-            Debug.Log("User is inside the designated area.");
+            Debug.Log($"User is inside the designated area. (Object: {gameObject.name})");
 
             if (scriptToActivate != null && !scriptToActivate.enabled)
             {

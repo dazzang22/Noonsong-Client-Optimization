@@ -31,8 +31,9 @@ public class PlayerObjectSpawn : MonoBehaviour
     public Transform xrOrigin; // XR Origin 참조
     private float timer;
 
-    public GameObject chatUI;
-    public GameObject selectUI;
+    [SerializeField] private EncounterUI encounterUI;
+
+   
 
 
     void Start()
@@ -62,8 +63,7 @@ public class PlayerObjectSpawn : MonoBehaviour
             if (timer >= changeInterval)
             {
                 PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
-                chatUI.SetActive(false);
-                selectUI.SetActive(false);
+                encounterUI.CloseEncounter();
                 if (PlayerObjectSpawnManager.Instance.CanSpawn())
                 {
                     SpawnObjectNearUser();
