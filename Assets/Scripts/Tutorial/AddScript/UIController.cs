@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    public TalkDialogue talkDialogue;
+
     [SerializeField] private Canvas friendsCanvas;
     [SerializeField] private Canvas mapCanvas;
     // [SerializeField] private Canvas skipCanvas;
@@ -23,10 +25,15 @@ public class UIController : MonoBehaviour
         // skipCanvas.gameObject.SetActive(false);
 
         friendsButton.onClick.AddListener(ToggleFriendsCanvas);
-        mapButton.onClick.AddListener(ToggleMapCanvas);
+
         // skipButton.onClick.AddListener(ToggleSkipCanvas);
         // yesButton.onClick.AddListener(SkipTutorial);
         // noButton.onClick.AddListener(HideSkipCanvas);
+    }
+
+    public void onClickMapbutton()
+    {
+        mapButton.onClick.AddListener(ToggleMapCanvas);
     }
 
     private void ToggleFriendsCanvas()
