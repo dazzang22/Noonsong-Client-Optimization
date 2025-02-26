@@ -6669,11 +6669,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab44187b9c22342138df7e16f7a8e23d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  talkDialogue: {fileID: 0}
   friendsCanvas: {fileID: 1900520203}
   mapCanvas: {fileID: 1033094018203004293}
+  selectPanel: {fileID: 467533345175762908}
   friendsButton: {fileID: 6713218076022771053}
   mapButton: {fileID: 5017226642798253886}
+  interactionButton: {fileID: 4057844971794957021}
+  greetButton: {fileID: 6269537391797156281}
+  giftButton: {fileID: 7685420895593208029}
 --- !u!4 &867623357
 Transform:
   m_ObjectHideFlags: 0
@@ -24297,7 +24300,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 250, y: 0}
-  m_SizeDelta: {x: 437.57, y: 0}
+  m_SizeDelta: {x: 431.62, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &786545325474203159
 RectTransform:
@@ -32019,7 +32022,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 99.99998, y: -1265.0002}
-  m_SizeDelta: {x: -1032.4954, y: 70}
+  m_SizeDelta: {x: -860.0686, y: 70}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &1689641549809868164
 RectTransform:
@@ -37995,7 +37998,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8394267422509762428}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d070304231912864bbf3e966393fc7bf, type: 3}
   m_Name: 
@@ -65465,7 +65468,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &5730592748683842637
 GameObject:
   m_ObjectHideFlags: 0
@@ -69718,19 +69721,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5117037817082784577}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2419184459673377503}
-        m_TargetAssemblyTypeName: EncounterUI, Assembly-CSharp
-        m_MethodName: OnDialogueButtonClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &6271293723038016745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70227,7 +70218,7 @@ MonoBehaviour:
   m_text: "\uB300\uD654\uB97C\n\uC885\uB8CC\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a5ee533fd49d5f74f8986b38eb238e70, type: 2}
-  m_sharedMaterial: {fileID: -6595832704298031202, guid: d48883c8b96e2bc4eb43a0a10b912d10, type: 2}
+  m_sharedMaterial: {fileID: 4058034231979652277, guid: a5ee533fd49d5f74f8986b38eb238e70, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -70290,7 +70281,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!95 &6313476802905052508
@@ -77862,19 +77853,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8725427801813140543}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2419184459673377503}
-        m_TargetAssemblyTypeName: EncounterUI, Assembly-CSharp
-        m_MethodName: ConfirmExit
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!224 &7219841756760737767
 RectTransform:
   m_ObjectHideFlags: 0
@@ -81927,7 +81906,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 41.05
+  m_fontSize: 36.3
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -82320,19 +82299,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2784318382146436587}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2419184459673377503}
-        m_TargetAssemblyTypeName: EncounterUI, Assembly-CSharp
-        m_MethodName: OpenGiftInventory
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!222 &7694381454528494223
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -82925,19 +82892,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8978723815027847091}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2419184459673377503}
-        m_TargetAssemblyTypeName: EncounterUI, Assembly-CSharp
-        m_MethodName: ShowExitConfirmation
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!224 &7778146027868060968
 RectTransform:
   m_ObjectHideFlags: 0

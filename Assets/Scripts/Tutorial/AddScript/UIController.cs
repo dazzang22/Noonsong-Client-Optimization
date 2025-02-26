@@ -6,14 +6,20 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    public TalkDialogue talkDialogue;
+    
 
     [SerializeField] private Canvas friendsCanvas;
     [SerializeField] private Canvas mapCanvas;
+    [SerializeField] private GameObject selectPanel;
     // [SerializeField] private Canvas skipCanvas;
 
     [SerializeField] private Button friendsButton;
     [SerializeField] private Button mapButton;
+    [SerializeField] private Button interactionButton;
+    [SerializeField] private Button greetButton;
+    [SerializeField] private Button giftButton;
+
+    private bool isClicked = false;
     // [SerializeField] private Button skipButton;
     // [SerializeField] private Button yesButton;
     // [SerializeField] private Button noButton;
@@ -24,8 +30,11 @@ public class UIController : MonoBehaviour
         mapCanvas.gameObject.SetActive(false);
         // skipCanvas.gameObject.SetActive(false);
 
+        greetButton.onClick.AddListener(() => isClicked = true);
+        giftButton.onClick.AddListener(() => isClicked = true);
+        
         friendsButton.onClick.AddListener(ToggleFriendsCanvas);
-
+        
         // skipButton.onClick.AddListener(ToggleSkipCanvas);
         // yesButton.onClick.AddListener(SkipTutorial);
         // noButton.onClick.AddListener(HideSkipCanvas);
@@ -36,6 +45,12 @@ public class UIController : MonoBehaviour
         mapButton.onClick.AddListener(ToggleMapCanvas);
     }
 
+    public void onClickInteractoinButton()
+    {
+        interactionButton.onClick.AddListener(ToggleInteractiveCanvas);
+    }
+
+
     private void ToggleFriendsCanvas()
     {
         friendsCanvas.gameObject.SetActive(!friendsCanvas.gameObject.activeSelf);
@@ -44,6 +59,21 @@ public class UIController : MonoBehaviour
     private void ToggleMapCanvas()
     {
         mapCanvas.gameObject.SetActive(!mapCanvas.gameObject.activeSelf);
+    }
+
+    private void ToggleInteractiveCanvas()
+    {
+        selectPanel.SetActive(!selectPanel.gameObject.activeSelf);
+    }
+
+    public bool IsButtonClicked()
+    {
+        if (isClicked)
+        {
+            isClicked = false; // 한 번 확인 후 다시 false로 초기화
+            return true;
+        }
+        return false;
     }
 
     // private void ToggleSkipCanvas()
