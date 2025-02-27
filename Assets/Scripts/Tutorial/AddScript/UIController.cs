@@ -13,6 +13,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private Canvas inventoryCanvas;
     [SerializeField] private Canvas turyCanvas;
     [SerializeField] private Canvas bookCanvas;
+    [SerializeField] private Canvas giftCanvas;
     
     [Header("Panel")]
     [SerializeField] private GameObject selectPanel;
@@ -27,6 +28,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private Button friendsButton;
     [SerializeField] private Button mapButton;
     [SerializeField] private Button interactionButton;
+    [SerializeField] private Button interactionButton2;
     [SerializeField] private Button inventoryButton;
     [SerializeField] private Button turyButton;
     [SerializeField] private Button bookButton;
@@ -42,6 +44,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private Button bookPopButton;
     [SerializeField] private Button likePopButton;
     [SerializeField] private Button turyPopButton;
+    [SerializeField] private Button bookXButton;
 
 
     private bool isClicked = false;
@@ -54,6 +57,7 @@ public class UIController : MonoBehaviour
         inventoryCanvas.gameObject.SetActive(false);
         turyCanvas.gameObject.SetActive(false);
         bookCanvas.gameObject.SetActive(false);
+        giftCanvas.gameObject.SetActive(false);
 
         //패널 초기화
         skipPanel.SetActive(false);
@@ -72,6 +76,7 @@ public class UIController : MonoBehaviour
         bookPopButton.onClick.AddListener(() => isClicked = true);
         likePopButton.onClick.AddListener(() => isClicked = true);
         turyPopButton.onClick.AddListener(() => isClicked = true);
+        bookXButton.onClick.AddListener(() => isClicked = true);
         
         friendsButton.onClick.AddListener(ToggleFriendsCanvas);
         skipButton.onClick.AddListener(ToggleSkipPanel);
@@ -93,7 +98,8 @@ public class UIController : MonoBehaviour
 
     public void onClickInteractoinButton()
     {
-        interactionButton.onClick.AddListener(ToggleInteractiveCanvas);
+        interactionButton.onClick.AddListener(ToggleInteractionCanvas);
+        interactionButton2.onClick.AddListener(ToggleInteractionCanvas);
     }
 
     public void onClickTuryButton()
@@ -104,6 +110,11 @@ public class UIController : MonoBehaviour
     public void onClickBookButton()
     {
         bookButton.onClick.AddListener(ToggleBookCanvas);
+    }
+
+    public void onClickGiftButton()
+    {
+        giftButton.onClick.AddListener(ActivateGiftCanvas);
     }
 
     
@@ -135,7 +146,7 @@ public class UIController : MonoBehaviour
         inventoryCanvas.gameObject.SetActive(!inventoryCanvas.gameObject.activeSelf);
     }
 
-    private void ToggleInteractiveCanvas()
+    private void ToggleInteractionCanvas()
     {
         selectPanel.SetActive(!selectPanel.gameObject.activeSelf);
     }
@@ -156,6 +167,11 @@ public class UIController : MonoBehaviour
         return false;
     }
 
+    public bool IsPanelActive()
+    {
+        return bookPanel.activeSelf || likePanel.activeSelf;
+    }
+
 
 
     //ActivePanel
@@ -169,6 +185,12 @@ public class UIController : MonoBehaviour
     {
         // skipCanvas 비활성화
         skipPanel.SetActive(false);
+    }
+
+    private void ActivateGiftCanvas()
+    {
+        selectPanel.SetActive(false);
+        giftCanvas.gameObject.SetActive(true);
     }
 
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Doublsb.Dialog;
+using UnityEngine.SceneManagement; 
 
 // 최대한 주석 달아보았으나, 혹시 이해가 안되는 코드 있다면 저(이다연)한테 물어보셔도 되고, 챗지피티에게 코드 주석 달아달라고 하고 설명해달라고 하면 잘 설명해줍니다!
 public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체 대사가 들어있음, 대사 코드 뒤에 오브젝트 등장, 애니메이션 작동 모두 관리하고 있습니다.
@@ -44,7 +45,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     [Header("")]
     public GameObject Count;
     public Canvas mapCanvas;
-    public GameObject StudentIdPanel;
+    public Canvas giftCanvas;
+    public Canvas bookCanvas;
     public GameObject StudentId;
 
     public Transform arCamera; // AR 카메라 Transform
@@ -184,21 +186,21 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         //플레이어가 인사하기를 눌러 눈송이에게 인사한다.
         FourthDialog.Add(new DialogData("/color:black//wait:0.5//emote:Excite/안녕, 친구들! 어라, 처음 보는 친구도 있네?", "NoonSong"));
         FourthDialog.Add(new DialogData("/color:black/이 애가 너와 친구가 되고 싶다고 해서 데려왔어!", "NoonDung"));
-        FourthDialog.Add(new DialogData("/color:black/눈송이를 위한 선물도 가져왔어! (두근두근…!)", "Snowflake", () => { ChangeAnimation(noonsongAnimator, "standing"); StartCoroutine(GreetNooonsong());}));
+        FourthDialog.Add(new DialogData("/color:black/눈송이를 위한 선물도 가져왔어! (두근두근…!)", "Snowflake", () => { ChangeAnimation(noonsongAnimator, "standing"); StartCoroutine(GiveGiftNooonsong());}));
         //플레이어가 선물하기를 눌러, 눈송이에게 숙명여대 앰브럼 뱃지 아이템을 선물한다
         FourthDialog.Add(new DialogData("/color:black//wait:0.5//emote:Love/와아, 숙명여대 앰블럼 뱃지네! 정말 기뻐!", "NoonSong"));
         //눈송이 호감도 오르는 연출
         FourthDialog.Add(new DialogData("/color:black/이렇게 찾아와 줘서 고마워, 그럼 우리 오늘부터 친구 하자!", "NoonSong"));
-        FourthDialog.Add(new DialogData("/color:black/[(눈송이와 친구가 되자.)]/wait:2.0/", "User", () => noonsong.SetActive(false)));
+        FourthDialog.Add(new DialogData("/color:black/[(눈송이와 친구가 되자.)]/wait:2.0/", "User", () =>  noonsong.SetActive(false)));
         //시스템 상으로 눈송이와 친구가 되고 눈송이가 도감에 추가됨
-        FourthDialog.Add(new DialogData("/color:black/아래 도감 보여? 도감 버튼을 누르면 여태까지 만나고 친구가 된 눈송이들을 볼 수 있어.", "NoonDung", () => noonDung.SetActive(true)));
-        FourthDialog.Add(new DialogData("/color:black/물론 우리 눈송 프렌즈들의 정보도 있지!", "NoonDung"));
+        FourthDialog.Add(new DialogData("/color:black/아래 도감 보여? 도감 버튼을 누르면 여태까지 만나고 친구가 된 눈송이들을 볼 수 있어.", "NoonDung", () => { noonDung.SetActive(true); StartCoroutine(ActivateBookCanvas());}));
+        FourthDialog.Add(new DialogData("/color:black//wait:0.5/물론 우리 눈송 프렌즈들의 정보도 있지!", "NoonDung"));
         //유저 도감 버튼을 누르면 도감으로 이동, 잠시 대기 후에 눈덩이 대화창이 도감 위에 나타남
-        FourthDialog.Add(new DialogData("/color:black/아이콘을 누르면 친구의 정보를 볼 수 있어~ 눈송이를 눌러 보자!", "NoonDung"));
+        FourthDialog.Add(new DialogData("/color:black/아이콘을 누르면 친구의 정보를 볼 수 있어~ 눈송이를 눌러 보자!", "NoonDung", () => StartCoroutine(clickNoonsong())));
         //유저가 눈송이 아이콘을 누르면 눈송이 설명이 뜸.
         FourthDialog.Add(new DialogData("/color:black/눈송이의 이름과 설명이 보이지? 특별한 눈송이들을 만나면 호감도도 확인할 수 있을 거야.", "NoonDung"));
         FourthDialog.Add(new DialogData("/color:black/참, 화면 위쪽의 카메라 모양을 누르면 원하는 친구와 사진을 찍을 수도 있어!", "NoonDung"));
-        FourthDialog.Add(new DialogData("/color:black/도감 버튼을 다시 누르거나 위쪽의 <를 누르면 원래 화면으로 돌아갈 수 있어!", "NoonDung", () => noonDung.SetActive(false)));
+        FourthDialog.Add(new DialogData("/color:black/위쪽의 X를 누르면 원래 화면으로 돌아갈 수 있어!", "NoonDung", () => { noonDung.SetActive(false); StartCoroutine(clickXButton());}));
         //유저가 도감 종료 입력을 하면 원래 화면으로 돌아감.
         
 
@@ -217,9 +219,9 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FourthDialog.Add(new DialogData("/color:black/흐흥, 미래 산업시대의 선구자가 될 이 튜리님에게 너 같은 친구들을 위한 발명품이 있지!", "Turi"));
         FourthDialog.Add(new DialogData("/color:black/바로바로… 특별한 눈송이들의 마음도 사로잡을 수 있는 선물 아이템들이야!", "Turi", () => ChangeAnimation(turiAnimator, "standing")));
         FourthDialog.Add(new DialogData("/color:black/어때? 가지고 싶지? 그 대신, 선물 아이템들을 만드는 데에는 눈의 결정이 많이 필요해.", "Turi"));
-        FourthDialog.Add(new DialogData("/color:blue/제2캠퍼스 원형 광장/color:black/에 있는 내 연구실에 오면 다양한 선물 아이템들로 바꿔줄게! 잊지 말고 놀러 와~!", "Turi", () => turi.SetActive(false)));
-        FourthDialog.Add(new DialogData("/color:black/튜토리얼을 성공적으로 마친 당신에게 이것을 드립니다!", "Narrator", () => StartCoroutine(ShowPanelThird())));
-        FourthDialog.Add(new DialogData("/color:black//wait:0.5/다양한 눈송이들과 친구가 되어 도감을 전부 채우는 것을 목표로 힘내요!!", "Narrator", () => { CompleteTutorial(); StartCoroutine(ShowPanel3());}));
+        FourthDialog.Add(new DialogData("/color:blue/제2캠퍼스 원형 광장/color:black/에 있는 내 연구실에 오면 다양한 선물 아이템들로 바꿔줄게! 잊지 말고 놀러 와~!", "Turi", () => { turi.SetActive(false); StartCoroutine(showPanelFifth());}));
+        FourthDialog.Add(new DialogData("/color:black/튜토리얼을 성공적으로 마친 당신에게 이것을 드립니다!", "Narrator", () => StartCoroutine(ShowPanelSeventh())));
+        FourthDialog.Add(new DialogData("/color:black//wait:0.5/다양한 눈송이들과 친구가 되어 도감을 전부 채우는 것을 목표로 힘내요!!", "Narrator", () => { CompleteTutorial();}));
         DialogManager.Show(FourthDialog);
     }
 
@@ -250,10 +252,12 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         };
 
         // FirstDialog();
-        dialogTriggered[1] = true;
-        ThirdDialog();
-        // dialogTriggered[2] = true;
-        // FourthDialog();
+        // dialogTriggered[0] = true;
+        // SecondDialog();
+        // dialogTriggered[1] = true;
+        // ThirdDialog();
+        dialogTriggered[2] = true;
+        FourthDialog();
         
     }
   
@@ -339,36 +343,25 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         Time.timeScale = 1f; // 시간 재개
     }
 
-    private IEnumerator ShowPanelThird()
-    {
-        Time.timeScale = 0f; // 시간 정지
-                             // 패널 활성화
-        StudentIdPanel.SetActive(true);
 
-        while (!Input.GetMouseButtonDown(0)) // 마우스 클릭을 기다림
-        {
-            yield return null; // 한 프레임을 대기
-        }
-
-        Time.timeScale = 1f; // 시간 재개
-    }
     private IEnumerator GreetNooonsong()
     {
         Time.timeScale = 0f; // 시간 정지
         uiController.onClickInteractoinButton();
-        
+
         while(!uiController.IsButtonClicked())//인사버튼 클릭 대기
         {
              yield return null; // 한 프레임을 대기
         }
+
         Time.timeScale = 1f; // 시간 재개
     }
 
     private IEnumerator GiveGiftNooonsong()
     {
         Time.timeScale = 0f; // 시간 정지
-        
-        while(!uiController.IsButtonClicked())//선물버튼 클릭 대기
+        uiController.onClickGiftButton();
+        while(!giftCanvas.gameObject.activeSelf)//선물캔버스가 활성화될때까지 대기
         {
              yield return null; // 한 프레임을 대기
         }
@@ -377,10 +370,100 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     }
 
 
-    private IEnumerator ShowPanel3()
+    private IEnumerator ActivateBookCanvas()
     {
+        Time.timeScale = 0f; // 시간 정지
+        uiController.onClickBookButton();
+
+        while(!bookCanvas.gameObject.activeSelf)
+        {
+            yield return null; // 한 프레임을 대
+        }
+        StartCoroutine(ShowPanelThird());
+        Time.timeScale = 1f; // 시간 재개
+    }
+
+    private IEnumerator ShowPanelThird()
+    {
+        Time.timeScale = 0f; // 시간 정지
+        uiController.PopUPBookPanel();
+
+        while ((!uiController.IsButtonClicked())) // 마우스 클릭을 기다림
+        {
+            yield return null; // 한 프레임을 대기
+        }
+        while (uiController.IsPanelActive()) // 패널이 활성화된 상태라면 기다림
+        {
+            yield return null;
+        }
+
+        StartCoroutine(ShowPanelFourth());
+        Time.timeScale = 1f; // 시간 재개
+    }
+
+    private IEnumerator ShowPanelFourth()
+    {
+        Time.timeScale = 0f; // 시간 정지
+
+        uiController.PopUpLikePanel();
+
+        while (!uiController.IsButtonClicked()) // 마우스 클릭을 기다림
+        {
+            yield return null; // 한 프레임을 대기
+        }
+        bookCanvas.sortingOrder = 0;
+        Time.timeScale = 1f; // 시간 재개
+    }
+
+    private IEnumerator clickNoonsong()
+    {
+        Time.timeScale = 0f; // 시간 정지
+        bookCanvas.sortingOrder = 2;
+        while(!bookCanvas.gameObject.activeSelf)
+        {
+            yield return null; // 한 프레임을 대기
+        }
+        yield return new WaitForSecondsRealtime(2f);
+        bookCanvas.sortingOrder = 0;
+        Time.timeScale = 1f; // 시간 재개
+    }
+
+    private IEnumerator clickXButton()
+    {
+        Time.timeScale = 0f; // 시간 정지
+        bookCanvas.sortingOrder = 2;
+        while((!uiController.IsButtonClicked()))
+        {
+            yield return null; // 한 프레임을 대기
+        }
+        yield return new WaitForSecondsRealtime(2f);
+        Time.timeScale = 1f; // 시간 재개
+
+    }
+
+    private IEnumerator showPanelFifth()
+    {
+        Time.timeScale = 0f; // 시간 정지
+        uiController.PopUpTuryPanel();
+
+        while ((!uiController.IsButtonClicked())) // 마우스 클릭을 기다림
+        {
+            yield return null; // 한 프레임을 대기
+        }
+        uiController.onClickTuryButton();
+        Time.timeScale = 1f; // 시간 재개
+    }
+
+    private IEnumerator ShowPanelSeventh()
+    {
+        Time.timeScale = 0f; // 시간 정지
         StudentId.SetActive(true);
-        yield return null;
+        while (!Input.GetMouseButtonDown(0)) // 마우스 클릭을 기다림
+        {
+            yield return null; // 한 프레임을 대기
+        }
+
+        Time.timeScale = 1f; // 시간 재개
     }
 
     private void CompleteTutorial()
@@ -390,6 +473,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         PlayerPrefs.Save();
 
         Debug.Log("튜토리얼 완료");
+        SceneManager.LoadScene("MainScene(Release)");
     }
 
 }
