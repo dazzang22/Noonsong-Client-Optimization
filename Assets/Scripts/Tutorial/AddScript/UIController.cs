@@ -15,6 +15,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private Canvas bookCanvas;
     [SerializeField] private Canvas giftCanvas;
     
+    
     [Header("Panel")]
     [SerializeField] private GameObject selectPanel;
     [SerializeField] private GameObject skipPanel;

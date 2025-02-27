@@ -44,6 +44,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
     [Header("")]
     public GameObject Count;
+    public GameObject mainCanvas;
+    public GameObject mainPanel;
     public Canvas mapCanvas;
     public Canvas giftCanvas;
     public Canvas bookCanvas;
@@ -71,7 +73,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         // part1 눈덩이 등장
         FirstDialog.Add(new DialogData("/color:black/숙명여대에 갓 입학한 새송이는 학교 탐방을 오게 되었다!", "Narrator"));
         FirstDialog.Add(new DialogData("/color:black/그런데 어쩌지? 학교가 너무 복잡해!","Narrator"));
-        FirstDialog.Add(new DialogData("/color:black/[학교가 너무 처음이라 막막하네...]", "User", () => { noonDung.SetActive(true); 
+        FirstDialog.Add(new DialogData("/color:black/[학교가 너무 처음이라 막막하네...]", "User", () => { noonDung.SetActive(true); StartCoroutine(ShowMainTuto());
         //StartCoroutine(MoveObject(noonDung, arCamera.TransformPoint(new Vector3(-1.5f, 1.5f, 5f)), arCamera.TransformPoint(new Vector3(0f, 0f, 1.5f)))); 
         })); // 좌측 위 등장 눈덩이 시작)))));
         FirstDialog.Add(new DialogData("/color:black//wait:0.5/안녕, 친구야! 혹시 무슨 고민 있어?", "NoonDung"));
@@ -87,8 +89,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FirstDialog.Add(new DialogData("/color:black//wait:1/우리는! /wait:0.5/학교를 지키는 어벤져스, /click/눈꽃송이들이야!", "Snowflake"));
         FirstDialog.Add(new DialogData("/color:black/마침 잘 만났다! 얘들아, 이 새송이가 눈송이와 친구가 되고 싶대!", "NoonDung"));
         FirstDialog.Add(new DialogData("/color:black/그런거라면... 눈송이에게 줄 선물을 구할 수 있는 이 눈의 결정이 있다면 분명 유용할 거야.", "Snowflake")); //
-        FirstDialog.Add(new DialogData("/color:black//wait:0.5/마침 우리한테 꿍쳐놓은 눈의 결정이 있으니까, 너한테 줄게!", "Snowflake", () => { ChangeAnimation(snowflakeAnimator1, "standing"); StartCoroutine(ShowPanelFirst());}));
-        FirstDialog.Add(new DialogData("/color:black/눈의 결정 15개를 획득했다!", "Narrator"));
+        FirstDialog.Add(new DialogData("/color:black/마침 우리한테 꿍쳐놓은 눈의 결정이 있으니까, 너한테 줄게!", "Snowflake", () => { ChangeAnimation(snowflakeAnimator1, "standing"); StartCoroutine(ShowPanelFirst());}));
+        FirstDialog.Add(new DialogData("/color:black//wait:0.5/눈의 결정 15개를 획득했다!", "Narrator"));
         FirstDialog.Add(new DialogData("/color:black/어려운 친구를 돕는 것도 우리 일이니까. 우리가 새송이를 도와주는 건 어떨까? /click/(뭉치면 산다!)", "Snowflake", () => ChangeAnimation(snowflakeAnimator1, "standing")));
         FirstDialog.Add(new DialogData("/color:black/그래, 눈의 결정이라면 우리가 전문이니까, 함께 다니면서 눈의 결정 찾는걸 도와줄게! /click/(맡겨 줘!)", "Snowflake"));
         FirstDialog.Add(new DialogData("/color:black/[고마워, 눈꽃송이들!]/wait:1//close/", "User", () => snowflake.SetActive(false)));
@@ -101,7 +103,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FirstDialog.Add(new DialogData("/color:black/로로잖아! 과연 학교의 소식통이라 그런지, 소식이 빠르네!", "NoonDung", () => ChangeAnimation(roroAnimator, "standing")));
         FirstDialog.Add(new DialogData("/color:black//emote:Happy/엣헴, 이런 일에 내가 빠질 수 없지. 눈송이와 친구가 되고 싶은 거 맞지?", "RoRo"));
         FirstDialog.Add(new DialogData("/color:black//emote:Happy/눈송이랑 친해지려면 인사를 하고 대화하는 게 중요한데…", "RoRo"));
-        FirstDialog.Add(new DialogData("/color:black//emote:Happy/아, 맞다! 1캠퍼스 정문에서 눈송이를 본 것 같다는 걸 알려주려고 온 건데 깜빡했네! 이러지 말고 직접 가 보는 게 좋겠어!", "RoRo"));
+        FirstDialog.Add(new DialogData("/color:black//emote:Happy/아, 맞다! 1캠퍼스 정문에서 눈송이를 본 것 같다는 걸 알려주려고 온 건데 깜빡했네!", "RoRo"));
         FirstDialog.Add(new DialogData("/color:black//emote:Happy/이러지 말고 직접 가 보는 게 좋겠어!", "RoRo"));
         FirstDialog.Add(new DialogData("/color:black//emote:Call/아직 학교 지리는 잘 모르지? 내가 같이 가줄게!", "RoRo", () => {roro.SetActive(false); dialogTriggered[0] = true;}));
         
@@ -251,13 +253,13 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
             { turi, turiSound }
         };
 
-        // FirstDialog();
+        FirstDialog();
         // dialogTriggered[0] = true;
         // SecondDialog();
         // dialogTriggered[1] = true;
         // ThirdDialog();
-        dialogTriggered[2] = true;
-        FourthDialog();
+        // dialogTriggered[2] = true;
+        // FourthDialog();
         
     }
   
@@ -299,6 +301,35 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         obj.transform.position = endPos;
     }
 
+    private IEnumerator ShowMainTuto()
+    {
+         Time.timeScale = 0f;
+        mainCanvas.SetActive(true);
+
+        // 첫 번째 클릭 대기
+        while (!Input.GetMouseButtonDown(0))
+        {
+            yield return null;
+        }
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        // mainPanel 활성화
+        mainPanel.SetActive(true);
+
+        // 두 번째 클릭 대기
+        while (!Input.GetMouseButtonDown(0))
+        {
+            yield return null;
+        }
+
+        // mainPanel & mainCanvas 비활성화
+        mainPanel.SetActive(false);
+        mainCanvas.SetActive(false);
+        Time.timeScale = 1f;
+
+    }
+
+    
     //재화팝업
     private IEnumerator ShowPanelFirst()
     {
