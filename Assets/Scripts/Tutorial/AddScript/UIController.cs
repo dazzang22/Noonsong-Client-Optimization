@@ -11,7 +11,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private Canvas friendsCanvas;
     [SerializeField] private Canvas mapCanvas;
     [SerializeField] private GameObject selectPanel;
-    // [SerializeField] private Canvas skipCanvas;
+    [SerializeField] private GameObject skipPanel;
 
     [SerializeField] private Button friendsButton;
     [SerializeField] private Button mapButton;
@@ -20,24 +20,24 @@ public class UIController : MonoBehaviour
     [SerializeField] private Button giftButton;
 
     private bool isClicked = false;
-    // [SerializeField] private Button skipButton;
-    // [SerializeField] private Button yesButton;
-    // [SerializeField] private Button noButton;
+    [SerializeField] private Button skipButton;
+    [SerializeField] private Button yesButton;
+    [SerializeField] private Button noButton;
 
     void Start()
     {
         friendsCanvas.gameObject.SetActive(false);
         mapCanvas.gameObject.SetActive(false);
-        // skipCanvas.gameObject.SetActive(false);
+        skipPanel.SetActive(false);
 
         greetButton.onClick.AddListener(() => isClicked = true);
         giftButton.onClick.AddListener(() => isClicked = true);
         
         friendsButton.onClick.AddListener(ToggleFriendsCanvas);
         
-        // skipButton.onClick.AddListener(ToggleSkipCanvas);
-        // yesButton.onClick.AddListener(SkipTutorial);
-        // noButton.onClick.AddListener(HideSkipCanvas);
+        skipButton.onClick.AddListener(ToggleSkipPanel);
+        yesButton.onClick.AddListener(SkipTutorial);
+        noButton.onClick.AddListener(HideSkipPanel);
     }
 
     public void onClickMapbutton()
@@ -76,20 +76,20 @@ public class UIController : MonoBehaviour
         return false;
     }
 
-    // private void ToggleSkipCanvas()
-    // {
-    //     skipCanvas.gameObject.SetActive(!skipCanvas.gameObject.activeSelf);
-    // }
+    private void ToggleSkipPanel()
+    {
+        skipPanel.SetActive(!skipPanel.activeSelf);
+    }
 
-    // private void SkipTutorial()
-    // {
-    //     // "MainScene"으로 전환
-    //     SceneManager.LoadScene("MainScene(Release)");
-    // }
+    private void SkipTutorial()
+    {
+        // "MainScene"으로 전환
+        SceneManager.LoadScene("MainScene(Release)");
+    }
 
-    // private void HideSkipCanvas()
-    // {
-    //     // skipCanvas 비활성화
-    //     skipCanvas.gameObject.SetActive(false);
-    // }
+    private void HideSkipPanel()
+    {
+        // skipCanvas 비활성화
+        skipPanel.SetActive(false);
+    }
 }
