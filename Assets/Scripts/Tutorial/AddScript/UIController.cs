@@ -6,28 +6,50 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    
+
     [SerializeField] private Canvas friendsCanvas;
     [SerializeField] private Canvas mapCanvas;
-    [SerializeField] private Canvas skipCanvas;
+    [SerializeField] private GameObject selectPanel;
+    // [SerializeField] private Canvas skipCanvas;
 
     [SerializeField] private Button friendsButton;
     [SerializeField] private Button mapButton;
-    [SerializeField] private Button skipButton;
-    [SerializeField] private Button yesButton;
-    [SerializeField] private Button noButton;
+    [SerializeField] private Button interactionButton;
+    [SerializeField] private Button greetButton;
+    [SerializeField] private Button giftButton;
+
+    private bool isClicked = false;
+    // [SerializeField] private Button skipButton;
+    // [SerializeField] private Button yesButton;
+    // [SerializeField] private Button noButton;
 
     void Start()
     {
         friendsCanvas.gameObject.SetActive(false);
         mapCanvas.gameObject.SetActive(false);
-        skipCanvas.gameObject.SetActive(false);
+        // skipCanvas.gameObject.SetActive(false);
 
+        greetButton.onClick.AddListener(() => isClicked = true);
+        giftButton.onClick.AddListener(() => isClicked = true);
+        
         friendsButton.onClick.AddListener(ToggleFriendsCanvas);
-        mapButton.onClick.AddListener(ToggleMapCanvas);
-        skipButton.onClick.AddListener(ToggleSkipCanvas);
-        yesButton.onClick.AddListener(SkipTutorial);
-        noButton.onClick.AddListener(HideSkipCanvas);
+        
+        // skipButton.onClick.AddListener(ToggleSkipCanvas);
+        // yesButton.onClick.AddListener(SkipTutorial);
+        // noButton.onClick.AddListener(HideSkipCanvas);
     }
+
+    public void onClickMapbutton()
+    {
+        mapButton.onClick.AddListener(ToggleMapCanvas);
+    }
+
+    public void onClickInteractoinButton()
+    {
+        interactionButton.onClick.AddListener(ToggleInteractiveCanvas);
+    }
+
 
     private void ToggleFriendsCanvas()
     {
@@ -39,20 +61,35 @@ public class UIController : MonoBehaviour
         mapCanvas.gameObject.SetActive(!mapCanvas.gameObject.activeSelf);
     }
 
-    private void ToggleSkipCanvas()
+    private void ToggleInteractiveCanvas()
     {
-        skipCanvas.gameObject.SetActive(!skipCanvas.gameObject.activeSelf);
+        selectPanel.SetActive(!selectPanel.gameObject.activeSelf);
     }
 
-    private void SkipTutorial()
+    public bool IsButtonClicked()
     {
-        // "MainScene"으로 전환
-        SceneManager.LoadScene("MainScene(Release)");
+        if (isClicked)
+        {
+            isClicked = false; // 한 번 확인 후 다시 false로 초기화
+            return true;
+        }
+        return false;
     }
 
-    private void HideSkipCanvas()
-    {
-        // skipCanvas 비활성화
-        skipCanvas.gameObject.SetActive(false);
-    }
+    // private void ToggleSkipCanvas()
+    // {
+    //     skipCanvas.gameObject.SetActive(!skipCanvas.gameObject.activeSelf);
+    // }
+
+    // private void SkipTutorial()
+    // {
+    //     // "MainScene"으로 전환
+    //     SceneManager.LoadScene("MainScene(Release)");
+    // }
+
+    // private void HideSkipCanvas()
+    // {
+    //     // skipCanvas 비활성화
+    //     skipCanvas.gameObject.SetActive(false);
+    // }
 }
