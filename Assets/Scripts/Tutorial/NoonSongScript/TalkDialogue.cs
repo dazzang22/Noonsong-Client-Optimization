@@ -10,7 +10,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     public UIController uiController;
 
     // 모든 animation들은 standing, fast, move 가 trigger로 animator에서 전환 가능하게 만듦, 기본 애니메이션은 Idle로 설정함.
-
+    [Header("Animator")]
     public Animator noonDungAnimator;  // NoonDung 오브젝트의 Animator 
     public Animator snowflakeAnimator1; // snowflake1 오브젝트의 Animator
     public Animator snowflakeAnimator2; // snowflake2 오브젝트의 Animator
@@ -21,6 +21,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     public Animator noonsongAnimator;  // noonsong 오브젝트의 Animator
     public Animator turiAnimator;      // turi 오브젝트의 Animator
 
+    [Header("Prefab")]
     public GameObject noonDung;  // part1 눈덩이 등장
     public GameObject snowflake; // part2 눈꽃송이 등장
     public GameObject roro;      // part3 로로 등장
@@ -29,18 +30,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     public GameObject noonsong;  // part6 눈송이 등장
     public GameObject turi;      // part7 튜리 등장
 
-    public GameObject ParticlePanel; // ParticlePanel 오브젝트
-    public GameObject Count;
-    public GameObject getMapPanel;
-    public Canvas mapCanvas;
-    public GameObject StudentIdPanel;
-    public GameObject StudentId;
 
-    public Transform arCamera; // AR 카메라 Transform
-    public float moveDuration = 2f; // 이동 애니메이션 지속 시간
-
-    public bool[] dialogTriggered = new bool[4]; // 다이얼로그가 호출되었는지 여부를 저장
-
+    [Header("AudioClip")]
     // 효과음 오디오 클립
     public AudioClip noonDungSound;
     public AudioClip snowflakeSound;
@@ -49,6 +40,17 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     public AudioClip kkotsongSound;
     public AudioClip noonsongSound;
     public AudioClip turiSound;
+
+    [Header("")]
+    public GameObject Count;
+    public Canvas mapCanvas;
+    public GameObject StudentIdPanel;
+    public GameObject StudentId;
+
+    public Transform arCamera; // AR 카메라 Transform
+    public float moveDuration = 2f; // 이동 애니메이션 지속 시간
+
+    public bool[] dialogTriggered = new bool[4]; // 다이얼로그가 호출되었는지 여부를 저장
 
     // 각 오브젝트에 대한 사운드 매핑
     private Dictionary<GameObject, AudioClip> objectSoundMap;
@@ -82,8 +84,9 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         })); // 하늘에서 내려옴 눈꽃송이 시작
         FirstDialog.Add(new DialogData("/color:black//wait:1/우리는! /wait:0.5/학교를 지키는 어벤져스, /click/눈꽃송이들이야!", "Snowflake"));
         FirstDialog.Add(new DialogData("/color:black/마침 잘 만났다! 얘들아, 이 새송이가 눈송이와 친구가 되고 싶대!", "NoonDung"));
-        FirstDialog.Add(new DialogData("/color:black/그런거라면... 눈송이에게 줄 선물을 구할 수 있는 이 눈의 결정이 있다면 분명 유용할 거야.", "Snowflake", () => StartCoroutine(ShowPanelFirst()))); //
-        FirstDialog.Add(new DialogData("/color:black//wait:0.5/마침 우리한테 꿍쳐놓은 눈의 결정이 있으니까, 너한테 줄게!", "Snowflake", () => ChangeAnimation(snowflakeAnimator1, "standing")));
+        FirstDialog.Add(new DialogData("/color:black/그런거라면... 눈송이에게 줄 선물을 구할 수 있는 이 눈의 결정이 있다면 분명 유용할 거야.", "Snowflake")); //
+        FirstDialog.Add(new DialogData("/color:black//wait:0.5/마침 우리한테 꿍쳐놓은 눈의 결정이 있으니까, 너한테 줄게!", "Snowflake", () => { ChangeAnimation(snowflakeAnimator1, "standing"); StartCoroutine(ShowPanelFirst());}));
+        FirstDialog.Add(new DialogData("/color:black/눈의 결정 15개를 획득했다!", "Narrator"));
         FirstDialog.Add(new DialogData("/color:black/어려운 친구를 돕는 것도 우리 일이니까. 우리가 새송이를 도와주는 건 어떨까? /click/(뭉치면 산다!)", "Snowflake", () => ChangeAnimation(snowflakeAnimator1, "standing")));
         FirstDialog.Add(new DialogData("/color:black/그래, 눈의 결정이라면 우리가 전문이니까, 함께 다니면서 눈의 결정 찾는걸 도와줄게! /click/(맡겨 줘!)", "Snowflake"));
         FirstDialog.Add(new DialogData("/color:black/[고마워, 눈꽃송이들!]/wait:1//close/", "User", () => snowflake.SetActive(false)));
@@ -154,8 +157,10 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         ThirdDialog.Add(new DialogData("/color:black/맞아요. 새송이가 눈송이와 친구가 되고 싶대요.", "RoRo"));
         ThirdDialog.Add(new DialogData("/color:black//emote:Happy/그렇다면 정확히 찾아 왔어. 마침 방금 전까지 눈송이랑 함께 있던 참이었거든.", "KkotSong", () => ChangeAnimation(kkotsongAnimator, "standing")));
         ThirdDialog.Add(new DialogData("/color:black/아마 눈송이는 /color:blue/프라임관/color:black/에 있을 거야!", "KkotSong"));
-        ThirdDialog.Add(new DialogData("/color:black/참, 눈송이한테는 이걸 주면 좋아할 거야. 가서 말을 건 뒤 선물을 줘 봐!", "KkotSong", () => {kkotsong.SetActive(false); dialogTriggered[2] = true;}));
+        ThirdDialog.Add(new DialogData("/color:black/참, 눈송이한테는 이걸 주면 좋아할 거야. 가서 말을 건 뒤 선물을 줘 봐!", "KkotSong", () => {kkotsong.SetActive(false); dialogTriggered[2] = true; uiController.onClickInventoryButton();}));
         //엠블럼 뱃지 획득
+        ThirdDialog.Add(new DialogData("/color:black/엠블럼 뱃지를 획득했다! 인벤토리를 확인해봐", "Narrator"));
+        
         DialogManager.Show(ThirdDialog);
     }
 
@@ -244,9 +249,11 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
             { turi, turiSound }
         };
 
-        //FirstDialog();
-        dialogTriggered[2] = true;
-        FourthDialog();
+        // FirstDialog();
+        dialogTriggered[1] = true;
+        ThirdDialog();
+        // dialogTriggered[2] = true;
+        // FourthDialog();
         
     }
   
@@ -288,13 +295,14 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         obj.transform.position = endPos;
     }
 
+    //재화팝업
     private IEnumerator ShowPanelFirst()
     {
         Time.timeScale = 0f; // 시간 정지
                              // 패널 활성화
-        ParticlePanel.SetActive(true);
+        uiController.PopUpGoodsPanel();
 
-        while (!Input.GetMouseButtonDown(0)) // 마우스 클릭을 기다림
+        while (!uiController.IsButtonClicked()) // 마우스 클릭을 기다림
         {
             yield return null; // 한 프레임을 대기
         }
@@ -302,13 +310,14 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         Time.timeScale = 1f; // 시간 재개
     }
 
+    //지도팝업
     private IEnumerator ShowPanelSecond()
     {
         Time.timeScale = 0f; // 시간 정지
 
-        getMapPanel.SetActive(true); // 패널 활성화
+        uiController.PopUpMapPanel();
 
-        while (!Input.GetMouseButtonDown(0)) // 마우스 클릭을 기다림
+        while (!uiController.IsButtonClicked()) // 마우스 클릭을 기다림
         {
             yield return null; // 한 프레임을 대기
         }
@@ -318,7 +327,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     private IEnumerator WaitForMapToOpen()
     {
         Time.timeScale = 0f; // 시간 정지
-        uiController.onClickMapbutton();
+        uiController.onClickMapButton();
 
         while (!mapCanvas.gameObject.activeSelf)
         {
