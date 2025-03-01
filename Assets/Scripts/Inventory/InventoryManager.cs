@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -90,4 +91,13 @@ public class InventoryManager : MonoBehaviour
     popupCloseButton.onClick.RemoveAllListeners();
     popupCloseButton.onClick.AddListener(() => descriptionPopup.SetActive(false));
   }
+
+    internal void AddEmblemBadge()
+    {
+        if (itemEntries != null && itemEntries.Count > 1) // 리스트가 비어있지 않고, 최소 두 개 이상의 아이템이 있을 경우
+        {
+            itemEntries[1].itemCount = 1; 
+            UpdateInventory(); // 인벤토리 UI 갱신
+        }
+    }
 }

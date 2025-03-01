@@ -202,7 +202,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FourthDialog.Add(new DialogData("/color:black/[(눈송이와 친구가 되자.)]/wait:2.0/", "User", () =>  noonsong.SetActive(false)));
         //시스템 상으로 눈송이와 친구가 되고 눈송이가 도감에 추가됨
         FourthDialog.Add(new DialogData("/color:black/아래 도감 보여? 도감 버튼을 누르면 여태까지 만나고 친구가 된 눈송이들을 볼 수 있어.", "NoonDung", () => { noonDung.SetActive(true); StartCoroutine(ActivateBookCanvas());}));
-        FourthDialog.Add(new DialogData("/color:black//wait:0.5/물론 우리 눈송 프렌즈들의 정보도 있지!", "NoonDung"));
+        FourthDialog.Add(new DialogData("/color:black//wait:0.5/물론 우리 눈송 프렌즈들의 정보도 있지!", "NoonDung", () => { StartCoroutine(DiscoverAllEntries()); }));
         //유저 도감 버튼을 누르면 도감으로 이동, 잠시 대기 후에 눈덩이 대화창이 도감 위에 나타남
         FourthDialog.Add(new DialogData("/color:black/아이콘을 누르면 친구의 정보를 볼 수 있어~ 눈송이를 눌러 보자!", "NoonDung", () => StartCoroutine(clickNoonsong())));
         //유저가 눈송이 아이콘을 누르면 눈송이 설명이 뜸.
@@ -259,13 +259,13 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
             { turi, turiSound }
         };
 
-        FirstDialog();
+        //FirstDialog();
         // dialogTriggered[0] = true;
         // SecondDialog();
         // dialogTriggered[1] = true;
         // ThirdDialog();
-        // dialogTriggered[2] = true;
-        // FourthDialog();
+        dialogTriggered[2] = true;
+        FourthDialog();
         
     }
   
@@ -409,7 +409,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
 
         // 슬롯 버튼 활성화 처리
-        Button slotButton = giftCanvas.transform.Find("Item").GetComponent<Button>();
+        Button slotButton = giftCanvas.GetComponentInChildren<Button>();
+
 
         // 슬롯 버튼 클릭 대기
         bool isPopupOpened = false;
@@ -450,6 +451,42 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         {
             yield return null; // 한 프레임 대기
         }
+    }
+
+
+    //눈송 프랜즈만 발견 처리
+    private IEnumerator DiscoverAllEntries()
+    {
+        Time.timeScale = 0f; // 시간 정지
+
+        FriendsManager friendsManager = FindObjectOfType<FriendsManager>();
+
+        while (friendsManager == null) // FriendsManager 가 씬에서 발견될 때까지 대기
+        {
+            yield return null; // 한 프레임 대기
+            friendsManager = FindObjectOfType<FriendsManager>();
+        }
+
+        friendsManager.SetAllEntriesDiscovered();
+
+        Time.timeScale = 1f; // 시간 재개
+    }
+
+    //앰블럼 뱃지만 획득 처리
+    private IEnumerator GetEmblemBadge()
+    {
+        Time.timeScale = 0f; // 시간 정지
+
+        InventoryManager inventoryManager = FindObjectOfType<InventoryManager>();
+        while (inventoryManager == null) // InventoryManager가 씬에서 발견될 때까지 대기
+        {
+            yield return null; // 한 프레임 대기
+            inventoryManager = FindObjectOfType<InventoryManager>();
+        }
+
+        inventoryManager.AddEmblemBadge();
+
+        Time.timeScale = 1f; // 시간 재개
     }
 
     private IEnumerator ActivateEffectCoroutine()
