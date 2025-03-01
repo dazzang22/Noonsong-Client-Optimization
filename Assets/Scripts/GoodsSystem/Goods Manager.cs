@@ -23,6 +23,7 @@ public class GoodsManager : MonoBehaviour
     [SerializeField] private GameObject noPanel;
     [SerializeField] private GameObject completePanel;
     [SerializeField] private GameObject receivePanel;
+    [SerializeField] private GameObject dispatchTutoPopup;
 
 
     [Header("Dispatch Settings")]
@@ -46,6 +47,7 @@ public class GoodsManager : MonoBehaviour
 
     void Start()
     {
+        PlayerPrefs.DeleteKey("DispatchPopupActivated"); //테스트용
         // CurrencyManager가 연결되어 있는지 확인
         if (currencyManager != null)
         {
@@ -126,6 +128,22 @@ public class GoodsManager : MonoBehaviour
 
     public void DispatchBtnClick()
     {
+        if (PlayerPrefs.GetInt("DispatchPopupActivated", 0) == 0) 
+        {
+            if (dispatchTutoPopup != null)
+            {
+                dispatchTutoPopup.gameObject.SetActive(true); // 최초 1회 활성화
+                PlayerPrefs.SetInt("DispatchPopupActivated", 1); // 상태 저장
+                PlayerPrefs.Save(); // 저장 확정
+            }
+        }
+        else
+        {
+            if (dispatchTutoPopup != null)
+            {
+                dispatchTutoPopup.gameObject.SetActive(false); // 다시 실행해도 비활성화
+            }
+        }
         dispatchBtns[0].gameObject.SetActive(false);
         dispatchBtns[1].gameObject.SetActive(true);
         noonsFriendsListPanel.gameObject.SetActive(true);

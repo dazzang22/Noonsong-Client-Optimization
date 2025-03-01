@@ -30,7 +30,7 @@ public class FriendsManager : MonoBehaviour
 
     void Start()
     {
-        PlayerPrefs.DeleteKey("CameraPopupActivated");
+
         if (noonsongFriendsEntryManager != null)
         {
             entries = new List<NoonsongFriendsEntry>(noonsongFriendsEntryManager.GetNoonsongEntries());
