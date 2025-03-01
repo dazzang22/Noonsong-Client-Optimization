@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-
+using BackEnd;
 public class GoodsManager : MonoBehaviour
 {
     //5분마다 제공되는 재화
@@ -115,6 +115,11 @@ public class GoodsManager : MonoBehaviour
             {
                 currencyManager.AddCurrency(DEFAULT_INCREMENT);
                 Debug.Log($"5분 경과: {DEFAULT_INCREMENT}개의 재화 추가.");
+                
+                //유저 재화 DB에 반영
+                Param param = new Param();
+                param= UserBalanceManager.Instance.addsnow(DEFAULT_INCREMENT);
+                UserBalanceManager.Instance.updateBalance(param);
             }
         }
     }
@@ -188,6 +193,12 @@ public class GoodsManager : MonoBehaviour
         completePanel.gameObject.SetActive(false);
         currencyManager.AddCurrency(randomReward);
         Debug.Log($"파견 완료: {randomReward}개의 재화 지급.");
+        
+        //유저 재화 DB 반영
+        Param param1 = new Param();
+        param1= UserBalanceManager.Instance.addsnow(randomReward);
+        UserBalanceManager.Instance.updateBalance(param1);
+
         if (rewardText != null)
         {
             rewardText.text = $"눈의 결정 X {randomReward}";

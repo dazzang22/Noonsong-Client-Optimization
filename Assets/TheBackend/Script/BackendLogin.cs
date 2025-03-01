@@ -30,6 +30,11 @@ public class BackendLogin
         Debug.Log("회원가입을 요청합니다.");
 
         var bro = Backend.BMember.CustomSignUp(id, pw);
+        UserDataManager.Instance.InsertUserData(id,pw);
+        //지도  
+        UserMapManager.Instance.insertUserMap(id);
+        //재화
+        UserBalanceManager.Instance.InsertUserBalance(id,0);
 
         if (bro.IsSuccess())
         {
@@ -72,6 +77,8 @@ public class BackendLogin
         if (bro.IsSuccess())
         {
             Debug.Log("닉네임 변경에 성공했습니다 : " + bro);
+            Param newparam=UserDataManager.Instance.ChangeNickname(nickname);
+            UserDataManager.Instance.UpdateUserData(newparam);
         }
         else
         {

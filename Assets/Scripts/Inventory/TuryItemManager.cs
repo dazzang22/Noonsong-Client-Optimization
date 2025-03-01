@@ -4,7 +4,7 @@ using TMPro;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using System;
-
+using BackEnd;
 public class TuryItemManager : MonoBehaviour
 {
   public InventoryManager inventoryManager;
@@ -131,6 +131,11 @@ public class TuryItemManager : MonoBehaviour
   {
     if (selectedItem != null && CurrencyManager.Instance.UseCurrency(selectedItem.itemPrice))
     {
+      //재화 소비 DB 반영
+      Param pay = new Param();
+      pay= UserBalanceManager.Instance.paysnow(selectedItem.itemPrice);
+      UserBalanceManager.Instance.updateBalance(pay);
+
       selectedItem.itemCount++; // ⭐ 아이템 개수 증가
       //UpdateItemCountUI(selectedItem);
       Debug.Log($"{selectedItem.itemName}을(를) 구매했습니다! 현재 보유량: {selectedItem.itemCount}");
