@@ -108,6 +108,7 @@ public class EmailVerifyManager : MonoBehaviour
         if (codeInput.text == verificationCode)
         {
             Debug.Log("인증 성공");
+            //인증 성공 시 처리
             codePanel.SetActive(false);
             successPanel.SetActive(true);
             emailErrorText.text = "";
@@ -116,12 +117,6 @@ public class EmailVerifyManager : MonoBehaviour
         {
             codeErrorText.text = "잘못된 인증 코드입니다";
         }
-    }
-
-    public void OnCloseSuccessPanel()
-    {
-        successPanel.SetActive(false);
-        Debug.Log("인증 완료");
     }
 
     private bool IsValidEmail(string email)

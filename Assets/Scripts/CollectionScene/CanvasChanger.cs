@@ -11,6 +11,7 @@ public class CanvasChanger : MonoBehaviour
     [SerializeField] private Canvas mapCanvas;
     [SerializeField] private Canvas inventoryCanvas;
     [SerializeField] private Canvas emailVerifyCanvas;
+    [SerializeField] private Canvas changePasswordCanvas;
     [SerializeField] private Button popupButton;
     [SerializeField] private Button backButton;
     [SerializeField] private Button turyButton;
@@ -23,6 +24,13 @@ public class CanvasChanger : MonoBehaviour
     [SerializeField] private Button emailVerifyBackButton1;
     [SerializeField] private Button emailVerifyBackButton2;
     [SerializeField] private Button emailVerifyBackButton3;
+    [SerializeField] private Button changePasswordButton;
+    [SerializeField] private Button changePasswordBackButton1;
+    [SerializeField] private Button changePasswordBackButton2;
+    [SerializeField] private Button changePasswordBackButton3;
+
+
+
 
   public MapManager mapManager;
 
@@ -33,6 +41,8 @@ public class CanvasChanger : MonoBehaviour
     turyCanvas.gameObject.SetActive(false);
     mapCanvas.gameObject.SetActive(false);
     inventoryCanvas.gameObject.SetActive(false);
+    emailVerifyCanvas.gameObject.SetActive(false);
+    changePasswordCanvas.gameObject.SetActive(false);
 
     popupButton.onClick.AddListener(ShowPopup);
     backButton.onClick.AddListener(HidePopup);
@@ -46,6 +56,10 @@ public class CanvasChanger : MonoBehaviour
     emailVerifyBackButton1.onClick.AddListener(ToggleEmailVerifyCanvas);
     emailVerifyBackButton2.onClick.AddListener(ToggleEmailVerifyCanvas);
     emailVerifyBackButton3.onClick.AddListener(ToggleEmailVerifyCanvas);
+    changePasswordButton.onClick.AddListener(ToggleChangePasswordCanvas);
+    changePasswordBackButton1.onClick.AddListener(ToggleChangePasswordCanvas);
+    changePasswordBackButton2.onClick.AddListener(ToggleChangePasswordCanvas);
+    changePasswordBackButton3.onClick.AddListener(ToggleChangePasswordCanvas);
   }
 
 
@@ -83,5 +97,12 @@ public class CanvasChanger : MonoBehaviour
       emailVerifyCanvas.gameObject.SetActive(!emailVerifyCanvas.gameObject.activeSelf);
       EmailVerifyManager emailVerifyManager = GameObject.Find("EmailVerifyManager").GetComponent<EmailVerifyManager>();
       emailVerifyManager.ClearInputText();
+    }
+
+    private void ToggleChangePasswordCanvas()
+    {
+      changePasswordCanvas.gameObject.SetActive(!changePasswordCanvas.gameObject.activeSelf);
+      ChangePasswordManager changePasswordManager = GameObject.Find("ChangePasswordManager").GetComponent<ChangePasswordManager>();
+      changePasswordManager.ClearInputText();
     }
 }

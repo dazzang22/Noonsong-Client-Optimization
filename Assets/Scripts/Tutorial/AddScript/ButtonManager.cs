@@ -4,16 +4,20 @@ using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour
 {
-    public GameObject popupPanel;
+    public GameObject openPanel;
+    public GameObject closePanel;
 
-    public void ShowPopup()
+    public void TogglePanels()
     {
-        popupPanel.SetActive(true);
-    }
+        if (openPanel != null)
+        {
+            openPanel.SetActive(true);
+        }
 
-    public void NoShowPopup()
-    {
-        popupPanel.SetActive(false);
+        if (closePanel != null)
+        {
+            closePanel.SetActive(false);
+        }
     }
 
     public void GoScene()

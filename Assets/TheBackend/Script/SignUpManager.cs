@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using BackEnd;
+using System.Collections;
 
 public class SignUpManager : MonoBehaviour
 {
@@ -13,27 +14,26 @@ public class SignUpManager : MonoBehaviour
 
     //회원가입 UI 관련
     public GameObject signUpPopup;
-    //public TMP_Text signUpTitle;
-    //public ScrollRect scrollViewSignUp;
     public GameObject signUpCompletionPopup;
-    public TMP_Text asteriskId;
-    public TMP_Text asteriskPW;
-    public TMP_Text asteriskPWConfirm;
 
-
-    //입력 필드
+    // 입력 필드
     public InputField inputFieldID;
     public TMP_Text textIdResult;
     public InputField inputFieldPW;
     public TMP_Text textPWResult;
     public InputField inputFieldPWConfirm;
     public TMP_Text textPWConfirmResult;
+    public InputField inputFieldEmail;
+    public TMP_Text textEmailResult;
+    public InputField inputFieldNickname;
+    public TMP_Text textNicknameResult;
     public Button btnSignUp;
 
     private bool isIdValid = false;
     private bool isPasswordValid = false;
     private bool isPasswordsMatch = false;
-    private bool isAgreeChecked = false;
+    private bool isEmailValid = false;
+    private bool isNicknameValid = false;
 
     void Start()
     {
@@ -47,10 +47,8 @@ public class SignUpManager : MonoBehaviour
         inputFieldID.onValueChanged.AddListener(OnIDFieldEndEdit);
         inputFieldPW.onValueChanged.AddListener(OnPasswordFieldEndEdit);
         inputFieldPWConfirm.onValueChanged.AddListener(OnPasswordConfirmFieldEndEdit);
-
-        inputFieldID.onValueChanged.AddListener(OnIDFieldChanged);
-        inputFieldPW.onValueChanged.AddListener(OnPasswordFieldChanged);
-        inputFieldPWConfirm.onValueChanged.AddListener(OnPasswordConfirmFieldChanged);
+        inputFieldEmail.onValueChanged.AddListener(OnEmailFieldEndEdit);
+        inputFieldNickname.onValueChanged.AddListener(OnNicknameFieldEndEdit);
 
         btnSignUp.onClick.AddListener(OnSignUpButtonClicked);
     }
@@ -137,10 +135,57 @@ public class SignUpManager : MonoBehaviour
         }
     }
 
+        void OnEmailFieldEndEdit(string email)
+    {
+        isEmailValid = ValidateEmail(email);
+        UpdateEmailResultText(email);
+        CheckAllConditions();
+    }
+
+    bool ValidateEmail(string email)
+    {
+        return Regex.IsMatch(email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+    }
+
+    void UpdateEmailResultText(string email)
+    {
+        if (!isEmailValid)
+        {
+            textEmailResult.text = "올바른 이메일 형식이 아닙니다.";
+            textEmailResult.color = Color.red;
+        }
+        else
+        {
+            textEmailResult.text = "사용 가능한 이메일입니다.";
+            textEmailResult.color = Color.green;
+        }
+    }
+
+    void OnNicknameFieldEndEdit(string nickname)
+    {
+        isNicknameValid = nickname.Length >= 2 && nickname.Length <= 10;
+        UpdateNicknameResultText();
+        CheckAllConditions();
+    }
+
+    void UpdateNicknameResultText()
+    {
+        if (!isNicknameValid)
+        {
+            textNicknameResult.text = "닉네임은 2~10자여야 합니다.";
+            textNicknameResult.color = Color.red;
+        }
+        else
+        {
+            textNicknameResult.text = "사용 가능한 닉네임입니다.";
+            textNicknameResult.color = Color.green;
+        }
+    }
+
     //아이디, PW1, PW2가 모두 유효한지 확인 후 계정생성 버튼 활성화
     void CheckAllConditions()
     {
-        if (isIdValid && isPasswordValid && isPasswordsMatch)
+        if (isIdValid && isPasswordValid && isPasswordsMatch && isEmailValid && isNicknameValid)
         {
             btnSignUp.interactable = true;
         }
@@ -150,43 +195,41 @@ public class SignUpManager : MonoBehaviour
         }
     }
 
-    //필수표시 (*) 활성화   
-    void OnIDFieldChanged(string text)
-    {
-        asteriskId.gameObject.SetActive(string.IsNullOrEmpty(text));
-    }
-
-    void OnPasswordFieldChanged(string text)
-    {
-        asteriskPW.gameObject.SetActive(string.IsNullOrEmpty(text));
-    }
-
-    void OnPasswordConfirmFieldChanged(string text)
-    {
-        asteriskPWConfirm.gameObject.SetActive(string.IsNullOrEmpty(text));
-    }
-
     //회원가입 시행 후 팝업 띄움.
     public void OnSignUpButtonClicked()
     {
-        if (!isAgreeChecked) // 동의 체크 여부 확인
+        /*if (toggleAgree) // 동의 체크 여부 확인
         {
             textAgreeWarning.text = "회원가입을 진행하려면 개인정보 제공에 동의해야 합니다.";
             textAgreeWarning.color = Color.red;
             textAgreeWarning.gameObject.SetActive(true);
             return;
-        }
+        }*/
 
         string id = inputFieldID.text;
         string password = inputFieldPW.text;
+        string email = inputFieldEmail.text;
+        string nickname = inputFieldNickname.text;
+
+        Debug.Log("회원가입 요청: ID=" + id + ", Email=" + email + ", Nickname=" + nickname);
 
         var bro = Backend.BMember.CustomSignUp(id, password);
-
+        
         if (bro.IsSuccess())
         {
+            Debug.Log("회원가입 성공! 자동 로그인 진행...");
+
+            // 회원가입 후 자동 로그인 (이메일과 닉네임은 로그인 후 등록)
+            BackendLogin.Instance.CustomLogin(id, password, () =>
+            {
+                BackendLogin.Instance.UpdateNickname(nickname);
+                BackendLogin.Instance.UpdateEmail(email);
+            });
+            // UI 변경 (회원가입 완료 창 띄우기)
             privatePolicyPopup.SetActive(false);
-            signUpPopup.SetActive(false);
-            signUpCompletionPopup.SetActive(true);
+                signUpPopup.SetActive(false);
+                signUpCompletionPopup.SetActive(true);
+            
         }
         else
         {
@@ -197,9 +240,34 @@ public class SignUpManager : MonoBehaviour
             }
             else
             {
-                textIdResult.text = "회원가입에 실패했습니다. 다시 시도해주세요.";
+                textIdResult.text = "회원가입에 실패했습니다. 다시 시도해주세요." + bro;
                 textIdResult.color = Color.red;
             }
+        }
+
+        
+    }
+    public void testfunc(){
+        var bro = Backend.BMember.UpdateCustomEmail("help@thebackend.io");
+        if (bro.IsSuccess())
+        {
+            Debug.Log("이메일 등록 성공");
+        }
+        else
+        {
+            Debug.LogError("이메일 등록 실패" + bro);
+        }
+    }
+    public void testfunc2()
+    {
+        var bro = Backend.BMember.UpdateNickname("nickname");
+        if (bro.IsSuccess())
+        {
+            Debug.Log("이메일 등록 성공");
+        }
+        else
+        {
+            Debug.LogError("이메일 등록 실패" + bro);
         }
     }
 }
