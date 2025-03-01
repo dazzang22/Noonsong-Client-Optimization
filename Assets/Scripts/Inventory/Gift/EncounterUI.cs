@@ -84,7 +84,9 @@ public class EncounterUI : MonoBehaviour
 
     public void Show(NoonsongEntry character, System.Action onClose)
     {
-        
+        HiButton.interactable = true;
+        GiftButton.interactable = true;
+        dialogueButton.interactable = false;
 
         if (character == null)
         {

@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Doublsb.Dialog;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
+using UltimateClean;
 
 // 최대한 주석 달아보았으나, 혹시 이해가 안되는 코드 있다면 저(이다연)한테 물어보셔도 되고, 챗지피티에게 코드 주석 달아달라고 하고 설명해달라고 하면 잘 설명해줍니다!
 public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체 대사가 들어있음, 대사 코드 뒤에 오브젝트 등장, 애니메이션 작동 모두 관리하고 있습니다.
@@ -59,6 +61,10 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     // 각 오브젝트에 대한 사운드 매핑
     private Dictionary<GameObject, AudioClip> objectSoundMap;
 
+    // 선물 반응 이펙트
+    public GameObject effectObject;
+    // 선물 주기 팝업 UI
+    public GameObject popupUI;
 
     // 첫 번째 대화 설정 1~3
     public void FirstDialog()
@@ -392,12 +398,65 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     {
         Time.timeScale = 0f; // 시간 정지
         uiController.onClickGiftButton();
+
         while(!giftCanvas.gameObject.activeSelf)//선물캔버스가 활성화될때까지 대기
         {
              yield return null; // 한 프레임을 대기
         }
 
         Time.timeScale = 1f; // 시간 재개
+
+
+
+        // 슬롯 버튼 활성화 처리
+        Button slotButton = giftCanvas.transform.Find("Item").GetComponent<Button>();
+
+        // 슬롯 버튼 클릭 대기
+        bool isPopupOpened = false;
+        slotButton.onClick.AddListener(() =>
+        {
+            isPopupOpened = true;
+            popupUI.SetActive(true); // 팝업 UI 활성화
+        });
+
+        // 슬롯 버튼 클릭될 때까지 대기
+        while (!isPopupOpened)
+        {
+            yield return null; // 한 프레임 대기
+        }
+
+        // 팝업 UI 처리
+        Button giftButton = popupUI.transform.Find("Yes").GetComponent<Button>();
+        Button cancelButton = popupUI.transform.Find("No").GetComponent<Button>();
+
+        bool isGiftGiven = false;
+
+        // 선물하기 버튼 클릭 시 처리
+        giftButton.onClick.AddListener(() =>
+        {
+            isGiftGiven = true;
+            popupUI.SetActive(false); // 팝업 UI 비활성화
+            StartCoroutine(ActivateEffectCoroutine());
+        });
+
+        // 취소하기 버튼 클릭 시 처리
+        cancelButton.onClick.AddListener(() =>
+        {
+            popupUI.SetActive(false); // 팝업 UI 비활성화
+        });
+
+        // 선물하기 버튼 클릭될 때까지 대기
+        while (!isGiftGiven)
+        {
+            yield return null; // 한 프레임 대기
+        }
+    }
+
+    private IEnumerator ActivateEffectCoroutine()
+    {
+        effectObject.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        effectObject.SetActive(false);
     }
 
 
