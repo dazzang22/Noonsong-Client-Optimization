@@ -164,7 +164,7 @@ public class FriendsManager : MonoBehaviour
 
             currentNoonsongObject = Instantiate(entry.prefab, randomWorldPosition, Quaternion.identity);
             currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);
-            currentNoonsongObject.transform.localScale = new Vector3(4f, 4f, 4f);
+            currentNoonsongObject.transform.localScale = new Vector3(5.5f, 5.5f, 5.5f);
             currentNoonsongObject.transform.LookAt(renderCamera.transform);
 
             // PhotoManager 스크립트를 추가하여 오브젝트 조작 가능하게 설정
