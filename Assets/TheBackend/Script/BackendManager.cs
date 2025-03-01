@@ -76,7 +76,7 @@ public class BackendManager : MonoBehaviour
         Debug.Log(UserMapManager.Instance.getUserMapList());
 
   
-        Debug.Log("테스트를 종료합니다.");
+        Debug.Log("테스트를 종료합니다.");*/
 
     }
 }
