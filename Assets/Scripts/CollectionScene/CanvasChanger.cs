@@ -10,6 +10,7 @@ public class CanvasChanger : MonoBehaviour
     [SerializeField] private Canvas turyCanvas;
     [SerializeField] private Canvas mapCanvas;
     [SerializeField] private Canvas inventoryCanvas;
+    [SerializeField] private Canvas emailVerifyCanvas;
     [SerializeField] private Button popupButton;
     [SerializeField] private Button backButton;
     [SerializeField] private Button turyButton;
@@ -18,8 +19,12 @@ public class CanvasChanger : MonoBehaviour
     [SerializeField] private Button mapbackButton;
     [SerializeField] private Button inventoryButton;
     [SerializeField] private Button inventoryBackButton;
+    [SerializeField] private Button emailVerifyButton;
+    [SerializeField] private Button emailVerifyBackButton1;
+    [SerializeField] private Button emailVerifyBackButton2;
+    [SerializeField] private Button emailVerifyBackButton3;
 
-    public MapManager mapManager;
+  public MapManager mapManager;
 
   private void Start()
   {
@@ -37,6 +42,10 @@ public class CanvasChanger : MonoBehaviour
     mapbackButton.onClick.AddListener(ToggleMapCanvas);
     inventoryButton.onClick.AddListener(ToggleInventoryCanvas);
     inventoryBackButton.onClick.AddListener(ToggleInventoryCanvas);
+    emailVerifyButton.onClick.AddListener(ToggleEmailVerifyCanvas);
+    emailVerifyBackButton1.onClick.AddListener(ToggleEmailVerifyCanvas);
+    emailVerifyBackButton2.onClick.AddListener(ToggleEmailVerifyCanvas);
+    emailVerifyBackButton3.onClick.AddListener(ToggleEmailVerifyCanvas);
   }
 
 
@@ -67,5 +76,12 @@ public class CanvasChanger : MonoBehaviour
     private void ToggleInventoryCanvas()
     {
       inventoryCanvas.gameObject.SetActive(!inventoryCanvas.gameObject.activeSelf);
+    }
+
+    private void ToggleEmailVerifyCanvas()
+    {
+      emailVerifyCanvas.gameObject.SetActive(!emailVerifyCanvas.gameObject.activeSelf);
+      EmailVerifyManager emailVerifyManager = GameObject.Find("EmailVerifyManager").GetComponent<EmailVerifyManager>();
+      emailVerifyManager.ClearInputText();
     }
 }
