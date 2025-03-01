@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System;
 
 public class FriendsManager : MonoBehaviour
 {
@@ -195,5 +196,25 @@ public class FriendsManager : MonoBehaviour
     public bool Is3DViewActive()
     {
         return isFriends3DViewActive;
+    }
+
+    internal void SetAllEntriesDiscovered()
+    {
+        if (noonsongFriendsEntryManager != null)
+        {
+            entries = new List<NoonsongFriendsEntry>(noonsongFriendsEntryManager.GetNoonsongEntries());
+        }
+
+        foreach (var entry in entries)
+        {
+            if (entry != null)
+            {
+                entry.isDiscovered = true;       
+
+                Debug.Log($"Entry '{entry.name}' has been marked as discovered.");
+            }
+        }
+
+        PopulateNoonsong();
     }
 }
