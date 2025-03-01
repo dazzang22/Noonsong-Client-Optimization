@@ -22,7 +22,7 @@ public class MapChartManager
     //지도 이름으로 지도 id 찾기
     public int getMapId(string location)
     {
-        var bro = Backend.Chart.GetChartContents("162815");
+        var bro = Backend.Chart.GetChartContents("167010");
         foreach(LitJson.JsonData gameData in bro.FlattenRows())
         {
             if(location == gameData["Name"].ToString()){
@@ -35,7 +35,7 @@ public class MapChartManager
     //지도 id로 지도이름 찾기
     public string getMapName(int location)
     {
-        var bro = Backend.Chart.GetChartContents("162815");
+        var bro = Backend.Chart.GetChartContents("167010");
         foreach(LitJson.JsonData gameData in bro.FlattenRows())
         {
             if(location == int.Parse(gameData["MapId"].ToString())){

@@ -31,6 +31,10 @@ public class BackendLogin
 
         var bro = Backend.BMember.CustomSignUp(id,pw);
         UserDataManager.Instance.InsertUserData(id,pw);
+        //지도  
+        UserMapManager.Instance.insertUserMap(id);
+        //재화
+        UserBalanceManager.Instance.InsertUserBalance(id,0);
 
         if (bro.IsSuccess())
         {

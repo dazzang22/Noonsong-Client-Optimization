@@ -105,10 +105,18 @@ public class UserMapManager {
     }
 
     //유저 validateMap 업데이트 (추가) : 구역이름으로 1개씩 전달하면 숫자로 저장됨.
-    public Param addUserValidate(string name)
+    public Param addUserValidate(int mapid)
     {
-        int mapid= MapChartManager.Instance.getMapId(name);
+        //int mapid= MapChartManager.Instance.getMapId(name);
         UserMap usermap= getUserMapJson();
+        foreach(int m in usermap.validateMap)
+        {
+            if(mapid == m)
+            {
+                Debug.LogError("이미 활성화된 구역입니다.");
+                return null;
+            }
+        }
         usermap.addValidateMap(mapid);
         return usermap.ToParam();
     }

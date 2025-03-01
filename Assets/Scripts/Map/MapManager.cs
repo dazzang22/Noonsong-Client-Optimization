@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using BackEnd;
 
 public class MapManager : MonoBehaviour
 {
@@ -143,6 +144,10 @@ public class MapManager : MonoBehaviour
         {
             regionUnlocked[regionIndex] = true;
             regions[regionIndex].SetActive(false);
+            //ì§€ì—­ í•´ê¸ˆ í™œì„±í™” db ë°˜ì˜
+            Param pmap =new Param();
+            pmap = UserMapManager.Instance.addUserValidate(regionIndex);
+            UserMapManager.Instance.UpdateUserMap(pmap);
         }
 
         if (AreAllRegionsUnlocked())
@@ -180,9 +185,9 @@ public class MapManager : MonoBehaviour
     {
         foreach (bool unlocked in regionUnlocked)
         {
-            if (!unlocked) return false; // ÇÏ³ª¶óµµ ÇØ±İµÇÁö ¾ÊÀ¸¸é false ¹İÈ¯
+            if (!unlocked) return false; // ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½Ø±İµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ false ï¿½ï¿½È¯
         }
-        return true; // ¸ğµç ±¸¿ªÀÌ ÇØ±İµÇ¾úÀ¸¸é true ¹İÈ¯
+        return true; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø±İµÇ¾ï¿½ï¿½ï¿½ï¿½ï¿½ true ï¿½ï¿½È¯
     }
 
     private void ActivateBluming()

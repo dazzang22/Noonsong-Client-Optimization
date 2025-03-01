@@ -114,26 +114,32 @@ public class NoonsongManager : MonoBehaviour
         GameObject newEntry;
         if (entry.isDiscovered)
         {
-          newEntry = Instantiate(discoveredEntryPrefab, entryParent);
-          discoveredItems++; 
+            newEntry = Instantiate(discoveredEntryPrefab, entryParent);
+            discoveredItems++; 
 
-          Button button = newEntry.GetComponent<Button>() ?? newEntry.AddComponent<Button>();
-          button.onClick.RemoveAllListeners();
-          button.onClick.AddListener(() => ShowDetails(entry, newEntry));
+            Button button = newEntry.GetComponent<Button>() ?? newEntry.AddComponent<Button>();
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => ShowDetails(entry, newEntry));
 
-          var noonsongImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
-          if (noonsongImage != null)
-          {
-                        // 호감도가 20 이상일 때만 이미지를 표시
-                        if (entry.loveLevel >= 20)
-                        {
-                            noonsongImage.sprite = entry.noonsongSprite;
-                        }
-                        else
-                        {
-                            noonsongImage.sprite = noonsongdefaultSprite;
-                        }
-                    }
+            //눈송이 DB테이블에 추가
+            Debug.Log($"{entry.noonsongName} 테이블에 추가");
+            int noonsongId= DogamChartManager.Instance.getSnowflakeId(entry.noonsongName);
+            string user = UserDataManager.Instance.getUserID();
+            UserDogamManager.Instance.noonsongInsert(user,noonsongId);
+            
+            var noonsongImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
+            if (noonsongImage != null)
+            {
+                // 호감도가 20 이상일 때만 이미지를 표시
+                if (entry.loveLevel >= 20)
+                {
+                    noonsongImage.sprite = entry.noonsongSprite;
+                }
+                else
+                {
+                    noonsongImage.sprite = noonsongdefaultSprite;
+                }
+            }
         }
         else
         {

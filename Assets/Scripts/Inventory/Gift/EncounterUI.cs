@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
-
+using BackEnd;
 public class EncounterUI : MonoBehaviour
 {
     [SerializeField] private GameObject encounterPanel;
@@ -84,7 +84,9 @@ public class EncounterUI : MonoBehaviour
 
     public void Show(NoonsongEntry character, System.Action onClose)
     {
-        
+        HiButton.interactable = true;
+        GiftButton.interactable = true;
+        dialogueButton.interactable = false;
 
         if (character == null)
         {
@@ -222,6 +224,11 @@ public class EncounterUI : MonoBehaviour
                 IncreasePopUp.gameObject.SetActive(true);
                 currencyManager.AddCurrency(NOONSONG_INCREMENT);
                 Debug.Log($"기본눈송이 : {NOONSONG_INCREMENT}개의 재화 추가.");
+
+                //db 반영
+                Param param2 = new Param();
+                param2= UserBalanceManager.Instance.addsnow(NOONSONG_INCREMENT);
+                UserBalanceManager.Instance.updateBalance(param2);
 
                 Destroy(currentTarget);
                 CloseEncounter();

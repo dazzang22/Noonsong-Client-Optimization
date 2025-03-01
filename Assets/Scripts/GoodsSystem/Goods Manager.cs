@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-
+using BackEnd;
 public class GoodsManager : MonoBehaviour
 {
     //5분마다 제공되는 재화
@@ -23,6 +23,7 @@ public class GoodsManager : MonoBehaviour
     [SerializeField] private GameObject noPanel;
     [SerializeField] private GameObject completePanel;
     [SerializeField] private GameObject receivePanel;
+    [SerializeField] private GameObject dispatchTutoPopup;
 
 
     [Header("Dispatch Settings")]
@@ -46,6 +47,7 @@ public class GoodsManager : MonoBehaviour
 
     void Start()
     {
+        PlayerPrefs.DeleteKey("DispatchPopupActivated"); //테스트용
         // CurrencyManager가 연결되어 있는지 확인
         if (currencyManager != null)
         {
@@ -115,12 +117,33 @@ public class GoodsManager : MonoBehaviour
             {
                 currencyManager.AddCurrency(DEFAULT_INCREMENT);
                 Debug.Log($"5분 경과: {DEFAULT_INCREMENT}개의 재화 추가.");
+                
+                //유저 재화 DB에 반영
+                Param param = new Param();
+                param= UserBalanceManager.Instance.addsnow(DEFAULT_INCREMENT);
+                UserBalanceManager.Instance.updateBalance(param);
             }
         }
     }
 
     public void DispatchBtnClick()
     {
+        if (PlayerPrefs.GetInt("DispatchPopupActivated", 0) == 0) 
+        {
+            if (dispatchTutoPopup != null)
+            {
+                dispatchTutoPopup.gameObject.SetActive(true); // 최초 1회 활성화
+                PlayerPrefs.SetInt("DispatchPopupActivated", 1); // 상태 저장
+                PlayerPrefs.Save(); // 저장 확정
+            }
+        }
+        else
+        {
+            if (dispatchTutoPopup != null)
+            {
+                dispatchTutoPopup.gameObject.SetActive(false); // 다시 실행해도 비활성화
+            }
+        }
         dispatchBtns[0].gameObject.SetActive(false);
         dispatchBtns[1].gameObject.SetActive(true);
         noonsFriendsListPanel.gameObject.SetActive(true);
@@ -188,6 +211,12 @@ public class GoodsManager : MonoBehaviour
         completePanel.gameObject.SetActive(false);
         currencyManager.AddCurrency(randomReward);
         Debug.Log($"파견 완료: {randomReward}개의 재화 지급.");
+        
+        //유저 재화 DB 반영
+        Param param1 = new Param();
+        param1= UserBalanceManager.Instance.addsnow(randomReward);
+        UserBalanceManager.Instance.updateBalance(param1);
+
         if (rewardText != null)
         {
             rewardText.text = $"눈의 결정 X {randomReward}";
