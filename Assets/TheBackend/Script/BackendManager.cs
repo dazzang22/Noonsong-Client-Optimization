@@ -70,10 +70,7 @@ public class BackendManager : MonoBehaviour
         GameDataManager.Instance.GetTableList();
         string userId= UserDataManager.Instance.getUserID();
         UserMapManager.Instance.insertUserMap(userId);
-        Param param = UserMapManager.Instance.addUserValidate("순헌관");
-        UserMapManager.Instance.UpdateUserMap(param);
-        Param param1 = UserMapManager.Instance.addUserValidate("진리관");
-        UserMapManager.Instance.UpdateUserMap(param1);
+
         Debug.Log(UserMapManager.Instance.getUserMapList());
 
   

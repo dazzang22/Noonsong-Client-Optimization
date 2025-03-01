@@ -63,13 +63,8 @@ public class UserDogamManager
     }
 
     //UserDogam 테이블에 도감 등록하기
-    public void noonsongInsert(string userid, int noonsongid, string location)
+    public void noonsongInsert(string userid, int noonsongid)
     {
-        //도감에 해당 눈송이가 등록되어 있으면 count +1 증가.
-        //1. 유저 행들의 집합 찾기
-        //2. 거기서 해당 눈송 id가 있는지 확인
-        //3. 없으면 등록 진행
-        //4. 있으면 count 함수 진행
 
         Debug.Log("유저도감 테이블에서 유저의 행을 찾아 등록 여부를 확인합니다.");
         List<UserDogam> userdogamlist = new List<UserDogam>();
@@ -97,7 +92,7 @@ public class UserDogamManager
         }
 
         Debug.Log("데이터를 초기화합니다.");
-        userinventory.setUserDogam(userid,noonsongid,1,location);
+        userinventory.setUserDogam(userid,noonsongid,1);
         param = userinventory.ToParam();
 
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
