@@ -2,19 +2,18 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using Mapbox.Utils;
 using Mapbox.Unity.Map;
-using UnityEngine.Android;
 using System.Collections;
 
 public class ScriptActivationController : MonoBehaviour
 {
     [SerializeField]
-    Vector2d[] rectangleVertices; // 사각형의 각 꼭짓점을 저장하는 배열
+    Vector2d[] rectangleVertices; // 사각형의 꼭짓점
 
     [SerializeField]
     MonoBehaviour scriptToActivate; // 활성화할 스크립트
 
     [SerializeField]
-    AbstractMap map; // Mapbox 맵을 참조
+    AbstractMap map; // Mapbox 맵
 
     [SerializeField]
     Transform xrOrigin; // XR Origin
@@ -23,13 +22,10 @@ public class ScriptActivationController : MonoBehaviour
     GameObject spawnObject; // 스폰할 오브젝트
 
     [SerializeField]
-    Canvas cameraCanvas; // 카메라 캔버스를 참조
+    Canvas cameraCanvas; // 카메라 캔버스
 
-    public string ActivatedScriptName { get; private set; }
-
-    private bool isLocationServiceInitialized = false;
-    private bool isXROriginPositionSet = false; // XR Origin 위치가 설정되었는지 여부
-    private bool isObjectSpawned = false; // 오브젝트가 스폰되었는지 여부
+    private bool isXROriginPositionSet = false;
+    private bool isObjectSpawned = false;
     private float checkInterval = 5f; // 위치 확인 간격 (초)
 
     void Start()
@@ -41,64 +37,30 @@ public class ScriptActivationController : MonoBehaviour
         }
 
         if (scriptToActivate != null)
-        {   
+        {
             scriptToActivate.enabled = false;
         }
 
-        StartCoroutine(WaitForLocationService());
+        StartCoroutine(CheckUserLocationPeriodically());
     }
     public bool IsActive()
     {
         return scriptToActivate != null && scriptToActivate.enabled;
     }
 
-    IEnumerator WaitForLocationService()
-    {
-        //Android 권한 요청
-         while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
-         {
-             yield return null;
-            Permission.RequestUserPermission(Permission.FineLocation);
-         }
-
-        if (!Input.location.isEnabledByUser)
-        {
-            Debug.LogError("Location services are not enabled by the user.");
-            yield break;
-        }
-
-        Input.location.Start();
-
-        int maxWait = 20;
-        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
-        {
-            yield return new WaitForSeconds(1);
-            maxWait--;
-        }
-
-        if (maxWait < 1)
-        {
-            Debug.LogError("Timed out while initializing location services.");
-            yield break;
-        }
-
-        if (Input.location.status == LocationServiceStatus.Failed)
-        {
-            Debug.LogError("Unable to determine device location.");
-            yield break;
-        }
-
-        isLocationServiceInitialized = true;
-        StartCoroutine(CheckUserLocationPeriodically());
-    }
-
     IEnumerator CheckUserLocationPeriodically()
     {
         while (true)
         {
-            if (isLocationServiceInitialized)
+            // 위치 권한이 승인되었는지 확인
+            if (LocationPermissionManager.Instance.IsLocationServiceInitialized)
             {
+                Debug.Log("위치 권한이 활성화되었습니다");
                 CheckAndSetupUserLocation();
+            }
+            else
+            {
+                Debug.Log("Waiting for location permission...");
             }
             yield return new WaitForSeconds(checkInterval);
         }
@@ -106,9 +68,7 @@ public class ScriptActivationController : MonoBehaviour
 
     void CheckAndSetupUserLocation()
     {
-        if (!isLocationServiceInitialized) return;
-
-        Vector2d userLocation = new Vector2d(Input.location.lastData.latitude, Input.location.lastData.longitude); // Latitude, Longitude
+        Vector2d userLocation = new Vector2d(Input.location.lastData.latitude, Input.location.lastData.longitude);
         Debug.Log($"User Location: Latitude = {userLocation.x:F6}, Longitude = {userLocation.y:F6}");
 
         if (IsLocationInsideRectangle(userLocation, rectangleVertices))
@@ -117,48 +77,39 @@ public class ScriptActivationController : MonoBehaviour
 
             if (scriptToActivate != null && !scriptToActivate.enabled)
             {
-                scriptToActivate.enabled = true; // 스크립트 활성화
+                scriptToActivate.enabled = true;
                 Debug.Log("Script activated.");
             }
 
-            // 유저 위치를 월드 좌표로 변환
             Vector3 worldPosition = map.GeoToWorldPosition(userLocation, true);
-
-            if (!isXROriginPositionSet || Vector3.Distance(xrOrigin.position, worldPosition) > 1f) // 위치가 변경되었거나 초기 설정되지 않은 경우
+            if (!isXROriginPositionSet || Vector3.Distance(xrOrigin.position, worldPosition) > 1f)
             {
                 worldPosition.y = 0;
-                // XR Origin을 해당 위치로 이동
                 xrOrigin.position = worldPosition;
-                isXROriginPositionSet = true; // XR Origin 위치가 설정되었음을 기록
+                isXROriginPositionSet = true;
                 Debug.Log(xrOrigin.position);
-                
-                // 오브젝트가 스폰되지 않은 경우에만 스폰
+
                 if (!isObjectSpawned)
                 {
                     SpawnObject(worldPosition);
-                    isObjectSpawned = true; // 오브젝트가 스폰되었음을 기록
+                    isObjectSpawned = true;
                 }
             }
         }
         else
         {
             Debug.Log("User is outside the designated area.");
-
             if (scriptToActivate != null && scriptToActivate.enabled)
             {
-                scriptToActivate.enabled = false; // 스크립트 비활성화
+                scriptToActivate.enabled = false;
                 Debug.Log("Script deactivated.");
             }
         }
 
-        // CameraCanvas 활성화 상태에 따른 XR Origin 위치 설정
-        if (cameraCanvas != null)
+        if (cameraCanvas != null && cameraCanvas.gameObject.activeSelf)
         {
-            if (cameraCanvas.gameObject.activeSelf) // CameraCanvas가 활성화된 경우
-            {
-                xrOrigin.position = Vector3.zero; // XR Origin 위치를 (0, 0, 0)으로 설정
-                Debug.Log("CameraCanvas is active. XR Origin set to (0,0,0).");
-            }
+            xrOrigin.position = Vector3.zero;
+            Debug.Log("CameraCanvas is active. XR Origin set to (0,0,0).");
         }
     }
 
@@ -170,27 +121,14 @@ public class ScriptActivationController : MonoBehaviour
             return false;
         }
 
-        Debug.Log("Checking if the location is inside the rectangle.");
-
-        // Print out the coordinates to verify
-        Debug.Log($"Checking if point: Latitude = {point.x}, Longitude = {point.y} is inside rectangle with vertices:");
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            Debug.Log($"Vertex {i}: Latitude = {vertices[i].x}, Longitude = {vertices[i].y}");
-        }
-
-        // 사각형 내부에 사용자가 있는지 확인합니다.
         bool inside = IsPointInTriangle(point, vertices[0], vertices[1], vertices[2]) ||
                       IsPointInTriangle(point, vertices[0], vertices[2], vertices[3]);
-
-        Debug.Log($"User is inside the rectangle: {inside}");
 
         return inside;
     }
 
     bool IsPointInTriangle(Vector2d pt, Vector2d v1, Vector2d v2, Vector2d v3)
     {
-        Debug.Log("Checking if the point is inside a triangle.");
         double d1, d2, d3;
         bool has_neg, has_pos;
 
