@@ -116,7 +116,9 @@ public class EncounterUI : MonoBehaviour
         {
             originalParent = currentTarget.transform.parent;
             currentTarget.transform.SetParent(Camera.main.transform);
-            currentTarget.transform.localPosition = new Vector3(0, 0, 3);
+
+            Vector3 fixedPosition = new Vector3(0, 0, 3);
+            currentTarget.transform.localPosition = fixedPosition;
             currentTarget.transform.localScale = Vector3.one * 1f;
             currentTarget.transform.localRotation = Quaternion.Euler(0, 180, 0);
 
@@ -146,6 +148,17 @@ public class EncounterUI : MonoBehaviour
         else
         {
             dialogueText.text = "안녕! 반가워~";
+        }
+    }
+
+    private void LateUpdate()
+    {
+        GameObject currentTarget = arObjectCatch.GetCurrentTarget();
+        if (currentTarget != null && currentTarget.transform.parent == Camera.main.transform)
+        {
+            // 고정된 위치와 회전 유지
+            currentTarget.transform.localPosition = new Vector3(0, 0, 3);
+            currentTarget.transform.localRotation = Quaternion.Euler(0, 180, 0);
         }
     }
 

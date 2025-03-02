@@ -61,10 +61,14 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     // 각 오브젝트에 대한 사운드 매핑
     private Dictionary<GameObject, AudioClip> objectSoundMap;
 
+    [Header("Gift")]
     // 선물 반응 이펙트
     public GameObject effectObject;
     // 선물 주기 팝업 UI
     public GameObject popupUI;
+    public Button slotButton; // 슬롯 버튼 (선물 버튼)
+    public Button giftButton; // 팝업의 "Yes" 버튼
+    public Button cancelButton; // 팝업의 "No" 버튼
 
     // 첫 번째 대화 설정 1~3
     public void FirstDialog()
@@ -407,12 +411,6 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         Time.timeScale = 1f; // 시간 재개
 
 
-
-        // 슬롯 버튼 활성화 처리
-        Button slotButton = giftCanvas.GetComponentInChildren<Button>();
-
-
-        // 슬롯 버튼 클릭 대기
         bool isPopupOpened = false;
         slotButton.onClick.AddListener(() =>
         {
@@ -420,22 +418,20 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
             popupUI.SetActive(true); // 팝업 UI 활성화
         });
 
-        // 슬롯 버튼 클릭될 때까지 대기
         while (!isPopupOpened)
         {
             yield return null; // 한 프레임 대기
         }
 
         // 팝업 UI 처리
-        Button giftButton = popupUI.transform.Find("Yes").GetComponent<Button>();
-        Button cancelButton = popupUI.transform.Find("No").GetComponent<Button>();
-
         bool isGiftGiven = false;
 
         // 선물하기 버튼 클릭 시 처리
         giftButton.onClick.AddListener(() =>
         {
             isGiftGiven = true;
+            Destroy(slotButton.gameObject);
+            giftCanvas.gameObject.SetActive(false);
             popupUI.SetActive(false); // 팝업 UI 비활성화
             StartCoroutine(ActivateEffectCoroutine());
         });

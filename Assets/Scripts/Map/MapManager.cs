@@ -19,6 +19,8 @@ public class MapManager : MonoBehaviour
 
     public GameObject popupUI;
 
+    private bool isBlumingActivated = false;
+
     private List<string> buildingNames = new List<string> { "Sunheon Bldg", "Myungshin Bldg", "Suryeon Bldg", "Renaissance Plaza Bldg", "College of Science Bldg", "College of Music Bldg", "College of Fine Arts Bldg", "Center for Continuing Education  Bldg", "College of Pharmacy Bldg" };
 
     public TestBluming testBluming;
@@ -192,6 +194,10 @@ public class MapManager : MonoBehaviour
 
     private void ActivateBluming()
     {
+        if (isBlumingActivated) return;
+
+        isBlumingActivated = true;
+        mapUI.SetActive(true);
         popupUI.SetActive(true);
         testBluming.UnlockBluming();
 
