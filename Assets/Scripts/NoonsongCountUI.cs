@@ -7,6 +7,7 @@ using System.Linq;
 public class NoonsongCountUI : MonoBehaviour
 {
     public TextMeshProUGUI friendCountText;
+    public TextMeshProUGUI accountfriendCountText;
     private NoonsongEntry[] noonsongEntries;
 
     private void Start()
@@ -32,5 +33,6 @@ public class NoonsongCountUI : MonoBehaviour
 
         int friendCount = noonsongEntries.Count(entry => entry.isFriend);
         friendCountText.text = $"{friendCount}";
+        accountfriendCountText.text = $"{friendCount}";
     }
 }
