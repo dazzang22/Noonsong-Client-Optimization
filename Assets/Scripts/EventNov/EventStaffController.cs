@@ -75,19 +75,19 @@ public class EventStaffController : MonoBehaviour
             Debug.LogError("NoonsongEntryManager not found in the scene.");
         }
 
-        // //지도 잠금 해제
-        // MapManager mapManager = FindObjectOfType<MapManager>();
-        // if (mapManager != null)
-        // {
-        //     for (int i = 0; i <= 9; i++)
-        //     {
-        //         mapManager.UnlockRegion(i);
-        //     }
-        // }
-        // else
-        // {
-        //     Debug.LogError("mapManager not found in the scene.");
-        // }
+        //지도 잠금 해제
+        MapManager mapmanager = FindObjectOfType<MapManager>();
+        if (mapmanager != null)
+        {
+            for (int i = 0; i <= 8; i++)
+            {
+                mapmanager.UnlockRegion(i);
+            }
+        }
+        else
+        {
+            Debug.LogError("mapmanager not found in the scene.");
+        }
     }
 
     private void ResetClickCount()
