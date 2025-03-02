@@ -263,13 +263,13 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
             { turi, turiSound }
         };
 
-        //FirstDialog();
+        // FirstDialog();
         // dialogTriggered[0] = true;
         // SecondDialog();
-        // dialogTriggered[1] = true;
-        // ThirdDialog();
-        dialogTriggered[2] = true;
-        FourthDialog();
+        dialogTriggered[1] = true;
+        ThirdDialog();
+        // dialogTriggered[2] = true;
+        // FourthDialog();
         
     }
   
@@ -408,8 +408,6 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
              yield return null; // 한 프레임을 대기
         }
 
-        Time.timeScale = 1f; // 시간 재개
-
 
         bool isPopupOpened = false;
         slotButton.onClick.AddListener(() =>
@@ -447,6 +445,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         {
             yield return null; // 한 프레임 대기
         }
+
+        Time.timeScale = 1f; // 시간 재개
     }
 
 
@@ -542,11 +542,9 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     {
         Time.timeScale = 0f; // 시간 정지
         bookCanvas.sortingOrder = 2;
-        while(!bookCanvas.gameObject.activeSelf)
-        {
-            yield return null; // 한 프레임을 대기
-        }
-        yield return new WaitForSecondsRealtime(2f);
+
+        yield return new WaitForSecondsRealtime(5f);
+
         bookCanvas.sortingOrder = 0;
         Time.timeScale = 1f; // 시간 재개
     }

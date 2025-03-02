@@ -162,6 +162,7 @@ public class UIController : MonoBehaviour
     {
         if (isClicked)
         {
+            Debug.Log("Click");
             isClicked = false; // 한 번 확인 후 다시 false로 초기화
             return true;
         }

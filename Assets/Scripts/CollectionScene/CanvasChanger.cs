@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class CanvasChanger : MonoBehaviour
 {
+  [Header ("Canvas")]
     [SerializeField] private Canvas mainCanvas;
     [SerializeField] private Canvas popupCanvas;
     [SerializeField] private Canvas turyCanvas;
@@ -12,6 +13,9 @@ public class CanvasChanger : MonoBehaviour
     [SerializeField] private Canvas inventoryCanvas;
     [SerializeField] private Canvas emailVerifyCanvas;
     [SerializeField] private Canvas changePasswordCanvas;
+    [SerializeField] private Canvas profileCanvas;
+
+    [Header ("Button")]
     [SerializeField] private Button popupButton;
     [SerializeField] private Button backButton;
     [SerializeField] private Button turyButton;
@@ -20,6 +24,7 @@ public class CanvasChanger : MonoBehaviour
     [SerializeField] private Button mapbackButton;
     [SerializeField] private Button inventoryButton;
     [SerializeField] private Button inventoryBackButton;
+    [SerializeField] private Button nicknameButton;
     [SerializeField] private Button emailVerifyButton;
     [SerializeField] private Button emailVerifyBackButton1;
     [SerializeField] private Button emailVerifyBackButton2;
@@ -41,6 +46,7 @@ public class CanvasChanger : MonoBehaviour
     turyCanvas.gameObject.SetActive(false);
     mapCanvas.gameObject.SetActive(false);
     inventoryCanvas.gameObject.SetActive(false);
+    profileCanvas.gameObject.SetActive(false);
     emailVerifyCanvas.gameObject.SetActive(false);
     changePasswordCanvas.gameObject.SetActive(false);
 
@@ -52,6 +58,7 @@ public class CanvasChanger : MonoBehaviour
     mapbackButton.onClick.AddListener(ToggleMapCanvas);
     inventoryButton.onClick.AddListener(ToggleInventoryCanvas);
     inventoryBackButton.onClick.AddListener(ToggleInventoryCanvas);
+    nicknameButton.onClick.AddListener(ToggleProfileCanvas);
     emailVerifyButton.onClick.AddListener(ToggleEmailVerifyCanvas);
     emailVerifyBackButton1.onClick.AddListener(ToggleEmailVerifyCanvas);
     emailVerifyBackButton2.onClick.AddListener(ToggleEmailVerifyCanvas);
@@ -60,6 +67,7 @@ public class CanvasChanger : MonoBehaviour
     changePasswordBackButton1.onClick.AddListener(ToggleChangePasswordCanvas);
     changePasswordBackButton2.onClick.AddListener(ToggleChangePasswordCanvas);
     changePasswordBackButton3.onClick.AddListener(ToggleChangePasswordCanvas);
+  
   }
 
 
@@ -90,6 +98,11 @@ public class CanvasChanger : MonoBehaviour
     private void ToggleInventoryCanvas()
     {
       inventoryCanvas.gameObject.SetActive(!inventoryCanvas.gameObject.activeSelf);
+    }
+
+    private void ToggleProfileCanvas()
+    {
+      profileCanvas.gameObject.SetActive(!profileCanvas.gameObject.activeSelf);
     }
 
     private void ToggleEmailVerifyCanvas()
