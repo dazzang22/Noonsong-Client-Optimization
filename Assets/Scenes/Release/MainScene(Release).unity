@@ -3535,8 +3535,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRadius: 20
   spawnPrefab: {fileID: 7535594161552218053, guid: d219feb137ea36f4f9d7eb27d7c3cb34, type: 3}
-  map: {fileID: 0}
-  anchorManager: {fileID: 0}
+  targetLocation: {x: 37.54467, y: 126.96447}
+  anchorManager: {fileID: 1381654042}
   xrOrigin: {fileID: 1381654041}
   arCamera: {fileID: 1092237227}
 --- !u!1 &331442387
@@ -11328,7 +11328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7033188808827829903, guid: db0d17372d5fe5d4192e1c2f20790b68, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20754,7 +20754,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 250, y: 0}
-  m_SizeDelta: {x: 412.57, y: 0}
+  m_SizeDelta: {x: 328.34, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1935575149
 MonoBehaviour:
@@ -20779,7 +20779,7 @@ MonoBehaviour:
   m_text: "\uBE14\uB8E8\uBC0D \uC2A4\uD31F\uC774\n\uD574\uAE08\uB418\uC5C8\uC2B5\uB2C8\uB2E4!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a5ee533fd49d5f74f8986b38eb238e70, type: 2}
-  m_sharedMaterial: {fileID: -6595832704298031202, guid: d48883c8b96e2bc4eb43a0a10b912d10, type: 2}
+  m_sharedMaterial: {fileID: 4058034231979652277, guid: a5ee533fd49d5f74f8986b38eb238e70, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -20842,7 +20842,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1935575150
