@@ -42,22 +42,14 @@ public class LoginManager : MonoBehaviour
         inputID = inputField_ID.text;
         inputPW = inputField_PW.text;
 
-        var bro = Backend.BMember.CustomLogin(inputID, inputPW);
+        BackendLogin.Instance.CustomLogin(inputID, inputPW);
 
-        if (bro.IsSuccess())
+        if (BackendLogin.Instance.login_static==0)
         {
-            SceneManager.LoadScene("Merge-TutorialScene");
-        }
-        else
-        {
-            string googlehash = Backend.Utils.GetGoogleHash();
-
-            Debug.Log("구글 해시 키 : " + googlehash);
             //resultText.text = $"로그인 실패: {bro.GetMessage()}";
-            resultText.text = $"로그인 실패: {bro.GetMessage()},{googlehash}";
+            resultText.text = "로그인 실패";
 
             resultText.color = Color.red;
-
-        }
+        }        
     }
 }
