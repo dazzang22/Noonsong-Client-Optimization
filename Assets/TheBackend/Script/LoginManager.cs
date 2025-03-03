@@ -17,6 +17,10 @@ public class LoginManager : MonoBehaviour
     private string inputID = "";
     private string inputPW = "";
 
+    public AudioSource audioSource;  // 오디오 소스
+    public AudioClip successSound;
+
+
     private void Start()
     {
         inputField_ID.onValueChanged.AddListener(OnIDFieldEndEdit);
@@ -50,6 +54,11 @@ public class LoginManager : MonoBehaviour
             resultText.text = "로그인 실패";
 
             resultText.color = Color.red;
-        }        
+        }
+        else
+        {
+            audioSource.PlayOneShot(successSound);
+
+        }
     }
 }
