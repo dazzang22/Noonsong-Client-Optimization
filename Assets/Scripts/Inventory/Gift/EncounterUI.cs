@@ -7,6 +7,7 @@ using System.Linq;
 using BackEnd;
 public class EncounterUI : MonoBehaviour
 {
+    [Header("UI")]
     [SerializeField] private GameObject encounterPanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private TextMeshProUGUI noonsongNameText;
@@ -14,6 +15,7 @@ public class EncounterUI : MonoBehaviour
     [SerializeField] private GameObject dialogueWindow;
     [SerializeField] private GameObject exitPopup;
 
+    [Header("Gift")]
     [SerializeField] private GiftInventory giftInventory;
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private NoonsongCountUI noonsongCountUI;
@@ -22,19 +24,20 @@ public class EncounterUI : MonoBehaviour
     [SerializeField] private Image giftItemImage;
     [SerializeField] private TextMeshProUGUI giftItemDescription;
 
+    [Header("friend")]
     [SerializeField] private GameObject friendRequestPopup;
     [SerializeField] private Button yesButton;
     [SerializeField] private Button noButton;
 
     private NoonsongEntry currentCharacter;
     private System.Action onCloseCallback;
-
+    [Header("effect")]
     public GameObject EffectPrefabs;
     public GameObject collectEffectPrefab;
 
     private bool isDialogueActive = false;
+    [Header("button")]
     [SerializeField] private Button dialogueButton;
-
     [SerializeField] private Button HiButton;
     [SerializeField] private Button GiftButton;
 
@@ -61,12 +64,14 @@ public class EncounterUI : MonoBehaviour
 
     private Transform originalParent;
 
+    [Header("OriginalNoonsong")]
     //기본눈송이
     [SerializeField] private ARObjectCatch arObjectCatch;
     [SerializeField] private CurrencyManager currencyManager;
     [SerializeField] private GameObject IncreasePopUp;
     [SerializeField] private GameObject noPopUp;
      private const int NOONSONG_INCREMENT = 15;
+
 
     private void Update()
     {

@@ -26,6 +26,19 @@ public class GiftInventory : MonoBehaviour
     public Button bestFriendConfirmButton;
     public ItemEntry bestFriendRewardItem;
 
+    [Header("Audio")]
+    public AudioClip gift;
+    public AudioClip bestfriend;
+    public AudioClip love;
+    public AudioClip hate;
+    public AudioClip eventUI;
+    private AudioSource audioSource;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     public void Initialize(InventoryManager inventory, EncounterUI ui, ARObjectCatch arCatch)
     {
         inventoryManager = inventory;
@@ -117,6 +130,7 @@ public class GiftInventory : MonoBehaviour
             switch (preference)
             {
                 case ItemEntry.PreferenceLevel.Love:
+                    audioSource.PlayOneShot(love);
                     preferenceMultiplier = 5;
                     giftReaction = currentNoonsong.isFriend
                         ? "역시 나를 잘 아는구나? 정말 고마워!"
@@ -124,6 +138,7 @@ public class GiftInventory : MonoBehaviour
                     effectToActivate = giftEffectParticle4;
                     break;
                 case ItemEntry.PreferenceLevel.Like:
+                    audioSource.PlayOneShot(love);
                     preferenceMultiplier = 3;
                     giftReaction = currentNoonsong.isFriend
                         ? "마음에 든다! 고마워~"
@@ -131,6 +146,7 @@ public class GiftInventory : MonoBehaviour
                     effectToActivate = giftEffectParticle3;
                     break;
                 case ItemEntry.PreferenceLevel.Dislike:
+                    audioSource.PlayOneShot(hate);
                     preferenceMultiplier = 0;
                     giftReaction = currentNoonsong.isFriend
                         ? "고마워~"
@@ -138,6 +154,7 @@ public class GiftInventory : MonoBehaviour
                     effectToActivate = giftEffectParticle1;
                     break;
                 default:
+                    audioSource.PlayOneShot(love);
                     effectToActivate = giftEffectParticle2;
                     break;
             }
@@ -164,6 +181,7 @@ public class GiftInventory : MonoBehaviour
             if (updatedLoveLevel >= 100 && !currentNoonsong.isBestFriend)
             {
                 Debug.Log("베프 팝업");
+                audioSource.PlayOneShot(eventUI);
                 ShowBestFriendPopup();
                 currentNoonsong.isBestFriend = true;
             }
@@ -171,6 +189,7 @@ public class GiftInventory : MonoBehaviour
             if (updatedLoveLevel == 50 && !currentNoonsong.isFriend)
             {
                 encounterUI.ShowFriendRequestPopup();
+                audioSource.PlayOneShot(eventUI);
             }
 
             encounterUI.ShowGiftDialogue(giftReaction);
@@ -201,6 +220,7 @@ public class GiftInventory : MonoBehaviour
     {
         if (bestFriendPopup != null)
         {
+            audioSource.PlayOneShot(bestfriend);
             bestFriendPopup.SetActive(false);
 
             // 보상 아이템 지급
