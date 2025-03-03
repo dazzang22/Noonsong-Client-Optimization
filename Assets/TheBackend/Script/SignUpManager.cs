@@ -17,15 +17,15 @@ public class SignUpManager : MonoBehaviour
     public GameObject signUpCompletionPopup;
 
     // 입력 필드
-    public InputField inputFieldID;
+    public TMP_InputField inputFieldID;
     public TMP_Text textIdResult;
-    public InputField inputFieldPW;
+    public TMP_InputField inputFieldPW;
     public TMP_Text textPWResult;
-    public InputField inputFieldPWConfirm;
+    public TMP_InputField inputFieldPWConfirm;
     public TMP_Text textPWConfirmResult;
-    public InputField inputFieldEmail;
+    public TMP_InputField inputFieldEmail;
     public TMP_Text textEmailResult;
-    public InputField inputFieldNickname;
+    public TMP_InputField inputFieldNickname;
     public TMP_Text textNicknameResult;
     public Button btnSignUp;
 
@@ -227,7 +227,7 @@ public class SignUpManager : MonoBehaviour
             });
             // UI 변경 (회원가입 완료 창 띄우기)
             privatePolicyPopup.SetActive(false);
-                signUpPopup.SetActive(false);
+                //signUpPopup.SetActive(false);
                 signUpCompletionPopup.SetActive(true);
             
         }

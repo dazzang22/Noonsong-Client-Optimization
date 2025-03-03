@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2922598756686711970
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6890342502650852939}
+  - component: {fileID: 3628183548455851267}
+  m_Layer: 0
+  m_Name: TuryItemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6890342502650852939
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2922598756686711970}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3628183548455851267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2922598756686711970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1f55a8875ed460489fafa62a851a28d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryManager: {fileID: 0}
+  itemEntries:
+  - {fileID: 11400000, guid: 74319764bb8a6db4093a691ba0db15f9, type: 2}
+  - {fileID: 11400000, guid: d5e34f7cb235c60499511cc8a71854ae, type: 2}
+  - {fileID: 11400000, guid: 074854d5e481c174a9f544fa42df4496, type: 2}
+  - {fileID: 11400000, guid: 3c240238aef45b941ac86406ec6d8621, type: 2}
+  - {fileID: 11400000, guid: 59a8f5a0a01f6cc478ec15f1e535aa0c, type: 2}
+  - {fileID: 11400000, guid: 43d922334c765d444a99f5b41e561978, type: 2}
+  - {fileID: 11400000, guid: 8960685cd0cfb1b42abf71662008f601, type: 2}
+  - {fileID: 11400000, guid: b503fb29798de7d43a3ef946e905f439, type: 2}
+  - {fileID: 11400000, guid: 28d6fbe85bd1f204682d50a94bd908c6, type: 2}
+  - {fileID: 11400000, guid: 10902daf5922e1343aeabf3b5f427b75, type: 2}
+  - {fileID: 11400000, guid: 66d09b21936f09e4ba4b3ff531a51f42, type: 2}
+  - {fileID: 11400000, guid: 88525d1e3f32d924fa890089b1b986fe, type: 2}
+  - {fileID: 11400000, guid: 383afb6dfa1313d49b9ad7c82109ddb9, type: 2}
+  - {fileID: 11400000, guid: 2203006fdd1fd4a4c9f27fbf9ac7829c, type: 2}
+  - {fileID: 11400000, guid: f37465e3e9514df4b91e4c82a822ec52, type: 2}
+  - {fileID: 11400000, guid: 5fe14ed6ed81e7f4c9be22dd4e8c49ec, type: 2}
+  - {fileID: 11400000, guid: cee8dbadcb40d4c4191fbc509d1fe121, type: 2}
+  - {fileID: 11400000, guid: e450d5d677ed71b40b9167c181121419, type: 2}
+  - {fileID: 11400000, guid: 3d7407e633fdf1a469c44b5ed865d8c1, type: 2}
+  contentPanel: {fileID: 0}
+  itemPrefab: {fileID: 0}
+  placeholderPrefab: {fileID: 8294834456848905955, guid: 4cc1d9140facf8a489fe92601aa5e7d7, type: 3}
+  currencyText: {fileID: 0}
+  purchasePopup: {fileID: 0}
+  buyPopup: {fileID: 0}
+  cantBuyPopup: {fileID: 0}
+  popupItemName: {fileID: 0}
+  popupItemPrice: {fileID: 0}
+  popupItemDescription: {fileID: 0}
+  popupItemImage: {fileID: 0}
+  cantBuyPopupItemName: {fileID: 0}
+  cantBuyPopupItemPrice: {fileID: 0}
+  cantBuyPopupItemDescription: {fileID: 0}
+  cantBuyPopupItemImage: {fileID: 0}
+  confirmBuyButton: {fileID: 0}
+  cancelBuyButton: {fileID: 0}
+  cantBuyConfirmButton: {fileID: 0}

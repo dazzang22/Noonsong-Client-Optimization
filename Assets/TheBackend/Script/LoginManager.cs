@@ -7,8 +7,8 @@ using TMPro;
 public class LoginManager : MonoBehaviour
 {
     public GameObject LoginView;
-    public InputField inputField_ID;
-    public InputField inputField_PW;
+    public TMP_InputField inputField_ID;
+    public TMP_InputField inputField_PW;
     public TMP_Text resultText;
 
     ButtonManager buttonManager;
