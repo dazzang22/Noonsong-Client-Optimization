@@ -11,6 +11,9 @@ public class GoodsManager : MonoBehaviour
     private const int DEFAULT_INCREMENT = 3;   // 5분마다 추가할 재화 양
     private const float INTERVAL = 300f;       // 5분(300초)
 
+    private Param param = new Param();
+    private int storedBal=0;
+
     //파견시스템
     [Header("Dispatch UI")]
     [SerializeField] private Button[] dispatchBtns;
@@ -52,6 +55,8 @@ public class GoodsManager : MonoBehaviour
         if (currencyManager != null)
         {
             currencyManager = CurrencyManager.Instance;
+            storedBal=UserBalanceManager.Instance.getUserBalance();
+            currencyManager.SetCurrency(storedBal);
         }
         // 5분마다 재화를 추가하는 코루틴 시작
         StartCoroutine(AddCurrencyPeriodically());
@@ -119,7 +124,6 @@ public class GoodsManager : MonoBehaviour
                 Debug.Log($"5분 경과: {DEFAULT_INCREMENT}개의 재화 추가.");
                 
                 //유저 재화 DB에 반영
-                Param param = new Param();
                 param= UserBalanceManager.Instance.addsnow(DEFAULT_INCREMENT);
                 UserBalanceManager.Instance.updateBalance(param);
             }

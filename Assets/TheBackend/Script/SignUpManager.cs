@@ -213,34 +213,36 @@ public class SignUpManager : MonoBehaviour
 
         Debug.Log("회원가입 요청: ID=" + id + ", Email=" + email + ", Nickname=" + nickname);
 
-        var bro = Backend.BMember.CustomSignUp(id, password);
+        BackendLogin.Instance.CustomSignUp(id, password,nickname,email);
         
-        if (bro.IsSuccess())
+        if (BackendLogin.Instance.signup_static==1)
         {
             Debug.Log("회원가입 성공! 자동 로그인 진행...");
 
             // 회원가입 후 자동 로그인 (이메일과 닉네임은 로그인 후 등록)
-            BackendLogin.Instance.CustomLogin(id, password, () =>
-            {
-                BackendLogin.Instance.UpdateNickname(nickname);
-                BackendLogin.Instance.UpdateEmail(email);
-            });
+            // BackendLogin.Instance.CustomLogin(id, password, () =>
+            // {
+            //     BackendLogin.Instance.UpdateNickname(nickname);
+            //     BackendLogin.Instance.UpdateEmail(email);
+            // });
+            BackendLogin.Instance.CustomLogin(id, password);
+
             // UI 변경 (회원가입 완료 창 띄우기)
             privatePolicyPopup.SetActive(false);
-                //signUpPopup.SetActive(false);
-                signUpCompletionPopup.SetActive(true);
+            //signUpPopup.SetActive(false);
+            signUpCompletionPopup.SetActive(true);
             
         }
         else
         {
-            if (bro.GetErrorCode() == "DuplicatedParameterException")
+            if (BackendLogin.Instance.su_error == "DuplicatedParameterException")
             {
                 textIdResult.text = "이미 존재하는 아이디입니다.";
                 textIdResult.color = Color.red;
             }
             else
             {
-                textIdResult.text = "회원가입에 실패했습니다. 다시 시도해주세요." + bro;
+                textIdResult.text = "회원가입에 실패했습니다. 다시 시도해주세요." + BackendLogin.Instance.su_error;
                 textIdResult.color = Color.red;
             }
         }

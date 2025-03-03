@@ -123,6 +123,7 @@ public class UserBalanceManager
             return null;
         }
         userBalance.setBalance(now-snowcount);
+        Debug.Log($"눈의 결정 소비: -{snowcount}");
         Param param= userBalance.ToParam();
         return param;
     }

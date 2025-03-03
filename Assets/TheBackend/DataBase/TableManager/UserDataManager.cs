@@ -28,7 +28,7 @@ public class UserDataManager
     private string gameDataRowInDate=string.Empty;
 
 //회원가입 이후 최초 유저 등록
-    public void InsertUserData(string id,string pw)
+    public void InsertUserData(string id,string pw,string nickname, string email)
 	{
 
         var bro1 = Backend.BMember.GetUserInfo();
@@ -42,7 +42,7 @@ public class UserDataManager
         JsonData userInfoJson = bro1.GetReturnValuetoJSON()["row"];
         Debug.Log(userInfoJson.ToString());
         UserProfileData user= new UserProfileData(userInfoJson);
-        user.setIdPw(id,pw);
+        user.setUserProfile(id,pw,nickname,email);
         Param param=user.ToParam();
 
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");       
@@ -128,9 +128,10 @@ public class UserDataManager
     //비밀번호 수정 -> 변경값을 전달
     public Param ChangePassword(string newPw)
     {
-        //비밀번호 수정 코드 작성
-        //UserProfileData에서 Param 생성 해서 return하기
-        return null;
+        UserProfileData userProfileData=findUser(Backend.UserInDate);
+        userProfileData.setPW(newPw);
+        Param param=userProfileData.ToParam();
+        return param;
     }
 
     //닉네임 변경   -> 변경 값을 전달
@@ -142,6 +143,16 @@ public class UserDataManager
         Debug.Log(param.GetJson().ToString());
         return param;
     }
+    //이메일 변경
+    public Param ChangeEmail(string email)
+    {
+        UserProfileData userProfileData=findUser(Backend.UserInDate);
+        userProfileData.setSMail(email);
+        Param param=userProfileData.ToParam();
+        return param;
+    }
+    //유저 초기화
+
 
     //회원정보 수정 반영 (업데이트) -> 수정 함수로 변경 결과 (Param)를 받아서 테이블 업데이트
     public void UpdateUserData(Param param)

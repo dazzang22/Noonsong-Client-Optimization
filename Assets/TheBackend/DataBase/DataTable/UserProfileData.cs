@@ -17,8 +17,6 @@ public class UserProfileData
     public string password;
     public string nickname=Backend.UserNickName;
     public string sookmyungMail;
-    public string subscriptionType;
-    public List<string> university;
 
     public UserProfileData()
     {
@@ -29,7 +27,6 @@ public class UserProfileData
     {
         Debug.Log(json.ToJson());
         this.owner_inDate=json["inDate"].ToString();
-        this.subscriptionType=json["subscriptionType"].ToString();
         this.updatedAt = DateTime.Parse(json["inDate"].ToString());
         this.sookmyungMail=null;
         this.nickname="none";
@@ -40,16 +37,17 @@ public class UserProfileData
         this.password=json["password"].ToString();
         this.owner_inDate=json["owner_inDate"].ToString();
         this.nickname =json["nickname"].ToString();
-        this.subscriptionType=json["subscriptionType"].ToString();
         this.updatedAt = DateTime.Parse(json["updatedAt"].ToString());
         this.sookmyungMail=json["sookmyungMail"].ToString();;
         
     }
 
-    public void setIdPw(string id,string pw)
+    public void setUserProfile(string id,string pw,string nick, string email)
     {
         this.userId=id;
         this.password=pw;
+        this.nickname=nick;
+        this.sookmyungMail=email;
     }
     public void setNickname(string newnick)
     {
@@ -59,6 +57,11 @@ public class UserProfileData
     {
         this.sookmyungMail= smail;
     }
+    public void setPW(string pw)
+    {
+        this.password=pw;
+    }
+    
 
     public string getuserId()
     {
@@ -73,7 +76,6 @@ public class UserProfileData
         result.AppendLine($"nickname: {nickname}");
         result.AppendLine($"owner_inDate: {owner_inDate}");
         result.AppendLine($"sookmyungMail: {sookmyungMail}");
-        result.AppendLine($"subscriptionType: {subscriptionType}");
 
         return result.ToString();
     }
@@ -86,7 +88,6 @@ public class UserProfileData
         param.Add("nickname", nickname);
         param.Add("password", password);
         param.Add("sookmyungMail", sookmyungMail);
-        param.Add("subscriptionType", subscriptionType);
 
         return param;
     }
@@ -97,7 +98,6 @@ public class UserProfileData
 		nickname				= "Noname";
 		sookmyungMail			= "None";
 		password	            = string.Empty;
-        subscriptionType        ="customsignup";
 	}
 }
 
