@@ -7,6 +7,12 @@ public class ButtonManager : MonoBehaviour
     public GameObject openPanel;
     public GameObject closePanel;
 
+    public void Start()
+    {
+        
+        PlayerPrefs.DeleteKey("TutorialCompleted");
+    }
+
     public void TogglePanels()
     {
         if (openPanel != null)
@@ -25,7 +31,7 @@ public class ButtonManager : MonoBehaviour
         if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 1)
         {
             // 튜토리얼이 완료되었으므로 main Scene으로 바로 이동
-            SceneManager.LoadScene("Main Scene");
+            SceneManager.LoadScene("MainScene(Release)");
         }
         else
         {

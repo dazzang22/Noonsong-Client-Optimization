@@ -6,7 +6,7 @@ using Mapbox.Unity.Map;
 public class TestBluming : MonoBehaviour
 {
     [SerializeField]
-    float spawnRadius = 20f;
+    float spawnRadius = 4f; //반경 4m
 
     [SerializeField]
     GameObject spawnPrefab;
@@ -64,6 +64,7 @@ public class TestBluming : MonoBehaviour
     {
         if (IsPlayerInZone())
         {
+            Debug.Log("Player is in Bluming Spot");
             if (spawnedObject == null)
             {
                 SpawnObject();
@@ -105,7 +106,7 @@ public class TestBluming : MonoBehaviour
             UnlockBluming();
         }
 
-        Debug.Log($"Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
+        Debug.Log($"Turi Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
 
         GameObject instance = Instantiate(spawnedObject, spawnPosition, Quaternion.identity);
         ARAnchor anchor = instance.AddComponent<ARAnchor>();
@@ -117,11 +118,11 @@ public class TestBluming : MonoBehaviour
         if (othersObject != null)
         {
             othersObject.gameObject.SetActive(true);
-            Debug.Log("Others 오브젝트 활성화됨!");
+            Debug.Log("Others activated!");
         }
         else
         {
-            Debug.LogWarning("Others 오브젝트를 찾을 수 없음!");
+            Debug.LogWarning("Others null");
         }
     }
     bool IsPlayerInZone()
