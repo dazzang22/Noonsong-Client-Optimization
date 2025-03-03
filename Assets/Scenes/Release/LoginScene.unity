@@ -1654,6 +1654,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 34}
   m_SizeDelta: {x: 600, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &230215826 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8350291245142641474, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+  m_PrefabInstance: {fileID: 1450544261315277025}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &230215831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230215826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d771fc06f4f945ace426f2829edb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openPanel: {fileID: 8887380833800092352}
+  closePanel: {fileID: 0}
 --- !u!1 &234068832
 GameObject:
   m_ObjectHideFlags: 0
@@ -15048,16 +15067,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1433451736083888248}
+    - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Close
+      value: SetActive
       objectReference: {fileID: 0}
     - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UltimateClean.Popup, Assembly-CSharp
+      value: UnityEngine.GameObject, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -15279,6 +15302,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -61.721924
       objectReference: {fileID: 0}
+    - target: {fileID: 8817388568243360177, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8817388568243360177, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8817388568243360177, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 230215831}
+    - target: {fileID: 8817388568243360177, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8817388568243360177, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TogglePanels
+      objectReference: {fileID: 0}
+    - target: {fileID: 8817388568243360177, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ButtonManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8817388568243360177, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8828925402772268596, guid: 00175ceee16e34286afd25206fc76914, type: 3}
       propertyPath: m_fontSize
       value: 30
@@ -15410,6 +15461,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8857301120583652924, guid: 00175ceee16e34286afd25206fc76914, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1019900803}
+    - targetCorrespondingSourceObject: {fileID: 8350291245142641474, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 230215831}
   m_SourcePrefab: {fileID: 100100000, guid: 00175ceee16e34286afd25206fc76914, type: 3}
 --- !u!114 &1467225490323813720
 MonoBehaviour:
@@ -21398,6 +21452,22 @@ PrefabInstance:
     - target: {fileID: 7657754198536416535, guid: 00175ceee16e34286afd25206fc76914, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -219.70001
+      objectReference: {fileID: 0}
+    - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8887380833800092352}
+    - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8132972683106325198, guid: 00175ceee16e34286afd25206fc76914, type: 3}
       propertyPath: m_Name
