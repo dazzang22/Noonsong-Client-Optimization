@@ -163,18 +163,18 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         var ThirdDialog = new List<DialogData>();
 
         // part5 꽃송이 등장
-        ThirdDialog.Add(new DialogData("/color:black/안녕, 친구들? /click//emote:Excite/처음 보는 친구도 있구나! 새송이인가 보네?", "KkotSong", () => { kkotsong.SetActive(true); 
-        //StartCoroutine(MoveObject(kkotsong, arCamera.TransformPoint(new Vector3(0f, -0.3f, 2f)), arCamera.TransformPoint(new Vector3(0f, -0.3f, 2f)))); 
+        ThirdDialog.Add(new DialogData("/color:black/안녕, 친구들? /click//emote:Excite/처음 보는 친구도 있구나! 새송이인가 보네?", "KkotSong", () => { kkotsong.SetActive(true);
+            //StartCoroutine(MoveObject(kkotsong, arCamera.TransformPoint(new Vector3(0f, -0.3f, 2f)), arCamera.TransformPoint(new Vector3(0f, -0.3f, 2f)))); 
         })); // 화면 가운데서 춤 연습중 꽃송이 시작
         ThirdDialog.Add(new DialogData("/color:black//emote:Hello/이 친구는 꽃송이야! 눈송이의 베프인 꽃송이라면 눈송이가 어디 있는지 알 지도 몰라!", "RoRo", () => ChangeAnimation(kkotsongAnimator, "standing")));
         ThirdDialog.Add(new DialogData("/color:black/눈송이? 너희 눈송이를 찾고 있니?", "KkotSong"));
         ThirdDialog.Add(new DialogData("/color:black/맞아요. 새송이가 눈송이와 친구가 되고 싶대요.", "RoRo"));
         ThirdDialog.Add(new DialogData("/color:black//emote:Happy/그렇다면 정확히 찾아 왔어. 마침 방금 전까지 눈송이랑 함께 있던 참이었거든.", "KkotSong", () => ChangeAnimation(kkotsongAnimator, "standing")));
         ThirdDialog.Add(new DialogData("/color:black/아마 눈송이는 /color:blue/프라임관/color:black/에 있을 거야!", "KkotSong"));
-        ThirdDialog.Add(new DialogData("/color:black/참, 눈송이한테는 이걸 주면 좋아할 거야. 가서 말을 건 뒤 선물을 줘 봐!", "KkotSong", () => {kkotsong.SetActive(false); dialogTriggered[2] = true; uiController.onClickInventoryButton();}));
+        ThirdDialog.Add(new DialogData("/color:black/참, 눈송이한테는 이걸 주면 좋아할 거야. 가서 말을 건 뒤 선물을 줘 봐!", "KkotSong", () => { kkotsong.SetActive(false); dialogTriggered[2] = true; uiController.onClickInventoryButton(); }));
         //엠블럼 뱃지 획득
-        ThirdDialog.Add(new DialogData("/color:black/엠블럼 뱃지를 획득했다! 인벤토리를 확인해봐", "Narrator"));
-        
+        ThirdDialog.Add(new DialogData("/color:black/엠블럼 뱃지를 획득했다! 인벤토리를 확인해봐", "Narrator", () => { StartCoroutine(GetEmblemBadge()); }));
+
         DialogManager.Show(ThirdDialog);
     }
 
@@ -477,6 +477,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         while (inventoryManager == null) // InventoryManager가 씬에서 발견될 때까지 대기
         {
             yield return null; // 한 프레임 대기
+            Debug.Log("인벤토리 매니저 찾는 중");
             inventoryManager = FindObjectOfType<InventoryManager>();
         }
 

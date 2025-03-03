@@ -3680,7 +3680,7 @@ GameObject:
   - component: {fileID: 449940340}
   - component: {fileID: 449940339}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: NOT_USING_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6184,14 +6184,14 @@ RectTransform:
   m_GameObject: {fileID: 867995842}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 4192568769846941352}
+  m_Father: {fileID: 1392888015}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -96, y: -1441}
+  m_AnchoredPosition: {x: -96, y: -658}
   m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &867995844
@@ -15024,6 +15024,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UltimateClean.Popup, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7945743274569569479, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8132972683106325198, guid: 00175ceee16e34286afd25206fc76914, type: 3}
       propertyPath: m_Name
       value: Input Field - ID
@@ -15292,6 +15312,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8857301120583652921, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8857301120583652924, guid: 00175ceee16e34286afd25206fc76914, type: 3}
       propertyPath: m_Name
       value: Button - LOGIN
@@ -15341,6 +15365,9 @@ PrefabInstance:
     - {fileID: 4825851963295711000, guid: 00175ceee16e34286afd25206fc76914, type: 3}
     - {fileID: 7498163870993624844, guid: 00175ceee16e34286afd25206fc76914, type: 3}
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8350291245737011458, guid: 00175ceee16e34286afd25206fc76914, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 867995843}
     - targetCorrespondingSourceObject: {fileID: 7962172350411875690, guid: 00175ceee16e34286afd25206fc76914, type: 3}
       insertIndex: 2
       addedObject: {fileID: 7206704889942594957}
@@ -17726,7 +17753,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1392888015}
-  - {fileID: 867995843}
   m_Father: {fileID: 8256654523335002196}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -22593,10 +22619,10 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1656648331}
-  - {fileID: 449940338}
   - {fileID: 1557943135}
   - {fileID: 6455476359381777855}
   - {fileID: 254757963}
   - {fileID: 237437368}
   - {fileID: 2140990731}
   - {fileID: 8256654523335002196}
+  - {fileID: 449940338}

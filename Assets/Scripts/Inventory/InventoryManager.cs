@@ -98,6 +98,11 @@ public class InventoryManager : MonoBehaviour
         {
             itemEntries[1].itemCount = 1; 
             UpdateInventory(); // 인벤토리 UI 갱신
+            Debug.Log("엠블렘 배지 획득!");
+        }
+        else
+        {
+            Debug.LogWarning("아이템 리스트가 비어있거나, 최소 두 개 이상의 아이템이 필요합니다.");
         }
     }
 }
