@@ -32,6 +32,9 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     public GameObject kkotsong;  // part5 꽃송이 등장
     public GameObject noonsong;  // part6 눈송이 등장
     public GameObject turi;      // part7 튜리 등장
+    public GameObject map;
+    public GameObject profile;
+    public GameObject goods;
 
 
     [Header("AudioClip")]
@@ -43,6 +46,9 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     public AudioClip kkotsongSound;
     public AudioClip noonsongSound;
     public AudioClip turiSound;
+    public AudioClip getMapSound;
+    public AudioClip getGoodsSound;
+    public AudioClip getProfileSound;
 
     [Header("")]
     public GameObject Count;
@@ -83,7 +89,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         // part1 눈덩이 등장
         FirstDialog.Add(new DialogData("/color:black/숙명여대에 갓 입학한 새송이는 학교 탐방을 오게 되었다!", "Narrator"));
         FirstDialog.Add(new DialogData("/color:black/그런데 어쩌지? 학교가 너무 복잡해!","Narrator"));
-        FirstDialog.Add(new DialogData("/color:black/[학교가 너무 처음이라 막막하네...]", "User", () => { noonDung.SetActive(true); StartCoroutine(ShowMainTuto());
+        FirstDialog.Add(new DialogData("/color:black/[학교가 너무 처음이라 막막하네...]", "User", () => { noonDung.SetActive(true); StartCoroutine(ShowMainTuto()); PlaySound(noonDung);
         //StartCoroutine(MoveObject(noonDung, arCamera.TransformPoint(new Vector3(-1.5f, 1.5f, 5f)), arCamera.TransformPoint(new Vector3(0f, 0f, 1.5f)))); 
         })); // 좌측 위 등장 눈덩이 시작)))));
         FirstDialog.Add(new DialogData("/color:black//wait:0.5/안녕, 친구야! 혹시 무슨 고민 있어?", "NoonDung"));
@@ -93,19 +99,19 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FirstDialog.Add(new DialogData("/color:black/같이 학교를 돌아다니면서 /color:blue/눈송이/color:black/가 어디에 있는지 찾아보자!/wait:1//close/", "NoonDung", () => noonDung.SetActive(false)));
         // part2 눈꽃송이 등장
         FirstDialog.Add(new DialogData("/color:black//wait:1/[저기 하늘에 떠 다니는 건 뭐지?]", "User"));
-        FirstDialog.Add(new DialogData("/color:black/어디? 어디?", "NoonDung", () => { snowflake.SetActive(true); 
+        FirstDialog.Add(new DialogData("/color:black/어디? 어디?", "NoonDung", () => { snowflake.SetActive(true); PlaySound(snowflake);
         //StartCoroutine(MoveObject(snowflake, arCamera.TransformPoint(new Vector3(0.35f, 2f, -1f)), arCamera.TransformPoint(new Vector3(0.35f, 0f, -1f)))); 
         })); // 하늘에서 내려옴 눈꽃송이 시작
         FirstDialog.Add(new DialogData("/color:black//wait:1/우리는! /wait:0.5/학교를 지키는 어벤져스, /click/눈꽃송이들이야!", "Snowflake"));
         FirstDialog.Add(new DialogData("/color:black/마침 잘 만났다! 얘들아, 이 새송이가 눈송이와 친구가 되고 싶대!", "NoonDung"));
         FirstDialog.Add(new DialogData("/color:black/그런거라면... 눈송이에게 줄 선물을 구할 수 있는 이 눈의 결정이 있다면 분명 유용할 거야.", "Snowflake")); //
-        FirstDialog.Add(new DialogData("/color:black/마침 우리한테 꿍쳐놓은 눈의 결정이 있으니까, 너한테 줄게!", "Snowflake", () => { ChangeAnimation(snowflakeAnimator1, "standing"); StartCoroutine(ShowPanelFirst());}));
+        FirstDialog.Add(new DialogData("/color:black/마침 우리한테 꿍쳐놓은 눈의 결정이 있으니까, 너한테 줄게!", "Snowflake", () => { ChangeAnimation(snowflakeAnimator1, "standing"); PlaySound(goods); StartCoroutine(ShowPanelFirst());}));
         FirstDialog.Add(new DialogData("/color:black//wait:0.5/눈의 결정 15개를 획득했다!", "Narrator"));
         FirstDialog.Add(new DialogData("/color:black/어려운 친구를 돕는 것도 우리 일이니까. 우리가 새송이를 도와주는 건 어떨까? /click/(뭉치면 산다!)", "Snowflake", () => ChangeAnimation(snowflakeAnimator1, "standing")));
         FirstDialog.Add(new DialogData("/color:black/그래, 눈의 결정이라면 우리가 전문이니까, 함께 다니면서 눈의 결정 찾는걸 도와줄게! /click/(맡겨 줘!)", "Snowflake"));
         FirstDialog.Add(new DialogData("/color:black/[고마워, 눈꽃송이들!]/wait:1//close/", "User", () => snowflake.SetActive(false)));
         // part3 로로 등장
-        FirstDialog.Add(new DialogData("/color:black//wait:1/앗! 찾았다", "RoRo", () => { roro.SetActive(true); 
+        FirstDialog.Add(new DialogData("/color:black//wait:1/앗! 찾았다", "RoRo", () => { roro.SetActive(true); PlaySound(roro);
         //StartCoroutine(MoveObject(roro, arCamera.TransformPoint(new Vector3(0f, 1f, 5f)), arCamera.TransformPoint(new Vector3(0f, -0.2f, 1f)))); 
         })); // 멀리서 달려오듯이 등장 로로 시작
         FirstDialog.Add(new DialogData("/color:black/[앗!]", "User", () => ChangeAnimation(roroAnimator, "standing")));
@@ -129,13 +135,13 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         var SecondDialog = new List<DialogData>();
 
         // part4 눈결이 등장
-        SecondDialog.Add(new DialogData("/color:black//emote:Hello/저기,, 안녕하세요! 처음 보는 분이네요..!", "NoonGyeol", () => { noonkyeol.SetActive(true); 
+        SecondDialog.Add(new DialogData("/color:black//emote:Hello/저기,, 안녕하세요! 처음 보는 분이네요..!", "NoonGyeol", () => { noonkyeol.SetActive(true); PlaySound(noonkyeol);
         //StartCoroutine(MoveObject(noonkyeol, arCamera.TransformPoint(new Vector3(2f, -0.5f, 5f)), arCamera.TransformPoint(new Vector3(0f, -0.5f, 3f)))); 
         })); // 오른쪽에서 천천히 등장 눈결이 시작));
         SecondDialog.Add(new DialogData("/color:black/눈결이 안녕! 혹시 근처에서 눈송이 못봤어?", "NoonDung", () => ChangeAnimation(noonkyeolAnimator, "standing")));
         SecondDialog.Add(new DialogData("/color:black/눈송이 말인가요? 음... 못 봤어요. 무슨 일이신데요?", "NoonGyeol"));
         SecondDialog.Add(new DialogData("/color:black/[(눈결이에게 사정을 설명한다)]", "User"));
-        SecondDialog.Add(new DialogData("/color:black//emote:Look/앗, 그렇다면 이 지도가 도움이 될 거예요!", "NoonGyeol", () => { ChangeAnimation(noonkyeolAnimator, "standing"); StartCoroutine(ShowPanelSecond());}));
+        SecondDialog.Add(new DialogData("/color:black//emote:Look/앗, 그렇다면 이 지도가 도움이 될 거예요!", "NoonGyeol", () => { ChangeAnimation(noonkyeolAnimator, "standing"); PlaySound(map); StartCoroutine(ShowPanelSecond());}));
         //지도 기능 해금
         SecondDialog.Add(new DialogData("/color:black//emote:Look/지도는 화면 하단의 버튼을 누르면 볼 수 있어요! 한번 보시겠어요?", "NoonGyeol", () => StartCoroutine(WaitForMapToOpen())));
         //유저가 지도를 누르면, 잠시 대기 후 눈결이 대사 스크립트가 지도 위에 뜬다.//
@@ -163,7 +169,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         var ThirdDialog = new List<DialogData>();
 
         // part5 꽃송이 등장
-        ThirdDialog.Add(new DialogData("/color:black/안녕, 친구들? /click//emote:Excite/처음 보는 친구도 있구나! 새송이인가 보네?", "KkotSong", () => { kkotsong.SetActive(true);
+        ThirdDialog.Add(new DialogData("/color:black/안녕, 친구들? /click//emote:Excite/처음 보는 친구도 있구나! 새송이인가 보네?", "KkotSong", () => { kkotsong.SetActive(true); PlaySound(kkotsong);
             //StartCoroutine(MoveObject(kkotsong, arCamera.TransformPoint(new Vector3(0f, -0.3f, 2f)), arCamera.TransformPoint(new Vector3(0f, -0.3f, 2f)))); 
         })); // 화면 가운데서 춤 연습중 꽃송이 시작
         ThirdDialog.Add(new DialogData("/color:black//emote:Hello/이 친구는 꽃송이야! 눈송이의 베프인 꽃송이라면 눈송이가 어디 있는지 알 지도 몰라!", "RoRo", () => ChangeAnimation(kkotsongAnimator, "standing")));
@@ -191,7 +197,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         //part 6,7
 
         // 눈송이 등장
-        FourthDialog.Add(new DialogData("/color:black//emote:Happy/찾았다, 눈송이!", "KkotSong", () => { noonsong.SetActive(true); 
+        FourthDialog.Add(new DialogData("/color:black//emote:Happy/찾았다, 눈송이!", "KkotSong", () => { noonsong.SetActive(true); PlaySound(noonsong);
         //StartCoroutine(MoveObject(noonsong, arCamera.TransformPoint(new Vector3(-1.5f, -0.3f, 5f)), arCamera.TransformPoint(new Vector3(0f, -0.3f, 2f)))); 
         })); // 화면 좌측에서 등장 눈송이 시작
         FourthDialog.Add(new DialogData("/color:black//emote:Happy/어서 가서 인사해봐!", "RoRo", () => StartCoroutine(GreetNooonsong())));
@@ -205,7 +211,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FourthDialog.Add(new DialogData("/color:black/이렇게 찾아와 줘서 고마워, 그럼 우리 오늘부터 친구 하자!", "NoonSong"));
         FourthDialog.Add(new DialogData("/color:black/[(눈송이와 친구가 되자.)]/wait:2.0/", "User", () =>  noonsong.SetActive(false)));
         //시스템 상으로 눈송이와 친구가 되고 눈송이가 도감에 추가됨
-        FourthDialog.Add(new DialogData("/color:black/아래 도감 보여? 도감 버튼을 누르면 여태까지 만나고 친구가 된 눈송이들을 볼 수 있어.", "NoonDung", () => { noonDung.SetActive(true); StartCoroutine(ActivateBookCanvas());}));
+        FourthDialog.Add(new DialogData("/color:black/아래 도감 보여? 도감 버튼을 누르면 여태까지 만나고 친구가 된 눈송이들을 볼 수 있어.", "NoonDung", () => { noonDung.SetActive(true); PlaySound(noonDung); StartCoroutine(ActivateBookCanvas());}));
         FourthDialog.Add(new DialogData("/color:black//wait:0.5/물론 우리 눈송 프렌즈들의 정보도 있지!", "NoonDung", () => { StartCoroutine(DiscoverAllEntries()); }));
         //유저 도감 버튼을 누르면 도감으로 이동, 잠시 대기 후에 눈덩이 대화창이 도감 위에 나타남
         FourthDialog.Add(new DialogData("/color:black/아이콘을 누르면 친구의 정보를 볼 수 있어~ 눈송이를 눌러 보자!", "NoonDung", () => StartCoroutine(clickNoonsong())));
@@ -219,7 +225,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
 
         // 튜리 등장
-        FourthDialog.Add(new DialogData("/color:black/앗-! 다들 나만 빼고 여기 모여 있었구나!", "Turi", () => { turi.SetActive(true); 
+        FourthDialog.Add(new DialogData("/color:black/앗-! 다들 나만 빼고 여기 모여 있었구나!", "Turi", () => { turi.SetActive(true); PlaySound(turi);
         //StartCoroutine(MoveObject(turi, arCamera.TransformPoint(new Vector3(0f, -2f, 3f)), arCamera.TransformPoint(new Vector3(0f, 0f, 3f)))); 
         })); // 아래에서 등장 튜리 시작
         FourthDialog.Add(new DialogData("/color:black/어라? 못 보던 얼굴도 있네?", "Turi"));
@@ -231,9 +237,10 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FourthDialog.Add(new DialogData("/color:black/흐흥, 미래 산업시대의 선구자가 될 이 튜리님에게 너 같은 친구들을 위한 발명품이 있지!", "Turi"));
         FourthDialog.Add(new DialogData("/color:black/바로바로… 특별한 눈송이들의 마음도 사로잡을 수 있는 선물 아이템들이야!", "Turi", () => ChangeAnimation(turiAnimator, "standing")));
         FourthDialog.Add(new DialogData("/color:black/어때? 가지고 싶지? 그 대신, 선물 아이템들을 만드는 데에는 눈의 결정이 많이 필요해.", "Turi"));
-        FourthDialog.Add(new DialogData("/color:blue/제2캠퍼스 원형 광장/color:black/에 있는 내 연구실에 오면 다양한 선물 아이템들로 바꿔줄게! 잊지 말고 놀러 와~!", "Turi", () => { turi.SetActive(false); StartCoroutine(showPanelFifth());}));
-        FourthDialog.Add(new DialogData("/color:black/튜토리얼을 성공적으로 마친 당신에게 이것을 드립니다!", "Narrator", () => StartCoroutine(ShowPanelSeventh())));
+        FourthDialog.Add(new DialogData("/color:blue/제2캠퍼스 원형 광장/color:black/에 있는 내 연구실에 오면 다양한 선물 아이템들로 바꿔줄게! 잊지 말고 놀러 와~!", "Turi", () => { turi.SetActive(false); }));
+        FourthDialog.Add(new DialogData("/color:black/튜토리얼을 성공적으로 마친 당신에게 이것을 드립니다!", "Narrator", () => { PlaySound(profile); StartCoroutine(ShowPanelSeventh());}));
         FourthDialog.Add(new DialogData("/color:black//wait:0.5/다양한 눈송이들과 친구가 되어 도감을 전부 채우는 것을 목표로 힘내요!!", "Narrator", () => { CompleteTutorial();}));
+       
         DialogManager.Show(FourthDialog);
     }
 
@@ -260,7 +267,11 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
             { noonkyeol, noonkyeolSound },
             { kkotsong, kkotsongSound },
             { noonsong, noonsongSound },
-            { turi, turiSound }
+            { turi, turiSound },
+            { map, getMapSound },
+            { goods, getGoodsSound },
+            { profile, getProfileSound }
+
         };
 
         FirstDialog();
@@ -286,29 +297,43 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     }
 
     // 3D 오브젝트가 카메라 좌표계를 사용해서 움직일 수 있게하는 함수 (오브젝트, 시작 위치, 도착 위치)
-    private IEnumerator MoveObject(GameObject obj, Vector3 startPos, Vector3 endPos)
-    {
-        // 초기 위치 설정
-        obj.transform.position = startPos;
+    // private IEnumerator MoveObject(GameObject obj, Vector3 startPos, Vector3 endPos)
+    // {
+    //     // 초기 위치 설정
+    //     obj.transform.position = startPos;
 
-        // 오브젝트에 할당된 사운드가 있는지 확인하고 재생
+    //     // 오브젝트에 할당된 사운드가 있는지 확인하고 재생
+    //     if (objectSoundMap.TryGetValue(obj, out AudioClip assignedSound))
+    //     {
+    //         AudioSource.PlayClipAtPoint(assignedSound, obj.transform.position);
+    //     }
+
+    //     // 이동 애니메이션 실행
+    //     float elapsedTime = 0f;
+    //     while (elapsedTime < moveDuration)
+    //     {
+    //         elapsedTime += Time.deltaTime;
+    //         float t = Mathf.Clamp01(elapsedTime / moveDuration);
+    //         obj.transform.position = Vector3.Lerp(startPos, endPos, t);
+    //         yield return null;
+    //     }
+
+    //     // 정확한 최종 위치로 설정
+    //     obj.transform.position = endPos;
+    // }
+
+    private void PlaySound(GameObject obj)
+    {
         if (objectSoundMap.TryGetValue(obj, out AudioClip assignedSound))
         {
-            AudioSource.PlayClipAtPoint(assignedSound, obj.transform.position);
+            AudioSource audioSource = obj.GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = obj.AddComponent<AudioSource>();
+            }
+            audioSource.clip = assignedSound;
+            audioSource.Play();
         }
-
-        // 이동 애니메이션 실행
-        float elapsedTime = 0f;
-        while (elapsedTime < moveDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / moveDuration);
-            obj.transform.position = Vector3.Lerp(startPos, endPos, t);
-            yield return null;
-        }
-
-        // 정확한 최종 위치로 설정
-        obj.transform.position = endPos;
     }
 
     private IEnumerator ShowMainTuto()
@@ -561,19 +586,6 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         yield return new WaitForSecondsRealtime(2f);
         Time.timeScale = 1f; // 시간 재개
 
-    }
-
-    private IEnumerator showPanelFifth()
-    {
-        Time.timeScale = 0f; // 시간 정지
-        uiController.PopUpTuryPanel();
-
-        while ((!uiController.IsButtonClicked())) // 마우스 클릭을 기다림
-        {
-            yield return null; // 한 프레임을 대기
-        }
-        uiController.onClickTuryButton();
-        Time.timeScale = 1f; // 시간 재개
     }
 
     private IEnumerator ShowPanelSeventh()
