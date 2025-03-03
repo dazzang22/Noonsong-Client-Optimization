@@ -24,8 +24,16 @@ public class MapManager : MonoBehaviour
     private List<string> buildingNames = new List<string> { "Sunheon Bldg", "Myungshin Bldg", "Suryeon Bldg", "Renaissance Plaza Bldg", "College of Science Bldg", "College of Music Bldg", "College of Fine Arts Bldg", "Center for Continuing Education  Bldg", "College of Pharmacy Bldg" };
 
     public TestBluming testBluming;
+
+    [Header("Audio")]
+    public AudioClip unlock;
+    public AudioClip bluming;
+    private AudioSource audioSource;
+
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         if (playerObjectSpawn == null)
         {
             playerObjectSpawn = FindObjectOfType<PlayerObjectSpawn>();
@@ -144,6 +152,7 @@ public class MapManager : MonoBehaviour
     {
         if (!regionUnlocked[regionIndex])
         {
+            audioSource.PlayOneShot(unlock);
             regionUnlocked[regionIndex] = true;
             regions[regionIndex].SetActive(false);
             //지역 해금 활성화 db 반영
@@ -196,6 +205,7 @@ public class MapManager : MonoBehaviour
     {
         if (isBlumingActivated) return;
 
+        audioSource.PlayOneShot(bluming);
         isBlumingActivated = true;
         mapUI.SetActive(true);
         popupUI.SetActive(true);
