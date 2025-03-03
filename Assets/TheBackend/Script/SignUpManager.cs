@@ -35,6 +35,10 @@ public class SignUpManager : MonoBehaviour
     private bool isEmailValid = false;
     private bool isNicknameValid = false;
 
+    public AudioSource audioSource;  // 오디오 소스
+    public AudioClip successSound;
+
+
     void Start()
     {
         SetupSignUpPage();
@@ -226,6 +230,7 @@ public class SignUpManager : MonoBehaviour
             //     BackendLogin.Instance.UpdateEmail(email);
             // });
             BackendLogin.Instance.CustomLogin(id, password);
+            audioSource.PlayOneShot(successSound);
 
             // UI 변경 (회원가입 완료 창 띄우기)
             privatePolicyPopup.SetActive(false);
