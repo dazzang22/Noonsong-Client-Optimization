@@ -237,7 +237,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FourthDialog.Add(new DialogData("/color:black/흐흥, 미래 산업시대의 선구자가 될 이 튜리님에게 너 같은 친구들을 위한 발명품이 있지!", "Turi"));
         FourthDialog.Add(new DialogData("/color:black/바로바로… 특별한 눈송이들의 마음도 사로잡을 수 있는 선물 아이템들이야!", "Turi", () => ChangeAnimation(turiAnimator, "standing")));
         FourthDialog.Add(new DialogData("/color:black/어때? 가지고 싶지? 그 대신, 선물 아이템들을 만드는 데에는 눈의 결정이 많이 필요해.", "Turi"));
-        FourthDialog.Add(new DialogData("/color:blue/제2캠퍼스 원형 광장/color:black/에 있는 내 연구실에 오면 다양한 선물 아이템들로 바꿔줄게! 잊지 말고 놀러 와~!", "Turi", () => { turi.SetActive(false); }));
+        FourthDialog.Add(new DialogData("/color:blue/제2캠퍼스 눈꽃 광장/color:black/에 있는 내 연구실에 오면 다양한 선물 아이템들로 바꿔줄게! 잊지 말고 놀러 와~!", "Turi", () => { turi.SetActive(false); }));
         FourthDialog.Add(new DialogData("/color:black/튜토리얼을 성공적으로 마친 당신에게 이것을 드립니다!", "Narrator", () => { PlaySound(profile); StartCoroutine(ShowPanelSeventh());}));
         FourthDialog.Add(new DialogData("/color:black//wait:0.5/다양한 눈송이들과 친구가 되어 도감을 전부 채우는 것을 목표로 힘내요!!", "Narrator", () => { CompleteTutorial();}));
        
