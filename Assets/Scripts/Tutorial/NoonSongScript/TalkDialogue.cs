@@ -52,6 +52,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
     [Header("")]
     public GameObject Count;
+    public Text printerText;
     // public GameObject mainCanvas;
     // public GameObject mainPanel;
     public Canvas mapCanvas;
@@ -143,11 +144,11 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         SecondDialog.Add(new DialogData("/color:black/[(눈결이에게 사정을 설명한다)]", "User"));
         SecondDialog.Add(new DialogData("/color:black//emote:Look/앗, 그렇다면 이 지도가 도움이 될 거예요!", "NoonGyeol", () => { ChangeAnimation(noonkyeolAnimator, "standing"); PlaySound(map); StartCoroutine(ShowPanelSecond());}));
         //지도 기능 해금
-        SecondDialog.Add(new DialogData("/color:black//emote:Look/지도는 화면 하단의 버튼을 누르면 볼 수 있어요! 한번 보시겠어요?", "NoonGyeol", () => StartCoroutine(WaitForMapToOpen())));
+        SecondDialog.Add(new DialogData("/color:black//emote:Look/지도는 화면 하단의 버튼을 누르면 볼 수 있어요! 한번 보시겠어요?", "NoonGyeol", () =>{ StartCoroutine(WaitForMapToOpen()); }));
         //유저가 지도를 누르면, 잠시 대기 후 눈결이 대사 스크립트가 지도 위에 뜬다.//
         SecondDialog.Add(new DialogData("/color:black//wait:0.5/지금은 지도가 전부 잠겨 있죠?", "NoonGyeol"));
         SecondDialog.Add(new DialogData("/color:black/교내를 돌아다니면서 많은 눈송이들과 친구가 되면 지도를 해금할 수 있을 거예요!", "NoonGyeol"));
-        SecondDialog.Add(new DialogData("/color:black/지도 버튼을 다시 누르면 지도가 사라져요.", "NoonGyeol"));
+        SecondDialog.Add(new DialogData("/color:black/위쪽의 <을 누르면 지도가 사라져요.", "NoonGyeol"));
         //유저가 지도를 다시 누르면, 지도가 사라진다.
         
         SecondDialog.Add(new DialogData("/color:black//emote:Study/그 외에도 저는 이것저것 많은 것을 알고 있으니까, 제 지식이 도움이 될 수 있을 것 같아요.", "NoonGyeol"));
@@ -220,12 +221,9 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FourthDialog.Add(new DialogData("/color:black/참, 화면 위쪽의 카메라 모양을 누르면 원하는 친구와 사진을 찍을 수도 있어!", "NoonDung"));
         FourthDialog.Add(new DialogData("/color:black/위쪽의 X를 누르면 원래 화면으로 돌아갈 수 있어!", "NoonDung", () => { noonDung.SetActive(false); StartCoroutine(clickXButton());}));
         //유저가 도감 종료 입력을 하면 원래 화면으로 돌아감.
-        
-
-
 
         // 튜리 등장
-        FourthDialog.Add(new DialogData("/color:black/앗-! 다들 나만 빼고 여기 모여 있었구나!", "Turi", () => { turi.SetActive(true); PlaySound(turi);
+        FourthDialog.Add(new DialogData("/color:black/앗! 다들 나만 빼고 여기 모여 있었구나!", "Turi", () => { turi.SetActive(true); PlaySound(turi);
         //StartCoroutine(MoveObject(turi, arCamera.TransformPoint(new Vector3(0f, -2f, 3f)), arCamera.TransformPoint(new Vector3(0f, 0f, 3f)))); 
         })); // 아래에서 등장 튜리 시작
         FourthDialog.Add(new DialogData("/color:black/어라? 못 보던 얼굴도 있네?", "Turi"));
@@ -401,9 +399,12 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while (!mapCanvas.gameObject.activeSelf)
         {
+            printerText.text = "지도를 클릭해보세요!";
             yield return null; // mapCanvas가 활성화될 때까지 대기
+
         }
         yield return new WaitForSecondsRealtime(2f);
+        printerText.text = "";
 
         mapCanvas.sortingOrder = 0;
         Time.timeScale = 1f; // 시간 재개
@@ -417,8 +418,10 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while(!uiController.IsButtonClicked())//인사버튼 클릭 대기
         {
-             yield return null; // 한 프레임을 대기
+            printerText.text = "중간의 대화하기 버튼을 누르고 인사하기 버튼을 눌러보세요";
+            yield return null; // 한 프레임을 대기
         }
+        printerText.text = "";
 
         Time.timeScale = 1f; // 시간 재개
     }
@@ -430,8 +433,10 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while(!giftCanvas.gameObject.activeSelf)//선물캔버스가 활성화될때까지 대기
         {
-             yield return null; // 한 프레임을 대기
+            printerText.text = "선물하기 버튼을 눌러보세요!";
+            yield return null; // 한 프레임을 대기
         }
+        printerText.text = "";
 
 
         bool isPopupOpened = false;
@@ -526,8 +531,10 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while(!bookCanvas.gameObject.activeSelf)
         {
+            printerText.text = "도감을 눌러보세요!";
             yield return null; // 한 프레임을 대
         }
+        printerText.text = "";
         StartCoroutine(ShowPanelThird());
         Time.timeScale = 1f; // 시간 재개
     }
@@ -583,7 +590,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         {
             yield return null; // 한 프레임을 대기
         }
-        yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(1.5f);
         Time.timeScale = 1f; // 시간 재개
 
     }
