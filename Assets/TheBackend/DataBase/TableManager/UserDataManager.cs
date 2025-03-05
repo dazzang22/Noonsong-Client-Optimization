@@ -24,7 +24,6 @@ public class UserDataManager
             return _instance;
         }
     }
-    public static UserProfileData userdata;
     private string gameDataRowInDate=string.Empty;
 
 //회원가입 이후 최초 유저 등록
@@ -124,6 +123,14 @@ public class UserDataManager
         string userid= userProfileData.getuserId();
         return userid;
     }
+    //튜토리얼 세이브 포인트 저장
+    public Param ChangeSave(int point)
+    {
+        UserProfileData userProfileData=findUser(Backend.UserInDate);
+        userProfileData.setSave(point);
+        Param param=userProfileData.ToParam();
+        return param;
+    }
 
     //비밀번호 수정 -> 변경값을 전달
     public Param ChangePassword(string newPw)
@@ -151,7 +158,9 @@ public class UserDataManager
         Param param=userProfileData.ToParam();
         return param;
     }
+
     //유저 초기화
+
 
 
     //회원정보 수정 반영 (업데이트) -> 수정 함수로 변경 결과 (Param)를 받아서 테이블 업데이트

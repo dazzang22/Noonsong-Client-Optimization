@@ -8,25 +8,44 @@ using BackEnd;
 
 public class BackendSavePoint : MonoBehaviour
 {
+    private static BackendSavePoint _instance = null;
+
+    public static BackendSavePoint Instance
+    {
+        get
+        {
+            if(_instance == null)
+            {
+                _instance = new BackendSavePoint();
+            }
+
+            return _instance;
+        }
+    }
     private int currentStep=0;
+    //private GPSManager gpsManager;
+
     void Start()
     {
-        LoadGameData();
-        
+        //currentStep=gpsManager.currentIndex;
        
     }
 
     public void LoadGameData()
     {
-        currentStep = PlayerPrefs.GetInt("TutorialStep", 0);
+        Debug.Log("세이브포인트 로드");
+        PlayerPrefs.GetInt("TutorialStep", currentStep);
         Debug.Log($"저장된 튜토리얼 단계: {currentStep}"); 
     }
 
 
-    public void SaveGameData()
+    public void SaveGameData(int point)
     {
-        //currentStep = PlayerPrefs.SetInt("TutorialStep", 0);
+        Debug.Log("세이브포인트 저장");
+        PlayerPrefs.SetInt("TutorialStep", point);
         PlayerPrefs.Save();
+        UserDataManager.Instance.ChangeSave(point);
+        Debug.Log($"세이브포인트 저장: {point}");
 
     }
 

@@ -12,6 +12,8 @@ public class GoodsManager : MonoBehaviour
     private const float INTERVAL = 300f;       // 5분(300초)
 
     private Param param = new Param();
+    private Param param1 = new Param();
+
     private int storedBal=0;
 
     //파견시스템
@@ -217,7 +219,6 @@ public class GoodsManager : MonoBehaviour
         Debug.Log($"파견 완료: {randomReward}개의 재화 지급.");
         
         //유저 재화 DB 반영
-        Param param1 = new Param();
         param1= UserBalanceManager.Instance.addsnow(randomReward);
         UserBalanceManager.Instance.updateBalance(param1);
 

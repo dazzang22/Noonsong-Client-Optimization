@@ -34,11 +34,14 @@ public class BackendLogin
         Debug.Log("회원가입을 요청합니다.");
 
         var bro = Backend.BMember.CustomSignUp(id,pw);
+        Debug.Log("유저 테이블 로드.");
         UserDataManager.Instance.InsertUserData(id,pw,nick,email);
-        //지도  
+        //지도
+        Debug.Log("지도 테이블 로드.");  
         UserMapManager.Instance.insertUserMap(id);
         //재화
-        UserBalanceManager.Instance.InsertUserBalance(id,0);
+        Debug.Log("재화 테이블 로드.");
+        UserBalanceManager.Instance.InsertUserBalance(id,15);
 
         if (bro.IsSuccess())
         {

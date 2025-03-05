@@ -84,7 +84,10 @@ public class GPSManager : MonoBehaviour
                     {
                         isVisited[currentIndex] = true; // 방문 여부를 true로 설정
                         TriggerDialog(nextIndex); // 해당 위치의 다이얼로그 호출
+                        BackendSavePoint.Instance.SaveGameData(currentIndex);
                         currentIndex++; // 다음 위치로 인덱스 증가
+                        Debug.Log($"currentIndex:{currentIndex}");
+
                     }
                 }
             }
@@ -118,6 +121,8 @@ public class GPSManager : MonoBehaviour
     // 인덱스에 따라 해당 다이얼로그를 트리거하는 메서드
     private void TriggerDialog(int index)
     {
+        BackendSavePoint.Instance.SaveGameData(index);
+
         switch (index)
         {
             case 0:
@@ -125,15 +130,22 @@ public class GPSManager : MonoBehaviour
                 break;
             case 1:
                 if (talkDialogue.IsDialogTriggered(0)) // 이전 다이얼로그가 호출되었는지 확인
+                {
                     talkDialogue.SecondDialog();
+                }
+                    
                 break;
             case 2:
                 if (talkDialogue.IsDialogTriggered(1)) // 이전 다이얼로그가 호출되었는지 확인
+                {
                     talkDialogue.ThirdDialog();
+                }    
                 break;
             case 3:
                 if (talkDialogue.IsDialogTriggered(2)) // 이전 다이얼로그가 호출되었는지 확인
+                {
                     talkDialogue.FourthDialog();
+                }    
                 break;
         }
     }

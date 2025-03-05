@@ -34,6 +34,8 @@ public class EncounterUI : MonoBehaviour
     [Header("effect")]
     public GameObject EffectPrefabs;
     public GameObject collectEffectPrefab;
+    private Param param2 = new Param();
+
 
     private bool isDialogueActive = false;
     [Header("button")]
@@ -244,7 +246,6 @@ public class EncounterUI : MonoBehaviour
                 Debug.Log($"기본눈송이 : {NOONSONG_INCREMENT}개의 재화 추가.");
 
                 //db 반영
-                Param param2 = new Param();
                 param2= UserBalanceManager.Instance.addsnow(NOONSONG_INCREMENT);
                 UserBalanceManager.Instance.updateBalance(param2);
 

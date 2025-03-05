@@ -17,6 +17,7 @@ public class UserProfileData
     public string password;
     public string nickname=Backend.UserNickName;
     public string sookmyungMail;
+    public int saveTutorial;
 
     public UserProfileData()
     {
@@ -48,6 +49,7 @@ public class UserProfileData
         this.password=pw;
         this.nickname=nick;
         this.sookmyungMail=email;
+        this.saveTutorial=0;
     }
     public void setNickname(string newnick)
     {
@@ -60,6 +62,10 @@ public class UserProfileData
     public void setPW(string pw)
     {
         this.password=pw;
+    }
+    public void setSave(int point)
+    {
+        this.saveTutorial=point;
     }
     
 

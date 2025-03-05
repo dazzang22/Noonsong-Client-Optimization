@@ -21,7 +21,7 @@ public class UserBalance
         this.snowCount=int.Parse(json["snowCount"].ToString());
     }
 
-    public void setuserBalance(string userid, int snowcount=0)
+    public void setuserBalance(string userid, int snowcount=15)
     {
         this.userId=userid;
         this.snowCount=snowcount;

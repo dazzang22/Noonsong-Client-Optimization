@@ -71,7 +71,7 @@ public class UserBalanceManager
     public UserBalance getUserBalanceJson()
     {
         Where where = new Where();
-        where.Equal("owner_inDate", Backend.UserInDate);
+        where.Equal("owner_inDate", Backend.UserInDate); 
         var bro = Backend.GameData.Get("UserBalance", where, 10);
 
         if(!bro.IsSuccess())
@@ -100,6 +100,7 @@ public class UserBalanceManager
     public int getUserBalance()
     {
         UserBalance userBalance = getUserBalanceJson();
+        Debug.Log($"유저 재화 로딩: {userBalance.getBalance()}");
         return userBalance.getBalance();
     }
 
