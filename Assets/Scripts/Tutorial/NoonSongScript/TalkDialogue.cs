@@ -52,8 +52,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
     [Header("")]
     public GameObject Count;
-    public GameObject mainCanvas;
-    public GameObject mainPanel;
+    // public GameObject mainCanvas;
+    // public GameObject mainPanel;
     public Canvas mapCanvas;
     public Canvas giftCanvas;
     public Canvas bookCanvas;
@@ -89,7 +89,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         // part1 눈덩이 등장
         FirstDialog.Add(new DialogData("/color:black/숙명여대에 갓 입학한 새송이는 학교 탐방을 오게 되었다!", "Narrator"));
         FirstDialog.Add(new DialogData("/color:black/그런데 어쩌지? 학교가 너무 복잡해!","Narrator"));
-        FirstDialog.Add(new DialogData("/color:black/[학교가 너무 처음이라 막막하네...]", "User", () => { noonDung.SetActive(true); StartCoroutine(ShowMainTuto()); PlaySound(noonDung);
+        FirstDialog.Add(new DialogData("/color:black/[학교가 너무 처음이라 막막하네...]", "User", () => { noonDung.SetActive(true); PlaySound(noonDung);
         //StartCoroutine(MoveObject(noonDung, arCamera.TransformPoint(new Vector3(-1.5f, 1.5f, 5f)), arCamera.TransformPoint(new Vector3(0f, 0f, 1.5f)))); 
         })); // 좌측 위 등장 눈덩이 시작)))));
         FirstDialog.Add(new DialogData("/color:black//wait:0.5/안녕, 친구야! 혹시 무슨 고민 있어?", "NoonDung"));
@@ -105,13 +105,13 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FirstDialog.Add(new DialogData("/color:black//wait:1/우리는! /wait:0.5/학교를 지키는 어벤져스, /click/눈꽃송이들이야!", "Snowflake"));
         FirstDialog.Add(new DialogData("/color:black/마침 잘 만났다! 얘들아, 이 새송이가 눈송이와 친구가 되고 싶대!", "NoonDung"));
         FirstDialog.Add(new DialogData("/color:black/그런거라면... 눈송이에게 줄 선물을 구할 수 있는 이 눈의 결정이 있다면 분명 유용할 거야.", "Snowflake")); //
-        FirstDialog.Add(new DialogData("/color:black/마침 우리한테 꿍쳐놓은 눈의 결정이 있으니까, 너한테 줄게!", "Snowflake", () => { ChangeAnimation(snowflakeAnimator1, "standing"); PlaySound(goods); StartCoroutine(ShowPanelFirst());}));
+        FirstDialog.Add(new DialogData("/color:black/마침 우리한테 꿍쳐놓은 눈의 결정이 있으니까, 너한테 줄게!", "Snowflake", () => { ChangeAnimation(snowflakeAnimator1, "standing"); PlaySound(goods);}));
         FirstDialog.Add(new DialogData("/color:black//wait:0.5/눈의 결정 15개를 획득했다!", "Narrator"));
         FirstDialog.Add(new DialogData("/color:black/어려운 친구를 돕는 것도 우리 일이니까. 우리가 새송이를 도와주는 건 어떨까? /click/(뭉치면 산다!)", "Snowflake", () => ChangeAnimation(snowflakeAnimator1, "standing")));
         FirstDialog.Add(new DialogData("/color:black/그래, 눈의 결정이라면 우리가 전문이니까, 함께 다니면서 눈의 결정 찾는걸 도와줄게! /click/(맡겨 줘!)", "Snowflake"));
-        FirstDialog.Add(new DialogData("/color:black/[고마워, 눈꽃송이들!]/wait:1//close/", "User", () => snowflake.SetActive(false)));
+        FirstDialog.Add(new DialogData("/color:black/[고마워, 눈꽃송이들!]/wait:1//close/", "User", () => { snowflake.SetActive(false); StartCoroutine(ShowPanelFirst());}));
         // part3 로로 등장
-        FirstDialog.Add(new DialogData("/color:black//wait:1/앗! 찾았다", "RoRo", () => { roro.SetActive(true); PlaySound(roro);
+        FirstDialog.Add(new DialogData("/color:black//wait:0.5/앗! 찾았다", "RoRo", () => { roro.SetActive(true); PlaySound(roro);
         //StartCoroutine(MoveObject(roro, arCamera.TransformPoint(new Vector3(0f, 1f, 5f)), arCamera.TransformPoint(new Vector3(0f, -0.2f, 1f)))); 
         })); // 멀리서 달려오듯이 등장 로로 시작
         FirstDialog.Add(new DialogData("/color:black/[앗!]", "User", () => ChangeAnimation(roroAnimator, "standing")));
@@ -336,33 +336,33 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         }
     }
 
-    private IEnumerator ShowMainTuto()
-    {
-         Time.timeScale = 0f;
-        mainCanvas.SetActive(true);
+    // private IEnumerator ShowMainTuto()
+    // {
+    //      Time.timeScale = 0f;
+    //     mainCanvas.SetActive(true);
 
-        // 첫 번째 클릭 대기
-        while (!Input.GetMouseButtonDown(0))
-        {
-            yield return null;
-        }
-        yield return new WaitForSecondsRealtime(0.1f);
+    //     // 첫 번째 클릭 대기
+    //     while (!Input.GetMouseButtonDown(0))
+    //     {
+    //         yield return null;
+    //     }
+    //     yield return new WaitForSecondsRealtime(0.1f);
 
-        // mainPanel 활성화
-        mainPanel.SetActive(true);
+    //     // mainPanel 활성화
+    //     mainPanel.SetActive(true);
 
-        // 두 번째 클릭 대기
-        while (!Input.GetMouseButtonDown(0))
-        {
-            yield return null;
-        }
+    //     // 두 번째 클릭 대기
+    //     while (!Input.GetMouseButtonDown(0))
+    //     {
+    //         yield return null;
+    //     }
 
-        // mainPanel & mainCanvas 비활성화
-        mainPanel.SetActive(false);
-        mainCanvas.SetActive(false);
-        Time.timeScale = 1f;
+    //     // mainPanel & mainCanvas 비활성화
+    //     mainPanel.SetActive(false);
+    //     mainCanvas.SetActive(false);
+    //     Time.timeScale = 1f;
 
-    }
+    // }
 
     
     //재화팝업
