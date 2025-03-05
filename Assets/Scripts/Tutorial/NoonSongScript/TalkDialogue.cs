@@ -52,8 +52,9 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
     [Header("")]
     public GameObject Count;
-    public GameObject mainCanvas;
-    public GameObject mainPanel;
+    public Text printerText;
+    // public GameObject mainCanvas;
+    // public GameObject mainPanel;
     public Canvas mapCanvas;
     public Canvas giftCanvas;
     public Canvas bookCanvas;
@@ -89,7 +90,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         // part1 눈덩이 등장
         FirstDialog.Add(new DialogData("/color:black/숙명여대에 갓 입학한 새송이는 학교 탐방을 오게 되었다!", "Narrator"));
         FirstDialog.Add(new DialogData("/color:black/그런데 어쩌지? 학교가 너무 복잡해!","Narrator"));
-        FirstDialog.Add(new DialogData("/color:black/[학교가 너무 처음이라 막막하네...]", "User", () => { noonDung.SetActive(true); StartCoroutine(ShowMainTuto()); PlaySound(noonDung);
+        FirstDialog.Add(new DialogData("/color:black/[학교가 너무 처음이라 막막하네...]", "User", () => { noonDung.SetActive(true); PlaySound(noonDung);
         //StartCoroutine(MoveObject(noonDung, arCamera.TransformPoint(new Vector3(-1.5f, 1.5f, 5f)), arCamera.TransformPoint(new Vector3(0f, 0f, 1.5f)))); 
         })); // 좌측 위 등장 눈덩이 시작)))));
         FirstDialog.Add(new DialogData("/color:black//wait:0.5/안녕, 친구야! 혹시 무슨 고민 있어?", "NoonDung"));
@@ -105,13 +106,13 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FirstDialog.Add(new DialogData("/color:black//wait:1/우리는! /wait:0.5/학교를 지키는 어벤져스, /click/눈꽃송이들이야!", "Snowflake"));
         FirstDialog.Add(new DialogData("/color:black/마침 잘 만났다! 얘들아, 이 새송이가 눈송이와 친구가 되고 싶대!", "NoonDung"));
         FirstDialog.Add(new DialogData("/color:black/그런거라면... 눈송이에게 줄 선물을 구할 수 있는 이 눈의 결정이 있다면 분명 유용할 거야.", "Snowflake")); //
-        FirstDialog.Add(new DialogData("/color:black/마침 우리한테 꿍쳐놓은 눈의 결정이 있으니까, 너한테 줄게!", "Snowflake", () => { ChangeAnimation(snowflakeAnimator1, "standing"); PlaySound(goods); StartCoroutine(ShowPanelFirst());}));
+        FirstDialog.Add(new DialogData("/color:black/마침 우리한테 꿍쳐놓은 눈의 결정이 있으니까, 너한테 줄게!", "Snowflake", () => { ChangeAnimation(snowflakeAnimator1, "standing"); PlaySound(goods);}));
         FirstDialog.Add(new DialogData("/color:black//wait:0.5/눈의 결정 15개를 획득했다!", "Narrator"));
         FirstDialog.Add(new DialogData("/color:black/어려운 친구를 돕는 것도 우리 일이니까. 우리가 새송이를 도와주는 건 어떨까? /click/(뭉치면 산다!)", "Snowflake", () => ChangeAnimation(snowflakeAnimator1, "standing")));
         FirstDialog.Add(new DialogData("/color:black/그래, 눈의 결정이라면 우리가 전문이니까, 함께 다니면서 눈의 결정 찾는걸 도와줄게! /click/(맡겨 줘!)", "Snowflake"));
-        FirstDialog.Add(new DialogData("/color:black/[고마워, 눈꽃송이들!]/wait:1//close/", "User", () => snowflake.SetActive(false)));
+        FirstDialog.Add(new DialogData("/color:black/[고마워, 눈꽃송이들!]/wait:1//close/", "User", () => { snowflake.SetActive(false); StartCoroutine(ShowPanelFirst());}));
         // part3 로로 등장
-        FirstDialog.Add(new DialogData("/color:black//wait:1/앗! 찾았다", "RoRo", () => { roro.SetActive(true); PlaySound(roro);
+        FirstDialog.Add(new DialogData("/color:black//wait:0.5/앗! 찾았다", "RoRo", () => { roro.SetActive(true); PlaySound(roro);
         //StartCoroutine(MoveObject(roro, arCamera.TransformPoint(new Vector3(0f, 1f, 5f)), arCamera.TransformPoint(new Vector3(0f, -0.2f, 1f)))); 
         })); // 멀리서 달려오듯이 등장 로로 시작
         FirstDialog.Add(new DialogData("/color:black/[앗!]", "User", () => ChangeAnimation(roroAnimator, "standing")));
@@ -143,11 +144,11 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         SecondDialog.Add(new DialogData("/color:black/[(눈결이에게 사정을 설명한다)]", "User"));
         SecondDialog.Add(new DialogData("/color:black//emote:Look/앗, 그렇다면 이 지도가 도움이 될 거예요!", "NoonGyeol", () => { ChangeAnimation(noonkyeolAnimator, "standing"); PlaySound(map); StartCoroutine(ShowPanelSecond());}));
         //지도 기능 해금
-        SecondDialog.Add(new DialogData("/color:black//emote:Look/지도는 화면 하단의 버튼을 누르면 볼 수 있어요! 한번 보시겠어요?", "NoonGyeol", () => StartCoroutine(WaitForMapToOpen())));
+        SecondDialog.Add(new DialogData("/color:black//emote:Look/지도는 화면 하단의 버튼을 누르면 볼 수 있어요! 한번 보시겠어요?", "NoonGyeol", () =>{ StartCoroutine(WaitForMapToOpen()); }));
         //유저가 지도를 누르면, 잠시 대기 후 눈결이 대사 스크립트가 지도 위에 뜬다.//
         SecondDialog.Add(new DialogData("/color:black//wait:0.5/지금은 지도가 전부 잠겨 있죠?", "NoonGyeol"));
         SecondDialog.Add(new DialogData("/color:black/교내를 돌아다니면서 많은 눈송이들과 친구가 되면 지도를 해금할 수 있을 거예요!", "NoonGyeol"));
-        SecondDialog.Add(new DialogData("/color:black/지도 버튼을 다시 누르면 지도가 사라져요.", "NoonGyeol"));
+        SecondDialog.Add(new DialogData("/color:black/위쪽의 <을 누르면 지도가 사라져요.", "NoonGyeol"));
         //유저가 지도를 다시 누르면, 지도가 사라진다.
         
         SecondDialog.Add(new DialogData("/color:black//emote:Study/그 외에도 저는 이것저것 많은 것을 알고 있으니까, 제 지식이 도움이 될 수 있을 것 같아요.", "NoonGyeol"));
@@ -220,12 +221,9 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FourthDialog.Add(new DialogData("/color:black/참, 화면 위쪽의 카메라 모양을 누르면 원하는 친구와 사진을 찍을 수도 있어!", "NoonDung"));
         FourthDialog.Add(new DialogData("/color:black/위쪽의 X를 누르면 원래 화면으로 돌아갈 수 있어!", "NoonDung", () => { noonDung.SetActive(false); StartCoroutine(clickXButton());}));
         //유저가 도감 종료 입력을 하면 원래 화면으로 돌아감.
-        
-
-
 
         // 튜리 등장
-        FourthDialog.Add(new DialogData("/color:black/앗-! 다들 나만 빼고 여기 모여 있었구나!", "Turi", () => { turi.SetActive(true); PlaySound(turi);
+        FourthDialog.Add(new DialogData("/color:black/앗! 다들 나만 빼고 여기 모여 있었구나!", "Turi", () => { turi.SetActive(true); PlaySound(turi);
         //StartCoroutine(MoveObject(turi, arCamera.TransformPoint(new Vector3(0f, -2f, 3f)), arCamera.TransformPoint(new Vector3(0f, 0f, 3f)))); 
         })); // 아래에서 등장 튜리 시작
         FourthDialog.Add(new DialogData("/color:black/어라? 못 보던 얼굴도 있네?", "Turi"));
@@ -237,7 +235,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FourthDialog.Add(new DialogData("/color:black/흐흥, 미래 산업시대의 선구자가 될 이 튜리님에게 너 같은 친구들을 위한 발명품이 있지!", "Turi"));
         FourthDialog.Add(new DialogData("/color:black/바로바로… 특별한 눈송이들의 마음도 사로잡을 수 있는 선물 아이템들이야!", "Turi", () => ChangeAnimation(turiAnimator, "standing")));
         FourthDialog.Add(new DialogData("/color:black/어때? 가지고 싶지? 그 대신, 선물 아이템들을 만드는 데에는 눈의 결정이 많이 필요해.", "Turi"));
-        FourthDialog.Add(new DialogData("/color:blue/제2캠퍼스 원형 광장/color:black/에 있는 내 연구실에 오면 다양한 선물 아이템들로 바꿔줄게! 잊지 말고 놀러 와~!", "Turi", () => { turi.SetActive(false); }));
+        FourthDialog.Add(new DialogData("/color:blue/제2캠퍼스 눈꽃 광장/color:black/에 있는 내 연구실에 오면 다양한 선물 아이템들로 바꿔줄게! 잊지 말고 놀러 와~!", "Turi", () => { turi.SetActive(false); }));
         FourthDialog.Add(new DialogData("/color:black/튜토리얼을 성공적으로 마친 당신에게 이것을 드립니다!", "Narrator", () => { PlaySound(profile); StartCoroutine(ShowPanelSeventh());}));
         FourthDialog.Add(new DialogData("/color:black//wait:0.5/다양한 눈송이들과 친구가 되어 도감을 전부 채우는 것을 목표로 힘내요!!", "Narrator", () => { CompleteTutorial();}));
        
@@ -336,33 +334,33 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         }
     }
 
-    private IEnumerator ShowMainTuto()
-    {
-         Time.timeScale = 0f;
-        mainCanvas.SetActive(true);
+    // private IEnumerator ShowMainTuto()
+    // {
+    //      Time.timeScale = 0f;
+    //     mainCanvas.SetActive(true);
 
-        // 첫 번째 클릭 대기
-        while (!Input.GetMouseButtonDown(0))
-        {
-            yield return null;
-        }
-        yield return new WaitForSecondsRealtime(0.1f);
+    //     // 첫 번째 클릭 대기
+    //     while (!Input.GetMouseButtonDown(0))
+    //     {
+    //         yield return null;
+    //     }
+    //     yield return new WaitForSecondsRealtime(0.1f);
 
-        // mainPanel 활성화
-        mainPanel.SetActive(true);
+    //     // mainPanel 활성화
+    //     mainPanel.SetActive(true);
 
-        // 두 번째 클릭 대기
-        while (!Input.GetMouseButtonDown(0))
-        {
-            yield return null;
-        }
+    //     // 두 번째 클릭 대기
+    //     while (!Input.GetMouseButtonDown(0))
+    //     {
+    //         yield return null;
+    //     }
 
-        // mainPanel & mainCanvas 비활성화
-        mainPanel.SetActive(false);
-        mainCanvas.SetActive(false);
-        Time.timeScale = 1f;
+    //     // mainPanel & mainCanvas 비활성화
+    //     mainPanel.SetActive(false);
+    //     mainCanvas.SetActive(false);
+    //     Time.timeScale = 1f;
 
-    }
+    // }
 
     
     //재화팝업
@@ -401,9 +399,12 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while (!mapCanvas.gameObject.activeSelf)
         {
+            printerText.text = "지도를 클릭해보세요!";
             yield return null; // mapCanvas가 활성화될 때까지 대기
+
         }
         yield return new WaitForSecondsRealtime(2f);
+        printerText.text = "";
 
         mapCanvas.sortingOrder = 0;
         Time.timeScale = 1f; // 시간 재개
@@ -417,8 +418,10 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while(!uiController.IsButtonClicked())//인사버튼 클릭 대기
         {
-             yield return null; // 한 프레임을 대기
+            printerText.text = "중간의 대화하기 버튼을 누르고 인사하기 버튼을 눌러보세요";
+            yield return null; // 한 프레임을 대기
         }
+        printerText.text = "";
 
         Time.timeScale = 1f; // 시간 재개
     }
@@ -430,8 +433,10 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while(!giftCanvas.gameObject.activeSelf)//선물캔버스가 활성화될때까지 대기
         {
-             yield return null; // 한 프레임을 대기
+            printerText.text = "선물하기 버튼을 눌러보세요!";
+            yield return null; // 한 프레임을 대기
         }
+        printerText.text = "";
 
 
         bool isPopupOpened = false;
@@ -526,8 +531,10 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while(!bookCanvas.gameObject.activeSelf)
         {
+            printerText.text = "도감을 눌러보세요!";
             yield return null; // 한 프레임을 대
         }
+        printerText.text = "";
         StartCoroutine(ShowPanelThird());
         Time.timeScale = 1f; // 시간 재개
     }
@@ -583,7 +590,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         {
             yield return null; // 한 프레임을 대기
         }
-        yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(1.5f);
         Time.timeScale = 1f; // 시간 재개
 
     }

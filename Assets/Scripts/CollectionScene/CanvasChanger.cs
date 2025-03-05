@@ -14,6 +14,8 @@ public class CanvasChanger : MonoBehaviour
     [SerializeField] private Canvas emailVerifyCanvas;
     [SerializeField] private Canvas changePasswordCanvas;
     [SerializeField] private Canvas profileCanvas;
+    [SerializeField] GameObject mainTutoCanvas;
+    [SerializeField] GameObject mainTutoPanel;
 
     [Header ("Button")]
     [SerializeField] private Button popupButton;
@@ -39,8 +41,9 @@ public class CanvasChanger : MonoBehaviour
 
   public MapManager mapManager;
 
-  private void Start()
+  private void Awake()
   {
+    PlayerPrefs.DeleteKey("MainTutoPopupActivated"); //테스트용
     mainCanvas.gameObject.SetActive(true);
     popupCanvas.gameObject.SetActive(false);
     turyCanvas.gameObject.SetActive(false);
@@ -69,6 +72,50 @@ public class CanvasChanger : MonoBehaviour
     changePasswordBackButton3.onClick.AddListener(ToggleChangePasswordCanvas);
   
   }
+
+    void Start()
+    {
+      if (PlayerPrefs.GetInt("MainTutoPopupActivated", 0) == 0) 
+      {
+          StartCoroutine(ShowMainTuto());
+          PlayerPrefs.SetInt("MainTutoPopupActivated", 1); // 상태 저장
+          PlayerPrefs.Save(); // 저장 확정
+      }
+      else
+      {
+          mainTutoCanvas.SetActive(false);
+      }
+      
+        
+    }
+
+    private IEnumerator ShowMainTuto()
+    {
+        Time.timeScale = 0f;
+        mainTutoCanvas.SetActive(true);
+
+        // 첫 번째 클릭 대기
+        while (!Input.GetMouseButtonDown(0))
+        {
+            yield return null;
+        }
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        // mainPanel 활성화
+        mainTutoPanel.SetActive(true);
+
+        // 두 번째 클릭 대기
+        while (!Input.GetMouseButtonDown(0))
+        {
+            yield return null;
+        }
+
+        // mainPanel & mainCanvas 비활성화
+        mainTutoPanel.SetActive(false);
+        mainTutoCanvas.SetActive(false);
+        Time.timeScale = 1f;
+
+    }
 
 
     private void ShowPopup()

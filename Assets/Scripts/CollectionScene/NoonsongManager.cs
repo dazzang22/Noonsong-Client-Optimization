@@ -45,38 +45,40 @@ public class NoonsongManager : MonoBehaviour
 
     void Start()
     {
-    if (noonsongEntryManager != null)
-    {
-      entries = new List<NoonsongEntry>(noonsongEntryManager.GetNoonsongEntries());
+        PlayerPrefs.DeleteKey("CameraPopupActivated"); //테스트용
+        
+        if (noonsongEntryManager != null)
+        {
+        entries = new List<NoonsongEntry>(noonsongEntryManager.GetNoonsongEntries());
+        }
+        else
+        {
+        Debug.LogError("NoonsongEntryManager is not assigned in the inspector!");
+        }
+
+        foreach (var button in categoryButtons)
+        {
+            button.onClick.AddListener(() => OnCategoryButtonClicked(button.name));
+        }
+
+        if (closeButton != null)
+        {
+        closeButton.onClick.AddListener(ShowCategoryScrollView);
+        }
+
+        ShowCategoryScrollView();
     }
-    else
+    public void ShowCategoryScrollView()
     {
-      Debug.LogError("NoonsongEntryManager is not assigned in the inspector!");
+        categoryScrollView.SetActive(true);
+        entryScrollView.SetActive(false);
+        if (progressText != null)
+        {
+        progressText.gameObject.SetActive(false);
+        }
     }
 
-    foreach (var button in categoryButtons)
-    {
-      button.onClick.AddListener(() => OnCategoryButtonClicked(button.name));
-    }
-
-    if (closeButton != null)
-    {
-      closeButton.onClick.AddListener(ShowCategoryScrollView);
-    }
-
-    ShowCategoryScrollView();
-  }
-  public void ShowCategoryScrollView()
-  {
-    categoryScrollView.SetActive(true);
-    entryScrollView.SetActive(false);
-    if (progressText != null)
-    {
-      progressText.gameObject.SetActive(false);
-    }
-  }
-
-  public bool View3DButtonPressed()
+    public bool View3DButtonPressed()
     {
         // 3D 뷰가 활성화되었음을 알려줌
         is3DViewActive = true;
