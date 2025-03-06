@@ -17,6 +17,7 @@ public class UserProfileData
     public string password;
     public string nickname=Backend.UserNickName;
     public string sookmyungMail;
+    public string mail;
     public int saveTutorial;
 
     public UserProfileData()
@@ -39,7 +40,8 @@ public class UserProfileData
         this.owner_inDate=json["owner_inDate"].ToString();
         this.nickname =json["nickname"].ToString();
         this.updatedAt = DateTime.Parse(json["updatedAt"].ToString());
-        this.sookmyungMail=json["sookmyungMail"].ToString();;
+        this.sookmyungMail=json["sookmyungMail"].ToString();
+        this.sookmyungMail=json["mail"].ToString();
         this.saveTutorial=int.Parse(json["saveTutorial"].ToString());
         
     }
@@ -49,7 +51,7 @@ public class UserProfileData
         this.userId=id;
         this.password=pw;
         this.nickname=nick;
-        this.sookmyungMail=email;
+        this.mail=email;
         this.saveTutorial=0;
     }
     public void setNickname(string newnick)
@@ -59,6 +61,10 @@ public class UserProfileData
     public void setSMail(string smail)
     {
         this.sookmyungMail= smail;
+    }
+    public void setMail(string mail)
+    {
+        this.mail= mail;
     }
     public void setPW(string pw)
     {
@@ -93,6 +99,7 @@ public class UserProfileData
         result.AppendLine($"nickname: {nickname}");
         result.AppendLine($"owner_inDate: {owner_inDate}");
         result.AppendLine($"sookmyungMail: {sookmyungMail}");
+        result.AppendLine($"mail: {mail}");
         result.AppendLine($"saveTutorial: {saveTutorial}");
 
 
@@ -107,6 +114,7 @@ public class UserProfileData
         param.Add("nickname", nickname);
         param.Add("password", password);
         param.Add("sookmyungMail", sookmyungMail);
+        param.Add("mail",mail);
         param.Add("saveTutorial", saveTutorial);
 
         return param;

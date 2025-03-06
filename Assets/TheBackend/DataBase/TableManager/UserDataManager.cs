@@ -145,12 +145,18 @@ public class UserDataManager
     public Param ChangeEmail(string email)
     {
         UserProfileData userProfileData=findUser(Backend.UserInDate);
-        userProfileData.setSMail(email);
+        userProfileData.setMail(email);
         Param param=userProfileData.ToParam();
         return param;
     }
 
     //유저 탈퇴
+    public void DeleteUser()
+    {
+        Where where = new Where();
+        where.Equal("userId", getUserID());
+        Backend.GameData.Delete("UserProfile", where);
+    }
     
 
     //회원정보 수정 반영 (업데이트) -> 수정 함수로 변경 결과 (Param)를 받아서 테이블 업데이트
