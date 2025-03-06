@@ -166,6 +166,7 @@ public class GoodsManager : MonoBehaviour
     //파견 눈송이 선택 및 확정
     public void SelectNoons(NoonsongFriendsEntry noonsongEntry)
     {
+        Debug.Log($"눈송이 선택여부:{isNoonsSelected}");
         if(!isNoonsSelected)
         {
             DisplayNoonsongInfo(noonsongEntry);

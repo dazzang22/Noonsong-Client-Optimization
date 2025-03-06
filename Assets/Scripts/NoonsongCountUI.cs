@@ -22,7 +22,7 @@ public class NoonsongCountUI : MonoBehaviour
 
         if (noonsongEntries == null || noonsongEntries.Length == 0)
         {
-            Debug.LogWarning($"NoonsongEntry¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogWarning($"NoonsongEntryï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
         }
     }
 
@@ -31,7 +31,8 @@ public class NoonsongCountUI : MonoBehaviour
         if (noonsongEntries == null)
             return;
 
-        int friendCount = noonsongEntries.Count(entry => entry.isFriend);
+        //int friendCount = noonsongEntries.Count(entry => entry.isFriend);
+        int friendCount= UserDogamManager.Instance.getDogamNum();
         friendCountText.text = $"{friendCount}";
         accountfriendCountText.text = $"{friendCount}";
     }

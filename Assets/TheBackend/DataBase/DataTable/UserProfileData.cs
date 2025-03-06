@@ -40,6 +40,7 @@ public class UserProfileData
         this.nickname =json["nickname"].ToString();
         this.updatedAt = DateTime.Parse(json["updatedAt"].ToString());
         this.sookmyungMail=json["sookmyungMail"].ToString();;
+        this.saveTutorial=int.Parse(json["saveTutorial"].ToString());
         
     }
 
@@ -74,6 +75,16 @@ public class UserProfileData
         return this.userId;
     }
 
+    public int getSave()
+    {
+        return this.saveTutorial;
+    }
+
+    public string getUserNickname()
+    {
+        return this.nickname;
+    }
+
     public override string ToString()
     {
         StringBuilder result = new StringBuilder();
@@ -82,6 +93,8 @@ public class UserProfileData
         result.AppendLine($"nickname: {nickname}");
         result.AppendLine($"owner_inDate: {owner_inDate}");
         result.AppendLine($"sookmyungMail: {sookmyungMail}");
+        result.AppendLine($"saveTutorial: {saveTutorial}");
+
 
         return result.ToString();
     }
@@ -94,6 +107,7 @@ public class UserProfileData
         param.Add("nickname", nickname);
         param.Add("password", password);
         param.Add("sookmyungMail", sookmyungMail);
+        param.Add("saveTutorial", saveTutorial);
 
         return param;
     }

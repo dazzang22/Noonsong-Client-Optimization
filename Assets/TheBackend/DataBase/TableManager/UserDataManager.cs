@@ -60,33 +60,7 @@ public class UserDataManager
 
 	}
 
-    //전체 회원 조회 (private table은 자기 자신 데이터만 조회할 수 있어서.. 일단 중지..)
-    public void getAllUsersList()
-    {
-        // List<string> userIdList = new List<string>();
-        // var bro = Backend.GameData.Get("UserProfile",new Where());
-        
-        // if(!bro.IsSuccess())
-        // {
-        //     Debug.Log("데이터 읽기 중 문제 발생: "+ bro);
-        // }
-
-        // LitJson.JsonData users=bro.FlattenRows();
-
-        // if(users==null || users.Count <= 0)
-        // {
-        //     Debug.Log("불러오기는 가능하지만, 데이터가 존재하지 않음.");
-        // }
-        
-        // for(int i=0;i<users.Count;i++)
-        // {
-        //     userIdList.Add(users[i]["userId"].ToString());
-        //     Debug.Log(i+userIdList[i]);
-        // }
-        // Debug.Log(string.Join(", ",userIdList));
-
-    }
-
+    
     //회원가입 한 날짜 (indate) 으로 특정 회원 조회 -> 회원 엔티티 반환.
     public UserProfileData findUser(string indate)
     {
@@ -101,7 +75,6 @@ public class UserDataManager
         }
 
         LitJson.JsonData gameDataListJson = bro.FlattenRows()[0];
-        Debug.Log(gameDataListJson.ToJson());
 
         if(gameDataListJson.Count <= 0)
         {
@@ -113,15 +86,33 @@ public class UserDataManager
         UserProfileData gameDataItem = new UserProfileData();
         gameDataItem.setUser(gameDataListJson);
 
-        Debug.Log(gameDataItem.ToString());
         return gameDataItem;
     }
 
+    //id 로드
     public string getUserID()
     {
         UserProfileData userProfileData=findUser(Backend.UserInDate);
+        
         string userid= userProfileData.getuserId();
         return userid;
+    }
+    //nickname 로드
+    public string getUserNickname()
+    {
+        UserProfileData userProfileData=findUser(Backend.UserInDate);
+        string usernick= userProfileData.getUserNickname();
+        return usernick;
+    }
+
+    //세이브 포인트 로드
+    public int getSave()
+    {
+        UserProfileData userProfileData=findUser(Backend.UserInDate);
+        int cursave=userProfileData.getSave();
+        Debug.Log($"{cursave}");
+        return cursave;
+
     }
     //튜토리얼 세이브 포인트 저장
     public Param ChangeSave(int point)
@@ -159,9 +150,8 @@ public class UserDataManager
         return param;
     }
 
-    //유저 초기화
-
-
+    //유저 탈퇴
+    
 
     //회원정보 수정 반영 (업데이트) -> 수정 함수로 변경 결과 (Param)를 받아서 테이블 업데이트
     public void UpdateUserData(Param param)

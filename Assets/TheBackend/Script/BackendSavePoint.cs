@@ -22,29 +22,25 @@ public class BackendSavePoint : MonoBehaviour
             return _instance;
         }
     }
-    private int currentStep=0;
-    //private GPSManager gpsManager;
 
-    void Start()
-    {
-        //currentStep=gpsManager.currentIndex;
-       
-    }
-
-    public void LoadGameData()
+    public int LoadGameData()
     {
         Debug.Log("세이브포인트 로드");
-        PlayerPrefs.GetInt("TutorialStep", currentStep);
-        Debug.Log($"저장된 튜토리얼 단계: {currentStep}"); 
+        //PlayerPrefs.GetInt("TutorialStep", currentStep);
+        int cur=UserDataManager.Instance.getSave();
+        Debug.Log($"{cur}");
+        return     cur;
     }
 
 
     public void SaveGameData(int point)
     {
-        Debug.Log("세이브포인트 저장");
-        PlayerPrefs.SetInt("TutorialStep", point);
-        PlayerPrefs.Save();
-        UserDataManager.Instance.ChangeSave(point);
+        //PlayerPrefs.SetInt("TutorialStep", point);
+        //PlayerPrefs.Save();
+        Param param = new Param();
+        param= UserDataManager.Instance.ChangeSave(point);
+        UserDataManager.Instance.UpdateUserData(param);
+
         Debug.Log($"세이브포인트 저장: {point}");
 
     }

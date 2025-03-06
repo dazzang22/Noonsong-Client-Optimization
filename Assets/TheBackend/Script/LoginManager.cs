@@ -47,7 +47,6 @@ public class LoginManager : MonoBehaviour
         inputPW = inputField_PW.text;
 
         BackendLogin.Instance.CustomLogin(inputID, inputPW);
-        //BackendSavePoint.Instance.LoadGameData();
 
         if (BackendLogin.Instance.login_static==0)
         {

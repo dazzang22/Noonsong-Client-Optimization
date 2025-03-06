@@ -45,6 +45,8 @@ public class BackendLogin
         //재화
         Debug.Log("재화 테이블 로드.");
         UserBalanceManager.Instance.InsertUserBalance(id,15);
+        BackendSavePoint.Instance.SaveGameData(0);
+
 
         if (bro.IsSuccess())
         {
@@ -67,6 +69,7 @@ public class BackendLogin
         Debug.Log("로그인을 요청합니다.");
 
         var bro = Backend.BMember.CustomLogin(id, pw);
+
 
 
         if (bro.IsSuccess())

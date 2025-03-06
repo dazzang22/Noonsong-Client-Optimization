@@ -113,6 +113,22 @@ public class UserDogamManager
 
     }
 
+    //유저 도감 개수 가져오기
+    public int getDogamNum()
+    {
+        List<UserDogam> userdogamlist = new List<UserDogam>();
+        userdogamlist= getUserDogamList(UserDataManager.Instance.getUserID());
+        if(userdogamlist != null)
+        {
+            return userdogamlist.Count;
+        }
+        else
+        {
+            return 0;
+        }
+        
+    }
+
     //UserDogam 테이블에서 유저가 만난 눈송이 데이터의 count를 1 증가시킴.
     public Param CountUp()
     {

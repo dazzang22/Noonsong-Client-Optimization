@@ -21,7 +21,7 @@ public class DogamChartManager {
     //눈송이 이름으로 눈송이 차트에서 눈송이이ID 찾기.
     public int getSnowflakeId(string noonsoong)
     {
-        var bro = Backend.Chart.GetChartContents("157725");
+        var bro = Backend.Chart.GetChartContents("167960");
         foreach(LitJson.JsonData gameData in bro.FlattenRows())
         {
             if(noonsoong == gameData["SnowflakeName"].ToString()){
@@ -35,7 +35,7 @@ public class DogamChartManager {
     //대학 이름으로 대학 차트에서 대학id 가져오기.
     public int getCollegeId(string college)
     {
-        var collegechart = Backend.Chart.GetChartContents("157731"); 
+        var collegechart = Backend.Chart.GetChartContents("167960"); 
 
         int collegeid=0;
         foreach(LitJson.JsonData gameData in collegechart.FlattenRows())

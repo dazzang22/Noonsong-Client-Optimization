@@ -80,6 +80,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     // 첫 번째 대화 설정 1~3
     public void FirstDialog()
     {
+        Debug.Log("시작");
+
         if (dialogTriggered[0]) return;
 
         var FirstDialog = new List<DialogData>();
@@ -272,7 +274,30 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         };
 
-        FirstDialog();
+        //FirstDialog();
+
+        switch(UserDataManager.Instance.getSave())
+        {
+            case 0:
+                FirstDialog();
+                break;
+            case 1:
+                SecondDialog();
+                break;
+            case 2:
+                ThirdDialog();
+                break;
+            case 3:
+                FourthDialog();
+                break;
+            case 4:
+                CompleteTutorial();
+                break;
+            default:
+                Debug.Log(UserDataManager.Instance.getSave());
+                break;
+        }
+
         // dialogTriggered[0] = true;
         // SecondDialog();
         // dialogTriggered[1] = true;
@@ -607,11 +632,13 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         Time.timeScale = 1f; // 시간 재개
     }
 
-    private void CompleteTutorial()
+    public void CompleteTutorial()
     {
         // 튜토리얼 완료 상태 저장
         PlayerPrefs.SetInt("TutorialCompleted", 1);
         PlayerPrefs.Save();
+
+        BackendSavePoint.Instance.SaveGameData(4);
 
         Debug.Log("튜토리얼 완료");
         SceneManager.LoadScene("MainScene(Release)");
