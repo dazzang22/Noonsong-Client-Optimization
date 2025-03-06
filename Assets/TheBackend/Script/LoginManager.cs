@@ -59,7 +59,21 @@ public class LoginManager : MonoBehaviour
         else
         {
             audioSource.PlayOneShot(successSound);
+            GoScene();
 
+        }
+    }
+
+    public void GoScene()
+    {
+        if (PlayerPrefs.GetInt("TutorialCompleted", 0) == 1)
+        {
+            // 튜토리얼이 완료되었으므로 main Scene으로 바로 이동
+            SceneManager.LoadScene("MainScene(Release)");
+        }
+        else
+        {
+            SceneManager.LoadScene("Merge-TutorialScene");
         }
     }
 }

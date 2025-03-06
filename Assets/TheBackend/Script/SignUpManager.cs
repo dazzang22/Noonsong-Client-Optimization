@@ -27,15 +27,19 @@ public class SignUpManager : MonoBehaviour
     public TMP_Text textEmailResult;
     public TMP_InputField inputFieldNickname;
     public TMP_Text textNicknameResult;
+
     public Button btnSignUp;
+    public Button btnCheckNickname;
 
-    private bool isIdValid = false;
-    private bool isPasswordValid = false;
-    private bool isPasswordsMatch = false;
-    private bool isEmailValid = false;
-    private bool isNicknameValid = false;
+    public bool isIdValid = false;
+    public bool isPasswordValid = false;
+    public bool isPasswordsMatch = false;
+    public bool isEmailValid = false;
+    public bool isNicknameValid = false;
+    public bool isNicknameAvailable = false;
+    public bool istoggleOn = false;
 
-    public AudioSource audioSource;  // 오디오 소스
+    public AudioSource audioSource;
     public AudioClip successSound;
 
 
@@ -54,6 +58,9 @@ public class SignUpManager : MonoBehaviour
         inputFieldEmail.onValueChanged.AddListener(OnEmailFieldEndEdit);
         inputFieldNickname.onValueChanged.AddListener(OnNicknameFieldEndEdit);
 
+        toggleAgree.onValueChanged.AddListener(OnToggleValueChanged);
+
+        btnCheckNickname.onClick.AddListener(CheckNicknameAvailability);
         btnSignUp.onClick.AddListener(OnSignUpButtonClicked);
     }
 
@@ -186,10 +193,61 @@ public class SignUpManager : MonoBehaviour
         }
     }
 
+    public void CheckNicknameAvailability()
+    {
+        string nickname = inputFieldNickname.text.Trim();
+
+        if (nickname.Length < 2 || nickname.Length > 10)
+        {
+            textNicknameResult.text = "닉네임은 2~10자여야 합니다.";
+            textNicknameResult.color = Color.red;
+            isNicknameAvailable = false;
+            return;
+        }
+
+        var bro = Backend.BMember.CheckNicknameDuplication("thebackend");
+        {
+            if (bro.IsSuccess())
+            {
+                textNicknameResult.text = "사용 가능한 닉네임입니다.";
+                textNicknameResult.color = Color.green;
+                isNicknameAvailable = true;
+            }
+            else if (bro.GetErrorCode() == "DuplicatedParameterException")
+            {
+                textNicknameResult.text = "이미 사용 중인 닉네임입니다.";
+                textNicknameResult.color = Color.red;
+                isNicknameAvailable = false;
+            }
+            else
+            {
+                textNicknameResult.text = "닉네임 확인 중 오류 발생. 다시 시도해주세요." + bro;
+                textNicknameResult.color = Color.red;
+                isNicknameAvailable = false;
+            }
+        }
+    }
+
+    void OnToggleValueChanged(bool isChecked)
+    {
+        if (isChecked)
+        {
+            istoggleOn = true;
+            Debug.Log("동의 체크됨");
+            CheckAllConditions();
+        }
+        else
+        {
+            istoggleOn = false;
+            Debug.Log("동의 체크 해제");
+            btnSignUp.interactable = false;
+        }
+    }
+
     //아이디, PW1, PW2가 모두 유효한지 확인 후 계정생성 버튼 활성화
     void CheckAllConditions()
     {
-        if (isIdValid && isPasswordValid && isPasswordsMatch && isEmailValid && isNicknameValid)
+        if (isIdValid && isPasswordValid && isPasswordsMatch && isEmailValid && isNicknameValid && istoggleOn)
         {
             btnSignUp.interactable = true;
         }
@@ -202,13 +260,13 @@ public class SignUpManager : MonoBehaviour
     //회원가입 시행 후 팝업 띄움.
     public void OnSignUpButtonClicked()
     {
-        /*if (toggleAgree) // 동의 체크 여부 확인
+        if (!istoggleOn) // 동의 체크 여부 확인
         {
             textAgreeWarning.text = "회원가입을 진행하려면 개인정보 제공에 동의해야 합니다.";
             textAgreeWarning.color = Color.red;
             textAgreeWarning.gameObject.SetActive(true);
             return;
-        }*/
+        }
 
         string id = inputFieldID.text;
         string password = inputFieldPW.text;
@@ -223,19 +281,38 @@ public class SignUpManager : MonoBehaviour
         {
             Debug.Log("회원가입 성공! 자동 로그인 진행...");
 
-            // 회원가입 후 자동 로그인 (이메일과 닉네임은 로그인 후 등록)
-            // BackendLogin.Instance.CustomLogin(id, password, () =>
-            // {
-            //     BackendLogin.Instance.UpdateNickname(nickname);
-            //     BackendLogin.Instance.UpdateEmail(email);
-            // });
+            //회원가입 후 자동 로그인 (이메일과 닉네임은 로그인 후 등록)
             BackendLogin.Instance.CustomLogin(id, password);
-            audioSource.PlayOneShot(successSound);
-
-            // UI 변경 (회원가입 완료 창 띄우기)
-            privatePolicyPopup.SetActive(false);
-            //signUpPopup.SetActive(false);
-            signUpCompletionPopup.SetActive(true);
+            if (BackendLogin.Instance.login_static==1)
+            {
+                Debug.Log("자동 로그인 성공");
+                BackendLogin.Instance.UpdateNickname(nickname);
+                if (BackendLogin.Instance.updateNickname_static==1)
+                {
+                    Debug.Log("닉네임 업데이트 성공");
+                    BackendLogin.Instance.UpdateEmail(email);
+                    if (BackendLogin.Instance.updateEmail_static==1)
+                    {
+                        Debug.Log("이메일 업데이트 성공");
+                        SignupSuccess();
+                    }
+                    else
+                    {
+                        Debug.LogError("이메일 업데이트 실패");
+                        BackendLogin.Instance.Logout();
+                    }
+                }
+                else
+                {
+                    Debug.LogError("닉네임 업데이트 실패");
+                    BackendLogin.Instance.Logout();
+                }
+            }
+            else
+            {
+                Debug.LogError("자동 로그인 실패");
+                BackendLogin.Instance.Logout();
+            }
             
         }
         else
@@ -254,27 +331,14 @@ public class SignUpManager : MonoBehaviour
 
         
     }
-    public void testfunc(){
-        var bro = Backend.BMember.UpdateCustomEmail("help@thebackend.io");
-        if (bro.IsSuccess())
-        {
-            Debug.Log("이메일 등록 성공");
-        }
-        else
-        {
-            Debug.LogError("이메일 등록 실패" + bro);
-        }
-    }
-    public void testfunc2()
-    {
-        var bro = Backend.BMember.UpdateNickname("nickname");
-        if (bro.IsSuccess())
-        {
-            Debug.Log("이메일 등록 성공");
-        }
-        else
-        {
-            Debug.LogError("이메일 등록 실패" + bro);
-        }
+
+    public void SignupSuccess(){
+        //ckendLogin.Instance.CustomLogin(id, password);
+        audioSource.PlayOneShot(successSound);
+
+        // UI 변경 (회원가입 완료 창 띄우기)
+        privatePolicyPopup.SetActive(false);
+        signUpPopup.SetActive(false);
+        signUpCompletionPopup.SetActive(true);
     }
 }

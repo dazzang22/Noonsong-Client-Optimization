@@ -155,5 +155,8 @@ public class EmailVerifyManager : MonoBehaviour
         codeInput.text = "";
         emailErrorText.text = "";
         codeErrorText.text = "";
+        emailPanel.SetActive(true);
+        codePanel.SetActive(false);
+        successPanel.SetActive(false);
     }
 }

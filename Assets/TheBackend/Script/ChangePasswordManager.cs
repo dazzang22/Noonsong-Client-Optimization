@@ -116,5 +116,8 @@ public class ChangePasswordManager : MonoBehaviour
         oldPasswordInput.text = "";
         newPasswordInput.text = "";
         confirmNewPasswordInput.text = "";
+        oldPasswordPanel.SetActive(true);
+        newPasswordPanel.SetActive(false);
+        successPanel.SetActive(false);
     }
 }
