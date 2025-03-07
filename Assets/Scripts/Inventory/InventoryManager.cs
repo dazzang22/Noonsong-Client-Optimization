@@ -3,15 +3,15 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System;
+using BackEnd;
 
 public class InventoryManager : MonoBehaviour
 {
-  public List<ItemEntry> itemEntries;  
   public Transform inventoryContentPanel; 
   public GameObject inventoryItemPrefab;
   public GameObject placeholderPrefab;
 
-  private Dictionary<ItemEntry, GameObject> inventoryItems = new Dictionary<ItemEntry, GameObject>();
+  private Dictionary<int, GameObject> inventoryItems = new Dictionary<int, GameObject>();
 
   public GameObject descriptionPopup;  // 설명 팝업 UI
   public TextMeshProUGUI popupItemName;
@@ -19,37 +19,90 @@ public class InventoryManager : MonoBehaviour
   public Image popupItemImage;
   public Button popupCloseButton;
 
+
+  
+
   void Start()
   {
     descriptionPopup.SetActive(false);
-        itemEntries[1].itemCount += 10;
+
+    string userId = UserDataManager.Instance.getUserID();
+    Debug.Log($" userId={userId}");
+    UserInventoryManager.Instance.LoadUserInventory(userId);
+
+    Debug.Log("인벤토리 로드 완료. 현재 보유 아이템 리스트:");
+    foreach (var item in UserInventoryManager.Instance.userInventoryEntries)
+    {
+      Debug.Log($"아이템 ID: {item.itemId}, 개수: {item.itemCount}");
     }
 
-    void PopulateInventory()
+    Invoke(nameof(InitializeInventory), 1f);
+  }
+
+  void InitializeInventory()
   {
+    //FindUserItemAndIncreaseCount(2, 10);
+    PopulateInventory();
+  }
+
+  private void FindUserItemAndIncreaseCount(int itemId, int amount)
+  {
+    UserInventoryEntry userItem = UserInventoryManager.Instance.userInventoryEntries.Find(e => e.itemId == itemId);
+
+    if (userItem != null)
+    {
+      userItem.itemCount += amount;
+      UserInventoryManager.Instance.UpdateItemCount(userItem.userId, userItem.itemId, userItem.itemCount);
+    }
+  }
+
+
+  void PopulateInventory()
+  {
+    if (inventoryContentPanel == null)
+    {
+      Debug.LogError("inventoryContentPanel이 존재하지 않습니다!");
+      return;
+    }
+
     foreach (Transform child in inventoryContentPanel)
     {
+      if (child == null) continue;
       Destroy(child.gameObject);
     }
     inventoryItems.Clear();
     int totalItems = 0;
-    foreach (var item in itemEntries)
+    foreach (var item in UserInventoryManager.Instance.userInventoryEntries)
     {
       if (item.itemCount > 0) // 보유 개수가 1 이상일 경우만 표시
       {
+        ItemEntry itemEntry = item.GetItemEntry();
+        if (itemEntry == null)
+        {
+          Debug.LogError($"⚠ 아이템 ID {item.itemId}에 해당하는 ItemEntry를 찾을 수 없음!");
+          continue;
+        }
+        if (inventoryContentPanel == null)
+        {
+          Debug.LogError("inventoryContentPanel이 삭제됨!");
+          return;
+        }
+
+
         GameObject newItem = Instantiate(inventoryItemPrefab, inventoryContentPanel);
 
-        newItem.transform.Find("Item_Name").GetComponent<TextMeshProUGUI>().text = item.itemName;
-        newItem.transform.Find("Item_Image").GetComponent<Image>().sprite = item.itemSprite;
+        newItem.transform.Find("Item_Name").GetComponent<TextMeshProUGUI>().text = itemEntry.itemName;
+        newItem.transform.Find("Item_Image").GetComponent<Image>().sprite = itemEntry.itemSprite;
+
         //newItem.transform.Find("Item_Count").GetComponent<TextMeshProUGUI>().text = $"보유 수량: {item.itemCount} 개";
 
         Button itemButton = newItem.GetComponent<Button>();
         if (itemButton != null)
         {
-          itemButton.onClick.AddListener(() => ShowItemDescription(item));
+          itemButton.onClick.AddListener(() => ShowItemDescription(itemEntry));
         }
 
-        inventoryItems[item] = newItem;
+        inventoryItems[item.itemId] = newItem;
         totalItems++;
       }
     }
@@ -58,6 +111,11 @@ public class InventoryManager : MonoBehaviour
       int placeholdersNeeded = 4 - totalItems;
       for (int i = 0; i < placeholdersNeeded; i++)
       {
+        if (inventoryContentPanel == null)
+        {
+          Debug.LogError("inventoryContentPanel이 삭제됨!");
+          return;
+        }
         Instantiate(placeholderPrefab, inventoryContentPanel);
       }
     }
@@ -65,19 +123,24 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdateInventory()
     {
-        var keys = new List<ItemEntry>(inventoryItems.Keys); 
-        for (int i = 0; i < keys.Count; i++)
+        var keys = new List<int>(inventoryItems.Keys);
+    foreach (var itemId in keys)
+    {
+      UserInventoryEntry userItem = UserInventoryManager.Instance.userInventoryEntries.Find(e => e.itemId == itemId);
+      if (userItem == null || userItem.itemCount <= 0)
+      {
+        if (inventoryItems.ContainsKey(itemId)) 
         {
-            ItemEntry item = keys[i];
-            if (item.itemCount <= 0)
-            {
-                Destroy(inventoryItems[item]); 
-                inventoryItems.Remove(item); 
-            }
+          Debug.Log($"🗑 아이템 삭제됨: {itemId}");
+          Destroy(inventoryItems[itemId]);
+          inventoryItems.Remove(itemId);
         }
-
-        PopulateInventory();
+      }
     }
+
+    PopulateInventory();
+    Debug.Log("인벤토리 업데이트 완료");
+  }
 
     void ShowItemDescription(ItemEntry item)
   {
@@ -94,15 +157,26 @@ public class InventoryManager : MonoBehaviour
 
     internal void AddEmblemBadge()
     {
-        if (itemEntries != null && itemEntries.Count > 1) // 리스트가 비어있지 않고, 최소 두 개 이상의 아이템이 있을 경우
-        {
-            itemEntries[1].itemCount = 1; 
-            UpdateInventory(); // 인벤토리 UI 갱신
-            Debug.Log("엠블렘 배지 획득!");
-        }
-        else
-        {
-            Debug.LogWarning("아이템 리스트가 비어있거나, 최소 두 개 이상의 아이템이 필요합니다.");
-        }
+    if (UserInventoryManager.Instance.userInventoryEntries.Count > 1)
+    {
+      // 리스트가 비어있지 않고, 최소 두 개 이상의 아이템이 있을 경우
+      UserInventoryEntry userItem = UserInventoryManager.Instance.userInventoryEntries.Find(e => e.itemId == 2);
+
+      if (userItem != null)
+      {
+        userItem.itemCount = 1;
+        UserInventoryManager.Instance.UpdateItemCount(userItem.userId, userItem.itemId, userItem.itemCount);
+        UpdateInventory(); // 인벤토리 UI 갱신
+        Debug.Log("엠블렘 배지 획득!");
+      }
+      else
+      {
+        Debug.LogWarning("엠블렘 배지를 찾을 수 없습니다.");
+      }
     }
+    else
+    {
+      Debug.LogWarning("인벤토리에 최소 두 개 이상의 아이템이 필요함.");
+    }
+  }
 }

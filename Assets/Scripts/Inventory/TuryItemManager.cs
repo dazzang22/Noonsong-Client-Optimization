@@ -131,16 +131,43 @@ public class TuryItemManager : MonoBehaviour
   {
     if (selectedItem != null && CurrencyManager.Instance.UseCurrency(selectedItem.itemPrice))
     {
+      string userId = UserDataManager.Instance.getUserID();
       //재화 소비 DB 반영
       Param pay = new Param();
       pay= UserBalanceManager.Instance.paysnow(selectedItem.itemPrice);
       UserBalanceManager.Instance.updateBalance(pay);
 
-      selectedItem.itemCount++; // ⭐ 아이템 개수 증가
-      //UpdateItemCountUI(selectedItem);
+      //인벤토리 DB 반영
+      UserInventoryEntry existingItem = UserInventoryManager.Instance.userInventoryEntries
+           .Find(e => e.itemId == selectedItem.itemID);
+      if (existingItem != null)
+      {
+        // **✅ 기존 아이템이 존재하면 개수 업데이트**
+        Debug.Log($"✅ {selectedItem.itemName}이 인벤토리에 이미 존재, 개수 증가");
+        UserInventoryManager.Instance.UpdateItemCount(userId, selectedItem.itemID, existingItem.itemCount + 1);
+      }
+      else
+      {
+        // **✅ 기존에 없던 아이템이라면 새롭게 추가**
+        Debug.Log($"🆕 {selectedItem.itemName}이 인벤토리에 없음 → 새롭게 추가");
+        UserInventoryManager.Instance.InsertUserInventory(userId, selectedItem.itemID, 1);
+      }
+
+      // 🔹 최신 데이터 불러오기 (DB에서 새로 가져옴)
+      UserInventoryManager.Instance.LoadUserInventory(userId);
+
+      // 🔹 최신 데이터를 `selectedItem.itemCount`에 반영
+      UserInventoryEntry updatedItem = UserInventoryManager.Instance.userInventoryEntries
+          .Find(e => e.itemId == selectedItem.itemID);
+      if (updatedItem != null)
+      {
+        selectedItem.itemCount = updatedItem.itemCount;
+      }
+
       Debug.Log($"{selectedItem.itemName}을(를) 구매했습니다! 현재 보유량: {selectedItem.itemCount}");
 
-      inventoryManager.UpdateInventory(); // ⭐ 인벤토리 업데이트
+
+      UserInventoryManager.Instance.ReloadInventory();  // ⭐ 인벤토리 업데이트
     }
 
     CloseAllPopups();
