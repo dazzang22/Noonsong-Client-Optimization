@@ -145,6 +145,7 @@ public class CanvasChanger : MonoBehaviour
     private void ToggleInventoryCanvas()
     {
       inventoryCanvas.gameObject.SetActive(!inventoryCanvas.gameObject.activeSelf);
+      UserInventoryManager.Instance.ReloadInventory();
     }
 
     private void ToggleProfileCanvas()
