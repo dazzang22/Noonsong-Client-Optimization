@@ -69,8 +69,7 @@ public class BackendLogin
         Debug.Log("로그인을 요청합니다.");
 
         var bro = Backend.BMember.CustomLogin(id, pw);
-
-
+        UserDogamManager.Instance.First();
 
         if (bro.IsSuccess())
         {

@@ -282,12 +282,15 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
                 FirstDialog();
                 break;
             case 1:
+                Debug.Log("2");
                 SecondDialog();
                 break;
             case 2:
+                Debug.Log("3");
                 ThirdDialog();
                 break;
             case 3:
+                Debug.Log("4");
                 FourthDialog();
                 break;
             case 4:

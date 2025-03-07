@@ -122,12 +122,6 @@ public class NoonsongManager : MonoBehaviour
             Button button = newEntry.GetComponent<Button>() ?? newEntry.AddComponent<Button>();
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => ShowDetails(entry, newEntry));
-
-            //눈송이 DB테이블에 추가
-            Debug.Log($"{entry.noonsongName} 테이블에 추가");
-            int noonsongId= DogamChartManager.Instance.getSnowflakeId(entry.noonsongName);
-            string user = UserDataManager.Instance.getUserID();
-            UserDogamManager.Instance.noonsongInsert(user,noonsongId);
             
             var noonsongImage = newEntry.transform.Find("NoonsongImage").GetComponent<Image>();
             if (noonsongImage != null)
@@ -235,7 +229,7 @@ public class NoonsongManager : MonoBehaviour
 
     void ShowDetails(NoonsongEntry entry, GameObject clickedEntry)
     {
-        Debug.Log($"ShowDetails called for entry: {entry.noonsongName}");
+        Debug.Log($"ShowDetails called for entry: {entry.noonsongName},{entry.loveLevel}");
 
         if (lastClickedEntry != null && lastClickedEntry != clickedEntry)
         {

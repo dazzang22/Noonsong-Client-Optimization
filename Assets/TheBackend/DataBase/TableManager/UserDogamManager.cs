@@ -21,17 +21,41 @@ public class UserDogamManager
             return _instance;
         }
     }
-    public static UserDogam userinventory;
+    //public static UserDogam userinventory;
+    public List<UserDogam> userdogamList;
+    public List<UserDogam> userfriendList;
+    public string userId;
 
     private string gameDataRowInDate = string.Empty;
 
-    //유저의 행들의 집합 찾기 & 등록된 눈송이 리스트업
-    public List<UserDogam> getUserDogamList(string userid)
+    //테이블 처음 등록 및 로드하기
+    public void First()
     {
-        Debug.Log($"{userid}의 도감 행들을 찾습니다.");
-        var bro= Backend.GameData.GetMyData("UserDogam",new Where());
+        userdogamList = new List<UserDogam>();
+        userfriendList = new List<UserDogam>();
+        userId=UserDataManager.Instance.getUserID();
+        userdogamList=getUserDogamList();
+        UserDogam userinventory = new UserDogam();
+        if(userdogamList!=null)
+        {
+            foreach(UserDogam ud in userdogamList)
+            {
+                userinventory=ud;
+                Debug.Log($"{userinventory.noonsongId}: {userinventory.count}");
+            }
+        }
+    }
 
-        List<UserDogam> userdogamList = new List<UserDogam>();
+    //--------------------------------------------------------------------------------
+    //UserDogam 테이블 조회
+    //--------------------------------------------------------------------------------
+
+    //DB에서 유저의 행들의 집합 찾기 & 등록된 눈송이 리스트업 가져오기기
+    public List<UserDogam> getUserDogamList()
+    {
+        Debug.Log($"{userId}의 도감 행들을 찾습니다.");
+        var bro= Backend.GameData.GetMyData("UserDogam",new Where());
+        List<UserDogam> userdogamlist = new List<UserDogam>();
 
         if(bro.IsSuccess())
         {
@@ -50,7 +74,13 @@ public class UserDogamManager
                 {
                     UserDogam us=new UserDogam(udjson);
                     Debug.Log(us.ToString());
-                    userdogamList.Add(us);
+                    
+                    userdogamlist.Add(us);
+                    if(us.getFriend())
+                    {
+                        addFriendList(us);
+                        //userfriendList.Add(us);
+                    }
                 }
             }
         }
@@ -59,40 +89,83 @@ public class UserDogamManager
             Debug.LogError("게임 정보 조회에 실패했습니다.: "+bro);
             return null;
         }
-        return userdogamList;
+        return userdogamlist;
     }
 
-    //UserDogam 테이블에 도감 등록하기
-    public void noonsongInsert(string userid, int noonsongid)
+//친구 눈송이리스트에 추가
+    public void addFriendList(UserDogam ad)
     {
+        foreach(UserDogam ud in userfriendList)
+        {
+            if(ud.noonsongId == ad.noonsongId)
+            {
+                return;
+            }
+        }
+        userfriendList.Add(ad);
+    }
+    
+    //유저 친구 눈송이 개수 가져오기
+    public int getFriendNum()
+    {
+        if(userfriendList != null)
+        {
+            foreach(UserDogam ud in userfriendList)
+            {
+                Debug.Log($"{ud.noonsongId}");
+            }
+            return userfriendList.Count;
+        }
+        else
+        {
+            return 0;
+        }
+        
+    }
+
+    //--------------------------------------------------------------------------------
+    //UserDogam 테이블 추가 및 업데이트
+    //--------------------------------------------------------------------------------
+
+    //UserDogam 테이블에 도감 추가하기
+    public void noonsongInsert(string noonsong, int love,string college)
+    {
+        UserDogam userinventory = new UserDogam();
 
         Debug.Log("유저도감 테이블에서 유저의 행을 찾아 등록 여부를 확인합니다.");
-        List<UserDogam> userdogamlist = new List<UserDogam>();
-        userdogamlist=getUserDogamList(userid);
+        int noonsongid= DogamChartManager.Instance.getSnowflakeId(noonsong);
         Param param = new Param();
-        if(userdogamlist!=null)
+        if(userdogamList!=null)
         {
-            foreach(UserDogam ud in userdogamlist)
+            foreach(UserDogam ud in userdogamList)
             {
                 if(ud.noonsongId == noonsongid)
                 {
-                    Debug.Log($"{noonsongid}에 countup을 합니다.");
+                    Debug.Log($"{noonsong}, {noonsongid}에 친밀도 업데이트 합니다.");
                     userinventory = ud;
-                    param = CountUp();
-                    DataUpdate(param);
+
+                    userinventory.setFavorUp(love);
+                    //결정 , 도감 등록, 최대 호감도 확인
+                    checkMaxFavor(college,userinventory);
+                    checkCount(college,userinventory);
+                    checkIsDogam(college,userinventory);
+                    DataUpdate(userinventory.ToParam());
                     return;
                 }
             }
         }
 
-        Debug.Log("도감에 등록되어 있지 않으므로 등록을 진행합니다.");
         if(userinventory == null)
         {
-            userinventory = new UserDogam();
+            Debug.Log("도감에 등록되어 있지 않으므로 도감에 추가합니다.");
+            //userinventory = new UserDogam();
         }
 
-        Debug.Log("데이터를 초기화합니다.");
-        userinventory.setUserDogam(userid,noonsongid,1);
+        //Debug.Log("데이터를 처음 등록합니다.");
+        userinventory.setUserDogam(userId,noonsongid,love);
+        checkMaxFavor(college,userinventory);
+        checkCount(college,userinventory);
+        checkIsDogam(college,userinventory);
         param = userinventory.ToParam();
 
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
@@ -109,39 +182,57 @@ public class UserDogamManager
         {
             Debug.LogError("게임 정보 데이터 삽입에 실패했습니다. : " + bro);
         }
-
-
     }
 
-    //유저 도감 개수 가져오기
-    public int getDogamNum()
+    //결정 개수 증가 여부 확인
+    public void checkCount(string college,UserDogam userinventory)
     {
-        List<UserDogam> userdogamlist = new List<UserDogam>();
-        userdogamlist= getUserDogamList(UserDataManager.Instance.getUserID());
-        if(userdogamlist != null)
+        int crystal= DogamChartManager.Instance.crystalValue(college);
+        Debug.Log($"crystal:{crystal}");
+        Debug.Log($"crystal:{userinventory.getFavor()/crystal}");
+
+        if(userinventory.getFavor()/crystal > userinventory.getCount())
         {
-            return userdogamlist.Count;
+            int increase= userinventory.getFavor()/crystal - userinventory.getCount();
+            userinventory.setCountUp(increase);
+            DataUpdate(userinventory.ToParam());
+            Debug.Log($"{increase}결정 개수 증가");
         }
-        else
-        {
-            return 0;
-        }
-        
     }
 
-    //UserDogam 테이블에서 유저가 만난 눈송이 데이터의 count를 1 증가시킴.
-    public Param CountUp()
+    //도감 등록 변환 확인
+    public void checkIsDogam(string college,UserDogam userinventory)
     {
-        if(userinventory.count>0)
+        int friend=DogamChartManager.Instance.friendFavor(college);
+        Debug.Log($"friend:{friend}");
+
+        if(userinventory.getFavor()>=friend && userinventory.getCount()==5)
         {
-            Debug.Log("눈송이 만남 횟수를 1 증가시킵니다.");
-            userinventory.setCountUp();
-            Debug.Log(userinventory.count);
+            userinventory.setFriend(); //isdogam true
+            DataUpdate(userinventory.ToParam());
+            addFriendList(userinventory);
+            Debug.Log("도감 등록");
         }
-        return userinventory.ToParam();
+
     }
 
-    //UserDogam 테이블에서 해당 유저 데이터 업데이트
+    //최대 호감도 확인
+    public void checkMaxFavor(string college,UserDogam userinventory)
+    {
+        int favor= DogamChartManager.Instance.maxFavor(college);
+        if(!userinventory.getFriend())
+        {
+            return;
+        }
+        if(userinventory.getFavor()>=favor)
+        {
+            userinventory.setFavorMax(favor); //친밀도 최대로 지정
+            DataUpdate(userinventory.ToParam());
+            Debug.Log("최대 호감도 도달");
+        }
+    }
+
+    //UserDogam 테이블에서 해당 유저 데이터 테이블에 업데이트
     public void DataUpdate(Param param)
     {
         if(param == null)
@@ -149,15 +240,8 @@ public class UserDogamManager
             Debug.LogError("Param이 존재하지 않습니다.");
             return;
         }
-        if(userinventory == null)
-        {
-            Debug.LogError("서버에서 다운받거나 새로 삽입한 데이터가 존재하지 않습니다. Insert 혹은 Get을 통해 데이터를 생성해주세요.");
-            return;
-        }
         
-        //Param param = new Param();
-        //param = userinventory.ToParam();
-        Debug.Log(userinventory.ToString());
+        //Debug.Log(userinventory.ToString());
         
         BackendReturnObject bro = null;
 

@@ -32,7 +32,7 @@ public class NoonsongCountUI : MonoBehaviour
             return;
 
         //int friendCount = noonsongEntries.Count(entry => entry.isFriend);
-        int friendCount= UserDogamManager.Instance.getDogamNum();
+        int friendCount= UserDogamManager.Instance.getFriendNum();
         friendCountText.text = $"{friendCount}";
         accountfriendCountText.text = $"{friendCount}";
     }
