@@ -132,9 +132,26 @@ public class TuryItemManager : MonoBehaviour
     if (selectedItem != null && CurrencyManager.Instance.UseCurrency(selectedItem.itemPrice))
     {
       //재화 소비 DB 반영
+      string userId = Backend.UserInDate;
       Param pay = new Param();
       pay= UserBalanceManager.Instance.paysnow(selectedItem.itemPrice);
       UserBalanceManager.Instance.updateBalance(pay);
+
+      //인벤토리 DB 반영
+      UserInventoryEntry existingItem = UserInventoryManager.Instance.userInventoryEntries
+           .Find(e => e.itemId == selectedItem.itemID);
+      if (existingItem != null)
+      {
+        // **✅ 기존 아이템이 존재하면 개수 업데이트**
+        Debug.Log($"✅ {selectedItem.itemName}이 인벤토리에 이미 존재, 개수 증가");
+        UserInventoryManager.Instance.UpdateItemCount(userId, selectedItem.itemID, existingItem.itemCount + 1);
+      }
+      else
+      {
+        // **✅ 기존에 없던 아이템이라면 새롭게 추가**
+        Debug.Log($"🆕 {selectedItem.itemName}이 인벤토리에 없음 → 새롭게 추가");
+        UserInventoryManager.Instance.InsertUserInventory(userId, selectedItem.itemID, 1);
+      }
 
       selectedItem.itemCount++; // ⭐ 아이템 개수 증가
       //UpdateItemCountUI(selectedItem);
