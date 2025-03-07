@@ -320,10 +320,14 @@ public class NoonsongManager : MonoBehaviour
             {
                 loveMeterImages[i].enabled = true;
 
-                if (loveLevel >= 60)  // 60 이상이면 loveSprite2 적용
+                if (loveLevel >= 60 && i < (loveLevel - 50) / 10)
+                {
                     loveMeterImages[i].sprite = loveSprite2;
+                }
                 else
+                {
                     loveMeterImages[i].sprite = loveSprite1;
+                }
             }
         }
     }

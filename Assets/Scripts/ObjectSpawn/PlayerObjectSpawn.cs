@@ -204,7 +204,7 @@ public class PlayerObjectSpawn : MonoBehaviour
 
             foreach (var entry in entries)
             {
-                if (!entry.isDiscovered)
+                if (!entry.isFriend)
                 {
                     return false; // 발견되지 않은 항목이 있으면 false 반환
                 }
