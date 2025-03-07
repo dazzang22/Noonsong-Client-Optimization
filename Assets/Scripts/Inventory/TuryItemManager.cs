@@ -131,8 +131,8 @@ public class TuryItemManager : MonoBehaviour
   {
     if (selectedItem != null && CurrencyManager.Instance.UseCurrency(selectedItem.itemPrice))
     {
+      string userId = UserDataManager.Instance.getUserID();
       //재화 소비 DB 반영
-      string userId = Backend.UserInDate;
       Param pay = new Param();
       pay= UserBalanceManager.Instance.paysnow(selectedItem.itemPrice);
       UserBalanceManager.Instance.updateBalance(pay);
@@ -153,11 +153,21 @@ public class TuryItemManager : MonoBehaviour
         UserInventoryManager.Instance.InsertUserInventory(userId, selectedItem.itemID, 1);
       }
 
-      selectedItem.itemCount++; // ⭐ 아이템 개수 증가
-      //UpdateItemCountUI(selectedItem);
+      // 🔹 최신 데이터 불러오기 (DB에서 새로 가져옴)
+      UserInventoryManager.Instance.LoadUserInventory(userId);
+
+      // 🔹 최신 데이터를 `selectedItem.itemCount`에 반영
+      UserInventoryEntry updatedItem = UserInventoryManager.Instance.userInventoryEntries
+          .Find(e => e.itemId == selectedItem.itemID);
+      if (updatedItem != null)
+      {
+        selectedItem.itemCount = updatedItem.itemCount;
+      }
+
       Debug.Log($"{selectedItem.itemName}을(를) 구매했습니다! 현재 보유량: {selectedItem.itemCount}");
 
-      inventoryManager.UpdateInventory(); // ⭐ 인벤토리 업데이트
+
+      UserInventoryManager.Instance.ReloadInventory();  // ⭐ 인벤토리 업데이트
     }
 
     CloseAllPopups();

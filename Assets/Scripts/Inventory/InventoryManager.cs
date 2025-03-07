@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System;
+using BackEnd;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -18,10 +19,29 @@ public class InventoryManager : MonoBehaviour
   public Image popupItemImage;
   public Button popupCloseButton;
 
+
+  
+
   void Start()
   {
     descriptionPopup.SetActive(false);
-    FindUserItemAndIncreaseCount(2, 10);
+
+    string userId = UserDataManager.Instance.getUserID();
+    Debug.Log($" userId={userId}");
+    UserInventoryManager.Instance.LoadUserInventory(userId);
+
+    Debug.Log("인벤토리 로드 완료. 현재 보유 아이템 리스트:");
+    foreach (var item in UserInventoryManager.Instance.userInventoryEntries)
+    {
+      Debug.Log($"아이템 ID: {item.itemId}, 개수: {item.itemCount}");
+    }
+
+    Invoke(nameof(InitializeInventory), 1f);
+  }
+
+  void InitializeInventory()
+  {
+    //FindUserItemAndIncreaseCount(2, 10);
     PopulateInventory();
   }
 
@@ -39,8 +59,15 @@ public class InventoryManager : MonoBehaviour
 
   void PopulateInventory()
   {
+    if (inventoryContentPanel == null)
+    {
+      Debug.LogError("inventoryContentPanel이 존재하지 않습니다!");
+      return;
+    }
+
     foreach (Transform child in inventoryContentPanel)
     {
+      if (child == null) continue;
       Destroy(child.gameObject);
     }
     inventoryItems.Clear();
@@ -50,7 +77,17 @@ public class InventoryManager : MonoBehaviour
       if (item.itemCount > 0) // 보유 개수가 1 이상일 경우만 표시
       {
         ItemEntry itemEntry = item.GetItemEntry();
-        if (itemEntry == null) continue;
+        if (itemEntry == null)
+        {
+          Debug.LogError($"⚠ 아이템 ID {item.itemId}에 해당하는 ItemEntry를 찾을 수 없음!");
+          continue;
+        }
+        if (inventoryContentPanel == null)
+        {
+          Debug.LogError("inventoryContentPanel이 삭제됨!");
+          return;
+        }
+
 
         GameObject newItem = Instantiate(inventoryItemPrefab, inventoryContentPanel);
 
@@ -74,6 +111,11 @@ public class InventoryManager : MonoBehaviour
       int placeholdersNeeded = 4 - totalItems;
       for (int i = 0; i < placeholdersNeeded; i++)
       {
+        if (inventoryContentPanel == null)
+        {
+          Debug.LogError("inventoryContentPanel이 삭제됨!");
+          return;
+        }
         Instantiate(placeholderPrefab, inventoryContentPanel);
       }
     }
@@ -89,6 +131,7 @@ public class InventoryManager : MonoBehaviour
       {
         if (inventoryItems.ContainsKey(itemId)) 
         {
+          Debug.Log($"🗑 아이템 삭제됨: {itemId}");
           Destroy(inventoryItems[itemId]);
           inventoryItems.Remove(itemId);
         }
@@ -96,7 +139,8 @@ public class InventoryManager : MonoBehaviour
     }
 
     PopulateInventory();
-    }
+    Debug.Log("인벤토리 업데이트 완료");
+  }
 
     void ShowItemDescription(ItemEntry item)
   {
