@@ -341,6 +341,8 @@ public class EncounterUI : MonoBehaviour
         dialogueButton.interactable = true;
         HiButton.interactable = false;
         GiftButton.interactable = false;
+        //DB 연결
+        GiftManager.Instance.sendGiftItem(item.itemID);
     }
 
     public void CloseEncounter()
@@ -363,6 +365,8 @@ public class EncounterUI : MonoBehaviour
     public int UpdateNoonsongAffection(int amount)
     {
         currentCharacter.loveLevel += amount;
+        //db 업데이트
+        UserDogamManager.Instance.noonsongInsert(currentCharacter.noonsongName,amount,currentCharacter.university);
         return currentCharacter.loveLevel;
     }
 
