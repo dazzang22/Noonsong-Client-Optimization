@@ -134,8 +134,7 @@ public class BackendLogin
             if (bro.IsSuccess())
             {
                 Debug.Log("이메일 등록 성공");
-                Param newparam=UserDataManager.Instance.ChangeEmail(email);
-                UserDataManager.Instance.UpdateUserData(newparam);
+                UserDataManager.Instance.changeEmail(email);
                 updateEmail_static=1;
             }
             else

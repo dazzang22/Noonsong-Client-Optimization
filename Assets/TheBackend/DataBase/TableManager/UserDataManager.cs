@@ -70,6 +70,16 @@ public class UserDataManager
 
         if(!bro.IsSuccess())
         {
+            if(bro.IsBadAccessTokenError()) 
+            {
+                Debug.Log("액세스토큰이 만료되었을 경우");
+                
+                var bro2 = Backend.BMember.RefreshTheBackendToken();
+                if(bro2.GetMessage() == "bad refreshToken") 
+                {
+                    Debug.Log("로그인 정보가 만료되었습니다.");
+                }
+            }
             Debug.LogError(bro.ToString());
             return null;
         }
@@ -141,11 +151,19 @@ public class UserDataManager
         Debug.Log(param.GetJson().ToString());
         return param;
     }
+
     //숙명 이메일 저장장
     public void SetSEmail(string email)
     {
         UserProfileData userProfileData=findUser(Backend.UserInDate);
         userProfileData.setSMail(email);
+        Param param=userProfileData.ToParam();
+        UpdateUserData(param);
+    }
+    public void changeEmail(string email)
+    {
+        UserProfileData userProfileData=findUser(Backend.UserInDate);
+        userProfileData.setMail(email);
         Param param=userProfileData.ToParam();
         UpdateUserData(param);
     }

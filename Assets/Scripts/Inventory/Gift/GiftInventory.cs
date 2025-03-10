@@ -141,7 +141,7 @@ public class GiftInventory : MonoBehaviour
                     audioSource.PlayOneShot(love);
                     preferenceMultiplier = 3;
                     giftReaction = currentNoonsong.isFriend
-                        ? "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½! ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~"
+                        ? "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?! ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~"
                         : "ï¿½ï¿½, ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½à¼­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!";
                     effectToActivate = giftEffectParticle3;
                     break;
@@ -166,19 +166,23 @@ public class GiftInventory : MonoBehaviour
             }
 
             int affectionChange = baseAffection * preferenceMultiplier;
+            int friendlevel = DogamChartManager.Instance.friendFavor(currentNoonsong.university);
 
             if (!currentNoonsong.isFriend)
             {
                 int newLoveLevel = currentNoonsong.loveLevel + affectionChange;
-                if (newLoveLevel > 50)
+                // 50 -> ´ëÇÐº° Ä£±¸°¡ µÉ ¼ö ÀÖ´Â È£°¨µµ ¼öÄ¡·Î º¯°æ (DB¿¡¼­ °¡Á®¿È)
+                if (newLoveLevel > friendlevel)
                 {
-                    affectionChange = 50 - currentNoonsong.loveLevel;
+                    affectionChange = friendlevel - currentNoonsong.loveLevel;
                 }
             }
 
             int updatedLoveLevel = encounterUI.UpdateNoonsongAffection(affectionChange);
+            int bestfriend = DogamChartManager.Instance.maxFavor(currentNoonsong.university);
+            // 100 -> ´ëÇÐº° º£ÇÁ°¡ µÉ ¼ö ÀÖ´Â È£°¨µµ ¼öÄ¡·Î º¯°æ (DB¿¡¼­ °¡Á®¿È)
 
-            if (updatedLoveLevel >= 100 && !currentNoonsong.isBestFriend)
+            if (updatedLoveLevel >= bestfriend && !currentNoonsong.isBestFriend)
             {
                 Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¾ï¿½");
                 audioSource.PlayOneShot(eventUI);
@@ -186,7 +190,7 @@ public class GiftInventory : MonoBehaviour
                 currentNoonsong.isBestFriend = true;
             }
 
-            if (updatedLoveLevel == 50 && !currentNoonsong.isFriend)
+            if (updatedLoveLevel == friendlevel && !currentNoonsong.isFriend)
             {
                 encounterUI.ShowFriendRequestPopup();
                 audioSource.PlayOneShot(eventUI);
@@ -236,7 +240,7 @@ public class GiftInventory : MonoBehaviour
     {
         if (inventoryManager == null)
         {
-            Debug.LogError("InventoryManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½");
+            Debug.LogError("InventoryManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿? ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½");
             return;
         }
 

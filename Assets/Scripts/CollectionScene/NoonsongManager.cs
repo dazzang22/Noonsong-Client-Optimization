@@ -281,7 +281,7 @@ public class NoonsongManager : MonoBehaviour
                 });
                 Debug.Log("3D View button click event added!");
             }
-            UpdateLoveMeter(entry.loveLevel);
+            UpdateLoveMeter(entry.loveLevel,entry);
         }
         else
         {
@@ -300,7 +300,7 @@ public class NoonsongManager : MonoBehaviour
         lastClickedEntry = clickedEntry;
     }
 
-    private void UpdateLoveMeter(int loveLevel)
+    private void UpdateLoveMeter(int loveLevel,NoonsongEntry entry)
     {
         for (int i = 0; i < loveMeterImages.Length; i++)
         {
@@ -310,11 +310,13 @@ public class NoonsongManager : MonoBehaviour
 
         for (int i = 0; i < loveMeterImages.Length; i++)
         {
-            if (loveLevel >= (i + 1) * 10)
+            int crystalvalue = DogamChartManager.Instance.crystalValue(entry.university);
+            int friendlevel = DogamChartManager.Instance.friendFavor(entry.university);
+            if (loveLevel >= (i + 1) * crystalvalue)
             {
                 loveMeterImages[i].enabled = true;
 
-                if (loveLevel >= 60 && i < (loveLevel - 50) / 10)
+                if (loveLevel >= (friendlevel +crystalvalue) && i < (loveLevel - friendlevel) / crystalvalue)
                 {
                     loveMeterImages[i].sprite = loveSprite2;
                 }
