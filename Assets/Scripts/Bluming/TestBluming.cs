@@ -27,10 +27,8 @@ public class TestBluming : MonoBehaviour
 
     IEnumerator Start()
     {
-        Debug.Log("위치 서비스 초기화 시작...");
         if (!Input.location.isEnabledByUser)
         {
-            Debug.LogError("GPS가 비활성화되어 있습니다. 설정에서 GPS를 활성화하세요.");
             yield break;
         }
 
@@ -39,24 +37,19 @@ public class TestBluming : MonoBehaviour
         int maxWait = 20;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
-            Debug.Log("위치 서비스 초기화 중...");
             yield return new WaitForSeconds(1);
             maxWait--;
         }
 
         if (maxWait <= 0)
         {
-            Debug.LogError("위치 서비스 초기화 시간 초과!");
             yield break;
         }
 
         if (Input.location.status == LocationServiceStatus.Failed)
         {
-            Debug.LogError("GPS 데이터를 가져올 수 없습니다.");
             yield break;
         }
-
-        Debug.Log($"위치 서비스 초기화 완료. 현재 위치: 위도 {Input.location.lastData.latitude}, 경도 {Input.location.lastData.longitude}");
     }
 
 
@@ -64,9 +57,9 @@ public class TestBluming : MonoBehaviour
     {
         if (IsPlayerInZone())
         {
-            Debug.Log("Player is in Bluming Spot");
             if (spawnedObject == null)
             {
+                Debug.Log("Player is in Bluming Spot");
                 SpawnObject();
             }
         }
@@ -137,7 +130,6 @@ public class TestBluming : MonoBehaviour
     {
         if (!Input.location.isEnabledByUser)
         {
-            Debug.LogWarning("GPS 사용이 비활성화됨!");
             return Vector2.zero;
         }
 
@@ -146,7 +138,6 @@ public class TestBluming : MonoBehaviour
             return new Vector2(Input.location.lastData.latitude, Input.location.lastData.longitude);
         }
 
-        Debug.LogWarning("GPS 데이터를 가져올 수 없음!");
         return Vector2.zero;
     }
 

@@ -32,7 +32,7 @@ public class EncounterUI : MonoBehaviour
     private NoonsongEntry currentCharacter;
     private System.Action onCloseCallback;
     [Header("effect")]
-    public GameObject EffectPrefabs;
+    public List<GameObject> EffectPrefabs;
     public GameObject collectEffectPrefab;
     private Param param2 = new Param();
 
@@ -100,8 +100,6 @@ public class EncounterUI : MonoBehaviour
             Debug.LogError("character가 null입니다!");
             return;
         }
-
-        EffectPrefabs.SetActive(true);
 
         currentCharacter = character;
         Debug.Log($"currentCharacter 설정됨: {currentCharacter.name}");
@@ -353,7 +351,14 @@ public class EncounterUI : MonoBehaviour
 
         encounterPanel.SetActive(false);
         dialogueWindow.SetActive(false);
-        EffectPrefabs.SetActive(false);
+        collectEffectPrefab.SetActive(false);
+        foreach (GameObject obj in EffectPrefabs)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(false);
+            }
+        }
         onCloseCallback?.Invoke();
     }
 
