@@ -112,6 +112,8 @@ public class EmailVerifyManager : MonoBehaviour
             codePanel.SetActive(false);
             successPanel.SetActive(true);
             emailErrorText.text = "";
+            //DB 연결
+            UserDataManager.Instance.SetSEmail(userEmail);
         }
         else
         {

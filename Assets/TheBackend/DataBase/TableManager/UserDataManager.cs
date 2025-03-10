@@ -141,13 +141,13 @@ public class UserDataManager
         Debug.Log(param.GetJson().ToString());
         return param;
     }
-    //이메일 변경
-    public Param ChangeEmail(string email)
+    //숙명 이메일 저장장
+    public void SetSEmail(string email)
     {
         UserProfileData userProfileData=findUser(Backend.UserInDate);
-        userProfileData.setMail(email);
+        userProfileData.setSMail(email);
         Param param=userProfileData.ToParam();
-        return param;
+        UpdateUserData(param);
     }
 
     //유저 탈퇴
