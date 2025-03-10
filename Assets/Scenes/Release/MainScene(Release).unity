@@ -1829,7 +1829,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5173212613526847845, guid: f6225236419c90d4a88643fd94374da8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5575404029903027467, guid: f6225236419c90d4a88643fd94374da8, type: 3}
       propertyPath: area1Center.x
@@ -4955,26 +4955,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74a76adb260eee749bceaab6aa699986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemEntries:
-  - {fileID: 11400000, guid: 74319764bb8a6db4093a691ba0db15f9, type: 2}
-  - {fileID: 11400000, guid: d5e34f7cb235c60499511cc8a71854ae, type: 2}
-  - {fileID: 11400000, guid: 074854d5e481c174a9f544fa42df4496, type: 2}
-  - {fileID: 11400000, guid: 3c240238aef45b941ac86406ec6d8621, type: 2}
-  - {fileID: 11400000, guid: 59a8f5a0a01f6cc478ec15f1e535aa0c, type: 2}
-  - {fileID: 11400000, guid: 43d922334c765d444a99f5b41e561978, type: 2}
-  - {fileID: 11400000, guid: 8960685cd0cfb1b42abf71662008f601, type: 2}
-  - {fileID: 11400000, guid: b503fb29798de7d43a3ef946e905f439, type: 2}
-  - {fileID: 11400000, guid: 28d6fbe85bd1f204682d50a94bd908c6, type: 2}
-  - {fileID: 11400000, guid: 10902daf5922e1343aeabf3b5f427b75, type: 2}
-  - {fileID: 11400000, guid: 66d09b21936f09e4ba4b3ff531a51f42, type: 2}
-  - {fileID: 11400000, guid: 88525d1e3f32d924fa890089b1b986fe, type: 2}
-  - {fileID: 11400000, guid: 383afb6dfa1313d49b9ad7c82109ddb9, type: 2}
-  - {fileID: 11400000, guid: 2203006fdd1fd4a4c9f27fbf9ac7829c, type: 2}
-  - {fileID: 11400000, guid: f37465e3e9514df4b91e4c82a822ec52, type: 2}
-  - {fileID: 11400000, guid: 5fe14ed6ed81e7f4c9be22dd4e8c49ec, type: 2}
-  - {fileID: 11400000, guid: cee8dbadcb40d4c4191fbc509d1fe121, type: 2}
-  - {fileID: 11400000, guid: e450d5d677ed71b40b9167c181121419, type: 2}
-  - {fileID: 11400000, guid: 3d7407e633fdf1a469c44b5ed865d8c1, type: 2}
   inventoryContentPanel: {fileID: 1146750417758641174}
   inventoryItemPrefab: {fileID: 882364859}
   placeholderPrefab: {fileID: 8294834456848905955, guid: 4cc1d9140facf8a489fe92601aa5e7d7, type: 3}
@@ -25549,11 +25529,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &1978596988 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2093920568255580789, guid: 005cc8ed2cc10e446a8deb3053ea15f0, type: 3}
-  m_PrefabInstance: {fileID: 1169966815}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1992404188
 GameObject:
   m_ObjectHideFlags: 0
@@ -72668,7 +72643,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -20.81305, y: 27.644043}
+  m_AnchoredPosition: {x: -20.81311, y: 27.644043}
   m_SizeDelta: {x: -119.056885, y: -186.63037}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &6234633020431823238
@@ -90984,7 +90959,11 @@ MonoBehaviour:
   friendRequestPopup: {fileID: 1665584525}
   yesButton: {fileID: 1768077364}
   noButton: {fileID: 410064607}
-  EffectPrefabs: {fileID: 1978596988}
+  EffectPrefabs:
+  - {fileID: 828445702}
+  - {fileID: 1572672361}
+  - {fileID: 530137373}
+  - {fileID: 752920694}
   collectEffectPrefab: {fileID: 1743159164}
   dialogueButton: {fileID: 783201761}
   HiButton: {fileID: 1750719643643276228}
