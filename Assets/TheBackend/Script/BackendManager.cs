@@ -67,14 +67,17 @@ public class BackendManager : MonoBehaviour
 
     void Test(){
         //BackendLogin.Instance.CustomSignUp("User3","1234");
-    
-        BackendLogin.Instance.CustomLogin("kkkkk","KKkk1111");
+
+        BackendLogin.Instance.CustomLogin("werwer","WERwer1111");
+        GameStatistics.Instance.AverageSnowCount();
+
         /*GameDataManager.Instance.GetTableList();
         string userId= UserDataManager.Instance.getUserID();
         UserMapManager.Instance.insertUserMap(userId);
 
         Debug.Log(UserMapManager.Instance.getUserMapList());
 
+        
   
         Debug.Log("테스트를 종료합니다.");*/
 
