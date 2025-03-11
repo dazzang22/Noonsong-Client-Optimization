@@ -47,14 +47,14 @@ public class ScrollViewManager : MonoBehaviour
                 panels[i].SetActive(false); 
             }
             scrollViews[index].SetActive(true);
-            if (index != 2)
-            {
+            //if (index != 2)
+            //{
                 for (int i = 0; i < panels.Length; i++)
                 {
                     panels[i].SetActive(false);
                 }
                 panels[index].SetActive(true);
-            }
+           // }
 
             Canvas.ForceUpdateCanvases();
         }
