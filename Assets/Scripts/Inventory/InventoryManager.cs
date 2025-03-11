@@ -79,7 +79,7 @@ public class InventoryManager : MonoBehaviour
         ItemEntry itemEntry = item.GetItemEntry();
         if (itemEntry == null)
         {
-          Debug.LogError($"⚠ 아이템 ID {item.itemId}에 해당하는 ItemEntry를 찾을 수 없음!");
+          Debug.LogError($"아이템 ID {item.itemId}에 해당하는 ItemEntry를 찾을 수 없음!");
           continue;
         }
         if (inventoryContentPanel == null)
@@ -93,6 +93,7 @@ public class InventoryManager : MonoBehaviour
 
         newItem.transform.Find("Item_Name").GetComponent<TextMeshProUGUI>().text = itemEntry.itemName;
         newItem.transform.Find("Item_Image").GetComponent<Image>().sprite = itemEntry.itemSprite;
+        newItem.transform.Find("Item_Quantity").GetComponent<TextMeshProUGUI>().text = item.itemCount.ToString();
 
         //newItem.transform.Find("Item_Count").GetComponent<TextMeshProUGUI>().text = $"보유 수량: {item.itemCount} 개";
 

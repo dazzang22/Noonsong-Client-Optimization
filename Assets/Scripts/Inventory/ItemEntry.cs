@@ -8,7 +8,7 @@ public class ItemEntry : ScriptableObject
   public string itemName;                // 아이템 이름
   public string description;             // 아이템 설명
   public int itemPrice;                  // 아이템 가격
-  public int itemCount = 0;
+  public int itemCount;
   public Sprite itemSprite;              // 아이템 이미지
 
   [System.Serializable]
