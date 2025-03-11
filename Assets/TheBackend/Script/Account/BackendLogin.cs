@@ -69,13 +69,14 @@ public class BackendLogin
         Debug.Log("로그인을 요청합니다.");
 
         var bro = Backend.BMember.CustomLogin(id, pw);
-        UserDogamManager.Instance.First();
+       //serDogamManager.Instance.First();
 
         if (bro.IsSuccess())
         {
             Debug.Log("로그인이 성공했습니다. : " + bro);
             //SceneManager.LoadScene("Merge-TutorialScene");
-            login_static=1;
+            UserDogamManager.Instance.First();
+            login_static =1;
         }
         else
         {

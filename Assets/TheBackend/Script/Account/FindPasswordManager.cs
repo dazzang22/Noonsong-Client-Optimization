@@ -14,7 +14,7 @@ public class FindPasswordManager : LoginBase
     [SerializeField] private GameObject findPWSuccessPanel;
 
 
-    private const string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"; // 이메일 정규식
+    private const string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"; 
 
     private void Start()
     {

@@ -51,7 +51,7 @@ public class LoginManager : MonoBehaviour
         if (BackendLogin.Instance.login_static==0)
         {
             //resultText.text = $"로그인 실패: {bro.GetMessage()}";
-            resultText.text = "로그인에 실패하였습니다. 아이디 또는 비밀번호를 다시 확인해 주세요.";
+            resultText.text = " 아이디 또는 비밀번호를 다시 확인하세요.";
 
             resultText.color = Color.red;
         }
