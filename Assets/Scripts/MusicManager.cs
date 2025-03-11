@@ -5,26 +5,37 @@ using System;
 
 public class MusicManager : MonoBehaviour
 {
-    public AudioClip area1MorningClip;
-    public AudioClip area1AfternoonClip;
-    public AudioClip area1EveningClip;
-    public AudioClip area1NightClip;
+    [Serializable]
+    public class CircularArea
+    {
+        public string name;
+        public Vector2 center; // 중심 좌표
+        public float radius;   // 반경
+        public AudioClip morningClip;
+        public AudioClip afternoonClip;
+        public AudioClip eveningClip;
+        public AudioClip nightClip;
+    }
 
-    public AudioClip area2MorningClip;
-    public AudioClip area2AfternoonClip;
-    public AudioClip area2EveningClip;
-    public AudioClip area2NightClip;
+    [Serializable]
+    public class PolygonalArea
+    {
+        public string name;
+        public List<Vector2> vertices; // 다각형 꼭지점
+        public AudioClip morningClip;
+        public AudioClip afternoonClip;
+        public AudioClip eveningClip;
+        public AudioClip nightClip;
+    }
 
-    public Vector2 area1Center = new Vector2(37.545991f, 126.964693f); // 1캠
-    public float area1Radius = 0.007f; // 반경 0.01도 = 약 1km)
-
-    public Vector2 area2Center = new Vector2(37.544362f, 126.964912f); // 2캠
-    public float area2Radius = 0.007f;
-
-    private bool isInArea1 = false;
-    private bool isInArea2 = false;
+    public CircularArea area3; // 구역 3 (원형)
+    public CircularArea area4; // 구역 4 (원형)
+    public PolygonalArea area1; // 구역 1 (다각형)
+    public PolygonalArea area2; // 구역 2 (다각형)
 
     private AudioSource audioSource;
+    private string currentArea = null; // 현재 활성화된 구역 이름
+    private const float gpsUpdateInterval = 1f; // GPS 업데이트 주기 (초)
 
     private void Start()
     {
@@ -64,78 +75,152 @@ public class MusicManager : MonoBehaviour
         while (true)
         {
             LocationInfo location = Input.location.lastData;
-            float latitude = location.latitude;
-            float longitude = location.longitude;
+            Vector2 currentPosition = new Vector2(location.latitude, location.longitude);
 
-            TimeSpan currentTime = DateTime.Now.TimeOfDay;
-            string timeOfDay = GetTimeOfDay(currentTime);
+            UpdateMusicForArea(currentPosition);
 
-            bool inArea1 = IsWithinArea(new Vector2(latitude, longitude), area1Center, area1Radius);
-            if (inArea1 && !isInArea1)
-            {
-                PlayMusicForTimeOfDay(area1MorningClip, area1AfternoonClip, area1EveningClip, area1NightClip, timeOfDay);
-            }
-            else if (!inArea1 && isInArea1)
-            {
-                StopMusic();
-            }
-            isInArea1 = inArea1;
-
-            bool inArea2 = IsWithinArea(new Vector2(latitude, longitude), area2Center, area2Radius);
-            if (inArea2 && !isInArea2)
-            {
-                PlayMusicForTimeOfDay(area2MorningClip, area2AfternoonClip, area2EveningClip, area2NightClip, timeOfDay);
-            }
-            else if (!inArea2 && isInArea2)
-            {
-                StopMusic();
-            }
-            isInArea2 = inArea2;
-
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(gpsUpdateInterval);
         }
     }
 
-    private bool IsWithinArea(Vector2 currentPosition, Vector2 areaCenter, float radius)
+    private void UpdateMusicForArea(Vector2 currentPosition)
     {
-        float distance = Vector2.Distance(currentPosition, areaCenter);
-        return distance <= radius;
+        string timeOfDay = GetTimeOfDay();
+        string detectedArea = null;
+
+        // 구역 3 확인
+        if (IsWithinCircularArea(currentPosition, area3))
+        {
+            detectedArea = area3.name;
+            PlayMusicForTimeOfDay(area3, timeOfDay);
+        }
+        // 구역 4 확인
+        else if (IsWithinCircularArea(currentPosition, area4))
+        {
+            detectedArea = area4.name;
+            PlayMusicForTimeOfDay(area4, timeOfDay);
+        }
+        // 구역 1 확인
+        else if (IsWithinPolygonalArea(currentPosition, area1))
+        {
+            detectedArea = area1.name;
+            PlayMusicForTimeOfDay(area1, timeOfDay);
+        }
+        // 구역 2 확인
+        else if (IsWithinPolygonalArea(currentPosition, area2))
+        {
+            detectedArea = area2.name;
+            PlayMusicForTimeOfDay(area2, timeOfDay);
+        }
+
+        // 구역 변경 시 음악 정지
+        if (detectedArea == null && currentArea != null)
+        {
+            StopMusic();
+        }
+
+        currentArea = detectedArea;
     }
 
-    private void PlayMusicForTimeOfDay(AudioClip morningClip, AudioClip afternoonClip, AudioClip eveningClip, AudioClip nightClip, string timeOfDay)
+    private bool IsWithinCircularArea(Vector2 position, CircularArea area)
     {
-        if (audioSource.isPlaying) audioSource.Stop();
+        float distance = Vector2.Distance(position, area.center);
+        return distance <= area.radius;
+    }
 
-        if (timeOfDay == "Morning" && morningClip != null) audioSource.clip = morningClip;
-        if (timeOfDay == "Afternoon" && afternoonClip != null) audioSource.clip = afternoonClip;
-        if (timeOfDay == "Evening" && eveningClip != null) audioSource.clip = eveningClip;
-        if (timeOfDay == "Night" && nightClip != null) audioSource.clip = nightClip;
+    private bool IsWithinPolygonalArea(Vector2 position, PolygonalArea area)
+    {
+        int intersectCount = 0;
+        for (int i = 0; i < area.vertices.Count; i++)
+        {
+            Vector2 p1 = area.vertices[i];
+            Vector2 p2 = area.vertices[(i + 1) % area.vertices.Count];
 
-        if (audioSource.clip != null) audioSource.Play();
+            if (RayIntersectsSegment(position, p1, p2))
+            {
+                intersectCount++;
+            }
+        }
+        return intersectCount % 2 == 1; // 홀수 교차점이면 내부
+    }
+
+    private bool RayIntersectsSegment(Vector2 point, Vector2 p1, Vector2 p2)
+    {
+        if (p1.y > p2.y)
+        {
+            Vector2 temp = p1;
+            p1 = p2;
+            p2 = temp;
+        }
+
+        if (point.y == p1.y || point.y == p2.y)
+        {
+            point.y += 0.0001f; // 수평선 교차 방지
+        }
+
+        if (point.y < p1.y || point.y > p2.y || point.x > Mathf.Max(p1.x, p2.x))
+        {
+            return false;
+        }
+
+        if (point.x < Mathf.Min(p1.x, p2.x))
+        {
+            return true;
+        }
+
+        float slope = (p2.x - p1.x) / (p2.y - p1.y);
+        float xIntersection = p1.x + (point.y - p1.y) * slope;
+
+        return point.x <= xIntersection;
+    }
+
+    private void PlayMusicForTimeOfDay(dynamic area, string timeOfDay)
+    {
+        if (audioSource.isPlaying && currentArea == area.name) return;
+
+        AudioClip clipToPlay = null;
+        switch (timeOfDay)
+        {
+            case "Morning":
+                clipToPlay = area.morningClip;
+                break;
+            case "Afternoon":
+                clipToPlay = area.afternoonClip;
+                break;
+            case "Evening":
+                clipToPlay = area.eveningClip;
+                break;
+            case "Night":
+                clipToPlay = area.nightClip;
+                break;
+        }
+
+        if (clipToPlay != null)
+        {
+            audioSource.Stop();
+            audioSource.clip = clipToPlay;
+            audioSource.Play();
+        }
     }
 
     private void StopMusic()
     {
-        if (audioSource.isPlaying) audioSource.Stop();
+        if (audioSource.isPlaying)
+        {
+            audioSource.Stop();
+            audioSource.clip = null;
+        }
     }
 
-    private string GetTimeOfDay(TimeSpan currentTime)
+    private string GetTimeOfDay()
     {
+        TimeSpan currentTime = DateTime.Now.TimeOfDay;
         if (currentTime >= new TimeSpan(6, 0, 0) && currentTime < new TimeSpan(12, 0, 0))
-        {
-            return "Morning"; // 오전
-        }
-        else if (currentTime >= new TimeSpan(12, 0, 0) && currentTime < new TimeSpan(18, 0, 0))
-        {
-            return "Afternoon"; // 오후
-        }
-        else if (currentTime >= new TimeSpan(18, 0, 0) && currentTime < new TimeSpan(24, 0, 0))
-        {
-            return "Evening"; // 저녁
-        }
-        else
-        {
-            return "Night"; // 밤
-        }
+            return "Morning";
+        if (currentTime >= new TimeSpan(12, 0, 0) && currentTime < new TimeSpan(18, 0, 0))
+            return "Afternoon";
+        if (currentTime >= new TimeSpan(18, 0, 0) && currentTime < new TimeSpan(24, 0, 0))
+            return "Evening";
+        return "Night";
     }
 }
