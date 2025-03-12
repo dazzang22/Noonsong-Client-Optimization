@@ -24,6 +24,36 @@ public class TestBluming : MonoBehaviour
     private GameObject spawnedObject;
     private Transform othersObject;
 
+    private void OnEnable()
+    {
+        MusicManager.OnEnterArea4 += HandleEnterArea4;
+        MusicManager.OnExitArea4 += HandleExitArea4;
+    }
+
+    private void OnDisable()
+    {
+        MusicManager.OnEnterArea4 -= HandleEnterArea4;
+        MusicManager.OnExitArea4 -= HandleExitArea4;
+    }
+
+    private void HandleEnterArea4()
+    {
+        Debug.Log("Entered Area 4 - Spawning Object");
+        if (spawnedObject == null)
+        {
+            SpawnObject();
+        }
+    }
+
+    private void HandleExitArea4()
+    {
+        Debug.Log("Exited Area 4 - Destroying Object");
+        if (spawnedObject != null)
+        {
+            Destroy(spawnedObject);
+            spawnedObject = null;
+        }
+    }
 
     IEnumerator Start()
     {
@@ -52,32 +82,10 @@ public class TestBluming : MonoBehaviour
         }
     }
 
-
-    void Update()
-    {
-        if (IsPlayerInZone())
-        {
-            if (spawnedObject == null)
-            {
-                Debug.Log("Player is in Bluming Spot");
-                SpawnObject();
-            }
-        }
-        else
-        {
-            if (spawnedObject != null)
-            {
-                Destroy(spawnedObject);
-                spawnedObject = null;
-            }
-        }
-    }
-
     void SpawnObject()
     {
         Vector3 userPosition = xrOrigin.position;
         Vector3 spawnPosition = userPosition;
-        spawnPosition.y -= 15;
         spawnedObject = Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
         spawnedObject.transform.localScale *= 2f;
 
@@ -117,42 +125,5 @@ public class TestBluming : MonoBehaviour
         {
             Debug.LogWarning("Others null");
         }
-    }
-    bool IsPlayerInZone()
-    {
-        Vector2 playerLocation = GetPlayerLocation();
-
-        float distance = GetDistanceFromTarget(playerLocation, targetLocation);
-        return distance <= spawnRadius;
-    }
-
-    Vector2 GetPlayerLocation()
-    {
-        if (!Input.location.isEnabledByUser)
-        {
-            return Vector2.zero;
-        }
-
-        if (Input.location.status == LocationServiceStatus.Running)
-        {
-            return new Vector2(Input.location.lastData.latitude, Input.location.lastData.longitude);
-        }
-
-        return Vector2.zero;
-    }
-
-    float GetDistanceFromTarget(Vector2 playerLocation, Vector2 targetLocation)
-    {
-        float earthRadius = 6371000f;
-        float dLat = Mathf.Deg2Rad * (targetLocation.x - playerLocation.x);
-        float dLon = Mathf.Deg2Rad * (targetLocation.y - playerLocation.y);
-
-        float a = Mathf.Sin(dLat / 2) * Mathf.Sin(dLat / 2) +
-                  Mathf.Cos(Mathf.Deg2Rad * playerLocation.x) *
-                  Mathf.Cos(Mathf.Deg2Rad * targetLocation.x) *
-                  Mathf.Sin(dLon / 2) * Mathf.Sin(dLon / 2);
-
-        float c = 2 * Mathf.Atan2(Mathf.Sqrt(a), Mathf.Sqrt(1 - a));
-        return earthRadius * c;
     }
 }
