@@ -85,7 +85,7 @@ public class TestBluming : MonoBehaviour
     void SpawnObject()
     {
         Vector3 userPosition = xrOrigin.position;
-        Vector3 spawnPosition = userPosition;
+        Vector3 spawnPosition = new Vector3(userPosition.x, userPosition.y - 15f, userPosition.z);
 
         spawnedObject = Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
 
@@ -119,6 +119,14 @@ public class TestBluming : MonoBehaviour
         {
             Debug.Log($"ARAnchor successfully added at {spawnPosition}");
         }
+
+        Rigidbody rb = spawnedObject.GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            rb = spawnedObject.AddComponent<Rigidbody>();
+        }
+        rb.isKinematic = true;
+        rb.useGravity = false;
 
         Debug.Log($"Turi Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
     }
