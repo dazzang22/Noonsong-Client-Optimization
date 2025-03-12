@@ -36,6 +36,8 @@ namespace Doublsb.Dialog
         //================================================
         //Public Variable
         //================================================
+        GPSManager gPSManager;
+
         [Header("Game Objects")]
         public GameObject Printer;
         public GameObject Characters;
@@ -89,11 +91,43 @@ namespace Doublsb.Dialog
 
         public void Show(List<DialogData> Data)
         {
+            if(Data ==null)
+            {
+                Debug.Log("데이터 전달 안됨");
+            }
+            Debug.Log("데이터 전달 완료");
+
             StartCoroutine(Activate_List(Data));
+        }
+
+        void Awake()
+        {
+            if(UserDataManager.Instance.getSave()!=0)
+            {
+                //gPSManager = FindObjectOfType<GPSManager>();
+
+            // foreach(DialogData dd in BackendSavePoint.Instance.nowData)
+            // {
+            //     _current_Data=dd;
+            // }
+            if(_current_Data==null)
+            {
+                Debug.Log("null");
+
+            }
+                Debug.Log(_current_Data);
+
+            }
+            
         }
 
         public void Click_Window()
         {
+            if(_current_Data == null)
+            {
+                Debug.Log("데이터 없음으로 스톱");    
+                return;
+            }
             switch (state)
             {
                 case State.Active:
@@ -258,6 +292,10 @@ namespace Doublsb.Dialog
 
             foreach (var Data in DataList)
             {
+                if(Data ==null)
+                {
+                    Debug.Log("data 없음");
+                }
                 Show(Data);
                 _init_selector();
 
@@ -345,6 +383,11 @@ namespace Doublsb.Dialog
 
         private IEnumerator _skip()
         {
+            if(_current_Data == null)
+            {
+                Debug.Log("현재 데이터 없음");
+                yield break;
+            }
             if (_current_Data.isSkippable)
             {
                 _currentDelay = 0;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.UI;
+using Doublsb.Dialog;
 
 public class GPSManager : MonoBehaviour
 {
@@ -13,20 +14,34 @@ public class GPSManager : MonoBehaviour
     //public Animator popup_anim; // 팝업 애니메이션을 관리하는 애니메이터
     public TalkDialogue talkDialogue; // TalkDialog 클래스 인스턴스, 다이얼로그 호출에 사용
 
-    [SerializeField] private ProfileManager profileManager;
-
     private int currentIndex = 0; // 현재 방문해야 할 위치의 인덱스
 
+    List<DialogData> dialogs;
+    void Awake()
+    {
+        currentIndex = BackendSavePoint.Instance.LoadGameData();
+        Debug.Log($"시작 인덱스: {currentIndex}");
+
+        if(currentIndex !=0 && currentIndex !=4)
+        {
+            for(int i=0; i<currentIndex; i++)
+            {
+                talkDialogue.dialogTriggered[i]=true;
+            }
+            
+        }
+        if(currentIndex==4)
+        {
+            talkDialogue.CompleteTutorial();
+        }
+    }
     IEnumerator Start()
     {
         //세이브 포인트 로드
         currentIndex = BackendSavePoint.Instance.LoadGameData();
         Debug.Log($"시작 인덱스: {currentIndex}");
 
-        //profileManager.setID();
-        //profileManager.setNickname();
-   
-        // 위치 권한이 있는지 확인하고 요청
+        //위치 권한이 있는지 확인하고 요청
         while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
         {
             yield return null;
@@ -39,19 +54,6 @@ public class GPSManager : MonoBehaviour
 
         // 위치 서비스 시작
         Input.location.Start(10, 1);
-
-        
-        if(currentIndex !=0 && currentIndex !=4)
-        {
-            for(int i=currentIndex-1; i>=0; i--)
-            {
-                talkDialogue.dialogTriggered[i]=true;
-            }
-        }
-        if(currentIndex==4)
-        {
-            talkDialogue.CompleteTutorial();
-        }
 
         int maxWait = 20;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
@@ -85,19 +87,8 @@ public class GPSManager : MonoBehaviour
 
 
     void LateUpdate() {
-        if(currentIndex !=0 && currentIndex !=4)
-        {
-            for(int i=currentIndex-1; i>=0; i--)
-            {
-                talkDialogue.dialogTriggered[i]=true;
-            }
-        }
-        if(currentIndex==4)
-        {
-            talkDialogue.CompleteTutorial();
-        }
         
-        int nextIndex = currentIndex + 1; // 다음 위치의 인덱스를 설정
+          int nextIndex = currentIndex + 1; // 다음 위치의 인덱스를 설정
 
         // 위치 서비스가 실행 중인 경우
         if (Input.location.status == LocationServiceStatus.Running)
@@ -119,7 +110,8 @@ public class GPSManager : MonoBehaviour
                     {
                         BackendSavePoint.Instance.SaveGameData(currentIndex);                        
                         Debug.Log($"currentIndex:{currentIndex}");
-                        isVisited[currentIndex] = true; // 방문 여부를 true로 설정
+                        if(currentIndex<3)
+                            isVisited[currentIndex] = true; // 방문 여부를 true로 설정
                         TriggerDialog(nextIndex); // 해당 위치의 다이얼로그 호출
                         currentIndex++; // 다음 위치로 인덱스 증가
                     }
@@ -156,7 +148,6 @@ public class GPSManager : MonoBehaviour
     private void TriggerDialog(int index)
     {
         BackendSavePoint.Instance.SaveGameData(index);
-        Debug.Log($"인덱스:{index}");
         switch (index)
         {
             case 0:

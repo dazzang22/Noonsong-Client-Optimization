@@ -124,6 +124,15 @@ public class UserDataManager
         return cursave;
 
     }
+    //파견 잔여시간간
+    public int getSendingTime()
+    {
+        UserProfileData userProfileData=findUser(Backend.UserInDate);
+        int time = userProfileData.getSendingTime();
+        Debug.Log($"파견 잔여시간: {time}");
+        return time;
+    }
+
     //튜토리얼 세이브 포인트 저장
     public Param ChangeSave(int point)
     {
@@ -152,7 +161,7 @@ public class UserDataManager
         return param;
     }
 
-    //숙명 이메일 저장장
+    //숙명 이메일 저장
     public void SetSEmail(string email)
     {
         UserProfileData userProfileData=findUser(Backend.UserInDate);
@@ -167,6 +176,15 @@ public class UserDataManager
         Param param=userProfileData.ToParam();
         UpdateUserData(param);
     }
+    //파견하기 시간 count
+    public void setSendingTime(int time)
+    {
+        UserProfileData userProfileData=findUser(Backend.UserInDate);
+        userProfileData.setSendingTime(time);
+        Param param=userProfileData.ToParam();
+        UpdateUserData(param);
+    }
+    
 
     //유저 탈퇴
     public void DeleteUser()

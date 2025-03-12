@@ -37,8 +37,6 @@ public class BackendSavePoint : MonoBehaviour
 
     public void SaveGameData(int point)
     {
-        //PlayerPrefs.SetInt("TutorialStep", point);
-        //PlayerPrefs.Save();
         Param param = new Param();
         param= UserDataManager.Instance.ChangeSave(point);
         UserDataManager.Instance.UpdateUserData(param);
@@ -49,7 +47,12 @@ public class BackendSavePoint : MonoBehaviour
 
     public void setDialogData(DialogData dd)
     {
+        Debug.Log($"다이얼로그 세팅: {dd.PrintText}");
         this.nowData.Add(dd);
+    }
+    public void initialDialogData()
+    {
+        this.nowData=new List<DialogData>();
     }
 
 

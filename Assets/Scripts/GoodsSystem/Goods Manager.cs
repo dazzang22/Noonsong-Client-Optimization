@@ -71,7 +71,19 @@ public class GoodsManager : MonoBehaviour
         {
             Debug.LogError("NoonsongFriendsEntryManager is not assigned in the inspector!");
         }
-        PopulateList();
+        //파견 잔여시간 남았을 때 DB에 따라 파견 표시 - 눈송이 선택 기준
+        if(UserDataManager.Instance.getSendingTime() !=0)
+        {
+            remainingMinutes= UserDataManager.Instance.getSendingTime();
+            isNoonsSelected = false;
+            dispatchBtns[2].gameObject.SetActive(true);
+            Dispatch();
+        }
+        else
+        {
+            PopulateList();
+        }
+        
     }
 
     private void PopulateList()
@@ -262,11 +274,16 @@ public class GoodsManager : MonoBehaviour
             if (dispatchTimeText != null)
             {
                 dispatchTimeText.text = $"{remainingMinutes}분";
+                //db update
+                UserDataManager.Instance.setSendingTime(remainingMinutes);
             }
 
             yield return new WaitForSeconds(60f); // 1분 대기(60f)
             remainingMinutes--; // 남은 시간 감소
         }
+        //db 0으로 초기화 세팅
+        UserDataManager.Instance.setSendingTime(0);
+
 
         // 파견 완료 시 보상 지급
         if (currencyManager != null)

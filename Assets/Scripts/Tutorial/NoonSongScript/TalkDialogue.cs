@@ -126,14 +126,16 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FirstDialog.Add(new DialogData("/color:black//emote:Happy/이러지 말고 직접 가 보는 게 좋겠어!", "RoRo"));
         FirstDialog.Add(new DialogData("/color:black//emote:Call/아직 학교 지리는 잘 모르지? 내가 같이 가줄게!", "RoRo", () => {roro.SetActive(false); dialogTriggered[0] = true;}));
         
+
         DialogManager.Show(FirstDialog);
+        
     }
 
     // 4
     public void SecondDialog()
     {
-        if (dialogTriggered[1]) return;
-        if (!dialogTriggered[0]) return; // 이전 다이얼로그가 호출되지 않았으면 return
+         if (dialogTriggered[1]) return;
+         if (!dialogTriggered[0]) return; // 이전 다이얼로그가 호출되지 않았으면 return
 
         var SecondDialog = new List<DialogData>();
 
@@ -159,14 +161,14 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         SecondDialog.Add(new DialogData("/color:black/으~음.. 눈송이 대신 눈결이가 있었네. 괜찮아! 마침 한 곳 더 짐작이 가는 곳이 있어!", "RoRo"));
         SecondDialog.Add(new DialogData("/color:black/2캠퍼스 정문으로 가보자!", "RoRo", () => {noonkyeol.SetActive(false); dialogTriggered[1] = true;}));
 
-        DialogManager.Show(SecondDialog);
+         DialogManager.Show(SecondDialog);
     }
 
     // 5
     public void ThirdDialog()
     {
-        if (dialogTriggered[2]) return;
-        if (!dialogTriggered[1]) return; // 이전 다이얼로그가 호출되지 않았으면 return
+         if (dialogTriggered[2]) return;
+         if (!dialogTriggered[1]) return; // 이전 다이얼로그가 호출되지 않았으면 return
 
 
         var ThirdDialog = new List<DialogData>();
@@ -190,8 +192,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     // 6~7
     public void FourthDialog()
     {
-        if (dialogTriggered[3]) return;
-        if (!dialogTriggered[2]) return; // 이전 다이얼로그가 호출되지 않았으면 return
+         if (dialogTriggered[3]) return;
+         if (!dialogTriggered[2]) return; // 이전 다이얼로그가 호출되지 않았으면 return
 
         dialogTriggered[3] = true;
 
@@ -275,8 +277,16 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         };
 
         //FirstDialog();
+        int i=UserDataManager.Instance.getSave();
+        if(i > 0 && i < 4)
+        {
+            for(int j=0; j<i; j++)
+            {
+                dialogTriggered[j]=true;
+            }
+        }
 
-        switch(UserDataManager.Instance.getSave())
+        switch(i)
         {
             case 0:
                 FirstDialog();

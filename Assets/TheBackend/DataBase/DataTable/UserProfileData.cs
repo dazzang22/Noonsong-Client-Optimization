@@ -19,6 +19,7 @@ public class UserProfileData
     public string sookmyungMail;
     public string mail;
     public int saveTutorial;
+    public int sendingTime=0; // 파견하기 잔여시간간
 
     public UserProfileData()
     {
@@ -43,6 +44,7 @@ public class UserProfileData
         this.sookmyungMail=json["sookmyungMail"].ToString();
         this.sookmyungMail=json["mail"].ToString();
         this.saveTutorial=int.Parse(json["saveTutorial"].ToString());
+        this.sendingTime=int.Parse(json["sendingTime"].ToString());
         
     }
 
@@ -53,6 +55,7 @@ public class UserProfileData
         this.nickname=nick;
         this.mail=email;
         this.saveTutorial=0;
+        this.sendingTime=0;
     }
     public void setNickname(string newnick)
     {
@@ -74,7 +77,11 @@ public class UserProfileData
     {
         this.saveTutorial=point;
     }
-    
+    public void setSendingTime(int time)
+    {
+        this.sendingTime=time;
+    }
+
 
     public string getuserId()
     {
@@ -90,6 +97,11 @@ public class UserProfileData
     {
         return this.nickname;
     }
+    public int getSendingTime()
+    {
+        return this.sendingTime;
+    }
+ 
 
     public override string ToString()
     {
@@ -101,6 +113,7 @@ public class UserProfileData
         result.AppendLine($"sookmyungMail: {sookmyungMail}");
         result.AppendLine($"mail: {mail}");
         result.AppendLine($"saveTutorial: {saveTutorial}");
+        result.AppendLine($"sendingTime: {sendingTime}");
 
 
         return result.ToString();
@@ -116,17 +129,11 @@ public class UserProfileData
         param.Add("sookmyungMail", sookmyungMail);
         param.Add("mail",mail);
         param.Add("saveTutorial", saveTutorial);
+        param.Add("sendingTime", sendingTime);
+
 
         return param;
     }
-
-    public void Reset()
-	{
-		userId					= "Offline";
-		nickname				= "Noname";
-		sookmyungMail			= "None";
-		password	            = string.Empty;
-	}
 }
 
   

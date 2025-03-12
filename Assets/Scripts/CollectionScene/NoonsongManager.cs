@@ -312,11 +312,11 @@ public class NoonsongManager : MonoBehaviour
         {
             int crystalvalue = DogamChartManager.Instance.crystalValue(entry.university);
             int friendlevel = DogamChartManager.Instance.friendFavor(entry.university);
-            if (loveLevel >= (i + 1) * crystalvalue)
+            if (loveLevel >= (i + 1) * 10)
             {
                 loveMeterImages[i].enabled = true;
 
-                if (loveLevel >= (friendlevel +crystalvalue) && i < (loveLevel - friendlevel) / crystalvalue)
+                if (loveLevel >= (110) && i < (loveLevel - 100) / 10)
                 {
                     loveMeterImages[i].sprite = loveSprite2;
                 }

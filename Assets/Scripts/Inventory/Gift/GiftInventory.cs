@@ -172,9 +172,9 @@ public class GiftInventory : MonoBehaviour
             {
                 int newLoveLevel = currentNoonsong.loveLevel + affectionChange;
                 // 50 -> ´ëÇÐº° Ä£±¸°¡ µÉ ¼ö ÀÖ´Â È£°¨µµ ¼öÄ¡·Î º¯°æ (DB¿¡¼­ °¡Á®¿È)
-                if (newLoveLevel > friendlevel)
+                if (newLoveLevel > 50)
                 {
-                    affectionChange = friendlevel - currentNoonsong.loveLevel;
+                    affectionChange = 50 - currentNoonsong.loveLevel;
                 }
             }
 
@@ -182,7 +182,7 @@ public class GiftInventory : MonoBehaviour
             int bestfriend = DogamChartManager.Instance.maxFavor(currentNoonsong.university);
             // 100 -> ´ëÇÐº° º£ÇÁ°¡ µÉ ¼ö ÀÖ´Â È£°¨µµ ¼öÄ¡·Î º¯°æ (DB¿¡¼­ °¡Á®¿È)
 
-            if (updatedLoveLevel >= bestfriend && !currentNoonsong.isBestFriend)
+            if (updatedLoveLevel >= 100 && !currentNoonsong.isBestFriend)
             {
                 Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¾ï¿½");
                 audioSource.PlayOneShot(eventUI);
