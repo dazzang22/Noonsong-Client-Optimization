@@ -184,7 +184,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         ThirdDialog.Add(new DialogData("/color:black/아마 눈송이는 /color:blue/프라임관/color:black/에 있을 거야!", "KkotSong"));
         ThirdDialog.Add(new DialogData("/color:black/참, 눈송이한테는 이걸 주면 좋아할 거야. 가서 말을 건 뒤 선물을 줘 봐!", "KkotSong", () => { kkotsong.SetActive(false); dialogTriggered[2] = true; uiController.onClickInventoryButton(); StartCoroutine(GetEmblemBadge());}));
         //엠블럼 뱃지 획득
-        ThirdDialog.Add(new DialogData("/color:black/엠블럼 뱃지를 획득했다! 인벤토리를 확인해봐", "Narrator"));
+        ThirdDialog.Add(new DialogData("/color:black/엠블럼 뱃지를 획득했다!", "Narrator"));
+        ThirdDialog.Add(new DialogData("/color:black/왼쪽 두번째 인벤토리 아이콘을 클릭해보세요", "Narrator"));
 
         DialogManager.Show(ThirdDialog);
     }
@@ -310,13 +311,6 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
                 Debug.Log(UserDataManager.Instance.getSave());
                 break;
         }
-
-        // dialogTriggered[0] = true;
-        // SecondDialog();
-        // dialogTriggered[1] = true;
-        // ThirdDialog();
-        // dialogTriggered[2] = true;
-        // FourthDialog();
         
     }
   
@@ -437,7 +431,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while (!mapCanvas.gameObject.activeSelf)
         {
-            printerText.text = "지도를 클릭해보세요!";
+            printerText.text = "오른쪽 첫번째 지도 아이콘을 클릭해보세요";
             yield return null; // mapCanvas가 활성화될 때까지 대기
 
         }
@@ -456,7 +450,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while(!uiController.IsButtonClicked())//인사버튼 클릭 대기
         {
-            printerText.text = "중간의 대화하기 버튼을 누르고 인사하기 버튼을 눌러보세요";
+            printerText.text = "하단의 말풍선 아이콘을 클릭해 눈송이와 인사해보세요";
             yield return null; // 한 프레임을 대기
         }
         printerText.text = "";
@@ -471,7 +465,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while(!giftCanvas.gameObject.activeSelf)//선물캔버스가 활성화될때까지 대기
         {
-            printerText.text = "선물하기 버튼을 눌러보세요!";
+            printerText.text = "선물 아이콘을 클릭해 눈송이에게 아이템을 선물해보세요";
             yield return null; // 한 프레임을 대기
         }
         printerText.text = "";
@@ -569,7 +563,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         while(!bookCanvas.gameObject.activeSelf)
         {
-            printerText.text = "도감을 눌러보세요!";
+            printerText.text = "오른쪽 세번째 도감 아이콘을 클릭해보세요";
             yield return null; // 한 프레임을 대
         }
         printerText.text = "";
@@ -647,10 +641,6 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
     public void CompleteTutorial()
     {
-        // 튜토리얼 완료 상태 저장
-        PlayerPrefs.SetInt("TutorialCompleted", 1);
-        PlayerPrefs.Save();
-
         BackendSavePoint.Instance.SaveGameData(4);
 
         Debug.Log("튜토리얼 완료");

@@ -24,6 +24,36 @@ public class TestBluming : MonoBehaviour
     private GameObject spawnedObject;
     private Transform othersObject;
 
+    private void OnEnable()
+    {
+        MusicManager.OnEnterArea4 += HandleEnterArea4;
+        MusicManager.OnExitArea4 += HandleExitArea4;
+    }
+
+    private void OnDisable()
+    {
+        MusicManager.OnEnterArea4 -= HandleEnterArea4;
+        MusicManager.OnExitArea4 -= HandleExitArea4;
+    }
+
+    private void HandleEnterArea4()
+    {
+        Debug.Log("Entered Area 4 - Spawning Object");
+        if (spawnedObject == null)
+        {
+            SpawnObject();
+        }
+    }
+
+    private void HandleExitArea4()
+    {
+        Debug.Log("Exited Area 4 - Destroying Object");
+        if (spawnedObject != null)
+        {
+            Destroy(spawnedObject);
+            spawnedObject = null;
+        }
+    }
 
     IEnumerator Start()
     {
@@ -52,33 +82,19 @@ public class TestBluming : MonoBehaviour
         }
     }
 
-
-    void Update()
-    {
-        if (IsPlayerInZone())
-        {
-            if (spawnedObject == null)
-            {
-                Debug.Log("Player is in Bluming Spot");
-                SpawnObject();
-            }
-        }
-        else
-        {
-            if (spawnedObject != null)
-            {
-                Destroy(spawnedObject);
-                spawnedObject = null;
-            }
-        }
-    }
-
     void SpawnObject()
     {
         Vector3 userPosition = xrOrigin.position;
-        Vector3 spawnPosition = userPosition;
-        spawnPosition.y -= 15;
+        Vector3 spawnPosition = new Vector3(userPosition.x, userPosition.y - 15f, userPosition.z);
+
         spawnedObject = Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
+
+        if (spawnedObject == null)
+        {
+            Debug.LogError("Spawned object is NULL!");
+            return;
+        }
+
         spawnedObject.transform.localScale *= 2f;
 
         Transform turiObject = spawnedObject.transform.Find("Turi");
@@ -93,18 +109,28 @@ public class TestBluming : MonoBehaviour
             othersObject.gameObject.SetActive(false);
         }
 
-        var mapManager = FindObjectOfType<MapManager>();
-        if (mapManager != null && mapManager.AreAllRegionsUnlocked())
+        ARAnchor anchor = spawnedObject.AddComponent<ARAnchor>();
+
+        if (anchor == null)
         {
-            UnlockBluming();
+            Debug.LogError("ARAnchor could not be added!");
+        }
+        else
+        {
+            Debug.Log($"ARAnchor successfully added at {spawnPosition}");
         }
 
-        Debug.Log($"Turi Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
+        Rigidbody rb = spawnedObject.GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            rb = spawnedObject.AddComponent<Rigidbody>();
+        }
+        rb.isKinematic = true;
+        rb.useGravity = false;
 
-        GameObject instance = Instantiate(spawnedObject, spawnPosition, Quaternion.identity);
-        ARAnchor anchor = instance.AddComponent<ARAnchor>();
-        instance.transform.parent = anchor.transform;
+        Debug.Log($"Turi Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
     }
+
 
     public void UnlockBluming()
     {
@@ -117,42 +143,5 @@ public class TestBluming : MonoBehaviour
         {
             Debug.LogWarning("Others null");
         }
-    }
-    bool IsPlayerInZone()
-    {
-        Vector2 playerLocation = GetPlayerLocation();
-
-        float distance = GetDistanceFromTarget(playerLocation, targetLocation);
-        return distance <= spawnRadius;
-    }
-
-    Vector2 GetPlayerLocation()
-    {
-        if (!Input.location.isEnabledByUser)
-        {
-            return Vector2.zero;
-        }
-
-        if (Input.location.status == LocationServiceStatus.Running)
-        {
-            return new Vector2(Input.location.lastData.latitude, Input.location.lastData.longitude);
-        }
-
-        return Vector2.zero;
-    }
-
-    float GetDistanceFromTarget(Vector2 playerLocation, Vector2 targetLocation)
-    {
-        float earthRadius = 6371000f;
-        float dLat = Mathf.Deg2Rad * (targetLocation.x - playerLocation.x);
-        float dLon = Mathf.Deg2Rad * (targetLocation.y - playerLocation.y);
-
-        float a = Mathf.Sin(dLat / 2) * Mathf.Sin(dLat / 2) +
-                  Mathf.Cos(Mathf.Deg2Rad * playerLocation.x) *
-                  Mathf.Cos(Mathf.Deg2Rad * targetLocation.x) *
-                  Mathf.Sin(dLon / 2) * Mathf.Sin(dLon / 2);
-
-        float c = 2 * Mathf.Atan2(Mathf.Sqrt(a), Mathf.Sqrt(1 - a));
-        return earthRadius * c;
     }
 }
