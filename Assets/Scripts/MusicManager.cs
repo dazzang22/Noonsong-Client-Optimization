@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Mapbox.Utils;
+using Mapbox.Unity.Map;
 
 public class MusicManager : MonoBehaviour
 {
@@ -35,56 +37,37 @@ public class MusicManager : MonoBehaviour
 
     private AudioSource audioSource;
     private string currentArea = null; // 현재 활성화된 구역 이름
-    private const float gpsUpdateInterval = 1f; // GPS 업데이트 주기 (초)
+
+    private void OnEnable()
+    {
+        ScriptActivationController.OnLocationUpdated += UpdateMusicForArea;
+    }
+
+    private void OnDisable()
+    {
+        ScriptActivationController.OnLocationUpdated -= UpdateMusicForArea;
+    }
 
     private void Start()
     {
-        audioSource = gameObject.AddComponent<AudioSource>();
-        StartCoroutine(StartLocationService());
-    }
-
-    private IEnumerator StartLocationService()
-    {
-        if (!Input.location.isEnabledByUser)
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
         {
-            Debug.LogError("Location service is disabled.");
-            yield break;
+            Debug.LogError("No AudioSource found on this GameObject. Please attach an AudioSource component.");
         }
-
-        Input.location.Start();
-
-        int maxWait = 20;
-        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+        else
         {
-            yield return new WaitForSeconds(1);
-            maxWait--;
-        }
-
-        if (maxWait <= 0 || Input.location.status != LocationServiceStatus.Running)
-        {
-            Debug.LogError("Unable to start location service.");
-            yield break;
-        }
-
-        Debug.Log("Location service started.");
-        StartCoroutine(UpdateLocation());
-    }
-
-    private IEnumerator UpdateLocation()
-    {
-        while (true)
-        {
-            LocationInfo location = Input.location.lastData;
-            Vector2 currentPosition = new Vector2(location.latitude, location.longitude);
-
-            UpdateMusicForArea(currentPosition);
-
-            yield return new WaitForSeconds(gpsUpdateInterval);
+            audioSource.playOnAwake = false;
+            audioSource.loop = true;
+            audioSource.volume = 1f;
         }
     }
 
-    private void UpdateMusicForArea(Vector2 currentPosition)
+    private void UpdateMusicForArea(Vector2d userLocation)
     {
+        Vector2 currentPosition = new Vector2((float)userLocation.x, (float)userLocation.y);
+        Debug.Log($"MusicManager received location: {currentPosition}");
+
         string timeOfDay = GetTimeOfDay();
         string detectedArea = null;
 
@@ -92,34 +75,42 @@ public class MusicManager : MonoBehaviour
         if (IsWithinCircularArea(currentPosition, area3))
         {
             detectedArea = area3.name;
+            Debug.Log($"Detected in Circular Area: {area3.name}");
             PlayMusicForTimeOfDay(area3, timeOfDay);
         }
         // 구역 4 확인
         else if (IsWithinCircularArea(currentPosition, area4))
         {
             detectedArea = area4.name;
+            Debug.Log($"Detected in Circular Area: {area4.name}");
             PlayMusicForTimeOfDay(area4, timeOfDay);
         }
         // 구역 1 확인
         else if (IsWithinPolygonalArea(currentPosition, area1))
         {
             detectedArea = area1.name;
+            Debug.Log($"Detected in Polygonal Area: {area1.name}");
             PlayMusicForTimeOfDay(area1, timeOfDay);
         }
         // 구역 2 확인
         else if (IsWithinPolygonalArea(currentPosition, area2))
         {
             detectedArea = area2.name;
+            Debug.Log($"Detected in Polygonal Area: {area2.name}");
             PlayMusicForTimeOfDay(area2, timeOfDay);
         }
 
         // 구역 변경 시 음악 정지
         if (detectedArea == null && currentArea != null)
         {
+            Debug.Log($"Exiting Area: {currentArea}");
             StopMusic();
         }
 
         currentArea = detectedArea;
+
+        // 디버그 로그로 현재 활성 구역 확인
+        Debug.Log($"Current Area: {currentArea}");
     }
 
     private bool IsWithinCircularArea(Vector2 position, CircularArea area)
@@ -197,9 +188,14 @@ public class MusicManager : MonoBehaviour
 
         if (clipToPlay != null)
         {
+            Debug.Log($"Playing Clip: {clipToPlay.name} for Time of Day: {timeOfDay}");
             audioSource.Stop();
             audioSource.clip = clipToPlay;
             audioSource.Play();
+        }
+        else
+        {
+            Debug.LogWarning($"No clip assigned for {timeOfDay} in area {area.name}");
         }
     }
 
@@ -215,12 +211,25 @@ public class MusicManager : MonoBehaviour
     private string GetTimeOfDay()
     {
         TimeSpan currentTime = DateTime.Now.TimeOfDay;
+        Debug.Log($"Current Time: {currentTime}");
+
         if (currentTime >= new TimeSpan(6, 0, 0) && currentTime < new TimeSpan(12, 0, 0))
+        {
+            Debug.Log("Detected Time of Day: Morning");
             return "Morning";
+        }
         if (currentTime >= new TimeSpan(12, 0, 0) && currentTime < new TimeSpan(18, 0, 0))
+        {
+            Debug.Log("Detected Time of Day: Afternoon");
             return "Afternoon";
+        }
         if (currentTime >= new TimeSpan(18, 0, 0) && currentTime < new TimeSpan(24, 0, 0))
+        {
+            Debug.Log("Detected Time of Day: Evening");
             return "Evening";
+        }
+
+        Debug.Log("Detected Time of Day: Night");
         return "Night";
     }
 }

@@ -2,10 +2,13 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using Mapbox.Utils;
 using Mapbox.Unity.Map;
+using System;
 using System.Collections;
 
 public class ScriptActivationController : MonoBehaviour
 {
+    public static event Action<Vector2d> OnLocationUpdated;
+
     [SerializeField]
     Vector2d[] rectangleVertices; // 사각형의 꼭짓점
 
@@ -56,6 +59,8 @@ public class ScriptActivationController : MonoBehaviour
             if (LocationPermissionManager.Instance.IsLocationServiceInitialized)
             {
                 Debug.Log("위치 권한이 활성화되었습니다");
+                Vector2d userLocation = new Vector2d(Input.location.lastData.latitude, Input.location.lastData.longitude);
+                OnLocationUpdated?.Invoke(userLocation);
                 CheckAndSetupUserLocation();
             }
             else
