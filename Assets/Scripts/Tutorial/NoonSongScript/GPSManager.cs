@@ -12,6 +12,7 @@ public class GPSManager : MonoBehaviour
     public double[] longs; // 각 위치의 경도를 저장하는 배열
     //public Animator popup_anim; // 팝업 애니메이션을 관리하는 애니메이터
     public TalkDialogue talkDialogue; // TalkDialog 클래스 인스턴스, 다이얼로그 호출에 사용
+    public Text printerText;
 
     [SerializeField] private ProfileManager profileManager;
 
@@ -120,10 +121,27 @@ public class GPSManager : MonoBehaviour
                         BackendSavePoint.Instance.SaveGameData(currentIndex);                        
                         Debug.Log($"currentIndex:{currentIndex}");
                         isVisited[currentIndex] = true; // 방문 여부를 true로 설정
+                        // printerText.text = "";
                         TriggerDialog(nextIndex); // 해당 위치의 다이얼로그 호출
                         currentIndex++; // 다음 위치로 인덱스 증가
                     }
                 }
+                // else
+                // {
+                //     if (talkDialogue.IsDialogTriggered(0))
+                //     {
+                //         Debug.Log("firstDialog 완료");
+                //         printerText.text = "1캠퍼스 정문으로 가세요";
+                //     }
+                //     else if(talkDialogue.IsDialogTriggered(1))
+                //     {
+                //         printerText.text = "2캠퍼스 정문으로 가세요";
+                //     }
+                //     else if(talkDialogue.IsDialogTriggered(2))
+                //     {
+                //         printerText.text = "프라임관으로 가세요";
+                //     }
+                // }
             }
         }
 
