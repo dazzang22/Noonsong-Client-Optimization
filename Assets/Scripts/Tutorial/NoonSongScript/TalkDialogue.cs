@@ -276,8 +276,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         };
 
         //FirstDialog();
-        dialogTriggered[0] = true;
-        SecondDialog();
+        // dialogTriggered[0] = true;
+        // SecondDialog();
         // dialogTriggered[1] = true;
         // ThirdDialog();
         // dialogTriggered[2] = true;
