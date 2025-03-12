@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 // 뒤끝 SDK namespace 추가
 using BackEnd;
@@ -172,4 +173,17 @@ public class BackendLogin
         Backend.BMember.Logout();
         Debug.Log("로그아웃 완료.");
     }
+
+    public int GetServerHour()
+    {
+        BackendReturnObject serverTime = Backend.Utils.GetServerTime();
+
+        string time = serverTime.GetReturnValuetoJSON()["utcTime"].ToString();
+        DateTime parsedDate = DateTime.Parse(time);
+        int hour = parsedDate.Hour;
+
+        //Debug.Log($"현재 시각: {hour}시");
+        return hour;
+    }
+
 }
