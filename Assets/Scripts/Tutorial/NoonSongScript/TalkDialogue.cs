@@ -276,6 +276,12 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         };
 
         //FirstDialog();
+        dialogTriggered[0] = true;
+        SecondDialog();
+        // dialogTriggered[1] = true;
+        // ThirdDialog();
+        // dialogTriggered[2] = true;
+        // FourthDialog();
 
         switch(UserDataManager.Instance.getSave())
         {
@@ -301,13 +307,6 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
                 Debug.Log(UserDataManager.Instance.getSave());
                 break;
         }
-
-        // dialogTriggered[0] = true;
-        // SecondDialog();
-        // dialogTriggered[1] = true;
-        // ThirdDialog();
-        // dialogTriggered[2] = true;
-        // FourthDialog();
         
     }
   
