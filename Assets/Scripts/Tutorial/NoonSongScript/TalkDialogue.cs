@@ -638,10 +638,6 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
     public void CompleteTutorial()
     {
-        // 튜토리얼 완료 상태 저장
-        PlayerPrefs.SetInt("TutorialCompleted", 1);
-        PlayerPrefs.Save();
-
         BackendSavePoint.Instance.SaveGameData(4);
 
         Debug.Log("튜토리얼 완료");
