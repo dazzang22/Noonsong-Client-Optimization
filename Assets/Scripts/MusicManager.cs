@@ -65,7 +65,6 @@ public class MusicManager : MonoBehaviour
     private void UpdateMusicForArea(Vector2d userLocation)
     {
         Vector2 currentPosition = new Vector2((float)userLocation.x, (float)userLocation.y);
-        Debug.Log($"MusicManager received location: {currentPosition}");
 
         string timeOfDay = GetTimeOfDay();
         string detectedArea = null;
@@ -73,25 +72,21 @@ public class MusicManager : MonoBehaviour
         if (IsWithinCircularArea(currentPosition, area3))
         {
             detectedArea = area3.name;
-            Debug.Log($"Detected in Circular Area: {area3.name}");
             PlayMusicForTimeOfDay(area3, timeOfDay);
         }
         else if (IsWithinCircularArea(currentPosition, area4))
         {
             detectedArea = area4.name;
-            Debug.Log($"Detected in Circular Area: {area4.name}");
             PlayMusicForTimeOfDay(area4, timeOfDay);
         }
         else if (IsWithinPolygonalArea(currentPosition, area1))
         {
             detectedArea = area1.name;
-            Debug.Log($"Detected in Polygonal Area: {area1.name}");
             PlayMusicForTimeOfDay(area1, timeOfDay);
         }
         else if (IsWithinPolygonalArea(currentPosition, area2))
         {
             detectedArea = area2.name;
-            Debug.Log($"Detected in Polygonal Area: {area2.name}");
             PlayMusicForTimeOfDay(area2, timeOfDay);
         }
 
@@ -104,14 +99,32 @@ public class MusicManager : MonoBehaviour
             OnExitArea4?.Invoke();
         }
 
-        if (detectedArea == null && currentArea != null)
+        if (detectedArea != currentArea)
         {
-            Debug.Log($"Exiting Area: {currentArea}");
-            StopMusic();
-        }
+            if (detectedArea == area4.name && currentArea != area4.name)
+            {
+                Debug.Log("Triggering OnEnterArea4 event");
+                OnEnterArea4?.Invoke();
+            }
+            else if (currentArea == area4.name && detectedArea != area4.name)
+            {
+                Debug.Log("Triggering OnExitArea4 event");
+                OnExitArea4?.Invoke();
+            }
 
-        currentArea = detectedArea;
-        Debug.Log($"Current Area: {currentArea}");
+            if (detectedArea == null && currentArea != null)
+            {
+                Debug.Log($"Exiting Area: {currentArea}");
+                StopMusic();
+            }
+            else if (detectedArea != null)
+            {
+                Debug.Log($"Entering Area: {detectedArea}");
+            }
+
+            currentArea = detectedArea;
+            Debug.Log($"Current Area updated to: {currentArea}");
+        }
     }
 
     private bool IsWithinCircularArea(Vector2 position, CircularArea area)
@@ -189,7 +202,6 @@ public class MusicManager : MonoBehaviour
 
         if (clipToPlay != null)
         {
-            Debug.Log($"Playing Clip: {clipToPlay.name} for Time of Day: {timeOfDay}");
             audioSource.Stop();
             audioSource.clip = clipToPlay;
             audioSource.Play();
@@ -223,7 +235,6 @@ public class MusicManager : MonoBehaviour
 
         if (clipToPlay != null)
         {
-            Debug.Log($"Playing Clip: {clipToPlay.name} for Time of Day: {timeOfDay}");
             audioSource.Stop();
             audioSource.clip = clipToPlay;
             audioSource.Play();
@@ -245,20 +256,18 @@ public class MusicManager : MonoBehaviour
 
     private string GetTimeOfDay()
     {
-        DateTime currentTime = TimeManager.GetCurrentTime();
-        Debug.Log($"Current Time: {currentTime}");
+        int serverHour = BackendLogin.Instance.GetServerHour();
+        Debug.Log($"Server Hour: {serverHour}");
 
-        TimeSpan time = currentTime.TimeOfDay;
-
-        if(time >= new TimeSpan(6, 0, 0) && time < new TimeSpan(12, 0, 0))
+        if (serverHour >= 6 && serverHour < 12)
         {
             return "Morning";
         }
-        if (time >= new TimeSpan(12, 0, 0) && time < new TimeSpan(18, 0, 0))
+        if (serverHour >= 12 && serverHour < 18)
         {
             return "Afternoon";
         }
-        if (time >= new TimeSpan(18, 0, 0) && time < new TimeSpan(24, 0, 0))
+        if (serverHour >= 18 && serverHour < 24)
         {
             return "Evening";
         }

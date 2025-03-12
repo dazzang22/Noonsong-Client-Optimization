@@ -85,8 +85,16 @@ public class TestBluming : MonoBehaviour
     void SpawnObject()
     {
         Vector3 userPosition = xrOrigin.position;
-        Vector3 spawnPosition = userPosition;
+        Vector3 spawnPosition = new Vector3(userPosition.x, userPosition.y - 15f, userPosition.z);
+
         spawnedObject = Instantiate(spawnPrefab, spawnPosition, Quaternion.identity);
+
+        if (spawnedObject == null)
+        {
+            Debug.LogError("Spawned object is NULL!");
+            return;
+        }
+
         spawnedObject.transform.localScale *= 2f;
 
         Transform turiObject = spawnedObject.transform.Find("Turi");
@@ -101,18 +109,28 @@ public class TestBluming : MonoBehaviour
             othersObject.gameObject.SetActive(false);
         }
 
-        var mapManager = FindObjectOfType<MapManager>();
-        if (mapManager != null && mapManager.AreAllRegionsUnlocked())
+        ARAnchor anchor = spawnedObject.AddComponent<ARAnchor>();
+
+        if (anchor == null)
         {
-            UnlockBluming();
+            Debug.LogError("ARAnchor could not be added!");
+        }
+        else
+        {
+            Debug.Log($"ARAnchor successfully added at {spawnPosition}");
         }
 
-        Debug.Log($"Turi Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
+        Rigidbody rb = spawnedObject.GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            rb = spawnedObject.AddComponent<Rigidbody>();
+        }
+        rb.isKinematic = true;
+        rb.useGravity = false;
 
-        GameObject instance = Instantiate(spawnedObject, spawnPosition, Quaternion.identity);
-        ARAnchor anchor = instance.AddComponent<ARAnchor>();
-        instance.transform.parent = anchor.transform;
+        Debug.Log($"Turi Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
     }
+
 
     public void UnlockBluming()
     {
