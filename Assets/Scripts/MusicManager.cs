@@ -97,6 +97,7 @@ public class MusicManager : MonoBehaviour
 
         if (detectedArea == area4.name && currentArea != area4.name)
         {
+            Debug.Log("Triggering OnEnterArea4 event");
             OnEnterArea4?.Invoke();
         }
         else if (currentArea == area4.name && detectedArea != area4.name)
