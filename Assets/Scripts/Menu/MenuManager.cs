@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using BackEnd;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class MenuManager : MonoBehaviour
 {
@@ -67,6 +68,11 @@ public class MenuManager : MonoBehaviour
         noticeCloseButton.onClick.AddListener(() => ClosePanel(settingNoticePanel));
         infoCloseButton.onClick.AddListener(() => ClosePanel(settingInfoPanel));
         soundCloseButton.onClick.AddListener(() => ClosePanel(settingSoundPanel));
+
+        bgmSlider.onValueChanged.AddListener(SetBGMVolume);
+        sfxSlider.onValueChanged.AddListener(SetSFXVolume);
+
+        LoadSoundSettings();
 
         // 로그아웃 & 계정 삭제 버튼 이벤트 연결
         foreach (Button logoutBtn in logoutButtons)
@@ -183,26 +189,36 @@ public class MenuManager : MonoBehaviour
             idText.text = "아이디 불러오기 실패";
         }
     }
-
-    // 저장된 사운드 설정 불러오기
-    private void LoadSoundSettings()
-    {
-        bgmSlider.value = PlayerPrefs.GetFloat("BGMVolume", 1.0f);
-        sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1.0f);
-        vibrationSlider.value = PlayerPrefs.GetFloat("Vibration", 1.0f);
-    }
-
-    // BGM 볼륨 조절
     private void SetBGMVolume(float volume)
     {
-        AudioListener.volume = volume; // 전체 오디오 볼륨 조절 (예제)
-        PlayerPrefs.SetFloat("BGMVolume", volume);
+        if (GameSoundManager.instance != null)
+        {
+            GameSoundManager.instance.SetBGMVolume(volume);
+        }
     }
 
-    // 효과음 볼륨 조절
     private void SetSFXVolume(float volume)
     {
-        PlayerPrefs.SetFloat("SFXVolume", volume);
+        if (GameSoundManager.instance != null)
+        {
+            GameSoundManager.instance.SetSFXVolume(volume);
+        }
+    }
+
+    private void LoadSoundSettings()
+    {
+        bgmSlider.onValueChanged.RemoveListener(SetBGMVolume);
+        sfxSlider.onValueChanged.RemoveListener(SetSFXVolume);
+
+        float savedBGMVolume = PlayerPrefs.GetFloat("BGMVolume", 1.0f);
+        float savedSFXVolume = PlayerPrefs.GetFloat("sound_on", 1.0f);
+
+        bgmSlider.value = savedBGMVolume;
+        sfxSlider.value = savedSFXVolume;
+
+        bgmSlider.onValueChanged.AddListener(SetBGMVolume);
+        sfxSlider.onValueChanged.AddListener(SetSFXVolume);
+
     }
 
     // 진동 설정
