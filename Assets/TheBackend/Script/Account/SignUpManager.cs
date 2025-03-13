@@ -42,6 +42,7 @@ public class SignUpManager : MonoBehaviour
     void Start()
     {
         SetupSignUpPage();
+        CheckAllConditions();
     }
     //회원가입페이지 관련 초기화. 버튼 비활성화하고 입력 필드에 리스너 설정
     void SetupSignUpPage()
@@ -53,7 +54,7 @@ public class SignUpManager : MonoBehaviour
         inputFieldPWConfirm.onValueChanged.AddListener(OnPasswordConfirmFieldEndEdit);
         inputFieldNickname.onValueChanged.AddListener(OnNicknameFieldEndEdit);
 
-        toggleAgree.onValueChanged.AddListener(delegate{ CheckAllConditions(); });
+        toggleAgree.onValueChanged.AddListener((isOn) => CheckAllConditions());
         btnSignUp.onClick.AddListener(OnSignUpButtonClicked);
     }
 
