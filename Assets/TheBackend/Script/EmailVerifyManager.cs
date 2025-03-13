@@ -9,14 +9,11 @@ using TMPro;
 
 public class EmailVerifyManager : MonoBehaviour
 {
-    public GameObject emailPanel;
-    public GameObject codePanel;
-    public GameObject successPanel;
-
     public TMP_InputField emailInput;
     public TMP_InputField codeInput;
-    public TMP_Text emailErrorText;
-    public TMP_Text codeErrorText;
+
+    public TMP_Text emailMessageText;
+    public TMP_Text codeMessageText;
 
     public Button requestCodeButton;
     public Button verifyCodeButton;
@@ -26,12 +23,27 @@ public class EmailVerifyManager : MonoBehaviour
 
     void Start()
     {
-        emailPanel.SetActive(true);
-        codePanel.SetActive(false);
-        successPanel.SetActive(false);
-
+        emailInput.onValueChanged.AddListener(OnEmailFieldChanged);
         requestCodeButton.onClick.AddListener(OnRequestVerification);
         verifyCodeButton.onClick.AddListener(OnVerifyCode);
+    }
+
+    private void OnEmailFieldChanged(string email)
+    {
+        if (string.IsNullOrEmpty(email))
+        {
+            emailMessageText.text = "";
+            return;
+        }
+
+        if (!IsValidEmail(email))
+        {
+            SetEmailMessage("올바른 숙명여자대학교 이메일을 입력해주세요.(@sookmyung.ac.kr 또는 @sm.ac.kr)", Color.red);
+        }
+        else
+        {
+            SetEmailMessage("올바른 이메일 형식입니다.", Color.green);
+        }
     }
 
     public void OnRequestVerification()
@@ -40,15 +52,16 @@ public class EmailVerifyManager : MonoBehaviour
 
         if (!IsValidEmail(userEmail))
         {
-            emailErrorText.text = "올바른 숙명여자대학교 이메일을 입력해주세요.(@sookmyung.ac.kr 또는 @sm.ac.kr)";
+            SetEmailMessage("올바른 숙명여자대학교 이메일을 입력해주세요.(@sookmyung.ac.kr 또는 @sm.ac.kr)", Color.red);
             return;
         }
 
+        SetEmailMessage("메일 발송 중...", Color.black, true);
         verificationCode = GenerateVerificationCode();
+
         SendVerificationEmail(userEmail, verificationCode);
 
-        emailPanel.SetActive(false);
-        codePanel.SetActive(true);
+        SetEmailMessage("입력하신 메일로 인증코드 발송하였습니다.", Color.green, true);
     }
 
     private void SendVerificationEmail(string recipientEmail, string code)
@@ -100,6 +113,7 @@ public class EmailVerifyManager : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogError("이메일 전송 실패: " + ex.Message);
+            SetEmailMessage("이메일 전송 실패. 다시 시도해주세요.", Color.red, false);
         }
     }
 
@@ -109,30 +123,20 @@ public class EmailVerifyManager : MonoBehaviour
         {
             Debug.Log("인증 성공");
             //인증 성공 시 처리
-            codePanel.SetActive(false);
-            successPanel.SetActive(true);
-            emailErrorText.text = "";
-            //DB 연결
-            UserDataManager.Instance.SetSEmail(userEmail);
+            codeMessageText.text = "인증에 성공하였습니다.";
+            codeMessageText.color = Color.green;
         }
         else
         {
-            codeErrorText.text = "잘못된 인증 코드입니다";
+            codeMessageText.text = "잘못된 인증 코드입니다";
+            codeMessageText.color = Color.red;
         }
     }
 
     private bool IsValidEmail(string email)
     {
-        if (!email.Contains("@") || !email.Contains("."))
-        {
-            return false;
-        }
-
-        if (email.EndsWith("@sookmyung.ac.kr") || email.EndsWith("@sm.ac.kr"))
-        {
-            return true;
-        }
-        return false;
+        return email.EndsWith("@sookmyung.ac.kr") || email.EndsWith("@sm.ac.kr");
+        
     }
 
     private string GenerateVerificationCode()
@@ -155,10 +159,25 @@ public class EmailVerifyManager : MonoBehaviour
     {
         emailInput.text = "";
         codeInput.text = "";
-        emailErrorText.text = "";
-        codeErrorText.text = "";
-        emailPanel.SetActive(true);
-        codePanel.SetActive(false);
-        successPanel.SetActive(false);
+        emailMessageText.text = "";
+        codeMessageText.text = "";
+        emailInput.interactable = true;
+    }
+
+    public bool isEmailVerified()
+    {
+        return codeMessageText.text == "인증에 성공하였습니다.";
+    }
+
+    public string GetUserEmail()
+    {
+        return userEmail;
+    }
+
+    private void SetEmailMessage(string message, Color color, bool disableInput = false)
+    {
+        emailMessageText.text = message;
+        emailMessageText.color = color;
+        emailInput.interactable = !disableInput;
     }
 }

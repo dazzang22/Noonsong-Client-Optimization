@@ -45,13 +45,14 @@ public class BackendLogin
         //재화
         Debug.Log("재화 테이블 로드.");
         UserBalanceManager.Instance.InsertUserBalance(id,15);
-        BackendSavePoint.Instance.SaveGameData(0);
+        //BackendSavePoint.Instance.SaveGameData(0);
 
 
         if (bro.IsSuccess())
         {
             Debug.Log("회원가입에 성공했습니다. : " + bro);
-            signup_static=1;
+            BackendSavePoint.Instance.SaveGameData(0);
+            signup_static =1;
             su_error=null;
         }
         else
