@@ -108,6 +108,7 @@ public class GiftInventory : MonoBehaviour
             {
                 { "LiberalArts", 10},
                 { "Science", 4 },
+                { "Science(Physical)", 4 },
                 { "Engineering", 8 },
                 { "HumanEcology", 4 },
                 { "SocialSciences", 5 },
