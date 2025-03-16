@@ -364,6 +364,11 @@ public class EncounterUI : MonoBehaviour
 
     public string GetCurrentNoonsongUniversity()
     {
+        if (currentCharacter.name == "체육교육과" || currentCharacter.name == "무용과")
+        {
+            string physicalString = "Science(Physical)";
+            return physicalString;
+        }
         return currentCharacter.university;
     }
 
