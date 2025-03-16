@@ -51,20 +51,34 @@ public class GameSoundManager : MonoBehaviour
     public void SetSFXVolume(float volume)
     {
         sfxVolume = volume;
-        AudioListener.volume = sfxVolume;
         PlayerPrefs.SetFloat("sound_on", sfxVolume);
         PlayerPrefs.Save();
 
         UltimateClean.SoundManager[] soundManagers = FindObjectsOfType<UltimateClean.SoundManager>();
-
         foreach (var sm in soundManagers)
         {
-            sm.SwitchSound(); 
-            
+            sm.SwitchSound();
+        }
+
+        AudioSource[] audioSources = FindObjectsOfType<AudioSource>();
+        foreach (var source in audioSources)
+        {
+            if (source.clip != null && source.clip.name.StartsWith("S_"))
+            {
+                source.volume = sfxVolume;
+            }
+        }
+
+        ButtonSounds[] buttonSounds = FindObjectsOfType<ButtonSounds>();
+        foreach (var buttonSound in buttonSounds)
+        {
+            buttonSound.UpdateButtonSoundVolume(sfxVolume);
         }
 
         Debug.Log($"[GameSoundManager] SFX 볼륨 변경: {sfxVolume}");
     }
+
+
 
     private void LoadSoundSettings()
     {

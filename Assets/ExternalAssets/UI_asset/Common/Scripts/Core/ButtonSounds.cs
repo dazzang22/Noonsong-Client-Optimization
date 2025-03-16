@@ -17,17 +17,19 @@ namespace UltimateClean
         public AudioClip rolloverSound;
 
         private AudioSource audioSource;
+        private float sfxVolume = 1f;
 
         private void Awake()
         {
             audioSource = GetComponent<AudioSource>();
+            sfxVolume = PlayerPrefs.GetFloat("sound_on", 1f);
         }
 
         public void PlayPressedSound()
         {
             if (pressedSound != null)
             {
-                audioSource.PlayOneShot(pressedSound);
+                audioSource.PlayOneShot(pressedSound, sfxVolume); 
             }
         }
 
@@ -35,8 +37,12 @@ namespace UltimateClean
         {
             if (rolloverSound != null)
             {
-                audioSource.PlayOneShot(rolloverSound);
+                audioSource.PlayOneShot(rolloverSound, sfxVolume);
             }
+        }
+        public void UpdateButtonSoundVolume(float volume)
+        {
+            sfxVolume = volume;
         }
     }
 }
