@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.UI;
 using Doublsb.Dialog;
+using TMPro;
 
 public class GPSManager : MonoBehaviour
 {
@@ -17,9 +18,11 @@ public class GPSManager : MonoBehaviour
 
     private int currentIndex = 0; // 현재 방문해야 할 위치의 인덱스
 
-    List<DialogData> dialogs;
+    public GameObject savepointPopupUI; //savapoint 할때 팝업
+    private string newText; //savepoint에서 시작할 때 안내 text
     void Awake()
     {
+
         currentIndex = BackendSavePoint.Instance.LoadGameData();
         Debug.Log($"시작 인덱스: {currentIndex}");
 
@@ -28,19 +31,96 @@ public class GPSManager : MonoBehaviour
             for(int i=0; i<currentIndex; i++)
             {
                 talkDialogue.dialogTriggered[i]=true;
-            }
-            
+            }   
         }
         if(currentIndex==4)
         {
             talkDialogue.CompleteTutorial();
         }
+        if(currentIndex > 0 && currentIndex < 4)
+        {  
+            StartCoroutine(InitializeSavePoint());
+            for(int j=0; j<currentIndex; j++)
+            {
+                talkDialogue.dialogTriggered[j]=true;
+            }
+        }
+        
+    }
+    private IEnumerator InitializeSavePoint()
+    {
+        yield return StartCoroutine(ShowSavePointPopup());
+        while (savepointPopupUI != null)
+        {
+            yield return null; // 프레임마다 확인
+        }
+
+    }
+
+        void ClosePrefab()
+    {
+        if (savepointPopupUI != null)
+        {
+            Destroy(savepointPopupUI);
+            savepointPopupUI = null;
+        }
+    }
+
+    //세이브포인트 팝업
+    private IEnumerator ShowSavePointPopup()
+    {
+        Time.timeScale = 0f; // 시간 정지
+        //savapoint popup tuto 로드
+        GameObject prefab = Resources.Load<GameObject>("Canvas)SavePoint PopupTutorial");
+        if(prefab != null)
+        {
+            Debug.Log("로드");
+            savepointPopupUI= Instantiate(prefab);
+            savepointPopupUI.transform.SetAsLastSibling();
+            TMP_Text[] textComponents = savepointPopupUI.GetComponentsInChildren<TMP_Text>();
+            Button closeButton = savepointPopupUI.GetComponentInChildren<Button>();
+
+            if (textComponents.Length >= 2)
+            {
+                if(currentIndex==1)
+                newText="사라진 눈송이를 찾아 1캠퍼스 정문으로 이동해보자!";
+                if(currentIndex==2)
+                    newText="사라진 눈결이를 찾아 2캠퍼스 정문으로 이동해보자!";
+                if(currentIndex==3)
+                    newText="사라진 눈송이를 찾아 프라임관으로 이동해보자!"; 
+                // 두 번째 TMP_Text의 텍스트 변경
+                textComponents[1].text = newText;
+            }
+            savepointPopupUI.SetActive(true);
+            if (closeButton != null)
+            {
+                closeButton.onClick.AddListener(ClosePrefab);
+            }
+        }
+
+        while (savepointPopupUI !=null) // 마우스 클릭을 기다림
+        {
+            yield return null; // 한 프레임을 대기
+        }
+
+        Time.timeScale = 1f; // 시간 재개
     }
     IEnumerator Start()
     {
         //세이브 포인트 로드
         currentIndex = BackendSavePoint.Instance.LoadGameData();
         Debug.Log($"시작 인덱스: {currentIndex}");
+
+        if(currentIndex<0 && currentIndex>4)
+        {
+            yield return null;
+
+        }
+        while (savepointPopupUI !=null) // 마우스 클릭을 기다림
+        {
+            yield return null; // 한 프레임을 대기
+        }
+        yield break;
 
         //위치 권한이 있는지 확인하고 요청
         while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))

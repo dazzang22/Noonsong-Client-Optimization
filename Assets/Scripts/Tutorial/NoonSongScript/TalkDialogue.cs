@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Doublsb.Dialog;
 using UnityEngine.SceneManagement;
 using UltimateClean;
+using TMPro;
 
 // 최대한 주석 달아보았으나, 혹시 이해가 안되는 코드 있다면 저(이다연)한테 물어보셔도 되고, 챗지피티에게 코드 주석 달아달라고 하고 설명해달라고 하면 잘 설명해줍니다!
 public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체 대사가 들어있음, 대사 코드 뒤에 오브젝트 등장, 애니메이션 작동 모두 관리하고 있습니다.
@@ -58,6 +59,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     public Canvas mapCanvas;
     public Canvas giftCanvas;
     public Canvas bookCanvas;
+    public Canvas savepointCanvas;
     public GameObject StudentId;
 
     public Transform arCamera; // AR 카메라 Transform
@@ -76,6 +78,9 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     public Button slotButton; // 슬롯 버튼 (선물 버튼)
     public Button giftButton; // 팝업의 "Yes" 버튼
     public Button cancelButton; // 팝업의 "No" 버튼
+
+    //세이브 포인트
+    private int saveStart =0;
 
     // 첫 번째 대화 설정 1~3
     public void FirstDialog()
@@ -198,6 +203,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         dialogTriggered[3] = true;
 
+
         var FourthDialog = new List<DialogData>();
 
         //part 6,7
@@ -276,32 +282,31 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
             { profile, getProfileSound }
 
         };
+    
 
         //FirstDialog();
-        int i=UserDataManager.Instance.getSave();
-        if(i > 0 && i < 4)
+        saveStart=UserDataManager.Instance.getSave();
+        if(saveStart > 0 && saveStart < 4)
         {
-            for(int j=0; j<i; j++)
+            for(int j=0; j<saveStart; j++)
             {
                 dialogTriggered[j]=true;
             }
         }
 
-        switch(i)
+
+        switch(saveStart)
         {
             case 0:
                 FirstDialog();
                 break;
             case 1:
-                Debug.Log("2");
                 SecondDialog();
                 break;
             case 2:
-                Debug.Log("3");
                 ThirdDialog();
                 break;
             case 3:
-                Debug.Log("4");
                 FourthDialog();
                 break;
             case 4:
@@ -393,7 +398,6 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     //     Time.timeScale = 1f;
 
     // }
-
     
     //재화팝업
     private IEnumerator ShowPanelFirst()
