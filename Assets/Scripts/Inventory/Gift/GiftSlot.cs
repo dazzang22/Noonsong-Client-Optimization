@@ -7,6 +7,7 @@ using TMPro;
 public class GiftSlot : MonoBehaviour
 {
     public TextMeshProUGUI itemNameText;
+    public TextMeshProUGUI itemQuantityText;
     public Image itemImage;
     private ItemEntry item;
     private GiftInventory giftInventory;
@@ -16,6 +17,7 @@ public class GiftSlot : MonoBehaviour
         item = newItem;
         giftInventory = inventory;
         itemNameText.text = item.itemName;
+        itemQuantityText.text = item.itemCount.ToString();
         itemImage.sprite = item.itemSprite;
     }
 
