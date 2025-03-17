@@ -116,11 +116,10 @@ public class GPSManager : MonoBehaviour
             yield return null;
 
         }
-        while (savepointPopupUI !=null) // 마우스 클릭을 기다림
+        while (savepointPopupUI !=null) // 세이브 포인트 팝업이 있으면 대기
         {
             yield return null; // 한 프레임을 대기
         }
-        yield break;
 
         //위치 권한이 있는지 확인하고 요청
         while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
