@@ -240,6 +240,7 @@ public class EncounterUI : MonoBehaviour
             if (currentTarget.name == "noonsong remake 0202(Clone)")
             {
                 IncreasePopUp.gameObject.SetActive(true);
+                dialogueButton.interactable = true;
                 currencyManager.AddCurrency(NOONSONG_INCREMENT);
                 Debug.Log($"기본눈송이 : {NOONSONG_INCREMENT}개의 재화 추가.");
 
