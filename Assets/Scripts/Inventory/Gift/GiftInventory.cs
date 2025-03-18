@@ -82,33 +82,19 @@ public class GiftInventory : MonoBehaviour
         {
             NoonsongEntry currentNoonsong = encounterUI.GetCurrentNoonsongEntry();
 
-            if (currentNoonsong == null)
-            {
-                Debug.LogError("currentNoonsongï¿½ï¿½ nullï¿½Ô´Ï´ï¿½! EncounterUIï¿½ï¿½ï¿½ï¿½ ï¿½Ã¹Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ç´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
-                return;
-            }
-
-            if (arObjectCatch == null)
-            {
-                Debug.LogError("arObjectCatchï¿½ï¿½ nullï¿½Ô´Ï´ï¿½! GiftInventory.Initialize()ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¹Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
-                return;
-            }
-
             if (!currentNoonsong.isDiscovered)
             {
-                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ßµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. CollectCharacter() ï¿½ï¿½ï¿½ï¿½");
                 arObjectCatch.CollectCharacter();
             }
 
             string university = encounterUI.GetCurrentNoonsongUniversity();
             ItemEntry.PreferenceLevel preference = selectedGiftItem.GetPreferenceForDepartment(university);
 
-            //ï¿½Ü°ï¿½ï¿½ëº° Ä£ï¿½Ðµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             Dictionary<string, int> affectionValues = new Dictionary<string, int>
             {
                 { "LiberalArts", 10},
                 { "Science", 4 },
-                { "Science(Physical)", 4 },
+                { "Science(Physical)", 2 },
                 { "Engineering", 8 },
                 { "HumanEcology", 4 },
                 { "SocialSciences", 5 },
@@ -125,7 +111,7 @@ public class GiftInventory : MonoBehaviour
 
             int baseAffection = affectionValues.ContainsKey(university) ? affectionValues[university] : 1;
             int preferenceMultiplier = 1;
-            string giftReaction = "ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½Ö´ï¿½ ï¿½Å¾ï¿½? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.";
+            string giftReaction = "³» »ý°¢ÇØ¼­ ÁÖ´Â °Å¾ß? °í¸¶¿ö.";
             GameObject effectToActivate = null;
 
             switch (preference)
@@ -134,24 +120,24 @@ public class GiftInventory : MonoBehaviour
                     audioSource.PlayOneShot(love);
                     preferenceMultiplier = 5;
                     giftReaction = currentNoonsong.isFriend
-                        ? "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Æ´Â±ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!"
-                        : "ï¿½ï¿½! ï¿½ï¿½ ï¿½Ì°ï¿½ ï¿½ï¿½Â¥ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´Âµï¿½, ï¿½î¶»ï¿½ï¿½ ï¿½Ë¾Ò¾ï¿½? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~";
+                        ? "¿ª½Ã ³ª¸¦ Àß ¾Æ´Â±¸³ª? Á¤¸» °í¸¶¿ö!"
+                        : "¿Í! ³ª ÀÌ°Å ÁøÂ¥ ÁÁ¾ÆÇÏ´Âµ¥, ¾î¶»°Ô ¾Ë¾Ò¾î? Á¤¸» °í¸¶¿ö~";
                     effectToActivate = giftEffectParticle4;
                     break;
                 case ItemEntry.PreferenceLevel.Like:
                     audioSource.PlayOneShot(love);
                     preferenceMultiplier = 3;
                     giftReaction = currentNoonsong.isFriend
-                        ? "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?! ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~"
-                        : "ï¿½ï¿½, ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½à¼­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!";
+                        ? "¸¶À½¿¡ µç´Ù! °í¸¶¿ö~"
+                        : "¿À, ÀÌ°Å ÁÁÀº °É? ¼±¹°ÇØÁà¼­ °í¸¶¿ö!";
                     effectToActivate = giftEffectParticle3;
                     break;
                 case ItemEntry.PreferenceLevel.Dislike:
                     audioSource.PlayOneShot(hate);
                     preferenceMultiplier = 0;
                     giftReaction = currentNoonsong.isFriend
-                        ? "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~"
-                        : "ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.";
+                        ? "°í¸¶¿ö~"
+                        : "ÇÏÇÏ, °í¸¶¿ö.";
                     effectToActivate = giftEffectParticle1;
                     break;
                 default:
@@ -185,7 +171,6 @@ public class GiftInventory : MonoBehaviour
 
             if (updatedLoveLevel >= 100 && !currentNoonsong.isBestFriend)
             {
-                Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¾ï¿½");
                 audioSource.PlayOneShot(eventUI);
                 ShowBestFriendPopup();
                 currentNoonsong.isBestFriend = true;
@@ -228,7 +213,6 @@ public class GiftInventory : MonoBehaviour
             audioSource.PlayOneShot(bestfriend);
             bestFriendPopup.SetActive(false);
 
-            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (bestFriendRewardItem != null)
             {
                 bestFriendRewardItem.itemCount++;
@@ -241,7 +225,6 @@ public class GiftInventory : MonoBehaviour
     {
         if (inventoryManager == null)
         {
-            Debug.LogError("InventoryManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿? ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½");
             return;
         }
 
