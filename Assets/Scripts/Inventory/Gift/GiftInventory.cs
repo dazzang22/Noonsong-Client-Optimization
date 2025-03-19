@@ -82,13 +82,18 @@ public class GiftInventory : MonoBehaviour
         {
             NoonsongEntry currentNoonsong = encounterUI.GetCurrentNoonsongEntry();
 
+            if (currentNoonsong == null)
+            {
+                Debug.LogError("NoonsongEntry is null. Cannot proceed with gifting.");
+                return;
+            }
+
             if (!currentNoonsong.isDiscovered)
             {
                 arObjectCatch.CollectCharacter();
             }
 
             string university = encounterUI.GetCurrentNoonsongUniversity();
-            ItemEntry.PreferenceLevel preference = selectedGiftItem.GetPreferenceForDepartment(university);
 
             Dictionary<string, int> affectionValues = new Dictionary<string, int>
             {
@@ -110,6 +115,8 @@ public class GiftInventory : MonoBehaviour
             };
 
             int baseAffection = affectionValues.ContainsKey(university) ? affectionValues[university] : 1;
+
+            ItemEntry.PreferenceLevel preference = selectedGiftItem.GetPreferenceForDepartment(university);
             int preferenceMultiplier = 1;
             string giftReaction = "내 생각해서 주는 거야? 고마워.";
             GameObject effectToActivate = null;
@@ -154,6 +161,12 @@ public class GiftInventory : MonoBehaviour
 
             int affectionChange = baseAffection * preferenceMultiplier;
             int friendlevel = DogamChartManager.Instance.friendFavor(currentNoonsong.university);
+
+            if (friendlevel <= 0)
+            {
+                Debug.LogError($"Invalid friend level for university: {currentNoonsong.university}");
+                friendlevel = 0;
+            }
 
             if (!currentNoonsong.isFriend)
             {
