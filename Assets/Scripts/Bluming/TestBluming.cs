@@ -5,14 +5,9 @@ using Mapbox.Unity.Map;
 
 public class TestBluming : MonoBehaviour
 {
-    [SerializeField]
-    float spawnRadius = 4f; //¹Ý°æ 4m
 
     [SerializeField]
     GameObject spawnPrefab;
-
-    [SerializeField]
-    Vector2 targetLocation;
 
     [SerializeField]
     ARAnchorManager anchorManager;
@@ -119,15 +114,6 @@ public class TestBluming : MonoBehaviour
         {
             Debug.Log($"ARAnchor successfully added at {spawnPosition}");
         }
-
-        Rigidbody rb = spawnedObject.GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            rb = spawnedObject.AddComponent<Rigidbody>();
-        }
-        rb.isKinematic = true;
-        rb.useGravity = false;
-
         Debug.Log($"Turi Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
     }
 
