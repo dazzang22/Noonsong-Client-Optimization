@@ -190,7 +190,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         ThirdDialog.Add(new DialogData("/color:black/참, 눈송이한테는 이걸 주면 좋아할 거야. 가서 말을 건 뒤 선물을 줘 봐!", "KkotSong", () => { kkotsong.SetActive(false); dialogTriggered[2] = true; uiController.onClickInventoryButton(); StartCoroutine(GetEmblemBadge());}));
         //엠블럼 뱃지 획득
         ThirdDialog.Add(new DialogData("/color:black/엠블럼 뱃지를 획득했다!", "Narrator"));
-        ThirdDialog.Add(new DialogData("/color:black/왼쪽 두번째 인벤토리 아이콘을 클릭해보세요", "Narrator"));
+        ThirdDialog.Add(new DialogData("/color:black/왼쪽 두번째 인벤토리 아이콘을 클릭해보세요", "Narrator",()=> {dialogTriggerd[2] = true; }));
 
         DialogManager.Show(ThirdDialog);
     }
