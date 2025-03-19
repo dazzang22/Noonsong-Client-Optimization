@@ -68,18 +68,16 @@ public class BackendManager : MonoBehaviour
     void Test(){
         //BackendLogin.Instance.CustomSignUp("User3","1234");
 
-        BackendLogin.Instance.CustomLogin("werwer","WERwer1111");
+        //BackendLogin.Instance.CustomLogin("werwer","werwer");
+        BackendLogin.Instance.CustomLogin("lotus","Lotus1234");
+        //재화 평균
         GameStatistics.Instance.AverageSnowCount();
+        //유저별 눈송이 수집율
+        GameStatistics.Instance.setUserStatic();
+        //눈송이별 수집율
+        GameStatistics.Instance.UpdateNoonStatics();
 
-        /*GameDataManager.Instance.GetTableList();
-        string userId= UserDataManager.Instance.getUserID();
-        UserMapManager.Instance.insertUserMap(userId);
-
-        Debug.Log(UserMapManager.Instance.getUserMapList());
-
-        
-  
-        Debug.Log("테스트를 종료합니다.");*/
+        //Debug.Log("테스트를 종료합니다.");
 
     }
 }
