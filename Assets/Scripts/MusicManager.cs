@@ -41,6 +41,8 @@ public class MusicManager : MonoBehaviour
 
     private AudioSource audioSource;
     private string currentArea = null;
+    private DateTime serverTime;
+    private bool isServerTimeSynced = false;
 
     private void Start()
     {
@@ -51,6 +53,8 @@ public class MusicManager : MonoBehaviour
         }
         audioSource.loop = true;
         audioSource.volume = 1f;
+
+        StartCoroutine(SyncServerTime());
     }
 
     private void OnEnable()
@@ -67,9 +71,7 @@ public class MusicManager : MonoBehaviour
     {
         Vector2 currentPosition = new Vector2((float)userLocation.x, (float)userLocation.y);
 
-        GetTimeOfDay(timeOfDay =>
-    {
-
+        string timeOfDay = GetCurrentTimeOfDay();
         string detectedArea = null;
 
         if (IsWithinCircularArea(currentPosition, area3))
@@ -93,6 +95,11 @@ public class MusicManager : MonoBehaviour
             PlayMusicForTimeOfDay(area2, timeOfDay);
         }
 
+        HandleAreaTransition(detectedArea);
+    }
+
+    private void HandleAreaTransition(string detectedArea)
+    {
         if (detectedArea == area4.name && currentArea != area4.name)
         {
             OnEnterArea4?.Invoke();
@@ -104,17 +111,6 @@ public class MusicManager : MonoBehaviour
 
         if (detectedArea != currentArea)
         {
-            if (detectedArea == area4.name && currentArea != area4.name)
-            {
-                Debug.Log("Triggering OnEnterArea4 event");
-                OnEnterArea4?.Invoke();
-            }
-            else if (currentArea == area4.name && detectedArea != area4.name)
-            {
-                Debug.Log("Triggering OnExitArea4 event");
-                OnExitArea4?.Invoke();
-            }
-
             if (detectedArea == null && currentArea != null)
             {
                 Debug.Log($"Exiting Area: {currentArea}");
@@ -128,7 +124,6 @@ public class MusicManager : MonoBehaviour
             currentArea = detectedArea;
             Debug.Log($"Current Area updated to: {currentArea}");
         }
-    });
     }
 
     private bool IsWithinCircularArea(Vector2 position, CircularArea area)
@@ -258,49 +253,40 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    public void GetTimeOfDay(Action<string> callback)
+    private string GetCurrentTimeOfDay()
     {
-        GetServerHour(serverHour =>
-        {
-            if (serverHour == -1)
-            {
-                Debug.LogWarning("Defaulting to Morning");
-                callback?.Invoke("Morning");
-                return;
-            }
+        int hour = serverTime.Hour;
 
-            Debug.Log($"Server Hour: {serverHour}");
-            string timeOfDay;
-
-            if (serverHour >= 6 && serverHour < 12)
-                timeOfDay = "Morning";
-            else if (serverHour >= 12 && serverHour < 18)
-                timeOfDay = "Afternoon";
-            else if (serverHour >= 18 && serverHour < 24)
-                timeOfDay = "Evening";
-            else
-                timeOfDay = "Night";
-
-            callback?.Invoke(timeOfDay);
-        });
+        if (hour >= 6 && hour < 12)
+            return "Morning";
+        else if (hour >= 12 && hour < 18)
+            return "Afternoon";
+        else if (hour >= 18 && hour < 24)
+            return "Evening";
+        else
+            return "Night";
     }
 
-    private void GetServerHour(Action<int> callback)
+    private IEnumerator SyncServerTime()
     {
-        SendQueue.Enqueue(Backend.Utils.GetServerTime, bro =>
+        while (true)
         {
-            if (bro.IsSuccess())
+            SendQueue.Enqueue(Backend.Utils.GetServerTime, bro =>
             {
-                string time = bro.GetReturnValuetoJSON()["utcTime"].ToString();
-                DateTime parsedDate = DateTime.Parse(time);
-                int hour = parsedDate.Hour;
-                callback?.Invoke(hour);
-            }
-            else
-            {
-                Debug.LogError($"Failed to retrieve server time: {bro}");
-                callback?.Invoke(-1);
-            }
-        });
+                if (bro.IsSuccess())
+                {
+                    string time = bro.GetReturnValuetoJSON()["utcTime"].ToString();
+                    serverTime = DateTime.Parse(time);
+                    isServerTimeSynced = true;
+                    Debug.Log($"Server time synced: {serverTime}");
+                }
+                else
+                {
+                    Debug.LogError($"Failed to retrieve server time: {bro}");
+                }
+            });
+
+            yield return new WaitForSeconds(60f); // 1분마다 서버 시간 동기화
+        }
     }
 }
