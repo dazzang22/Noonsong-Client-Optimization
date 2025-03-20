@@ -187,7 +187,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         ThirdDialog.Add(new DialogData("/color:black/맞아요. 새송이가 눈송이와 친구가 되고 싶대요.", "RoRo"));
         ThirdDialog.Add(new DialogData("/color:black//emote:Happy/그렇다면 정확히 찾아 왔어. 마침 방금 전까지 눈송이랑 함께 있던 참이었거든.", "KkotSong", () => ChangeAnimation(kkotsongAnimator, "standing")));
         ThirdDialog.Add(new DialogData("/color:black/아마 눈송이는 /color:blue/프라임관/color:black/에 있을 거야!", "KkotSong"));
-        ThirdDialog.Add(new DialogData("/color:black/참, 눈송이한테는 이걸 주면 좋아할 거야. 가서 말을 건 뒤 선물을 줘 봐!", "KkotSong", () => { kkotsong.SetActive(false); dialogTriggered[2] = true; uiController.onClickInventoryButton(); StartCoroutine(GetEmblemBadge());}));
+        ThirdDialog.Add(new DialogData("/color:black/참, 눈송이한테는 이걸 주면 좋아할 거야. 가서 말을 건 뒤 선물을 줘 봐!", "KkotSong", () => { kkotsong.SetActive(false); uiController.onClickInventoryButton(); StartCoroutine(GetEmblemBadge());}));
         //엠블럼 뱃지 획득
         ThirdDialog.Add(new DialogData("/color:black/엠블럼 뱃지를 획득했다!", "Narrator"));
         ThirdDialog.Add(new DialogData("/color:black/왼쪽 두번째 인벤토리 아이콘을 클릭해보세요", "Narrator",()=> {dialogTriggered[2] = true; }));
@@ -283,7 +283,8 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         };
     
-
+        // dialogTriggered[1] = true;
+        // ThirdDialog();
         //FirstDialog();
         saveStart=UserDataManager.Instance.getSave();
         if(saveStart > 0 && saveStart < 4)
