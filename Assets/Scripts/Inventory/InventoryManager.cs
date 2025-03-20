@@ -160,7 +160,6 @@ public class InventoryManager : MonoBehaviour
     {
     if (UserInventoryManager.Instance.userInventoryEntries.Count > 1)
     {
-      // 리스트가 비어있지 않고, 최소 두 개 이상의 아이템이 있을 경우
       UserInventoryEntry userItem = UserInventoryManager.Instance.userInventoryEntries.Find(e => e.itemId == 2);
 
       if (userItem != null)
