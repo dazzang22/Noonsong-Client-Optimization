@@ -156,9 +156,9 @@ public class GameStatistics
         }
         foreach(var n in noonlist)
         {
-            if(n.Value!=NoonsongStatisticsManager.Instance.getNoons(n.Key))
+            string noonName =  DogamChartManager.Instance.getNoonsongName(n.Key);
+            if(n.Value!=NoonsongStatisticsManager.Instance.getNoons(noonName))
             {
-                string noonName =  DogamChartManager.Instance.getNoonsongName(n.Key);
                 NoonsongStatisticsManager.Instance.insertNoonsongStatistic(noonName,n.Value);
             }
         }
