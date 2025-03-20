@@ -283,41 +283,41 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         };
 
-        dialogTriggered[1] = true;
-        ThirdDialog();
-        ////FirstDialog();
-        //saveStart =UserDataManager.Instance.getSave();
-        //if(saveStart > 0 && saveStart < 4)
-        //{
-        //    for(int j=0; j<saveStart; j++)
-        //    {
-        //        dialogTriggered[j]=true;
-        //    }
-        //}
+        //dialogTriggered[1] = true;
+        //ThirdDialog();
+        //FirstDialog();
+        saveStart = UserDataManager.Instance.getSave();
+        if (saveStart > 0 && saveStart < 4)
+        {
+            for (int j = 0; j < saveStart; j++)
+            {
+                dialogTriggered[j] = true;
+            }
+        }
 
 
-        //switch(saveStart)
-        //{
-        //    case 0:
-        //        FirstDialog();
-        //        break;
-        //    case 1:
-        //        SecondDialog();
-        //        break;
-        //    case 2:
-        //        ThirdDialog();
-        //        break;
-        //    case 3:
-        //        FourthDialog();
-        //        break;
-        //    case 4:
-        //        CompleteTutorial();
-        //        break;
-        //    default:
-        //        Debug.Log(UserDataManager.Instance.getSave());
-        //        break;
-        //}
-        
+        switch (saveStart)
+        {
+            case 0:
+                FirstDialog();
+                break;
+            case 1:
+                SecondDialog();
+                break;
+            case 2:
+                ThirdDialog();
+                break;
+            case 3:
+                FourthDialog();
+                break;
+            case 4:
+                CompleteTutorial();
+                break;
+            default:
+                Debug.Log(UserDataManager.Instance.getSave());
+                break;
+        }
+
     }
   
     // 애니메이션 변경 함수 (애니메이터 이름, trigger 문자열) 받음
