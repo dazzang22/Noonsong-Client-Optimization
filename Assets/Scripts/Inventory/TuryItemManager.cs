@@ -16,8 +16,8 @@ public class TuryItemManager : MonoBehaviour
   public TextMeshProUGUI currencyText; // 현재 보유 재화 표시 UI
 
   public GameObject purchasePopup;     // 메인 팝업 판넬 (전체 UI 판넬)
-  public GameObject buyPopup;          // 구매 확인 팝업 ⭐ 추가
-  public GameObject cantBuyPopup;      // 재화 부족 팝업 ⭐ 추가
+  public GameObject buyPopup;          // 구매 확인 팝업 
+  public GameObject cantBuyPopup;      // 재화 부족 팝업 
 
   public TextMeshProUGUI popupItemName; // 구매 팝업 아이템 이름
   public TextMeshProUGUI popupItemPrice; // 구매 팝업 아이템 가격 표시
@@ -29,10 +29,9 @@ public class TuryItemManager : MonoBehaviour
   public TextMeshProUGUI cantBuyPopupItemDescription;
   public Image cantBuyPopupItemImage;
 
-  public Button confirmBuyButton;       // 구매 팝업 내 "구매" 버튼 ⭐ 추가
-  public Button cancelBuyButton;        // 구매 팝업 내 "취소" 버튼 ⭐ 추가
-  public Button cantBuyConfirmButton;   // 재화 부족 팝업 "확인" 버튼 ⭐ 추가
-
+  public Button confirmBuyButton;       // 구매 팝업 내 "구매" 버튼 
+  public Button cancelBuyButton;        // 구매 팝업 내 "취소" 버튼 
+  public Button cantBuyConfirmButton;   // 재화 부족 팝업 "확인" 버튼 
 
   private ItemEntry selectedItem; // 현재 선택된 아이템 저장
 
@@ -142,21 +141,21 @@ public class TuryItemManager : MonoBehaviour
            .Find(e => e.itemId == selectedItem.itemID);
       if (existingItem != null)
       {
-        // **✅ 기존 아이템이 존재하면 개수 업데이트**
+        //존 아이템이 존재하면 개수 업데이트
         Debug.Log($"✅ {selectedItem.itemName}이 인벤토리에 이미 존재, 개수 증가");
         UserInventoryManager.Instance.UpdateItemCount(userId, selectedItem.itemID, existingItem.itemCount + 1);
       }
       else
       {
-        // **✅ 기존에 없던 아이템이라면 새롭게 추가**
+        //기존에 없던 아이템이라면 새롭게 추가
         Debug.Log($"🆕 {selectedItem.itemName}이 인벤토리에 없음 → 새롭게 추가");
         UserInventoryManager.Instance.InsertUserInventory(userId, selectedItem.itemID, 1);
       }
 
-      // 🔹 최신 데이터 불러오기 (DB에서 새로 가져옴)
+      //최신 데이터 불러오기 (DB에서 새로 가져옴)
       UserInventoryManager.Instance.LoadUserInventory(userId);
 
-      // 🔹 최신 데이터를 `selectedItem.itemCount`에 반영
+      //최신 데이터를 `selectedItem.itemCount`에 반영
       UserInventoryEntry updatedItem = UserInventoryManager.Instance.userInventoryEntries
           .Find(e => e.itemId == selectedItem.itemID);
       if (updatedItem != null)
@@ -167,7 +166,7 @@ public class TuryItemManager : MonoBehaviour
       Debug.Log($"{selectedItem.itemName}을(를) 구매했습니다! 현재 보유량: {selectedItem.itemCount}");
 
 
-      UserInventoryManager.Instance.ReloadInventory();  // ⭐ 인벤토리 업데이트
+      UserInventoryManager.Instance.ReloadInventory();  //인벤토리 업데이트
     }
 
     CloseAllPopups();

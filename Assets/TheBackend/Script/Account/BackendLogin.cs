@@ -175,7 +175,7 @@ public class BackendLogin
         Debug.Log("로그아웃 완료.");
     }
 
-    public int GetServerHour()
+    /*public int GetServerHour()
     {
         BackendReturnObject serverTime = Backend.Utils.GetServerTime();
 
@@ -185,6 +185,6 @@ public class BackendLogin
 
         //Debug.Log($"현재 시각: {hour}시");
         return hour;
-    }
+    }*/
 
 }
