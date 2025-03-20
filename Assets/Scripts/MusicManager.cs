@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Mapbox.Utils;
 using Mapbox.Unity.Map;
+using BackEnd;
 
 public class MusicManager : MonoBehaviour
 {
@@ -14,8 +15,8 @@ public class MusicManager : MonoBehaviour
     public class CircularArea
     {
         public string name;
-        public Vector2 center; // Áß½É ÁÂÇ¥
-        public float radius;   // ¹Ý°æ
+        public Vector2 center; // ì¤‘ì‹¬ ì¢Œí‘œ
+        public float radius;   // ë°˜ê²½
         public AudioClip morningClip;
         public AudioClip afternoonClip;
         public AudioClip eveningClip;
@@ -26,17 +27,17 @@ public class MusicManager : MonoBehaviour
     public class PolygonalArea
     {
         public string name;
-        public List<Vector2> vertices; // ´Ù°¢Çü ²ÀÁöÁ¡
+        public List<Vector2> vertices; // ë‹¤ê°í˜• ê¼­ì§€ì 
         public AudioClip morningClip;
         public AudioClip afternoonClip;
         public AudioClip eveningClip;
         public AudioClip nightClip;
     }
 
-    public CircularArea area3; // ±¸¿ª 3 (¿øÇü)
-    public CircularArea area4; // ±¸¿ª 4 (¿øÇü)
-    public PolygonalArea area1; // ±¸¿ª 1 (´Ù°¢Çü)
-    public PolygonalArea area2; // ±¸¿ª 2 (´Ù°¢Çü)
+    public CircularArea area3; // êµ¬ì—­ 3 (ì›í˜•)
+    public CircularArea area4; // êµ¬ì—­ 4 (ì›í˜•)
+    public PolygonalArea area1; // êµ¬ì—­ 1 (ë‹¤ê°í˜•)
+    public PolygonalArea area2; // êµ¬ì—­ 2 (ë‹¤ê°í˜•)
 
     private AudioSource audioSource;
     private string currentArea = null;
@@ -66,7 +67,9 @@ public class MusicManager : MonoBehaviour
     {
         Vector2 currentPosition = new Vector2((float)userLocation.x, (float)userLocation.y);
 
-        string timeOfDay = GetTimeOfDay();
+        GetTimeOfDay(timeOfDay =>
+    {
+
         string detectedArea = null;
 
         if (IsWithinCircularArea(currentPosition, area3))
@@ -125,6 +128,7 @@ public class MusicManager : MonoBehaviour
             currentArea = detectedArea;
             Debug.Log($"Current Area updated to: {currentArea}");
         }
+    });
     }
 
     private bool IsWithinCircularArea(Vector2 position, CircularArea area)
@@ -254,23 +258,49 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    private string GetTimeOfDay()
+    public void GetTimeOfDay(Action<string> callback)
     {
-        int serverHour = BackendLogin.Instance.GetServerHour();
-        Debug.Log($"Server Hour: {serverHour}");
+        GetServerHour(serverHour =>
+        {
+            if (serverHour == -1)
+            {
+                Debug.LogWarning("Defaulting to Morning");
+                callback?.Invoke("Morning");
+                return;
+            }
 
-        if (serverHour >= 6 && serverHour < 12)
+            Debug.Log($"Server Hour: {serverHour}");
+            string timeOfDay;
+
+            if (serverHour >= 6 && serverHour < 12)
+                timeOfDay = "Morning";
+            else if (serverHour >= 12 && serverHour < 18)
+                timeOfDay = "Afternoon";
+            else if (serverHour >= 18 && serverHour < 24)
+                timeOfDay = "Evening";
+            else
+                timeOfDay = "Night";
+
+            callback?.Invoke(timeOfDay);
+        });
+    }
+
+    private void GetServerHour(Action<int> callback)
+    {
+        SendQueue.Enqueue(Backend.Utils.GetServerTime, bro =>
         {
-            return "Morning";
-        }
-        if (serverHour >= 12 && serverHour < 18)
-        {
-            return "Afternoon";
-        }
-        if (serverHour >= 18 && serverHour < 24)
-        {
-            return "Evening";
-        }
-        return "Night";
+            if (bro.IsSuccess())
+            {
+                string time = bro.GetReturnValuetoJSON()["utcTime"].ToString();
+                DateTime parsedDate = DateTime.Parse(time);
+                int hour = parsedDate.Hour;
+                callback?.Invoke(hour);
+            }
+            else
+            {
+                Debug.LogError($"Failed to retrieve server time: {bro}");
+                callback?.Invoke(-1);
+            }
+        });
     }
 }

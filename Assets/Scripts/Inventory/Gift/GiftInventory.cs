@@ -118,7 +118,7 @@ public class GiftInventory : MonoBehaviour
 
             ItemEntry.PreferenceLevel preference = selectedGiftItem.GetPreferenceForDepartment(university);
             int preferenceMultiplier = 1;
-            string giftReaction = "³» »ý°¢ÇØ¼­ ÁÖ´Â °Å¾ß? °í¸¶¿ö.";
+            string giftReaction = "ë‚´ ìƒê°í•´ì„œ ì£¼ëŠ” ê±°ì•¼? ê³ ë§ˆì›Œ.";
             GameObject effectToActivate = null;
 
             switch (preference)
@@ -127,24 +127,24 @@ public class GiftInventory : MonoBehaviour
                     audioSource.PlayOneShot(love);
                     preferenceMultiplier = 5;
                     giftReaction = currentNoonsong.isFriend
-                        ? "¿ª½Ã ³ª¸¦ Àß ¾Æ´Â±¸³ª? Á¤¸» °í¸¶¿ö!"
-                        : "¿Í! ³ª ÀÌ°Å ÁøÂ¥ ÁÁ¾ÆÇÏ´Âµ¥, ¾î¶»°Ô ¾Ë¾Ò¾î? Á¤¸» °í¸¶¿ö~";
+                        ? "ì—­ì‹œ ë‚˜ë¥¼ ìž˜ ì•„ëŠ”êµ¬ë‚˜? ì •ë§ ê³ ë§ˆì›Œ!"
+                        : "ì™€! ë‚˜ ì´ê±° ì§„ì§œ ì¢‹ì•„í•˜ëŠ”ë°, ì–´ë–»ê²Œ ì•Œì•˜ì–´? ì •ë§ ê³ ë§ˆì›Œ~";
                     effectToActivate = giftEffectParticle4;
                     break;
                 case ItemEntry.PreferenceLevel.Like:
                     audioSource.PlayOneShot(love);
                     preferenceMultiplier = 3;
                     giftReaction = currentNoonsong.isFriend
-                        ? "¸¶À½¿¡ µç´Ù! °í¸¶¿ö~"
-                        : "¿À, ÀÌ°Å ÁÁÀº °É? ¼±¹°ÇØÁà¼­ °í¸¶¿ö!";
+                        ? "ë§ˆìŒì— ë“ ë‹¤! ê³ ë§ˆì›Œ~"
+                        : "ì˜¤, ì´ê±° ì¢‹ì€ ê±¸? ì„ ë¬¼í•´ì¤˜ì„œ ê³ ë§ˆì›Œ!";
                     effectToActivate = giftEffectParticle3;
                     break;
                 case ItemEntry.PreferenceLevel.Dislike:
                     audioSource.PlayOneShot(hate);
                     preferenceMultiplier = 0;
                     giftReaction = currentNoonsong.isFriend
-                        ? "°í¸¶¿ö~"
-                        : "ÇÏÇÏ, °í¸¶¿ö.";
+                        ? "ê³ ë§ˆì›Œ~"
+                        : "í•˜í•˜, ê³ ë§ˆì›Œ.";
                     effectToActivate = giftEffectParticle1;
                     break;
                 default:
@@ -171,7 +171,7 @@ public class GiftInventory : MonoBehaviour
             if (!currentNoonsong.isFriend)
             {
                 int newLoveLevel = currentNoonsong.loveLevel + affectionChange;
-                // 50 -> ´ëÇÐº° Ä£±¸°¡ µÉ ¼ö ÀÖ´Â È£°¨µµ ¼öÄ¡·Î º¯°æ (DB¿¡¼­ °¡Á®¿È)
+                // 50 -> ëŒ€í•™ë³„ ì¹œêµ¬ê°€ ë  ìˆ˜ ìžˆëŠ” í˜¸ê°ë„ ìˆ˜ì¹˜ë¡œ ë³€ê²½ (DBì—ì„œ ê°€ì ¸ì˜´)
                 if (newLoveLevel > 50)
                 {
                     affectionChange = 50 - currentNoonsong.loveLevel;
@@ -180,7 +180,7 @@ public class GiftInventory : MonoBehaviour
 
             int updatedLoveLevel = encounterUI.UpdateNoonsongAffection(affectionChange);
             int bestfriend = DogamChartManager.Instance.maxFavor(currentNoonsong.university);
-            // 100 -> ´ëÇÐº° º£ÇÁ°¡ µÉ ¼ö ÀÖ´Â È£°¨µµ ¼öÄ¡·Î º¯°æ (DB¿¡¼­ °¡Á®¿È)
+            // 100 -> ëŒ€í•™ë³„ ë² í”„ê°€ ë  ìˆ˜ ìžˆëŠ” í˜¸ê°ë„ ìˆ˜ì¹˜ë¡œ ë³€ê²½ (DBì—ì„œ ê°€ì ¸ì˜´)
 
             if (updatedLoveLevel >= 100 && !currentNoonsong.isBestFriend)
             {
@@ -201,6 +201,16 @@ public class GiftInventory : MonoBehaviour
             if (selectedGiftItem.itemCount <= 0)
             {
                 giftItems.Remove(selectedGiftItem);
+            }
+
+            //DBì—°ê²°
+            string userId = UserDataManager.Instance.getUserID();
+            UserInventoryEntry existingItem = UserInventoryManager.Instance.userInventoryEntries
+                 .Find(e => e.itemId == selectedGiftItem.itemID);
+
+            if (existingItem != null)
+            {
+                UserInventoryManager.Instance.UpdateItemCount(userId, existingItem.itemId, existingItem.itemCount - 1);
             }
 
             inventoryManager.UpdateInventory();
@@ -229,6 +239,20 @@ public class GiftInventory : MonoBehaviour
             if (bestFriendRewardItem != null)
             {
                 bestFriendRewardItem.itemCount++;
+
+                //DBì—°ê²°
+                string userId = UserDataManager.Instance.getUserID();
+                UserInventoryEntry existingItem = UserInventoryManager.Instance.userInventoryEntries
+                     .Find(e => e.itemId == bestFriendRewardItem.itemID);
+                if (existingItem != null)
+                {
+                    UserInventoryManager.Instance.UpdateItemCount(userId, existingItem.itemId, existingItem.itemCount + 1);
+                }
+                else
+                {
+                    UserInventoryManager.Instance.InsertUserInventory(userId, bestFriendRewardItem.itemID, 1);
+                }
+
                 inventoryManager.UpdateInventory();
             }
         }
