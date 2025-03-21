@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 using BackEnd;
+using UnityEngine.XR.ARFoundation;
+
 public class EncounterUI : MonoBehaviour
 {
     [Header("UI")]
@@ -120,7 +122,16 @@ public class EncounterUI : MonoBehaviour
         if (currentTarget != null)
         {
             originalParent = currentTarget.transform.parent;
-            currentTarget.transform.SetParent(Camera.main.transform);
+            if (currentTarget != null && currentTarget.transform.parent != Camera.main.transform)
+            {
+                currentTarget.transform.SetParent(Camera.main.transform);
+            }
+
+            ARAnchorManager anchorManager = FindObjectOfType<ARAnchorManager>();
+            if (anchorManager != null)
+            {
+                ARAnchor anchor = currentTarget.AddComponent<ARAnchor>();
+            }
 
             Vector3 fixedPosition = new Vector3(0, 0, 3);
             currentTarget.transform.localPosition = fixedPosition;
@@ -159,11 +170,17 @@ public class EncounterUI : MonoBehaviour
     private void LateUpdate()
     {
         GameObject currentTarget = arObjectCatch.GetCurrentTarget();
-        if (currentTarget != null && currentTarget.transform.parent == Camera.main.transform)
+
+        if (currentTarget != null)
         {
-            // 고정된 위치와 회전 유지
+            if (currentTarget.transform.parent != Camera.main.transform)
+            {
+                currentTarget.transform.SetParent(Camera.main.transform);
+            }
+
             currentTarget.transform.localPosition = new Vector3(0, 0, 3);
             currentTarget.transform.localRotation = Quaternion.Euler(0, 180, 0);
+            currentTarget.transform.localScale = Vector3.one * 1f;
         }
     }
 
