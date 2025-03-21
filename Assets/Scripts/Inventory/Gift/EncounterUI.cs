@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 using BackEnd;
+using UnityEngine.XR.ARFoundation;
+
 public class EncounterUI : MonoBehaviour
 {
     [Header("UI")]
@@ -123,6 +125,12 @@ public class EncounterUI : MonoBehaviour
             if (currentTarget != null && currentTarget.transform.parent != Camera.main.transform)
             {
                 currentTarget.transform.SetParent(Camera.main.transform);
+            }
+
+            ARAnchorManager anchorManager = FindObjectOfType<ARAnchorManager>();
+            if (anchorManager != null)
+            {
+                ARAnchor anchor = currentTarget.AddComponent<ARAnchor>();
             }
 
             Vector3 fixedPosition = new Vector3(0, 0, 3);
