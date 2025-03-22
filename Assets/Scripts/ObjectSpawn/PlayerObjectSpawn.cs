@@ -130,7 +130,7 @@ public class PlayerObjectSpawn : MonoBehaviour
     {
         // 랜덤 반경과 방향으로 오프셋 생성
         float angle = Random.Range(0, Mathf.PI * 2);
-        float distance = Random.Range(6f, spawnRadius); // 최소 5m ~ 최대 spawnRadius
+        float distance = Random.Range(5f, spawnRadius); // 최소 5m ~ 최대 spawnRadius
         float offsetX = Mathf.Cos(angle) * distance;
         float offsetZ = Mathf.Sin(angle) * distance;
 
