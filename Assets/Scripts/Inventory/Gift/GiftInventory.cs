@@ -281,6 +281,7 @@ public class GiftInventory : MonoBehaviour
             ItemEntry itemEntry = item.GetItemEntry();
             if (itemEntry != null)
             {
+                itemEntry.itemCount = item.itemCount;
                 giftItems.Add(itemEntry);
             }
         }
