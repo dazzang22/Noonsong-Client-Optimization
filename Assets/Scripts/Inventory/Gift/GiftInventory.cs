@@ -203,18 +203,24 @@ public class GiftInventory : MonoBehaviour
                 giftItems.Remove(selectedGiftItem);
             }
 
-            //DB연결
+            // DB 업데이트
             string userId = UserDataManager.Instance.getUserID();
+            
             UserInventoryEntry existingItem = UserInventoryManager.Instance.userInventoryEntries
-                 .Find(e => e.itemId == selectedGiftItem.itemID);
-
+           .Find(e => e.itemId == selectedGiftItem.itemID);
             if (existingItem != null)
             {
-                UserInventoryManager.Instance.UpdateItemCount(userId, existingItem.itemId, existingItem.itemCount - 1);
+                //기존 아이템이 존재하면 개수 업데이트
+                int newCount = existingItem.itemCount - 1;
+                UserInventoryManager.Instance.UpdateItemCount(userId, selectedGiftItem.itemID, newCount);
+                selectedGiftItem.itemCount = newCount;
             }
 
-            inventoryManager.UpdateInventory();
+            // 인벤토리 UI 업데이트
+            UserInventoryManager.Instance.ReloadInventory();
             SyncWithInventoryManager();
+            Debug.Log("선물하기 완료. 아이템 남은 개수:" + selectedGiftItem.itemCount);
+
             encounterUI.GiveGift(selectedGiftItem);
             giftPopup.SetActive(false);
             giftInventoryUI.SetActive(false);
@@ -246,14 +252,18 @@ public class GiftInventory : MonoBehaviour
                      .Find(e => e.itemId == bestFriendRewardItem.itemID);
                 if (existingItem != null)
                 {
-                    UserInventoryManager.Instance.UpdateItemCount(userId, existingItem.itemId, existingItem.itemCount + 1);
+                    UserInventoryManager.Instance.UpdateItemCount(userId, bestFriendRewardItem.itemID, existingItem.itemCount + 1);
+                    int newCount = existingItem.itemCount + 1;
+                    UserInventoryManager.Instance.UpdateItemCount(userId, bestFriendRewardItem.itemID, newCount);
+                    bestFriendRewardItem.itemCount = newCount;
                 }
                 else
                 {
                     UserInventoryManager.Instance.InsertUserInventory(userId, bestFriendRewardItem.itemID, 1);
+                    bestFriendRewardItem.itemCount = 1;
                 }
 
-                inventoryManager.UpdateInventory();
+                UserInventoryManager.Instance.ReloadInventory();
             }
         }
     }
@@ -277,7 +287,7 @@ public class GiftInventory : MonoBehaviour
         UpdateGiftInventoryUI();
     }
 
-    private void UpdateGiftInventoryUI()
+    public void UpdateGiftInventoryUI()
     {
         foreach (Transform child in giftSlotContainer)
         {

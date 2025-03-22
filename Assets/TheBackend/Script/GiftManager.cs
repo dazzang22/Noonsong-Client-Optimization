@@ -21,8 +21,8 @@ public class GiftManager {
     //아이템 소모
     public void sendGiftItem(int itemIdToDelete)
     {
-        string userId = UserDataManager.Instance.getUserID();
-        UserInventoryManager.Instance.RemoveItem(userId, itemIdToDelete);
+        //string userId = UserDataManager.Instance.getUserID();
+        //UserInventoryManager.Instance.RemoveItem(userId, itemIdToDelete);
     }
 
     //친밀도 상승

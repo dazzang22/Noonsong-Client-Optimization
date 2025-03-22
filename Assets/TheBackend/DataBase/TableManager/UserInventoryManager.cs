@@ -87,42 +87,50 @@ public class UserInventoryManager
     //아이템 개수 업데이트
     public void UpdateItemCount(string userId, int itemId, int newCount)
     {
-        Debug.Log($"🚀 UpdateItemCount 실행됨: userId={userId}, itemId={itemId}, newCount={newCount}");
-
         UserInventoryEntry entry = userInventoryEntries.Find(e => e.itemId == itemId);
         if (entry != null)
         {
-            entry.itemCount = newCount;
-
-            //가장 최근 데이터 가져오기
-            Where where = new Where();
-            where.Equal("userId", userId);
-            where.Equal("itemId", itemId);
-            var bro1 = Backend.GameData.Get("UserInventory", where, 1);
-
-            if (!bro1.IsSuccess() || bro1.FlattenRows().Count == 0)
+            if (newCount <= 0)
             {
-                Debug.LogError($"유저 인벤토리 조회 실패 (inDate 찾을 수 없음): {bro1}");
-                return;
-            }
+                // 아이템 수량이 0 이하이면 인벤토리에서 제거
+                userInventoryEntries.Remove(entry);
 
-            string inDate = bro1.FlattenRows()[0]["inDate"].ToString();
-            Debug.Log($"✅ 최신 inDate 조회 성공: {inDate}");
-
-            //뒤끝 DB 업데이트 실행
-            Param param = new Param();
-            param.Add("itemCount", newCount);
-
-            var bro2 = Backend.GameData.UpdateV2("UserInventory", inDate, Backend.UserInDate, param);
-            if (!bro2.IsSuccess())
-            {
-                Debug.LogError($"아이템 개수 업데이트 실패: {bro2}");
+                // DB에서 아이템 삭제
+                Where where = new Where();
+                where.Equal("userId", userId);
+                where.Equal("itemId", itemId);
+                var bro = Backend.GameData.Delete("UserInventory", where);
+                if (!bro.IsSuccess())
+                {
+                    Debug.LogError($"아이템 삭제 실패: {bro}");
+                }
             }
             else
             {
-                Debug.Log($"아이템 개수 업데이트 성공: {itemId} → {newCount}");
-                LoadUserInventory(userId);
-                Debug.Log("인벤토리 새로고침 완료");
+                // 아이템 수량 업데이트
+                entry.itemCount = newCount;
+
+                // DB에서 해당 아이템의 inDate 조회
+                Where where = new Where();
+                where.Equal("userId", userId);
+                where.Equal("itemId", itemId);
+                var bro1 = Backend.GameData.Get("UserInventory", where, 1);
+                if (!bro1.IsSuccess() || bro1.FlattenRows().Count == 0)
+                {
+                    Debug.LogError($"유저 인벤토리 조회 실패 (inDate 찾을 수 없음): {bro1}");
+                    return;
+                }
+
+                string inDate = bro1.FlattenRows()[0]["inDate"].ToString();
+
+                // DB 업데이트
+                Param param = new Param();
+                param.Add("itemCount", newCount);
+                var bro2 = Backend.GameData.UpdateV2("UserInventory", inDate, Backend.UserInDate, param);
+                if (!bro2.IsSuccess())
+                {
+                    Debug.LogError($"아이템 개수 업데이트 실패: {bro2}");
+                }
             }
         }
         else
@@ -130,6 +138,7 @@ public class UserInventoryManager
             Debug.LogError($"업데이트할 아이템을 찾을 수 없음: {itemId}");
         }
     }
+
 
 
     //아이템 삭제
@@ -163,9 +172,11 @@ public class UserInventoryManager
         Debug.Log($" 인벤토리 새로고침: userId={userId}");
 
         InventoryManager inventoryManager = GameObject.FindObjectOfType<InventoryManager>();
+        GiftInventory giftInventory = GameObject.FindObjectOfType<GiftInventory>();
         if (inventoryManager != null)
         {
-            inventoryManager.UpdateInventory(); // 인벤토리 UI 업데이트
+            inventoryManager.UpdateInventory();
+            giftInventory.UpdateGiftInventoryUI();
             Debug.Log("인벤토리 UI 업데이트 완료");
         }
         else
