@@ -90,6 +90,8 @@ public class ChangePasswordManager : MonoBehaviour
                 Debug.Log("비밀번호 변경 성공!");
                 newPasswordPanel.SetActive(false);
                 successPanel.SetActive(true);
+                //db 연결
+                UserDataManager.Instance.ChangePassword(newPassword);
             }
             else
             {

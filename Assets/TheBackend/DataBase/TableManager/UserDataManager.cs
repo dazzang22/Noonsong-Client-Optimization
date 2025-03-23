@@ -143,12 +143,12 @@ public class UserDataManager
     }
 
     //비밀번호 수정 -> 변경값을 전달
-    public Param ChangePassword(string newPw)
+    public void ChangePassword(string newPw)
     {
         UserProfileData userProfileData=findUser(Backend.UserInDate);
         userProfileData.setPW(newPw);
         Param param=userProfileData.ToParam();
-        return param;
+        UpdateUserData(param);
     }
 
     //닉네임 변경   -> 변경 값을 전달

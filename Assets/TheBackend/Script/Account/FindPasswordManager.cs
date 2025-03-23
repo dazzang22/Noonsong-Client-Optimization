@@ -65,6 +65,7 @@ public class FindPasswordManager : LoginBase
                 return;
             }
 
+            Debug.LogError($"{callback.GetMessage()}");
             string message;
             switch (int.Parse(callback.GetStatusCode()))
             {
