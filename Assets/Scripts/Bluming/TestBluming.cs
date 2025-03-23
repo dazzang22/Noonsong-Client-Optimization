@@ -19,6 +19,8 @@ public class TestBluming : MonoBehaviour
     private GameObject spawnedObject;
     private Transform othersObject;
 
+    private bool isObjectSpawned = false;
+
     private void OnEnable()
     {
         MusicManager.OnEnterArea4 += HandleEnterArea4;
@@ -34,8 +36,9 @@ public class TestBluming : MonoBehaviour
     private void HandleEnterArea4()
     {
         Debug.Log("Entered Area 4 - Spawning Object");
-        if (spawnedObject == null)
+        if (!isObjectSpawned)
         {
+            Debug.Log("Spawning Object");
             SpawnObject();
         }
     }
@@ -47,6 +50,7 @@ public class TestBluming : MonoBehaviour
         {
             Destroy(spawnedObject);
             spawnedObject = null;
+            isObjectSpawned = false;
         }
     }
 
@@ -105,15 +109,15 @@ public class TestBluming : MonoBehaviour
         }
 
         ARAnchor anchor = spawnedObject.AddComponent<ARAnchor>();
-
         if (anchor == null)
         {
             Debug.LogError("ARAnchor could not be added!");
+            return;
         }
-        else
-        {
-            Debug.Log($"ARAnchor successfully added at {spawnPosition}");
-        }
+
+        spawnedObject.transform.SetParent(anchor.transform, true);
+        Debug.Log($"ARAnchor successfully added at {spawnPosition}");
+        isObjectSpawned = true;
         Debug.Log($"Turi Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
     }
 

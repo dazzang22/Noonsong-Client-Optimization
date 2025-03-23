@@ -89,6 +89,11 @@ public class EncounterUI : MonoBehaviour
                 CloseEncounter();
             }
         }
+
+        //if (currentTarget != null)
+        //{
+        //    Debug.Log($"현재 오브젝트 상태: {currentTarget.activeSelf}, 위치: {currentTarget.transform.position}");
+        //}
     }
 
     public void Show(NoonsongEntry character, System.Action onClose)
