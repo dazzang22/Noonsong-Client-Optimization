@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.XR.ARFoundation;
+using Unity.XR.CoreUtils;
 
 public class NoonsongEntryManager : MonoBehaviour
 {
@@ -53,6 +55,10 @@ public class NoonsongEntryManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("AR Session active: " + (FindObjectOfType<ARSession>() != null));
+            Debug.Log("XR Origin active: " + (FindObjectOfType<XROrigin>() != null));
+            Debug.Log("AR Camera Background active: " + (FindObjectOfType<ARCameraBackground>() != null));
+
             Debug.Log($"NoonsongEntryManager initialized with {noonsongEntries.Count} entries.");
         }
     }

@@ -190,7 +190,10 @@ namespace Mapbox.Unity
 			//}
 			try
 			{
-				_telemetryLibrary = TelemetryFactory.GetTelemetryInstance();
+                Debug.Log("[MapboxAccess] Telemetry disabled intentionally.");
+                return;
+
+                _telemetryLibrary = TelemetryFactory.GetTelemetryInstance();
 				_telemetryLibrary.Initialize(_configuration.AccessToken);
 				_telemetryLibrary.SetLocationCollectionState(GetTelemetryCollectionState());
 				_telemetryLibrary.SendTurnstile();

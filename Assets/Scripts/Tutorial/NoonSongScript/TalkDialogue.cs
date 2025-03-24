@@ -6,6 +6,7 @@ using Doublsb.Dialog;
 using UnityEngine.SceneManagement;
 using UltimateClean;
 using TMPro;
+using UnityEngine.XR.ARFoundation;
 
 // 최대한 주석 달아보았으나, 혹시 이해가 안되는 코드 있다면 저(이다연)한테 물어보셔도 되고, 챗지피티에게 코드 주석 달아달라고 하고 설명해달라고 하면 잘 설명해줍니다!
 public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체 대사가 들어있음, 대사 코드 뒤에 오브젝트 등장, 애니메이션 작동 모두 관리하고 있습니다.
@@ -283,9 +284,11 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         };
 
-        //dialogTriggered[1] = true;
+        dialogTriggered[1] = true;
+        //dialogTriggered[2] = true;
+        //FourthDialog();
         //ThirdDialog();
-        //FirstDialog();
+        FirstDialog();
         saveStart = UserDataManager.Instance.getSave();
         if (saveStart > 0 && saveStart < 4)
         {
@@ -319,7 +322,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         }
 
     }
-  
+
     // 애니메이션 변경 함수 (애니메이터 이름, trigger 문자열) 받음
     private void ChangeAnimation(Animator animator, string trigger)
     {
@@ -646,9 +649,29 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
     public void CompleteTutorial()
     {
-        BackendSavePoint.Instance.SaveGameData(4);
+        StartCoroutine(TransitionToMain());
+    }
 
+    IEnumerator TransitionToMain()
+    {
+        // AR 세션 리셋/종료
+        if (ARSession.state > ARSessionState.None && ARSession.state < ARSessionState.SessionInitializing)
+        {
+            Debug.Log("Stopping AR Session before loading next scene.");
+            ARSession session = FindObjectOfType<ARSession>();
+            if (session != null)
+            {
+                session.enabled = false;
+            }
+
+            yield return null;
+        }
+
+        // 저장
+        BackendSavePoint.Instance.SaveGameData(4);
         Debug.Log("튜토리얼 완료");
+
+        // 씬 전환
         SceneManager.LoadScene("MainScene(Release)");
     }
 
