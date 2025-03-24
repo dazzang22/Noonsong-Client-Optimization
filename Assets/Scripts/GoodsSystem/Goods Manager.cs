@@ -234,6 +234,7 @@ public class GoodsManager : MonoBehaviour
         //유저 재화 DB 반영
         param1= UserBalanceManager.Instance.addsnow(randomReward);
         UserBalanceManager.Instance.updateBalance(param1);
+        UserDataManager.Instance.setSendingTime(0);
 
         if (rewardText != null)
         {

@@ -155,6 +155,8 @@ public class UIController : MonoBehaviour
      private void ToggleSkipPanel()
     {
         skipPanel.SetActive(!skipPanel.activeSelf);
+        //DB 반영
+        BackendSavePoint.Instance.SaveGameData(4);
     }
 
 
