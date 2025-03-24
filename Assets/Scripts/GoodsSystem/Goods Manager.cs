@@ -289,7 +289,7 @@ public class GoodsManager : MonoBehaviour
         // 파견 완료 시 보상 지급
         if (currencyManager != null)
         {
-            randomReward = Random.Range(1, 11); // 1에서 10까지의 랜덤 값 생성 (포함)
+            randomReward = Random.Range(30,40); // 1에서 10까지의 랜덤 값 생성 (포함)
             ChangeCompletImg();
         }
         remainingMinutes = DISPATCH_DURATION;
