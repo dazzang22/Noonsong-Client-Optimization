@@ -35,17 +35,14 @@ public class TestBluming : MonoBehaviour
 
     private void HandleEnterArea4()
     {
-        Debug.Log("Entered Area 4 - Spawning Object");
         if (!isObjectSpawned)
         {
-            Debug.Log("Spawning Object");
             SpawnObject();
         }
     }
 
     private void HandleExitArea4()
     {
-        Debug.Log("Exited Area 4 - Destroying Object");
         if (spawnedObject != null)
         {
             Destroy(spawnedObject);
@@ -90,7 +87,6 @@ public class TestBluming : MonoBehaviour
 
         if (spawnedObject == null)
         {
-            Debug.LogError("Spawned object is NULL!");
             return;
         }
 
@@ -111,12 +107,10 @@ public class TestBluming : MonoBehaviour
         ARAnchor anchor = spawnedObject.AddComponent<ARAnchor>();
         if (anchor == null)
         {
-            Debug.LogError("ARAnchor could not be added!");
             return;
         }
 
         spawnedObject.transform.SetParent(anchor.transform, true);
-        Debug.Log($"ARAnchor successfully added at {spawnPosition}");
         isObjectSpawned = true;
         Debug.Log($"Turi Object spawned at {spawnPosition} with scale {spawnedObject.transform.localScale}");
     }
@@ -127,11 +121,6 @@ public class TestBluming : MonoBehaviour
         if (othersObject != null)
         {
             othersObject.gameObject.SetActive(true);
-            Debug.Log("Others activated!");
-        }
-        else
-        {
-            Debug.LogWarning("Others null");
         }
     }
 }

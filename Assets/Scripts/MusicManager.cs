@@ -205,10 +205,6 @@ public class MusicManager : MonoBehaviour
             audioSource.clip = clipToPlay;
             audioSource.Play();
         }
-        else
-        {
-            Debug.LogWarning($"No clip assigned for {timeOfDay} in area {area.name}");
-        }
     }
 
     private void PlayMusicForTimeOfDay(PolygonalArea area, string timeOfDay)
@@ -237,10 +233,6 @@ public class MusicManager : MonoBehaviour
             audioSource.Stop();
             audioSource.clip = clipToPlay;
             audioSource.Play();
-        }
-        else
-        {
-            Debug.LogWarning($"No clip assigned for {timeOfDay} in area {area.name}");
         }
     }
 
@@ -278,11 +270,6 @@ public class MusicManager : MonoBehaviour
                     string time = bro.GetReturnValuetoJSON()["utcTime"].ToString();
                     serverTime = DateTime.Parse(time);
                     isServerTimeSynced = true;
-                    Debug.Log($"Server time synced: {serverTime}");
-                }
-                else
-                {
-                    Debug.LogError($"Failed to retrieve server time: {bro}");
                 }
             });
 
