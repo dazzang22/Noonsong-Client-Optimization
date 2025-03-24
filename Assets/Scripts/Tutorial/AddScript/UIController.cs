@@ -8,7 +8,6 @@ public class UIController : MonoBehaviour
 {
     
     [Header("Canvas")]
-    [SerializeField] private Canvas friendsCanvas;
     [SerializeField] private Canvas mapCanvas;
     [SerializeField] private Canvas inventoryCanvas;
     [SerializeField] private Canvas turyCanvas;
@@ -26,7 +25,6 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject turyPanel;
 
     [Header("MainButton")]
-    [SerializeField] private Button friendsButton;
     [SerializeField] private Button mapButton;
     [SerializeField] private Button interactionButton;
     [SerializeField] private Button interactionButton2;
@@ -53,7 +51,6 @@ public class UIController : MonoBehaviour
     void Start()
     {
         //캔버스 초기화
-        friendsCanvas.gameObject.SetActive(false);
         mapCanvas.gameObject.SetActive(false);
         inventoryCanvas.gameObject.SetActive(false);
         turyCanvas.gameObject.SetActive(false);
@@ -79,7 +76,6 @@ public class UIController : MonoBehaviour
         turyPopButton.onClick.AddListener(() => isClicked = true);
         bookXButton.onClick.AddListener(() => isClicked = true);
         
-        friendsButton.onClick.AddListener(ToggleFriendsCanvas);
         skipButton.onClick.AddListener(ToggleSkipPanel);
 
         yesButton.onClick.AddListener(SkipTutorial);
@@ -122,10 +118,6 @@ public class UIController : MonoBehaviour
 
 
     //toggleCanvas
-    private void ToggleFriendsCanvas()
-    {
-        friendsCanvas.gameObject.SetActive(!friendsCanvas.gameObject.activeSelf);
-    }
 
     private void ToggleMapCanvas()
     {
