@@ -20,6 +20,7 @@ public class TestBluming : MonoBehaviour
     private Transform othersObject;
 
     private bool isObjectSpawned = false;
+    private bool isBlumingActivated = false;
 
     private void OnEnable()
     {
@@ -95,13 +96,15 @@ public class TestBluming : MonoBehaviour
         Transform turiObject = spawnedObject.transform.Find("Turi");
         othersObject = spawnedObject.transform.Find("Others");
 
-        if (turiObject != null)
-        {
-            turiObject.gameObject.SetActive(true);
-        }
-        if (othersObject != null)
+        turiObject.gameObject.SetActive(true);
+
+        if (isBlumingActivated == false)
         {
             othersObject.gameObject.SetActive(false);
+        }
+        else
+        {
+            othersObject.gameObject.SetActive(true);
         }
 
         ARAnchor anchor = spawnedObject.AddComponent<ARAnchor>();
@@ -118,9 +121,6 @@ public class TestBluming : MonoBehaviour
 
     public void UnlockBluming()
     {
-        if (othersObject != null)
-        {
-            othersObject.gameObject.SetActive(true);
-        }
+        isBlumingActivated = true;
     }
 }
