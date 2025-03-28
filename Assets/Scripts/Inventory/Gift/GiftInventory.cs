@@ -252,7 +252,6 @@ public class GiftInventory : MonoBehaviour
                      .Find(e => e.itemId == bestFriendRewardItem.itemID);
                 if (existingItem != null)
                 {
-                    UserInventoryManager.Instance.UpdateItemCount(userId, bestFriendRewardItem.itemID, existingItem.itemCount + 1);
                     int newCount = existingItem.itemCount + 1;
                     UserInventoryManager.Instance.UpdateItemCount(userId, bestFriendRewardItem.itemID, newCount);
                     bestFriendRewardItem.itemCount = newCount;

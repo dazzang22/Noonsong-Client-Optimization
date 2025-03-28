@@ -209,7 +209,7 @@ Debug.Log("Not enough currency to catch the generalNoonsong.");
 
                         noonsongManager.DiscoverItem(entry);
                         entry.isDiscovered = true;
-                        currencyManager.UseCurrency(requiredCurrency);
+                        //currencyManager.UseCurrency(requiredCurrency);
                     }
                     else
                     {
