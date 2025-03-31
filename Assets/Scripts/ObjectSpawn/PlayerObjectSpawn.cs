@@ -118,7 +118,7 @@ public class PlayerObjectSpawn : MonoBehaviour
         // ARAnchor 추가
         ARAnchor anchor = instance.AddComponent<ARAnchor>();
         anchor.transform.position = spawnPosition;
-        anchor.transform.rotation = Quaternion.identity;
+        instance.transform.localRotation = Quaternion.Euler(0, 180, 0);
 
         if (anchor == null)
         {
@@ -151,7 +151,7 @@ public class PlayerObjectSpawn : MonoBehaviour
     Vector3 GetSpawnPositionInFront(Vector3 userPosition, Vector3 direction)
     {
         float angle = Random.Range(-30f, 30f); // 플레이어의 시야각 내에서 랜덤 위치
-        Vector3 spawnOffset = Quaternion.Euler(0, angle, 0) * direction * Random.Range(5f, spawnRadius);
+        Vector3 spawnOffset = Quaternion.Euler(0, angle, 0) * direction * Random.Range(6f, spawnRadius);
     
         return userPosition + spawnOffset;
     } 
