@@ -53,6 +53,7 @@ public class PlayerObjectSpawnManager : MonoBehaviour
             if (obj.GameObject != null)
             {
                 GameObject.Destroy(obj.GameObject);
+                Debug.Log("destroy spawnObject(TimeOut)");
             }
         }
         _spawnedObjects.Clear();
