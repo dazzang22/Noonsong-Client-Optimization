@@ -33,11 +33,16 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     [SerializeField] private EncounterUI encounterUI;
 
+    private Vector3 lastPosition;
+    private Vector3 movementDirection= Vector3.forward;
+
    
 
 
     void Start()
     {
+        lastPosition = xrOrigin.position;
+
         PlayerObjectSpawnManager.Instance.RegisterSpawnController(this);
 
         // 첫 번째 오브젝트를 스폰
@@ -57,6 +62,8 @@ public class PlayerObjectSpawn : MonoBehaviour
                 PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
                 return;
             }
+
+            UpdateMovementDirection();
 
             timer += Time.deltaTime;
 
@@ -86,8 +93,7 @@ public class PlayerObjectSpawn : MonoBehaviour
 
         //사용자 위치에서 일정 범위 내 랜덤 위치를 생성
         Vector3 userPosition = xrOrigin.position;
-        Vector3 randomOffset = GetRandomOffset();
-        Vector3 spawnPosition = userPosition + randomOffset;
+        Vector3 spawnPosition = GetSpawnPositionInFront(userPosition, movementDirection);
         spawnPosition.y = -5; // Y축 고정
 
         Debug.Log($"Attempting to spawn object at {spawnPosition}");
@@ -125,17 +131,41 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     }
 
-
-    Vector3 GetRandomOffset()
+    private void UpdateMovementDirection()
     {
-        // 랜덤 반경과 방향으로 오프셋 생성
-        float angle = Random.Range(0, Mathf.PI * 2);
-        float distance = Random.Range(5f, spawnRadius); // 최소 5m ~ 최대 spawnRadius
-        float offsetX = Mathf.Cos(angle) * distance;
-        float offsetZ = Mathf.Sin(angle) * distance;
+        Vector3 currentPosition = xrOrigin.position;
+        Vector3 displacement = currentPosition - lastPosition;
 
-        return new Vector3(offsetX, 0, offsetZ);
+        if (displacement.magnitude > 0.01f) // 최소 이동 거리 확인 (노이즈 방지)
+        {
+            movementDirection = displacement.normalized; // 이동 방향 업데이트
+        }
+        else
+        {
+            movementDirection = xrOrigin.forward; // 정지 시 플레이어가 바라보는 방향 사용
+        }
+
+        lastPosition = currentPosition;
     }
+
+    Vector3 GetSpawnPositionInFront(Vector3 userPosition, Vector3 direction)
+    {
+        float angle = Random.Range(-30f, 30f); // 플레이어의 시야각 내에서 랜덤 위치
+        Vector3 spawnOffset = Quaternion.Euler(0, angle, 0) * direction * Random.Range(5f, spawnRadius);
+    
+        return userPosition + spawnOffset;
+    } 
+    //랜덤 위치로 스폰
+    // Vector3 GetRandomOffset()
+    // {
+    //     // 랜덤 반경과 방향으로 오프셋 생성
+    //     float angle = Random.Range(0, Mathf.PI * 2);
+    //     float distance = Random.Range(5f, spawnRadius); // 최소 5m ~ 최대 spawnRadius
+    //     float offsetX = Mathf.Cos(angle) * distance;
+    //     float offsetZ = Mathf.Sin(angle) * distance;
+
+    //     return new Vector3(offsetX, 0, offsetZ);
+    // }
 
     SpawnedObject GetRandomPrefab()
     {
