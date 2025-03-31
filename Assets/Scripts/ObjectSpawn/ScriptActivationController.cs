@@ -58,7 +58,6 @@ public class ScriptActivationController : MonoBehaviour
             // 위치 권한이 승인되었는지 확인
             if (LocationPermissionManager.Instance.IsLocationServiceInitialized)
             {
-                Debug.Log("위치 권한이 활성화되었습니다");
                 Vector2d userLocation = new Vector2d(Input.location.lastData.latitude, Input.location.lastData.longitude);
                 OnLocationUpdated?.Invoke(userLocation);
                 CheckAndSetupUserLocation();
@@ -74,7 +73,7 @@ public class ScriptActivationController : MonoBehaviour
     void CheckAndSetupUserLocation()
     {
         Vector2d userLocation = new Vector2d(Input.location.lastData.latitude, Input.location.lastData.longitude);
-        Debug.Log($"User Location: Latitude = {userLocation.x:F6}, Longitude = {userLocation.y:F6}");
+        // Debug.Log($"User Location: Latitude = {userLocation.x:F6}, Longitude = {userLocation.y:F6}");
 
         if (IsLocationInsideRectangle(userLocation, rectangleVertices))
         {
@@ -83,7 +82,7 @@ public class ScriptActivationController : MonoBehaviour
             if (scriptToActivate != null && !scriptToActivate.enabled)
             {
                 scriptToActivate.enabled = true;
-                Debug.Log("Script activated.");
+                // Debug.Log("Script activated.");
             }
 
             Vector3 worldPosition = map.GeoToWorldPosition(userLocation, true);
@@ -92,7 +91,7 @@ public class ScriptActivationController : MonoBehaviour
                 worldPosition.y = 0;
                 xrOrigin.position = worldPosition;
                 isXROriginPositionSet = true;
-                Debug.Log(xrOrigin.position);
+                Debug.Log("Player position at " + xrOrigin.position);
 
                 if (!isObjectSpawned)
                 {
@@ -107,14 +106,14 @@ public class ScriptActivationController : MonoBehaviour
             if (scriptToActivate != null && scriptToActivate.enabled)
             {
                 scriptToActivate.enabled = false;
-                Debug.Log("Script deactivated.");
+                // Debug.Log("Script deactivated.");
             }
         }
 
         if (cameraCanvas != null && cameraCanvas.gameObject.activeSelf)
         {
             xrOrigin.position = Vector3.zero;
-            Debug.Log("CameraCanvas is active. XR Origin set to (0,0,0).");
+            // Debug.Log("CameraCanvas is active. XR Origin set to (0,0,0).");
         }
     }
 
@@ -122,7 +121,7 @@ public class ScriptActivationController : MonoBehaviour
     {
         if (vertices.Length != 4)
         {
-            Debug.LogError("The rectangle must have exactly 4 vertices.");
+            // Debug.LogError("The rectangle must have exactly 4 vertices.");
             return false;
         }
 
@@ -157,6 +156,6 @@ public class ScriptActivationController : MonoBehaviour
         worldPosition.y = 0;
         GameObject instance = Instantiate(spawnObject, worldPosition, Quaternion.identity);
         instance.transform.localScale = new Vector3(1, 1, 1);
-        Debug.Log("Object spawned at: " + worldPosition);
+        // Debug.Log("Object spawned at: " + worldPosition);
     }
 }
