@@ -122,5 +122,8 @@ public class TestBluming : MonoBehaviour
     public void UnlockBluming()
     {
         isBlumingActivated = true;
+
+        Destroy(spawnedObject);
+        SpawnObject();
     }
 }
