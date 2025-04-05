@@ -118,7 +118,7 @@ public class GiftInventory : MonoBehaviour
 
             ItemEntry.PreferenceLevel preference = selectedGiftItem.GetPreferenceForDepartment(university);
             int preferenceMultiplier = 1;
-            string giftReaction = "내 생각해서 주는 거야? 고마워.";
+            string giftReaction = "와, 고마워!";
             GameObject effectToActivate = null;
 
             switch (preference)
@@ -127,8 +127,8 @@ public class GiftInventory : MonoBehaviour
                     audioSource.PlayOneShot(love);
                     preferenceMultiplier = 5;
                     giftReaction = currentNoonsong.isFriend
-                        ? "역시 나를 잘 아는구나? 정말 고마워!"
-                        : "와! 나 이거 진짜 좋아하는데, 어떻게 알았어? 정말 고마워~";
+                        ? "역시 나를 잘 아는구나? 진짜 너 밖에 없어~"
+                        : "와! 나 이거 진짜 좋아하는데, 어떻게 알았어? 정말 고마워~!";
                     effectToActivate = giftEffectParticle4;
                     break;
                 case ItemEntry.PreferenceLevel.Like:
@@ -143,8 +143,8 @@ public class GiftInventory : MonoBehaviour
                     audioSource.PlayOneShot(hate);
                     preferenceMultiplier = 0;
                     giftReaction = currentNoonsong.isFriend
-                        ? "고마워~"
-                        : "하하, 고마워.";
+                        ? "다른 눈송이랑 착각한 거... 아니지?"
+                        : "음... 일단 고마워.";
                     effectToActivate = giftEffectParticle1;
                     break;
                 default:
