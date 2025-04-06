@@ -52,19 +52,38 @@ public class EncounterUI : MonoBehaviour
         { 10, new List<string> { "안녕! 만나서 정말 좋아! 우린 정말 좋은 친구야." } },
     };
 
-    private List<string> randomDialogue = new List<string>
-{
-    "다음에 또 보자!",
-    "오늘도 좋은 하루 보내~",
-    "대화 재밌었어! 다음에 만나~",
-    "조심히 가, 안녕!",
-    "다음에 만나면 또 놀자~",
-    "또 만나러 와 줄거지? 잘 가!",
-    "나 잊으면 안 돼~ 다음에 또 얘기하자!",
-    "안녕, 나중에 봐~",
-    "앗, 벌써 시간이... 아쉽지만 다음에 또 놀자!",
-    "너랑 노는 거 정말 재밌었어! 안녕~"
-};
+    private List<string> commonDialogues = new List<string>
+    {
+        "다음에 또 보자!",
+        "오늘도 좋은 하루 보내~",
+        "대화 재밌었어! 다음에 만나~",
+        "조심히 가, 안녕!",
+        "다음에 만나면 또 놀자~",
+        "또 만나러 와 줄거지? 잘 가!",
+        "나 잊으면 안 돼~ 다음에 또 얘기하자!",
+        "안녕, 나중에 봐~",
+        "앗, 벌써 시간이... 아쉽지만 다음에 또 놀자!",
+        "너랑 노는 거 정말 재밌었어! 안녕~"
+    };
+
+    private Dictionary<string, List<string>> departmentDialogues = new Dictionary<string, List<string>>
+    {
+        { "LiberalArts", new List<string> { "다음 만남도 하나의 멋진 이야기가 되겠지? 기대할게!", "짧은 이별은 더 깊은 만남을 위한 예고편이지~ 다음에 더 깊은 대화 나누자." , "나와의 시간에 긴 여운이 남길 바라~" } },
+        { "Science", new List<string> { "다음에 또 보자. 내 계산에 따르면 우리가 또 만날 확률은... 100%거든!", "너와의 대화는 내게 언제나 유의미한 데이터야~ 다음에도 잘 부탁해." } },
+        { "Science(Physical)", new List<string> { "잠깐 숨 고르고, 다음에도 최고의 컨디션으로 만나자~"} },
+        { "Engineering", new List<string> { "내 알고리즘에 너를 넣어뒀으니, 우린 다시 만나게 될 거야!", "오늘, 거의 무한동력 장치 만든 기분이었어! 다음에 또 보자~", "너와의 시간이 새로운 프로젝트의 실마리가 될지도 모르겠어. 좋은 영감을 줘서 고마워!" } },
+        { "HumanEcology", new List<string> { "일상 속에서 늘 행복하길 바랄게. 다음에 또 만나자~", "좋은 한 끼가 몸을 살리듯, 오늘의 대화도 내 마음을 살린 것 같아. 고마워~" } },
+        { "SocialSciences", new List<string> { "앞으로도 각자의 위치에서 더 나은 사회를 만들어보자!", "네 덕에 세상을 보는 시야가 넓어진 것 같아. 유익하고 즐거운 시간이었어!" } },
+        { "Law", new List<string> { "공정한 하루 보내~!" } },
+        { "Business", new List<string> { "오늘 만남이 창출해낸 가치를 잊지 못할 거야. 다음에도 잘 부탁해!" } },
+        { "Music", new List<string> { "너랑 나의 멜로디는 늘 조화로운 것 같아! 오늘도 정말 좋았어~", "너의 하루가 아름다운 멜로디로 가득하길 바랄게~" } },
+        { "Pharmacy", new List<string> { "다음에 보자. 그때까지 아프지 말고, 영양분도 잘 챙겨!" } },
+        { "Art", new List<string> { "너의 하루가 아름다운 색들로 가득하길 바랄게~", "미적으로 완벽한 시간이었어. 다음에 보자!" } },
+        { "GlobalService", new List<string> { "너와 나의 연결도 하나의 글로벌한 연결이겠지. 앞으로도 잘 지내보자~" } },
+        { "GlobalConvergence", new List<string> { "다음에는 더 다양한 문화에 대해 이야기하자!" } },
+        { "English", new List<string> { "다시 만나자! somewhere, sometime~" } },
+        { "Media", new List<string> { "다음에도 흥미로운 소식 있으면 꼭 전해줘, 알았지?"} },
+    };
 
     private Transform originalParent;
 
@@ -245,14 +264,25 @@ public class EncounterUI : MonoBehaviour
     {
         if (!isDialogueActive) return;
 
-        if (affectionDialogue == null || affectionDialogue.Count == 0)
+        List<string> combinedDialogues = new List<string>(commonDialogues);
+
+        if (currentCharacter != null)
         {
-            Debug.LogWarning("affectionDialogue 데이터가 없지만, 기본 처리 진행.");
+            string dept = GetCurrentNoonsongUniversity(); // 기존에 만들어둔 함수
+            if (departmentDialogues.ContainsKey(dept))
+            {
+                combinedDialogues.AddRange(departmentDialogues[dept]);
+            }
+        }
+
+        if (combinedDialogues.Count > 0)
+        {
+            int randomIndex = Random.Range(0, combinedDialogues.Count);
+            dialogueText.text = combinedDialogues[randomIndex];
         }
         else
         {
-            int randomIndex = Random.Range(0, randomDialogue.Count);
-            dialogueText.text = randomDialogue[randomIndex];
+            dialogueText.text = "안녕! 다음에 또 봐~";
         }
 
         GameObject currentTarget = arObjectCatch.GetCurrentTarget();
