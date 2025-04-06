@@ -93,9 +93,10 @@ public class PlayerObjectSpawn : MonoBehaviour
 
         //사용자 위치에서 일정 범위 내 랜덤 위치를 생성
         Vector3 userPosition = xrOrigin.position;
-        Vector3 spawnPosition = GetSpawnPositionInFront(userPosition, movementDirection);
-        spawnPosition.y = -5; // Y축 고정
 
+        Vector3 cameraForward = new Vector3(arCamera.transform.forward.x, 0, arCamera.transform.forward.z).normalized;
+        Vector3 spawnPosition = GetSpawnPositionInFront(userPosition, cameraForward);
+        spawnPosition.y = -5; // Y 고정
         Debug.Log($"Attempting to spawn object at {spawnPosition}");
 
         var spawnedObject = GetRandomPrefab();
