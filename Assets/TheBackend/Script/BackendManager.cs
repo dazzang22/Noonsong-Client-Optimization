@@ -69,11 +69,11 @@ public class BackendManager : MonoBehaviour
         //BackendLogin.Instance.CustomSignUp("User3","1234");
 
         //BackendLogin.Instance.CustomLogin("werwer","werwer");
-        BackendLogin.Instance.CustomLogin("lotus","Lotus1234");
+        BackendLogin.Instance.CustomLogin("werwer","WERwer1111");
         //재화 평균
         GameStatistics.Instance.AverageSnowCount();
         //유저별 눈송이 수집율
-        GameStatistics.Instance.setUserStatic();
+        
         //눈송이별 수집율
         GameStatistics.Instance.UpdateNoonStatics();
 

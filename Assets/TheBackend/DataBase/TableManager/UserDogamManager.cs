@@ -42,7 +42,7 @@ public class UserDogamManager
             foreach(UserDogam ud in userdogamList)
             {
                 userinventory=ud;
-                Debug.Log($"{i++}:{userinventory.noonsongId}: {userinventory.favor}:{userinventory.count} :{userinventory.friend}");
+                //Debug.Log($"{i++}:{userinventory.noonsongId}: {userinventory.favor}:{userinventory.count} :{userinventory.friend}");
             }
         }
     }
@@ -71,11 +71,11 @@ public class UserDogamManager
             }
             else
             {
-                Debug.Log($"{userdogamjson.Count}");
+                //Debug.Log($"{userdogamjson.Count}");
                 foreach(LitJson.JsonData udjson in userdogamjson)
                 {
                     UserDogam us=new UserDogam(udjson);
-                    Debug.Log(us.ToString());
+                    //Debug.Log(us.ToString());
                     
                     userdogamlist.Add(us);
                     if(us.getFriend())
