@@ -13,11 +13,13 @@ public class LoginManager : MonoBehaviour
 
     ButtonManager buttonManager;
 
+    public Button letsGoButton;
     public Button loginButton;
+
     private string inputID = "";
     private string inputPW = "";
 
-    public AudioSource audioSource;  // 오디오 소스
+    public AudioSource audioSource; 
     public AudioClip successSound;
 
 
@@ -27,6 +29,7 @@ public class LoginManager : MonoBehaviour
         inputField_PW.onValueChanged.AddListener(OnPasswordFieldEndEdit);
 
         loginButton.onClick.AddListener(TryLogin);
+        letsGoButton.onClick.AddListener(TryAutoLogin);
 
         buttonManager = FindObjectOfType<ButtonManager>();
     }
@@ -50,9 +53,7 @@ public class LoginManager : MonoBehaviour
 
         if (BackendLogin.Instance.login_static==0)
         {
-            //resultText.text = $"로그인 실패: {bro.GetMessage()}";
             resultText.text = " 아이디 또는 비밀번호를 다시 확인하세요.";
-
             resultText.color = Color.red;
         }
         else
@@ -62,6 +63,22 @@ public class LoginManager : MonoBehaviour
             audioSource.PlayOneShot(successSound);
             GoScene();
 
+        }
+    }
+
+    private void TryAutoLogin()
+    {
+        BackendReturnObject bro = Backend.BMember.LoginWithTheBackendToken();
+        if (bro.IsSuccess())
+        {
+            Debug.Log("자동 로그인 성공");
+            audioSource.PlayOneShot(successSound);
+            GoScene();
+        }
+        else
+        {
+            Debug.Log($"자동 로그인 실패: {bro.GetMessage()}");
+            LoginView.SetActive(true);
         }
     }
 
@@ -76,5 +93,6 @@ public class LoginManager : MonoBehaviour
         {
             SceneManager.LoadScene("Merge-TutorialScene");
         }
+        
     }
 }
