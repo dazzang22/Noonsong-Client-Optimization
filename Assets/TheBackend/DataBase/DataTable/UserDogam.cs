@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
+
 using BackEnd;
 
 public class UserDogam 
@@ -13,6 +14,7 @@ public class UserDogam
     public int count=0; // 결정 개수
     public int favor =0; //호감도
     public bool max=false; //베프 유무
+    public string updatedAt;
 
     public UserDogam()
     {
@@ -26,7 +28,8 @@ public class UserDogam
         this.count=int.Parse(json["count"].ToString());  
         this.favor=int.Parse(json["favor"].ToString()); 
         this.friend=bool.Parse(json["friend"].ToString()); 
-        this.max=bool.Parse(json["max"].ToString());    
+        this.max=bool.Parse(json["max"].ToString()); 
+        this.updatedAt = json["updatedAt"].ToString();   
    
   
     
@@ -71,7 +74,7 @@ public class UserDogam
     public void setFriend()
     {
         this.friend=true;
-        this.count=0;
+        //this.count=0;
     }
 
 
@@ -98,6 +101,7 @@ public class UserDogam
         param.Add("favor",favor);
         param.Add("friend",friend);
         param.Add("max",max);
+        param.Add("updatedAt",updatedAt);
 
 
         return param;
