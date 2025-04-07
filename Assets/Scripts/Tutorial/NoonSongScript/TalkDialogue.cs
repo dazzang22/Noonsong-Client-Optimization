@@ -8,7 +8,6 @@ using UltimateClean;
 using TMPro;
 using UnityEngine.XR.ARFoundation;
 
-// 최대한 주석 달아보았으나, 혹시 이해가 안되는 코드 있다면 저(이다연)한테 물어보셔도 되고, 챗지피티에게 코드 주석 달아달라고 하고 설명해달라고 하면 잘 설명해줍니다!
 public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체 대사가 들어있음, 대사 코드 뒤에 오브젝트 등장, 애니메이션 작동 모두 관리하고 있습니다.
 {
     public DialogManager DialogManager; // DialogManager 스크립트를 참조해서 함수사용함.
@@ -284,11 +283,11 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
 
         };
 
-        dialogTriggered[1] = true;
+        //dialogTriggered[1] = true;
         //dialogTriggered[2] = true;
         //FourthDialog();
         //ThirdDialog();
-        FirstDialog();
+        // FirstDialog();
         saveStart = UserDataManager.Instance.getSave();
         if (saveStart > 0 && saveStart < 4)
         {

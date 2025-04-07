@@ -38,10 +38,11 @@ public class UserDogamManager
         UserDogam userinventory = new UserDogam();
         if(userdogamList!=null)
         {
+            int i=0;
             foreach(UserDogam ud in userdogamList)
             {
                 userinventory=ud;
-                Debug.Log($"{userinventory.noonsongId}: {userinventory.count}");
+                Debug.Log($"{i++}:{userinventory.noonsongId}: {userinventory.favor}:{userinventory.count} :{userinventory.friend}");
             }
         }
     }
@@ -54,7 +55,7 @@ public class UserDogamManager
     public List<UserDogam> getUserDogamList()
     {
         Debug.Log($"{userId}의 도감 행들을 찾습니다.");
-        var bro= Backend.GameData.GetMyData("UserDogam",new Where());
+        var bro= Backend.GameData.GetMyData("UserDogam",new Where(),100);
         List<UserDogam> userdogamlist = new List<UserDogam>();
 
         if(bro.IsSuccess())
@@ -70,6 +71,7 @@ public class UserDogamManager
             }
             else
             {
+                Debug.Log($"{userdogamjson.Count}");
                 foreach(LitJson.JsonData udjson in userdogamjson)
                 {
                     UserDogam us=new UserDogam(udjson);
@@ -90,6 +92,73 @@ public class UserDogamManager
             return null;
         }
         return userdogamlist;
+    }
+
+//유저 도감 리스트 정리
+    public void arrangeUDList()
+    {
+        List<UserDogam> udlist = new List<UserDogam>();
+        List<int> use = new List<int>();
+        
+        if(userdogamList!=null)
+        {
+            //foreach(UserDogam ud in userdogamList)
+            for(int j=0;j<userdogamList.Count;j++)
+            {
+                if(use.Contains(j))
+                {
+                    continue;
+                }
+                UserDogam ud=new UserDogam(); 
+                ud = userdogamList[j];
+                int now=j;
+                Debug.Log($"{ud.ToString()}");
+                for(int i=now+1;i<userdogamList.Count;i++)
+                {
+                    if(use.Contains(i))
+                    {
+                        continue;
+                    }
+                    if(ud.noonsongId == userdogamList[i].noonsongId)
+                    {
+                        Debug.Log($"{userdogamList[i].ToString()}");
+                        if(ud.max || userdogamList[i].max)
+                        {
+                            ud.setFavorMax(100);
+                        }
+                        if(ud.friend || userdogamList[i].friend)
+                        {
+                            ud.friend=true;
+                        }
+                        ud.setFavorUp(userdogamList[i].favor);
+                        ud.setCountUp(userdogamList[i].count);                        
+
+                        //유저 도감 리스트 계산한거 체크
+                        use.Add(i);
+
+                    }
+                }
+                //최종 리스트 업데이트
+                ud.count= checkCount(ud);
+                ud= checkMaxFavor(ud);
+                ud= checkIsDogam(ud);
+                Debug.Log($"수정:{ud.ToString()}");
+
+                udlist.Add(ud);
+
+                //테이블 새로 업데이트
+                string name = DogamChartManager.Instance.getNoonsongName(ud.noonsongId);
+                gameDataRowInDate = string.Empty;
+                noonsongInsert(name,0,"Law");
+            }
+        }
+        //기존 리스트로 업데이트
+        userdogamList.Clear();
+        foreach(UserDogam ne in udlist)
+        {
+            userdogamList.Add(ne);
+        }
+        Debug.Log("끝");
     }
 
 //친구 눈송이리스트에 추가
@@ -137,6 +206,7 @@ public class UserDogamManager
         Param param = new Param();
         if(userdogamList!=null)
         {
+            int update=-1;
             foreach(UserDogam ud in userdogamList)
             {
                 if(ud.noonsongId == noonsongid)
@@ -145,13 +215,32 @@ public class UserDogamManager
                     userinventory = ud;
 
                     userinventory.setFavorUp(love);
-                    //결정 , 도감 등록, 최대 호감도 확인
-                    checkMaxFavor(college,userinventory);
-                    checkCount(college,userinventory);
-                    checkIsDogam(college,userinventory);
+                    //결정 , 도감 등록, 최대 호감도 업데이트트
+                    userinventory.count= checkCount(userinventory);
+                    userinventory= checkMaxFavor(userinventory);
+                    userinventory= checkIsDogam(userinventory);
+
+                    //테이블 업데이트
+                    Where where1 = new Where();
+                    where1.Equal("updatedAt", userinventory.updatedAt);
+                    var bro1 = Backend.GameData.Get("UserDogam", where1);
+                    gameDataRowInDate = bro1.GetInDate();
                     DataUpdate(userinventory.ToParam());
-                    return;
+
+                    //유저 도감 리스트 업데이트
+                    update= userdogamList.IndexOf(ud);
+                    break;
                 }
+            }
+            //유저 도감 리스트 업데이트
+            if(update>=0)
+            {
+                userdogamList[update]=userinventory;
+                if(userinventory.getFriend())
+                {
+                    addFriendList(userinventory);
+                }
+                return;
             }
         }
 
@@ -163,10 +252,18 @@ public class UserDogamManager
 
         //Debug.Log("데이터를 처음 등록합니다.");
         userinventory.setUserDogam(userId,noonsongid,love);
-        checkMaxFavor(college,userinventory);
-        checkCount(college,userinventory);
-        checkIsDogam(college,userinventory);
+        userinventory.count= checkCount(userinventory);
+        userinventory= checkMaxFavor(userinventory);
+        userinventory= checkIsDogam(userinventory);
         param = userinventory.ToParam();
+
+        //유저 도감 리스트 업데이트
+        userdogamList.Add(userinventory);
+        if(userinventory.getFriend())
+        {
+            addFriendList(userinventory);
+            //userfriendList.Add(us);
+        }
 
         Debug.Log("게임 정보 데이터 삽입을 요청합니다.");
         var bro = Backend.GameData.Insert("UserDogam", param);
@@ -185,51 +282,76 @@ public class UserDogamManager
     }
 
     //결정 개수 증가 여부 확인
-    public void checkCount(string college,UserDogam userinventory)
+    public int checkCount(UserDogam userinventory)
     {
-        int crystal= DogamChartManager.Instance.crystalValue(college);
-        Debug.Log($"crystal:{crystal}");
-        Debug.Log($"crystal:{userinventory.getFavor()/crystal}");
-
+        //int crystal= DogamChartManager.Instance.crystalValue(college);
+        int crystal=10;
+        //Debug.Log($"crystal:{crystal}");
+        //Debug.Log($"crystal:{userinventory.getFavor()/crystal}");
         if(userinventory.getFavor()/crystal > userinventory.getCount())
         {
-            int increase= userinventory.getFavor()/crystal - userinventory.getCount();
+            int increase= 0;
+            if(userinventory.getFriend())
+            {
+                if(userinventory.getFavor()>100  && userinventory.getCount()>=5)
+                {
+                    increase=userinventory.getFavor()/crystal - userinventory.getCount()-10;
+                }
+                if(userinventory.getFavor()/crystal>userinventory.getCount()+10)
+                {
+                    increase=userinventory.getFavor()/crystal - userinventory.getCount()-10;
+                }
+            }
+            else
+            {
+                increase= userinventory.getFavor()/crystal - userinventory.getCount();
+            }
+            
             userinventory.setCountUp(increase);
-            DataUpdate(userinventory.ToParam());
+            //DataUpdate(userinventory.ToParam());
             Debug.Log($"{increase}결정 개수 증가");
         }
+        return userinventory.getCount();
     }
 
     //도감 등록 변환 확인
-    public void checkIsDogam(string college,UserDogam userinventory)
+    public UserDogam checkIsDogam(UserDogam userinventory)
     {
-        int friend=DogamChartManager.Instance.friendFavor(college);
-        Debug.Log($"friend:{friend}");
+        //int friend=DogamChartManager.Instance.friendFavor(college);
+        int friend=100;
+        //Debug.Log($"friend:{friend}");
 
-        if(userinventory.getFavor()>=friend && userinventory.getCount()==5)
+        if(userinventory.getFavor()>=friend && userinventory.getCount()>=5)
         {
             userinventory.setFriend(); //isdogam true
-            DataUpdate(userinventory.ToParam());
+            //DataUpdate(userinventory.ToParam());
+            if(!userinventory.max && userinventory.getFavor()>friend && userinventory.getCount()>=5)
+            {
+                userinventory.count-=5;
+            }
             addFriendList(userinventory);
-            Debug.Log("도감 등록");
+            Debug.Log("친구 등록");
         }
+        return userinventory;
 
     }
 
     //최대 호감도 확인
-    public void checkMaxFavor(string college,UserDogam userinventory)
+    public UserDogam checkMaxFavor(UserDogam userinventory)
     {
-        int favor= DogamChartManager.Instance.maxFavor(college);
+        //int favor= DogamChartManager.Instance.maxFavor(college);
+        int favor = 150;
         if(!userinventory.getFriend())
         {
-            return;
+            return userinventory;
         }
         if(userinventory.getFavor()>=favor)
         {
             userinventory.setFavorMax(favor); //친밀도 최대로 지정
-            DataUpdate(userinventory.ToParam());
+            //DataUpdate(userinventory.ToParam());
             Debug.Log("최대 호감도 도달");
         }
+        return userinventory;
     }
 
     //UserDogam 테이블에서 해당 유저 데이터 테이블에 업데이트
