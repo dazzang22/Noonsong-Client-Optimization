@@ -52,40 +52,36 @@ public class PlayerObjectSpawn : MonoBehaviour
         }
     }
  
-    void Update()
+    void Update()   
     {
         var activationController = GetComponentInParent<ScriptActivationController>();
-        if (activationController != null && activationController.IsActive())
+        bool isInActiveZone = activationController != null && activationController.IsActive();
+        bool isUICanvasOn = noonsongManager.Is3DViewActive() || friendsManager.Is3DViewActive();
+
+        if (!isInActiveZone || isUICanvasOn)
         {
-            if (noonsongManager.Is3DViewActive() || friendsManager.Is3DViewActive())
-            {
-                PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
-                return;
-            }
-
-            UpdateMovementDirection();
-
-            timer += Time.deltaTime;
-
-            if (timer >= changeInterval)
-            {
-                PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
-                encounterUI.CloseEncounter();
-                if (PlayerObjectSpawnManager.Instance.CanSpawn())
-                {
-                    SpawnObjectNearUser();
-                }
-                timer = 0f;
-            }
-            // foreach (var obj in _spawnedObjects)
-            // {
-            //     if (IsObjectInView(obj))
-            //     {
-            //         LookAtCamera(obj);
-            //     }
-            // }
+            PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
+            encounterUI.CloseEncounter();
+            timer = 0f;
+            return;
         }
+
+        UpdateMovementDirection();
+
+        timer += Time.deltaTime;
+
+        if (timer >= changeInterval)
+        {
+            PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
+            encounterUI.CloseEncounter();
+            if (PlayerObjectSpawnManager.Instance.CanSpawn())
+            {
+                SpawnObjectNearUser();
+            }
+            timer = 0f;
+        }      
     }
+
 
     void SpawnObjectNearUser()
     {

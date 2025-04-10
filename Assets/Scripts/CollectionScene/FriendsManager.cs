@@ -161,12 +161,12 @@ public class FriendsManager : MonoBehaviour
 
         if (renderCamera != null && entry.prefab != null)
         {
-            Vector3 randomViewportPosition = new Vector3(0.5f, 0.5f, renderCamera.nearClipPlane + 2f);
+            Vector3 randomViewportPosition = new Vector3(0.5f, 0.2f, renderCamera.nearClipPlane + 5f);
             Vector3 randomWorldPosition = renderCamera.ViewportToWorldPoint(randomViewportPosition);
 
             currentNoonsongObject = Instantiate(entry.prefab, randomWorldPosition, Quaternion.identity);
-            currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);
-            currentNoonsongObject.transform.localScale = new Vector3(5.5f, 5.5f, 5.5f);
+            // currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);
+            currentNoonsongObject.transform.localScale = new Vector3(3f, 3f, 3f);
             currentNoonsongObject.transform.LookAt(renderCamera.transform);
 
             // PhotoManager 스크립트를 추가하여 오브젝트 조작 가능하게 설정

@@ -339,6 +339,7 @@ public class NoonsongManager : MonoBehaviour
         if (cameraCanvas != null)
         {
             cameraCanvas.gameObject.SetActive(true);
+
         }
         
         if (PlayerPrefs.GetInt("CameraPopupActivated", 0) == 0) 
@@ -360,15 +361,9 @@ public class NoonsongManager : MonoBehaviour
 
         if (renderCamera != null && entry.prefab != null)
         {
-            // 카메라 뷰포트에서 중앙 좌표 설정 (0.5, 0.5)
-            float randomX = 0.5f;
-            float randomY = 0.5f;
-
-            // 휴대폰 화면의 중앙 좌표를 월드 좌표로 변환
-            Vector3 randomViewportPosition = new Vector3(randomX, randomY, renderCamera.nearClipPlane + 2f);
+            Vector3 randomViewportPosition = new Vector3(0.5f, 0.2f, renderCamera.nearClipPlane + 5f);
             Vector3 randomWorldPosition = renderCamera.ViewportToWorldPoint(randomViewportPosition);
 
-            // 3D 오브젝트 생성 및 참조 저장
             currentNoonsongObject = Instantiate(entry.prefab, randomWorldPosition, Quaternion.identity);
             
             NPCPatrol npcPatrol = currentNoonsongObject.GetComponent<NPCPatrol>();
@@ -378,14 +373,17 @@ public class NoonsongManager : MonoBehaviour
                 npcPatrol.enabled = false;
             }
 
-            //3D 오브젝트 position 설정
-            currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);
+            // //3D 오브젝트 position 설정
+            // currentNoonsongObject.transform.position = new Vector3(0, -3f, -5f);
 
             //3D 오브젝트 scale 설정
             currentNoonsongObject.transform.localScale = new Vector3(4f, 4f, 4f);
 
             // 오브젝트가 카메라를 바라보게 설정
             currentNoonsongObject.transform.LookAt(renderCamera.transform);
+
+            Debug.Log("WorldPos: " + randomWorldPosition);
+            Debug.DrawLine(renderCamera.transform.position, randomWorldPosition, Color.red, 5f);
 
             // PhotoManager 스크립트를 추가하여 오브젝트 조작 가능하게 설정
             var photoManager = currentNoonsongObject.AddComponent<PhotoManager>();
