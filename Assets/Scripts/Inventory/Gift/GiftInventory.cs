@@ -221,9 +221,10 @@ public class GiftInventory : MonoBehaviour
             SyncWithInventoryManager();
             Debug.Log("선물하기 완료. 아이템 남은 개수:" + selectedGiftItem.itemCount);
 
-            encounterUI.GiveGift(selectedGiftItem);
+           
             giftPopup.SetActive(false);
             giftInventoryUI.SetActive(false);
+            encounterUI.GiveGift(selectedGiftItem);
         }
     }
 

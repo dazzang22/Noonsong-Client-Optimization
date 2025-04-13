@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.574817, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,6 +123,77 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &32286586
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1152842875}
+    m_Modifications:
+    - target: {fileID: 453910143232045401, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_Name
+      value: Very Happy
+      objectReference: {fileID: 0}
+    - target: {fileID: 453910143232045401, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214961783165121554, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214961783165121554, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214961783165121554, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214961783165121554, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214961783165121554, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214961783165121554, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214961783165121554, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214961783165121554, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214961783165121554, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3214961783165121554, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+--- !u!4 &32286587 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3214961783165121554, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+  m_PrefabInstance: {fileID: 32286586}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &32286588 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 453910143232045401, guid: 8d583c78f71abb04e9f4dae98ea6f9d3, type: 3}
+  m_PrefabInstance: {fileID: 32286586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &78847212
 GameObject:
   m_ObjectHideFlags: 0
@@ -1257,7 +1328,7 @@ MonoBehaviour:
   arCamera: {fileID: 1152842875}
   moveDuration: 2
   dialogTriggered: 00000000
-  effectObject: {fileID: 0}
+  effectObject: {fileID: 32286588}
   popupUI: {fileID: 5911069187217723011}
   slotButton: {fileID: 2277273598151647112}
   giftButton: {fileID: 8941449389107546586}
@@ -3172,6 +3243,7 @@ Transform:
   - {fileID: 543450651860645542}
   - {fileID: 1322111967}
   - {fileID: 2165169171677157983}
+  - {fileID: 32286587}
   m_Father: {fileID: 767232035}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1152842876

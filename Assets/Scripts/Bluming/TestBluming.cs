@@ -91,7 +91,7 @@ public class TestBluming : MonoBehaviour
             return;
         }
 
-        spawnedObject.transform.localScale *= 2f;
+        spawnedObject.transform.localScale *= 5f;
 
         Transform turiObject = spawnedObject.transform.Find("Turi");
         othersObject = spawnedObject.transform.Find("Others");

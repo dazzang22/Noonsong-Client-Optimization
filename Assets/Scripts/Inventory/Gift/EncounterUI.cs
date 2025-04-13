@@ -386,9 +386,8 @@ public class EncounterUI : MonoBehaviour
 
     public void GiveGift(ItemEntry item)
     {
-        Debug.Log($"{item.itemName}��(��) ����");
-        giftInventory.SyncWithInventoryManager();
         giftPopup.SetActive(false);
+        giftInventory.SyncWithInventoryManager();
         dialogueButton.interactable = true;
         HiButton.interactable = false;
         GiftButton.interactable = false;
