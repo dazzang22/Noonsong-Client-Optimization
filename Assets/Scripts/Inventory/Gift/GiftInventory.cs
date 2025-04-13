@@ -157,6 +157,9 @@ public class GiftInventory : MonoBehaviour
             {
                 effectToActivate.SetActive(true);
                 StartCoroutine(DisableEffectAfterDelay(3f, effectToActivate));
+
+                giftPopup.SetActive(false);
+                giftInventoryUI.SetActive(false);
             }
 
             int affectionChange = baseAffection * preferenceMultiplier;
@@ -221,9 +224,6 @@ public class GiftInventory : MonoBehaviour
             SyncWithInventoryManager();
             Debug.Log("선물하기 완료. 아이템 남은 개수:" + selectedGiftItem.itemCount);
 
-           
-            giftPopup.SetActive(false);
-            giftInventoryUI.SetActive(false);
             encounterUI.GiveGift(selectedGiftItem);
         }
     }
