@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class ARObjectCatch : MonoBehaviour
 {
     private PlayerObjectSpawnManager playerObjectSpawnManager;
-    private PlayerObjectSpawn playerObjectSpawn;
 
     [SerializeField]
     private NoonsongManager noonsongManager;
@@ -38,35 +37,15 @@ public class ARObjectCatch : MonoBehaviour
 
     void Update()
     {
-        UpdateActivePlayerObjectSpawn();
-
-        if (playerObjectSpawn != null)
-        {
-            CheckForObjectInView();
-        }
-    }
-
-
-    void UpdateActivePlayerObjectSpawn()
-    {
-        var activeControllers = FindObjectsOfType<ScriptActivationController>();
-        foreach (var controller in activeControllers)
-        {
-            if (controller.IsActive())
-            {
-                playerObjectSpawn = controller.GetComponentInChildren<PlayerObjectSpawn>();
-                return;
-            }
-        }
-
-        playerObjectSpawn = null;
+        CheckForObjectInView();
     }
 
     void CheckForObjectInView()
     {
-        if (playerObjectSpawn != null && playerObjectSpawnManager.SpawnedObjects.Count > 0)
+        var spawnedObjects = playerObjectSpawnManager.SpawnedObjects;
+        if (spawnedObjects.Count > 0)
         {
-            foreach (var obj in playerObjectSpawnManager.SpawnedObjects)
+            foreach (var obj in spawnedObjects)
             {
                 GameObject target = obj.GameObject;
                 if (target == null)
@@ -217,7 +196,6 @@ Debug.Log("Not enough currency to catch the generalNoonsong.");
                     }
                 }
 
-                UpdateActivePlayerObjectSpawn();
                 CheckForObjectInView();
             }
         }

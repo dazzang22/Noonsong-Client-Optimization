@@ -13,9 +13,6 @@ public class ScriptActivationController : MonoBehaviour
     Vector2d[] rectangleVertices; // 사각형의 꼭짓점
 
     [SerializeField]
-    MonoBehaviour scriptToActivate; // 활성화할 스크립트
-
-    [SerializeField]
     AbstractMap map; // Mapbox 맵
 
     [SerializeField]
@@ -29,6 +26,7 @@ public class ScriptActivationController : MonoBehaviour
 
     private bool isXROriginPositionSet = false;
     private bool isObjectSpawned = false;
+     private bool isInsideArea = false;
     private float checkInterval = 5f; // 위치 확인 간격 (초)
 
     void Start()
@@ -39,16 +37,11 @@ public class ScriptActivationController : MonoBehaviour
             return;
         }
 
-        if (scriptToActivate != null)
-        {
-            scriptToActivate.enabled = false;
-        }
-
         StartCoroutine(CheckUserLocationPeriodically());
     }
     public bool IsActive()
     {
-        return scriptToActivate != null && scriptToActivate.enabled;
+        return isInsideArea;
     }
 
     IEnumerator CheckUserLocationPeriodically()
@@ -78,12 +71,7 @@ public class ScriptActivationController : MonoBehaviour
         if (IsLocationInsideRectangle(userLocation, rectangleVertices))
         {
             Debug.Log($"User is inside the designated area. (Object: {gameObject.name})");
-
-            if (scriptToActivate != null && !scriptToActivate.enabled)
-            {
-                scriptToActivate.enabled = true;
-                // Debug.Log("Script activated.");
-            }
+            isInsideArea = true;
 
             Vector3 worldPosition = map.GeoToWorldPosition(userLocation, true);
             if (!isXROriginPositionSet || Vector3.Distance(xrOrigin.position, worldPosition) > 1f)
@@ -102,12 +90,7 @@ public class ScriptActivationController : MonoBehaviour
         }
         else
         {
-            Debug.Log("User is outside the designated area.");
-            if (scriptToActivate != null && scriptToActivate.enabled)
-            {
-                scriptToActivate.enabled = false;
-                // Debug.Log("Script deactivated.");
-            }
+            isInsideArea = false;
         }
 
         if (cameraCanvas != null && cameraCanvas.gameObject.activeSelf)

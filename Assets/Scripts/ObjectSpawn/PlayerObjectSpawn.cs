@@ -29,7 +29,7 @@ public class PlayerObjectSpawn : MonoBehaviour
     [SerializeField] float changeInterval = 20f; // 오브젝트가 재스폰되는 시간(초)
 
     public Transform xrOrigin; // XR Origin 참조
-    private float timer;
+    private float timer = 0f;
 
     [SerializeField] private EncounterUI encounterUI;
 
@@ -45,11 +45,7 @@ public class PlayerObjectSpawn : MonoBehaviour
 
         PlayerObjectSpawnManager.Instance.RegisterSpawnController(this);
 
-        // 첫 번째 오브젝트를 스폰
-        if (PlayerObjectSpawnManager.Instance.CanSpawn())
-        {
-            SpawnObjectNearUser();
-        }
+
     }
  
     void Update()   
@@ -60,26 +56,43 @@ public class PlayerObjectSpawn : MonoBehaviour
 
         if (!isInActiveZone || isUICanvasOn)
         {
-            PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
-            encounterUI.CloseEncounter();
+            PlayerObjectSpawnManager.Instance.RemoveSpawnedObjectsForBuilding(activationController.gameObject.name);
             timer = 0f;
             return;
         }
 
         UpdateMovementDirection();
 
-        timer += Time.deltaTime;
-
-        if (timer >= changeInterval)
+        if (isInActiveZone)
         {
-            PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
-            encounterUI.CloseEncounter();
-            if (PlayerObjectSpawnManager.Instance.CanSpawn())
+            if (timer == 0f)
             {
-                SpawnObjectNearUser();
+                // 건물 안에 들어오면 바로 첫 번째 스폰
+                if (PlayerObjectSpawnManager.Instance.CanSpawn())
+                {
+                    SpawnObjectNearUser();
+                }
             }
-            timer = 0f;
-        }      
+
+            timer += Time.deltaTime;
+
+            // 20초마다 오브젝트 교체
+            if (timer >= changeInterval)
+            {
+                // 기존 오브젝트 제거
+                PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
+                encounterUI.CloseEncounter();
+
+                // 새로운 오브젝트 스폰
+                if (PlayerObjectSpawnManager.Instance.CanSpawn())
+                {
+                    SpawnObjectNearUser();
+                }
+
+                // 타이머 리셋
+                timer = 0f;
+            }
+        }
     }
 
 
@@ -115,7 +128,6 @@ public class PlayerObjectSpawn : MonoBehaviour
         // ARAnchor 추가
         ARAnchor anchor = instance.AddComponent<ARAnchor>();
         anchor.transform.position = spawnPosition;
-        instance.transform.localRotation = Quaternion.Euler(0, 180, 0);
 
         if (anchor == null)
         {
@@ -124,7 +136,9 @@ public class PlayerObjectSpawn : MonoBehaviour
         // Anchor를 통해 안정적으로 위치 고정
         instance.transform.parent = anchor.transform;
 
-        PlayerObjectSpawnManager.Instance.AddSpawnedObject(new SpawnedObject(instance, spawnedObject.NoonsongEntry));
+        var activationController = GetComponentInParent<ScriptActivationController>();
+        PlayerObjectSpawnManager.Instance.AddSpawnedObject(activationController.gameObject.name, 
+                                                            new SpawnedObject(instance, spawnedObject.NoonsongEntry));
 
     }
 

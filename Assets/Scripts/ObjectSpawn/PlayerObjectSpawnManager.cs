@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class PlayerObjectSpawnManager : MonoBehaviour
 {
-    public static PlayerObjectSpawnManager Instance; // 싱글턴 패턴 사용
+    public static PlayerObjectSpawnManager Instance;
 
-    private List<PlayerObjectSpawn> spawnControllers = new List<PlayerObjectSpawn>(); // 모든 스폰 컨트롤러 리스트
+    private List<PlayerObjectSpawn> spawnControllers = new List<PlayerObjectSpawn>();
+    private Dictionary<string, List<SpawnedObject>> _spawnedObjectsPerBuilding;
     private List<SpawnedObject> _spawnedObjects;
-
     public List<SpawnedObject> SpawnedObjects => _spawnedObjects;
 
     void Awake()
@@ -16,6 +16,7 @@ public class PlayerObjectSpawnManager : MonoBehaviour
         {
             Instance = this;
             _spawnedObjects = new List<SpawnedObject>();
+            _spawnedObjectsPerBuilding = new Dictionary<string, List<SpawnedObject>>();
         }
         else
         {
@@ -31,31 +32,66 @@ public class PlayerObjectSpawnManager : MonoBehaviour
         }
     }
 
+    // 전체에 대해 아무 오브젝트도 없을 때만 스폰 가능
     public bool CanSpawn()
     {
-        if (SpawnedObjects == null) // 리스트가 null이면 초기화
+        foreach (var kvp in _spawnedObjectsPerBuilding)
         {
-            Debug.LogWarning("SpawnedObjects가 null이므로 초기화합니다.");
-            _spawnedObjects = new List<SpawnedObject>();
+            if (kvp.Value.Count > 0)
+                return false;
         }
-        return _spawnedObjects.Count == 0; // 현재 스폰된 오브젝트가 하나도 없을 때만 스폰 가능
+        return true;
     }
 
-    public void AddSpawnedObject(SpawnedObject obj)
+    // 특정 건물에 오브젝트 추가
+    public void AddSpawnedObject(string buildingName, SpawnedObject obj)
     {
+        if (!_spawnedObjectsPerBuilding.ContainsKey(buildingName))
+        {
+            _spawnedObjectsPerBuilding[buildingName] = new List<SpawnedObject>();
+        }
+        _spawnedObjectsPerBuilding[buildingName].Add(obj);
         _spawnedObjects.Add(obj);
     }
 
+    // 특정 건물에 대한 오브젝트 제거
+    public void RemoveSpawnedObjectsForBuilding(string buildingName)
+    {
+        if (_spawnedObjectsPerBuilding.ContainsKey(buildingName))
+        {
+            foreach (var obj in _spawnedObjectsPerBuilding[buildingName])
+            {
+                if (obj.GameObject != null)
+                {
+                    GameObject.Destroy(obj.GameObject);
+                    Debug.Log($"Destroyed object for building: {buildingName}");
+                }
+            }
+            _spawnedObjectsPerBuilding[buildingName].Clear();
+        }
+    }
+
+    // 전체 제거 (타이머 기반 리셋 등)
     public void RemoveSpawnedObjects()
     {
-        foreach (var obj in _spawnedObjects)
+        foreach (var kvp in _spawnedObjectsPerBuilding)
         {
-            if (obj.GameObject != null)
+            foreach (var obj in kvp.Value)
             {
-                GameObject.Destroy(obj.GameObject);
-                Debug.Log("destroy spawnObject(TimeOut)");
+                if (obj.GameObject != null)
+                {
+                    GameObject.Destroy(obj.GameObject);
+                    Debug.Log("Destroy spawnObject (TimeOut)");
+                }
+                _spawnedObjects.Clear();
             }
+            kvp.Value.Clear();
         }
-        _spawnedObjects.Clear();
+    }
+
+    // 디버깅용 전체 리스트 조회
+    public Dictionary<string, List<SpawnedObject>> GetAllSpawnedObjects()
+    {
+        return _spawnedObjectsPerBuilding;
     }
 }
