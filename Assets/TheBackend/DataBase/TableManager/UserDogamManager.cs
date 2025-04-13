@@ -22,9 +22,9 @@ public class UserDogamManager
         }
     }
     //public static UserDogam userinventory;
-    public List<UserDogam> userdogamList;
-    public List<UserDogam> userfriendList;
-    public string userId;
+    public static List<UserDogam> userdogamList=null;
+    public static List<UserDogam> userfriendList=null;
+    public static string userId=null;
 
     private string gameDataRowInDate = string.Empty;
 
@@ -42,7 +42,7 @@ public class UserDogamManager
             foreach(UserDogam ud in userdogamList)
             {
                 userinventory=ud;
-                //Debug.Log($"{i++}:{userinventory.noonsongId}: {userinventory.favor}:{userinventory.count} :{userinventory.friend}");
+                Debug.Log($"{i++}:{DogamChartManager.Instance.getNoonsongName(userinventory.noonsongId)}:{userinventory.noonsongId}: {userinventory.favor}:{userinventory.count} :{userinventory.friend}");
             }
         }
     }
@@ -199,6 +199,9 @@ public class UserDogamManager
     //UserDogam 테이블에 도감 추가하기
     public void noonsongInsert(string noonsong, int love,string college)
     {
+        Debug.Log($"noonsong도감에 추가 {noonsong}");
+
+
         UserDogam userinventory = new UserDogam();
 
         Debug.Log("유저도감 테이블에서 유저의 행을 찾아 등록 여부를 확인합니다.");
@@ -243,6 +246,8 @@ public class UserDogamManager
                 return;
             }
         }
+        Debug.Log($"userdogamList is null? {userdogamList == null}");
+        Debug.Log($"userId is null? {userId == null}");
 
         if(userinventory == null)
         {
@@ -259,6 +264,7 @@ public class UserDogamManager
 
         //유저 도감 리스트 업데이트
         userdogamList.Add(userinventory);
+
         if(userinventory.getFriend())
         {
             addFriendList(userinventory);

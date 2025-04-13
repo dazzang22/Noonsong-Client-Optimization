@@ -72,6 +72,7 @@ public class LoginManager : MonoBehaviour
         if (bro.IsSuccess())
         {
             Debug.Log("자동 로그인 성공");
+            UserDogamManager.Instance.First();
             audioSource.PlayOneShot(successSound);
             GoScene();
         }
