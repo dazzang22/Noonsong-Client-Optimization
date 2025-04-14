@@ -59,12 +59,12 @@ public class MusicManager : MonoBehaviour
 
     private void OnEnable()
     {
-        ScriptActivationController.OnLocationUpdated += UpdateMusicForArea;
+        LocationManager.OnLocationUpdated += UpdateMusicForArea;
     }
 
     private void OnDisable()
     {
-        ScriptActivationController.OnLocationUpdated -= UpdateMusicForArea;
+        LocationManager.OnLocationUpdated -= UpdateMusicForArea;
     }
 
     private void UpdateMusicForArea(Vector2d userLocation)

@@ -377,7 +377,6 @@ MonoBehaviour:
     y: 126.9658871
   map: {fileID: 926417127}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!114 &21010277 stripped
 MonoBehaviour:
@@ -611,7 +610,6 @@ MonoBehaviour:
     y: 126.9651452
   map: {fileID: 1647249495}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &26943256
 GameObject:
@@ -4272,7 +4270,6 @@ MonoBehaviour:
     y: 126.9646258
   map: {fileID: 642378477}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!28 &281912381
 Texture2D:
@@ -10162,7 +10159,6 @@ MonoBehaviour:
     y: 126.9654935
   map: {fileID: 362163220}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!114 &688913211 stripped
 MonoBehaviour:
@@ -10331,7 +10327,6 @@ MonoBehaviour:
     y: 126.965347
   map: {fileID: 1303392238}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &715133037 stripped
 GameObject:
@@ -11091,7 +11086,6 @@ MonoBehaviour:
     y: 126.9652297
   map: {fileID: 3125520}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!114 &770207557 stripped
 MonoBehaviour:
@@ -12859,7 +12853,6 @@ MonoBehaviour:
     y: 126.964189
   map: {fileID: 1865618649}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &858033543
 GameObject:
@@ -12942,7 +12935,6 @@ MonoBehaviour:
     y: 126.96327
   map: {fileID: 22379736}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1001 &860757027
 PrefabInstance:
@@ -13314,7 +13306,6 @@ MonoBehaviour:
     y: 126.9652867
   map: {fileID: 845203832}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &882364859 stripped
 GameObject:
@@ -13561,7 +13552,6 @@ MonoBehaviour:
     y: 126.9647475
   map: {fileID: 2038320580}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &883155266
 GameObject:
@@ -14428,7 +14418,6 @@ MonoBehaviour:
     y: 126.9648401
   map: {fileID: 1666181899}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &995258371
 GameObject:
@@ -15117,7 +15106,6 @@ MonoBehaviour:
     y: 126.9645517
   map: {fileID: 919832834}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &1026678780
 GameObject:
@@ -15629,7 +15617,6 @@ MonoBehaviour:
     y: 126.9639539
   map: {fileID: 1487076095}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &1056212556
 GameObject:
@@ -16616,7 +16603,6 @@ MonoBehaviour:
     y: -6.27959
   map: {fileID: 1339298802}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 0}
   cameraCanvas: {fileID: 0}
 --- !u!114 &1098290806 stripped
 MonoBehaviour:
@@ -18767,7 +18753,6 @@ MonoBehaviour:
     y: 126.9650597
   map: {fileID: 739949111}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!114 &1276910179 stripped
 MonoBehaviour:
@@ -20306,7 +20291,7 @@ GameObject:
   - component: {fileID: 1368360340}
   - component: {fileID: 1368360341}
   m_Layer: 0
-  m_Name: LocationPermissionManager
+  m_Name: LocationManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20339,6 +20324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28f581f32f9074a7fb3add49859a7b02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateInterval: 5
 --- !u!1001 &1370099802
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23166,7 +23152,6 @@ MonoBehaviour:
     y: 126.9652344
   map: {fileID: 771245920}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &1611907633
 GameObject:
@@ -24180,7 +24165,6 @@ MonoBehaviour:
     y: 126.9653215
   map: {fileID: 1323115782}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &1676946768
 GameObject:
@@ -24703,7 +24687,6 @@ MonoBehaviour:
     y: 126.9641571
   map: {fileID: 285574863}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &1723540928
 GameObject:
@@ -25606,7 +25589,6 @@ MonoBehaviour:
     y: 126.9667076
   map: {fileID: 1723540930}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &1791007517
 GameObject:
@@ -25955,7 +25937,6 @@ MonoBehaviour:
     y: 126.9653034
   map: {fileID: 185930884}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &1822261934
 GameObject:
@@ -27741,7 +27722,6 @@ MonoBehaviour:
     y: 126.9650476
   map: {fileID: 1749226612}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!28 &1908530247
 Texture2D:
@@ -28525,7 +28505,6 @@ MonoBehaviour:
     y: 126.9638862
   map: {fileID: 818804135}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &1948443524 stripped
 GameObject:
@@ -29759,7 +29738,6 @@ MonoBehaviour:
     y: 126.9653229
   map: {fileID: 1056212558}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &1997165225
 GameObject:
@@ -30695,7 +30673,6 @@ MonoBehaviour:
     y: 126.9643697
   map: {fileID: 278377093}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &2070347886
 GameObject:
@@ -31564,7 +31541,6 @@ MonoBehaviour:
     y: 126.9643167
   map: {fileID: 955028369}
   xrOrigin: {fileID: 1381654041}
-  spawnObject: {fileID: 2043254034}
   cameraCanvas: {fileID: 7617715453329391265}
 --- !u!1 &2140159345
 GameObject:

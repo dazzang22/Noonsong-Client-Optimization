@@ -1,12 +1,18 @@
 using UnityEngine;
 using UnityEngine.Android;
 using System.Collections;
+using System;
+using Mapbox.Utils;
 
-public class LocationPermissionManager : MonoBehaviour
+public class LocationManager : MonoBehaviour
 {
-    public static LocationPermissionManager Instance { get; private set; }
+    public static LocationManager Instance { get; private set; }
     
     public bool IsLocationServiceInitialized { get; private set; } = false;
+
+    public static event Action<Vector2d> OnLocationUpdated;
+
+    [SerializeField] private float updateInterval = 5f;
 
     void Awake()
     {
@@ -58,5 +64,22 @@ public class LocationPermissionManager : MonoBehaviour
 
         IsLocationServiceInitialized = true;
         Debug.Log("Location services initialized.");
+
+        StartCoroutine(UpdateLocationRoutine());
+    }
+
+    IEnumerator UpdateLocationRoutine()
+    {
+        while (true)
+        {
+            if (IsLocationServiceInitialized)
+            {
+                Vector2d userLocation = new Vector2d(Input.location.lastData.latitude, Input.location.lastData.longitude);
+                Debug.Log($"[LocationManager] Broadcasting location: {userLocation}");
+                OnLocationUpdated?.Invoke(userLocation);
+            }
+
+            yield return new WaitForSeconds(updateInterval);
+        }   
     }
 }

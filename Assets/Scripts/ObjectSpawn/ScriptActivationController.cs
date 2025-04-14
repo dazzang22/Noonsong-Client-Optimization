@@ -7,27 +7,24 @@ using System.Collections;
 
 public class ScriptActivationController : MonoBehaviour
 {
-    public static event Action<Vector2d> OnLocationUpdated;
+    [SerializeField] Vector2d[] rectangleVertices; // 사각형의 꼭짓점
 
-    [SerializeField]
-    Vector2d[] rectangleVertices; // 사각형의 꼭짓점
+    [SerializeField] AbstractMap map; // Mapbox 맵
 
-    [SerializeField]
-    AbstractMap map; // Mapbox 맵
+    [SerializeField]  Transform xrOrigin; // XR Origin
 
-    [SerializeField]
-    Transform xrOrigin; // XR Origin
+    [SerializeField] Canvas cameraCanvas; // 카메라 캔버스
+    private bool isInsideArea = false;
 
-    [SerializeField]
-    GameObject spawnObject; // 스폰할 오브젝트
+    void OnEnable()
+    {
+        LocationManager.OnLocationUpdated += OnLocationUpdated;
+    }
 
-    [SerializeField]
-    Canvas cameraCanvas; // 카메라 캔버스
-
-    private bool isXROriginPositionSet = false;
-    private bool isObjectSpawned = false;
-     private bool isInsideArea = false;
-    private float checkInterval = 5f; // 위치 확인 간격 (초)
+    void OnDisable()
+    {
+        LocationManager.OnLocationUpdated -= OnLocationUpdated;
+    }
 
     void Start()
     {
@@ -36,61 +33,37 @@ public class ScriptActivationController : MonoBehaviour
             Debug.LogError("You must specify exactly 4 vertices for the rectangle.");
             return;
         }
-
-        StartCoroutine(CheckUserLocationPeriodically());
     }
     public bool IsActive()
     {
         return isInsideArea;
     }
 
-    IEnumerator CheckUserLocationPeriodically()
+    void OnLocationUpdated(Vector2d userLocation)
     {
-        while (true)
-        {
-            // 위치 권한이 승인되었는지 확인
-            if (LocationPermissionManager.Instance.IsLocationServiceInitialized)
-            {
-                Vector2d userLocation = new Vector2d(Input.location.lastData.latitude, Input.location.lastData.longitude);
-                OnLocationUpdated?.Invoke(userLocation);
-                CheckAndSetupUserLocation();
-            }
-            else
-            {
-                Debug.Log("Waiting for location permission...");
-            }
-            yield return new WaitForSeconds(checkInterval);
-        }
+        CheckAndSetupUserLocation(userLocation);
     }
 
-    void CheckAndSetupUserLocation()
+    void CheckAndSetupUserLocation(Vector2d userLocation)
     {
-        Vector2d userLocation = new Vector2d(Input.location.lastData.latitude, Input.location.lastData.longitude);
         // Debug.Log($"User Location: Latitude = {userLocation.x:F6}, Longitude = {userLocation.y:F6}");
+
+        Vector3 worldPosition = map.GeoToWorldPosition(userLocation, true);
+        worldPosition.y = 0;
+        xrOrigin.position = worldPosition;
 
         if (IsLocationInsideRectangle(userLocation, rectangleVertices))
         {
-            Debug.Log($"User is inside the designated area. (Object: {gameObject.name})");
+            Debug.Log($"(Object: {gameObject.name}), User is inside the designated area. ");
             isInsideArea = true;
 
-            Vector3 worldPosition = map.GeoToWorldPosition(userLocation, true);
-            if (!isXROriginPositionSet || Vector3.Distance(xrOrigin.position, worldPosition) > 1f)
-            {
-                worldPosition.y = 0;
-                xrOrigin.position = worldPosition;
-                isXROriginPositionSet = true;
-                Debug.Log("Player position at " + xrOrigin.position);
+            // Debug.Log("inside : Player position at " + xrOrigin.position);
 
-                if (!isObjectSpawned)
-                {
-                    SpawnObject(worldPosition);
-                    isObjectSpawned = true;
-                }
-            }
         }
         else
         {
             isInsideArea = false;
+            // Debug.Log($"(Object: {gameObject.name}), outside : Player position at " + xrOrigin.position);
         }
 
         if (cameraCanvas != null && cameraCanvas.gameObject.activeSelf)
@@ -104,7 +77,7 @@ public class ScriptActivationController : MonoBehaviour
     {
         if (vertices.Length != 4)
         {
-            // Debug.LogError("The rectangle must have exactly 4 vertices.");
+            Debug.LogError("The rectangle must have exactly 4 vertices.");
             return false;
         }
 
@@ -131,14 +104,13 @@ public class ScriptActivationController : MonoBehaviour
 
     double Sign(Vector2d p1, Vector2d p2, Vector2d p3)
     {
-        return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
-    }
-
-    void SpawnObject(Vector3 worldPosition)
-    {
-        worldPosition.y = 0;
-        GameObject instance = Instantiate(spawnObject, worldPosition, Quaternion.identity);
-        instance.transform.localScale = new Vector3(1, 1, 1);
-        // Debug.Log("Object spawned at: " + worldPosition);
+        double signValue = (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+    
+        // 작은 값에 대해 오차 범위를 둔 비교
+        if (Math.Abs(signValue) < 1e-8) // epsilon 값 (작은 값)
+        {
+            return 0;
+        }
+        return signValue;
     }
 }
