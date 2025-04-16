@@ -7,12 +7,6 @@ public class ButtonManager : MonoBehaviour
     public GameObject openPanel;
     public GameObject closePanel;
 
-    public void Start()
-    {
-        
-        // PlayerPrefs.DeleteKey("TutorialCompleted");
-    }
-
     public void TogglePanels()
     {
         if (openPanel != null)

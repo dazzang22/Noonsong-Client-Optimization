@@ -37,7 +37,6 @@ public class CanvasChanger : MonoBehaviour
 
   private void Awake()
   {
-    // PlayerPrefs.DeleteKey("MainTutoPopupActivated"); //테스트용
     mainCanvas.gameObject.SetActive(true);
     popupCanvas.gameObject.SetActive(false);
     turyCanvas.gameObject.SetActive(false);
