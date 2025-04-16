@@ -14,7 +14,6 @@ public class CanvasChanger : MonoBehaviour
     [SerializeField] private Canvas changePasswordCanvas;
     [SerializeField] private Canvas profileCanvas;
     [SerializeField] GameObject mainTutoCanvas;
-    [SerializeField] GameObject mainTutoPanel;
 
     [Header ("Button")]
     [SerializeField] private Button popupButton;
@@ -91,17 +90,6 @@ public class CanvasChanger : MonoBehaviour
         }
         yield return new WaitForSecondsRealtime(0.1f);
 
-        // mainPanel 활성화
-        mainTutoPanel.SetActive(true);
-
-        // 두 번째 클릭 대기
-        while (!Input.GetMouseButtonDown(0))
-        {
-            yield return null;
-        }
-
-        // mainPanel & mainCanvas 비활성화
-        mainTutoPanel.SetActive(false);
         mainTutoCanvas.SetActive(false);
         Time.timeScale = 1f;
 
