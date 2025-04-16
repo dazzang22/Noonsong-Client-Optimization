@@ -20,12 +20,12 @@ public class TuryItemManager : MonoBehaviour
   public GameObject cantBuyPopup;      // 재화 부족 팝업 
 
   public TextMeshProUGUI popupItemName; // 구매 팝업 아이템 이름
-  public TextMeshProUGUI popupItemPrice; // 구매 팝업 아이템 가격 표시
+  //public TextMeshProUGUI popupItemPrice; // 구매 팝업 아이템 가격 표시
   public TextMeshProUGUI popupItemDescription; // 구매 팝업 아이템 설명 표시
   public Image popupItemImage;         // 구매 팝업 아이템 이미지 표시
 
   public TextMeshProUGUI cantBuyPopupItemName;
-  public TextMeshProUGUI cantBuyPopupItemPrice;
+  //public TextMeshProUGUI cantBuyPopupItemPrice;
   public TextMeshProUGUI cantBuyPopupItemDescription;
   public Image cantBuyPopupItemImage;
 
