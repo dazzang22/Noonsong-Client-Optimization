@@ -52,7 +52,7 @@ public class GoodsManager : MonoBehaviour
 
     void Start()
     {
-        PlayerPrefs.DeleteKey("DispatchPopupActivated"); //테스트용
+        // PlayerPrefs.DeleteKey("DispatchPopupActivated"); //테스트용
         // CurrencyManager가 연결되어 있는지 확인
         if (currencyManager != null)
         {

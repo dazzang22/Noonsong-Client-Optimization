@@ -45,7 +45,7 @@ public class NoonsongManager : MonoBehaviour
 
     void Start()
     {
-        PlayerPrefs.DeleteKey("CameraPopupActivated"); //테스트용
+        // PlayerPrefs.DeleteKey("CameraPopupActivated"); //테스트용
         
         if (noonsongEntryManager != null)
         {

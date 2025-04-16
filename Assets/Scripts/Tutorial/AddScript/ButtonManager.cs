@@ -10,7 +10,7 @@ public class ButtonManager : MonoBehaviour
     public void Start()
     {
         
-        PlayerPrefs.DeleteKey("TutorialCompleted");
+        // PlayerPrefs.DeleteKey("TutorialCompleted");
     }
 
     public void TogglePanels()
