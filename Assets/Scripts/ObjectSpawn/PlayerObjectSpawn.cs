@@ -54,6 +54,8 @@ public class PlayerObjectSpawn : MonoBehaviour
         bool isInActiveZone = activationController != null && activationController.IsActive();
         bool isUICanvasOn = noonsongManager.Is3DViewActive() || friendsManager.Is3DViewActive();
 
+        isInActiveZone = true;
+        
         if (!isInActiveZone || isUICanvasOn)
         {
             PlayerObjectSpawnManager.Instance.RemoveSpawnedObjectsForBuilding(activationController.gameObject.name);
@@ -124,6 +126,11 @@ public class PlayerObjectSpawn : MonoBehaviour
 
         //크기 조정
         instance.transform.localScale = new Vector3(spawnScale, spawnScale, spawnScale);
+
+        //회전 조정
+        //회전 조정
+        float yRotation = xrOrigin.eulerAngles.y + 180f;
+        instance.transform.rotation = Quaternion.Euler(0, yRotation, 0);
 
         // ARAnchor 추가
         ARAnchor anchor = instance.AddComponent<ARAnchor>();
