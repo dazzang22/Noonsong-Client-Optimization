@@ -34,11 +34,14 @@ public class UserDogam
   
     
     }
-    public void setUserDogam(string userId, int noonsongId, int favor)
+    public void setUserDogam(string userId, int noonsongId, int count,int favor, bool friend, bool max)
     {
         this.userId=userId;
         this.noonsongId=noonsongId;
         this.favor=favor;
+        this.count=count;
+        this.friend=friend;
+        this.max=max;
     }
 
     public int getFavor()
@@ -101,7 +104,7 @@ public class UserDogam
         param.Add("favor",favor);
         param.Add("friend",friend);
         param.Add("max",max);
-        param.Add("updatedAt",updatedAt);
+        //param.Add("updatedAt",updatedAt);
 
 
         return param;

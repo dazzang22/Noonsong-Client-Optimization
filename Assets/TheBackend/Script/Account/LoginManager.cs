@@ -61,6 +61,7 @@ public class LoginManager : MonoBehaviour
             // UserDogamManager.Instance.arrangeUDList();
             // Debug.Log("22");
             audioSource.PlayOneShot(successSound);
+            UserDogamManager.Instance.First();
             GoScene();
 
         }

@@ -77,7 +77,11 @@ public class NoonsongEntryManager : MonoBehaviour
             Debug.Log($"Added to the collection: {entry.noonsongName}");
             //DB 에 추가
             Debug.Log("디비 추가");
-            UserDogamManager.Instance.noonsongInsert(entry.noonsongName,entry.loveLevel,entry.university);
+            int num=0;
+            if(entry.isBestFriend ){    num= 5;       }
+            if(!entry.isFriend ){    num= entry.loveLevel/10;       }
+            if(entry.isFriend && !entry.isBestFriend){num=entry.loveLevel/10-5;}
+            UserDogamManager.Instance.noonsongInsert(entry.noonsongName,num,entry.loveLevel,entry.isFriend,entry.isBestFriend);
         }
         else
         {

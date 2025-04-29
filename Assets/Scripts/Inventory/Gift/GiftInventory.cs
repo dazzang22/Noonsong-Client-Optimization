@@ -80,6 +80,7 @@ public class GiftInventory : MonoBehaviour
     {
         if (selectedGiftItem != null)
         {
+            Debug.Log("선물하기 친밀도 계산 시작");
             NoonsongEntry currentNoonsong = encounterUI.GetCurrentNoonsongEntry();
 
             if (currentNoonsong == null)
@@ -163,18 +164,10 @@ public class GiftInventory : MonoBehaviour
             }
 
             int affectionChange = baseAffection * preferenceMultiplier;
-            int friendlevel = DogamChartManager.Instance.friendFavor(currentNoonsong.university);
-
-            if (friendlevel <= 0)
-            {
-                Debug.LogError($"Invalid friend level for university: {currentNoonsong.university}");
-                friendlevel = 0;
-            }
 
             if (!currentNoonsong.isFriend)
             {
                 int newLoveLevel = currentNoonsong.loveLevel + affectionChange;
-                // 50 -> 대학별 친구가 될 수 있는 호감도 수치로 변경 (DB에서 가져옴)
                 if (newLoveLevel > 50)
                 {
                     affectionChange = 50 - currentNoonsong.loveLevel;
@@ -182,21 +175,30 @@ public class GiftInventory : MonoBehaviour
             }
 
             int updatedLoveLevel = encounterUI.UpdateNoonsongAffection(affectionChange);
-            int bestfriend = DogamChartManager.Instance.maxFavor(currentNoonsong.university);
-            // 100 -> 대학별 베프가 될 수 있는 호감도 수치로 변경 (DB에서 가져옴)
+            int num=0;
 
             if (updatedLoveLevel >= 100 && !currentNoonsong.isBestFriend)
             {
                 audioSource.PlayOneShot(eventUI);
                 ShowBestFriendPopup();
                 currentNoonsong.isBestFriend = true;
+                num=5;
             }
 
-            if (updatedLoveLevel == friendlevel && !currentNoonsong.isFriend)
+            if (updatedLoveLevel == 50 && !currentNoonsong.isFriend)
             {
                 encounterUI.ShowFriendRequestPopup();
                 audioSource.PlayOneShot(eventUI);
+                num=5;
             }
+            //db 업데이트
+            Debug.Log($"업데이트된 친밀도:{updatedLoveLevel}");
+            if(num!=5)
+            {
+                if(!currentNoonsong.isFriend) {num=updatedLoveLevel/10;}
+                else{num=updatedLoveLevel/10-5;}
+            }
+            UserDogamManager.Instance.noonsongInsert(currentNoonsong.noonsongName,num,updatedLoveLevel,currentNoonsong.isFriend,currentNoonsong.isBestFriend);
 
             encounterUI.ShowGiftDialogue(giftReaction);
 

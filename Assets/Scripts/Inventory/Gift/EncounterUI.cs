@@ -428,7 +428,8 @@ public class EncounterUI : MonoBehaviour
     {
         currentCharacter.loveLevel += amount;
         //db 업데이트
-        UserDogamManager.Instance.noonsongInsert(currentCharacter.noonsongName,amount,currentCharacter.university);
+        Debug.Log($"도감 db 업데이트{currentCharacter.noonsongName}");
+       // UserDogamManager.Instance.noonsongInsert(currentCharacter.noonsongName,amount);
         return currentCharacter.loveLevel;
     }
 
@@ -446,6 +447,8 @@ public class EncounterUI : MonoBehaviour
     public void BecomeFriends()
     {
         currentCharacter.isFriend = true;
+        //db추가
+        UserDogamManager.Instance.noonsongInsert(currentCharacter.noonsongName,5,currentCharacter.loveLevel,true,false);
         friendRequestPopup.SetActive(false);
         noonsongCountUI.UpdateFriendCount();
         if (collectEffectPrefab != null)

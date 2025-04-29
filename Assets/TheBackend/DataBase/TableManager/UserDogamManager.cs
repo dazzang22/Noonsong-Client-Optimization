@@ -22,8 +22,8 @@ public class UserDogamManager
         }
     }
     //public static UserDogam userinventory;
-    public static List<UserDogam> userdogamList=null;
-    public static List<UserDogam> userfriendList=null;
+    public static List<UserDogam> userdogamList = new List<UserDogam>();
+    public static List<UserDogam> userfriendList = new List<UserDogam>();
     public static string userId=null;
 
     private string gameDataRowInDate = string.Empty;
@@ -31,8 +31,6 @@ public class UserDogamManager
     //테이블 처음 등록 및 로드하기
     public void First()
     {
-        userdogamList = new List<UserDogam>();
-        userfriendList = new List<UserDogam>();
         userId=UserDataManager.Instance.getUserID();
         userdogamList=getUserDogamList();
         UserDogam userinventory = new UserDogam();
@@ -149,7 +147,7 @@ public class UserDogamManager
                 //테이블 새로 업데이트
                 string name = DogamChartManager.Instance.getNoonsongName(ud.noonsongId);
                 gameDataRowInDate = string.Empty;
-                noonsongInsert(name,0,"Law");
+                noonsongInsert(name,ud.count,ud.favor,ud.friend,ud.max);
             }
         }
         //기존 리스트로 업데이트
@@ -197,7 +195,7 @@ public class UserDogamManager
     //--------------------------------------------------------------------------------
 
     //UserDogam 테이블에 도감 추가하기
-    public void noonsongInsert(string noonsong, int love,string college)
+    public void noonsongInsert(string noonsong,int count, int love,bool friend,bool max)
     {
         Debug.Log($"noonsong도감에 추가 {noonsong}");
 
@@ -215,51 +213,63 @@ public class UserDogamManager
                 if(ud.noonsongId == noonsongid)
                 {
                     Debug.Log($"{noonsong}, {noonsongid}에 친밀도 업데이트 합니다.");
-                    userinventory = ud;
+                    //userinventory = ud;
 
-                    userinventory.setFavorUp(love);
-                    //결정 , 도감 등록, 최대 호감도 업데이트트
-                    userinventory.count= checkCount(userinventory);
-                    userinventory= checkMaxFavor(userinventory);
-                    userinventory= checkIsDogam(userinventory);
+                    // userinventory.setFavorUp(love);
+                    // //결정 , 도감 등록, 최대 호감도 업데이트트
+                    // userinventory.count= checkCount(userinventory);
+                    // userinventory= checkMaxFavor(userinventory);
+                    // userinventory= checkIsDogam(userinventory);
 
-                    //테이블 업데이트
-                    Where where1 = new Where();
-                    where1.Equal("updatedAt", userinventory.updatedAt);
-                    var bro1 = Backend.GameData.Get("UserDogam", where1);
-                    gameDataRowInDate = bro1.GetInDate();
-                    DataUpdate(userinventory.ToParam());
+                    // //테이블 업데이트
+                    // Where where1 = new Where();
+                    // where1.Equal("updatedAt", userinventory.updatedAt);
+                    // var bro1 = Backend.GameData.Get("UserDogam", where1);
+                    // gameDataRowInDate = bro1.GetInDate();
+                    // DataUpdate(userinventory.ToParam());
 
-                    //유저 도감 리스트 업데이트
+                    // //유저 도감 리스트 업데이트
                     update= userdogamList.IndexOf(ud);
-                    break;
+                    //userdogamList.Remove(ud);
+                    // break;
+                    //지우고 업데이트 시킴
+                    // itemCode 컬럼이 dragon_sword 인 제일 최신 데이터 제거
+                    Where where = new Where();
+                    where.Equal("noonsongId", noonsongid);
+                    Backend.GameData.Delete("UserDogam", where);
                 }
             }
             //유저 도감 리스트 업데이트
             if(update>=0)
             {
-                userdogamList[update]=userinventory;
-                if(userinventory.getFriend())
-                {
-                    addFriendList(userinventory);
-                }
-                return;
+                userdogamList.Remove(userinventory);
+                // userdogamList[update]=userinventory;
+                // if(userinventory.getFriend())
+                // {
+                //     addFriendList(userinventory);
+                // }
             }
         }
         Debug.Log($"userdogamList is null? {userdogamList == null}");
+        if(userdogamList==null)
+        {
+            userdogamList=new List<UserDogam>();
+        }
         Debug.Log($"userId is null? {userId == null}");
 
-        if(userinventory == null)
-        {
-            Debug.Log("도감에 등록되어 있지 않으므로 도감에 추가합니다.");
-            //userinventory = new UserDogam();
-        }
+        // if(userinventory == null)
+        // {
+        //     Debug.Log("도감에 등록되어 있지 않으므로 도감에 추가합니다.");
+        //     //userinventory = new UserDogam();
+        // }
 
-        //Debug.Log("데이터를 처음 등록합니다.");
-        userinventory.setUserDogam(userId,noonsongid,love);
-        userinventory.count= checkCount(userinventory);
-        userinventory= checkMaxFavor(userinventory);
-        userinventory= checkIsDogam(userinventory);
+        Debug.Log("데이터를 등록합니다.");
+        userinventory.setUserDogam(userId,noonsongid,count,love,friend, max);
+        // userinventory.count= checkCount(userinventory);
+        // userinventory= checkMaxFavor(userinventory);
+        // userinventory= checkIsDogam(userinventory);
+        Debug.Log($"{userinventory.ToString()}");
+        
         param = userinventory.ToParam();
 
         //유저 도감 리스트 업데이트

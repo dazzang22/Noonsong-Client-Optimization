@@ -159,6 +159,7 @@ public class NoonsongManager : MonoBehaviour
       progressText.text = $"{discoveredItems} / {totalItems}";
       progressText.gameObject.SetActive(true);
     }
+
   }
 
   public void OnCloseButtonClicked()
@@ -280,6 +281,9 @@ public class NoonsongManager : MonoBehaviour
                 Debug.Log("3D View button click event added!");
             }
             UpdateLoveMeter(entry.loveLevel,entry);
+            //db 업데이트
+            //UserDogamManager.Instance.noonsongInsert(entry.noonsongName,)
+
         }
         else
         {
@@ -308,13 +312,11 @@ public class NoonsongManager : MonoBehaviour
 
         for (int i = 0; i < loveMeterImages.Length; i++)
         {
-            int crystalvalue = DogamChartManager.Instance.crystalValue(entry.university);
-            int friendlevel = DogamChartManager.Instance.friendFavor(entry.university);
             if (loveLevel >= (i + 1) * 10)
             {
                 loveMeterImages[i].enabled = true;
 
-                if (loveLevel >= (110) && i < (loveLevel - 100) / 10)
+                if (loveLevel >= (60) && i < (loveLevel - 50) / 10)
                 {
                     loveMeterImages[i].sprite = loveSprite2;
                 }
