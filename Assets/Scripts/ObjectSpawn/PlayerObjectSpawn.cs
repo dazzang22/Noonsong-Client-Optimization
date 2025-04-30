@@ -53,8 +53,6 @@ public class PlayerObjectSpawn : MonoBehaviour
         var activationController = GetComponentInParent<ScriptActivationController>();
         bool isInActiveZone = activationController != null && activationController.IsActive();
         bool isUICanvasOn = noonsongManager.Is3DViewActive() || friendsManager.Is3DViewActive();
-
-        isInActiveZone = true;
         
         if (!isInActiveZone || isUICanvasOn)
         {
