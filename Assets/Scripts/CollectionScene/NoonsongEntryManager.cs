@@ -21,31 +21,7 @@ public class NoonsongEntryManager : MonoBehaviour
                 noon.loveLevel=0;
             }
         }
-        List<UserDogam> userdogamlist= UserDogamManager.Instance.getUserDogamList();
-        if(userdogamlist!=null)
-        {
-            foreach(UserDogam ud in userdogamlist)
-            {
-                string name= DogamChartManager.Instance.getNoonsongName(ud.noonsongId);
-
-                foreach(NoonsongEntry noon in noonsongEntries)
-                {
-                    if(noon.noonsongName == name)
-                    {
-                        noon.isDiscovered=true;
-                        noon.isBestFriend=ud.max;
-                        noon.isFriend=ud.getFriend();
-                        noon.loveLevel=ud.getFavor();
-                        Debug.Log($"눈송이엔트리 업데이트:{noon}");
-                    }
-                }
-            }
-        }
-        else
-        {
-            Debug.Log("도감 비어있음");
-
-        }
+        syncwithEntryDB();
     }
     void Start()
     {
@@ -108,6 +84,37 @@ public class NoonsongEntryManager : MonoBehaviour
     {
         Debug.Log($"Retrieving all entries. Total count: {noonsongEntries.Count}");
         return noonsongEntries.ToArray();
+    }
+
+    //db랑 noonsongentry 싱크 맞추기
+    public void syncwithEntryDB()
+    {
+        List<UserDogam> userdogamlist= UserDogamManager.Instance.getUserDogamList();
+        if(userdogamlist!=null)
+        {
+            foreach(UserDogam ud in userdogamlist)
+            {
+                string name= DogamChartManager.Instance.getNoonsongName(ud.noonsongId);
+
+                foreach(NoonsongEntry noon in noonsongEntries)
+                {
+                    if(noon.noonsongName == name)
+                    {
+                        noon.isDiscovered=true;
+                        noon.isBestFriend=ud.max;
+                        noon.isFriend=ud.getFriend();
+                        noon.loveLevel=ud.getFavor();
+                        Debug.Log($"눈송이엔트리 업데이트:{noon}");
+                    }
+                }
+            }
+            Debug.Log("UserDogam DB와 싱크 완료");
+        }
+        else
+        {
+            Debug.Log("도감 비어있음");
+
+        }
     }
     
 }

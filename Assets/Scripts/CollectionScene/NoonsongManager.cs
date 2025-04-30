@@ -107,6 +107,9 @@ public class NoonsongManager : MonoBehaviour
     int totalItems = 0;
     int discoveredItems = 0;
 
+    //DB 싱크
+    noonsongEntryManager.syncwithEntryDB();
+
     foreach (var entry in entries)
     {
       if (selectedCategory == "All" || entry.university == selectedCategory)
