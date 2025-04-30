@@ -99,6 +99,13 @@ public class CanvasChanger : MonoBehaviour
     {
         popupCanvas.gameObject.SetActive(true);
         mainCanvas.gameObject.SetActive(false);
+
+        NoonsongManager noonsongManager = FindObjectOfType<NoonsongManager>();
+        if (noonsongManager != null)
+        {
+            noonsongManager.selectedCategory = "All";
+            noonsongManager.ShowCategoryScrollView();
+        }
     }
 
     private void HidePopup()
