@@ -40,6 +40,7 @@ public class VersionNoticeManger
         }
         
         string version = bro.GetReturnValuetoJSON()["version"].ToString();
+        Debug.Log($"{version},{Application.version}");
 
         // 최신버전이 현재 기기에 저장된 버전이라면
         if(version  <= Application.version) {
