@@ -32,6 +32,15 @@ public class UserDogamManager
     public void First()
     {
         userId=UserDataManager.Instance.getUserID();
+        if(userdogamList!=null) 
+            userdogamList.Clear();
+        else
+            userdogamList = new List<UserDogam>();
+        if (userfriendList!=null) 
+            userfriendList.Clear();
+        else
+            userfriendList = new List<UserDogam>();
+        
         userdogamList=getUserDogamList();
         UserDogam userinventory = new UserDogam();
         if(userdogamList!=null)
@@ -43,6 +52,8 @@ public class UserDogamManager
                 Debug.Log($"{i++}:{DogamChartManager.Instance.getNoonsongName(userinventory.noonsongId)}:{userinventory.noonsongId}: {userinventory.favor}:{userinventory.count} :{userinventory.friend}");
             }
         }
+        Debug.Log($"[UserDogamManager] userdogamList 초기화 완료. Count: {userdogamList.Count}");
+        Debug.Log($"[UserDogamManager] userfriendList 초기화 완료. Count: {userfriendList.Count}");
     }
 
     //--------------------------------------------------------------------------------
@@ -166,6 +177,7 @@ public class UserDogamManager
         {
             if(ud.noonsongId == ad.noonsongId)
             {
+                Debug.Log($"{ud.noonsongId}");
                 return;
             }
         }
@@ -181,6 +193,7 @@ public class UserDogamManager
             {
                 Debug.Log($"{ud.noonsongId}");
             }
+            Debug.Log($"[UserDogamManager] 도감 등록 눈송이 개수:{userfriendList.Count}");
             return userfriendList.Count;
         }
         else
