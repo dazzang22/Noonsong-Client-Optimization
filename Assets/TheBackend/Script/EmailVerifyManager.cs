@@ -6,6 +6,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using TMPro;
+using System.Collections;
 
 public class EmailVerifyManager : MonoBehaviour
 {
@@ -56,9 +57,16 @@ public class EmailVerifyManager : MonoBehaviour
             return;
         }
 
-        SetEmailMessage("메일 발송 중...", Color.black, true);
-        verificationCode = GenerateVerificationCode();
+        StartCoroutine(RequestVerificationCoroutine());
+    }
 
+    private IEnumerator RequestVerificationCoroutine()
+    {
+        SetEmailMessage("메일 발송 중...", Color.black, true);
+
+        yield return new WaitForSeconds(0.5f); 
+
+        verificationCode = GenerateVerificationCode();
         SendVerificationEmail(userEmail, verificationCode);
 
         SetEmailMessage("입력하신 메일로 인증코드 발송하였습니다.", Color.green, true);
@@ -66,8 +74,8 @@ public class EmailVerifyManager : MonoBehaviour
 
     private void SendVerificationEmail(string recipientEmail, string code)
     {
-        string senderEmail = "friendsnoonsong@gmail.com"; //프눈계정 이메일
-        string senderPassword = "tkousxipdrjdrotq"; //설정한 앱 비밀번호
+        string senderEmail = "friendsnoonsong@gmail.com"; //프눈 계정 이메일
+        string senderPassword = "tkousxipdrjdrotq"; //설정되어있는 앱 비밀번호
         
         try
         {
