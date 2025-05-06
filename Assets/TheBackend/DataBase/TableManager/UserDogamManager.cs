@@ -51,9 +51,9 @@ public class UserDogamManager
                 userinventory=ud;
                 Debug.Log($"{i++}:{DogamChartManager.Instance.getNoonsongName(userinventory.noonsongId)}:{userinventory.noonsongId}: {userinventory.favor}:{userinventory.count} :{userinventory.friend}");
             }
+            Debug.Log($"[UserDogamManager] userdogamList 초기화 완료. Count: {userdogamList.Count}");
+            Debug.Log($"[UserDogamManager] userfriendList 초기화 완료. Count: {userfriendList.Count}");
         }
-        Debug.Log($"[UserDogamManager] userdogamList 초기화 완료. Count: {userdogamList.Count}");
-        Debug.Log($"[UserDogamManager] userfriendList 초기화 완료. Count: {userfriendList.Count}");
     }
 
     //--------------------------------------------------------------------------------
