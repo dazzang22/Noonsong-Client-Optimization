@@ -117,6 +117,11 @@ public class GameStatistics
                 {
                     dogamList[user]= new List<Dictionary<string, int>>();
                 }
+                if(name ==null)
+                {
+                    Debug.Log($"{n},{udjson["userId"].ToString()}");
+                    continue;
+                }
                 udlist[name]=favor;
             }
             dogamList[user].Add(udlist);

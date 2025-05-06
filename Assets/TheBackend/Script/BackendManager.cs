@@ -25,11 +25,11 @@ public class BackendManager : MonoBehaviour
             //점검중 관리
             Backend.ErrorHandler.OnMaintenanceError = () => {
                 Debug.Log("점검 에러 발생!!!");
-                VersionNoticeManger.Instance.SetMaintenanceNotice( "점검 중입니다.");
-                StartCoroutine(OpenNoticeUI());
+                VersionNoticeManger.Instance.SetMaintenanceNotice( "점검 중입니다.",true,false);
+                StartCoroutine(OpenNoticeUI("점검 중입니다."));
             };
             //버전 & 공지 관리
-            CheckVersionAndNotice();
+            StartCoroutine(VersionAndNoticeFlow());
         }
         else
         {
@@ -45,45 +45,50 @@ public class BackendManager : MonoBehaviour
             //TuriShopManager.Instance.DisplayShopItems(); //테스트
         //});
     }
-
-    public void  CheckVersionAndNotice()
+    private IEnumerator VersionAndNoticeFlow()
     {
         VersionNoticeManger.Instance.VersionCheck();
-        VersionNoticeManger.Instance.NoticeCheck();
+        string vt=VersionNoticeManger.Instance.newText;
         Debug.Log($"{VersionNoticeManger.Instance.newText}");
-        Debug.Log($"{VersionNoticeManger.Instance.ispopup}");
-        if(VersionNoticeManger.Instance.ispopup)
+        if (VersionNoticeManger.Instance.isversion)
         {
-            StartCoroutine(OpenNoticeUI());
+            yield return StartCoroutine(OpenNoticeUI(vt));
         }
-        
+
+        VersionNoticeManger.Instance.NoticeCheck();
+        string pt=VersionNoticeManger.Instance.newText;
+        if (VersionNoticeManger.Instance.ispopup)
+        {
+            yield return StartCoroutine(OpenNoticeUI(pt));
+        }
     }
-   
-    private IEnumerator OpenNoticeUI()
+
+private IEnumerator OpenNoticeUI(string newtext)
+{
+    GameObject prefab = Resources.Load<GameObject>("Canvas)SavePoint PopupTutorial");
+    if (prefab == null)
     {
-        GameObject prefab = Resources.Load<GameObject>("Canvas)SavePoint PopupTutorial"); // 파일명만 정확히
-        if (prefab == null)
-        {
-            Debug.LogError("공지 팝업 프리팹을 찾을 수 없습니다.");
-            yield break;
-        }
-
-        GameObject popup = Instantiate(prefab);
-        popup.transform.SetAsLastSibling();
-
-        TMP_Text[] texts = popup.GetComponentsInChildren<TMP_Text>();
-        if (texts.Length >= 2)
-        {
-            texts[0].text = "공지";
-            texts[1].text = VersionNoticeManger.Instance.newText;
-        }
-
-        Button close = popup.GetComponentInChildren<Button>();
-        if (close != null)
-            close.onClick.AddListener(() => Destroy(popup));
-
-        yield return new WaitWhile(() => popup != null); // 닫을 때까지 대기
+        Debug.LogError("공지 팝업 프리팹을 찾을 수 없습니다.");
+        yield break;
     }
+
+    GameObject popup = Instantiate(prefab);
+    popup.transform.SetAsLastSibling();
+
+    TMP_Text[] texts = popup.GetComponentsInChildren<TMP_Text>();
+    if (texts.Length >= 2)
+    {
+        texts[0].text = "공지";
+        texts[1].text = newtext;
+        Debug.Log($"{newtext}");
+    }
+
+    Button close = popup.GetComponentInChildren<Button>();
+    if (close != null)
+        close.onClick.AddListener(() => Destroy(popup));
+
+    yield return new WaitWhile(() => popup != null);
+}
 
 
     // =======================================================
@@ -117,16 +122,12 @@ public class BackendManager : MonoBehaviour
 
 
     void Test(){
-        //BackendLogin.Instance.CustomSignUp("User3","1234");
-
-        //BackendLogin.Instance.CustomLogin("werwer","werwer");
-        BackendLogin.Instance.CustomLogin("werwer","WERwer1111");
+        BackendLogin.Instance.CustomLogin("emily9821","Emily9821");
         //재화 평균
         GameStatistics.Instance.AverageSnowCount();
-        //유저별 눈송이 수집율
-        
-        //눈송이별 수집율
+        //유저별 & 눈송이별 수집율
         GameStatistics.Instance.UpdateNoonStatics();
+
 
         //Debug.Log("테스트를 종료합니다.");
 
