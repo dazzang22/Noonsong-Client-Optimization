@@ -122,9 +122,9 @@ public class InventoryManager : MonoBehaviour
     }
   }
 
-    public void UpdateInventory()
-    {
-        var keys = new List<int>(inventoryItems.Keys);
+  public void UpdateInventory()
+  {
+    var keys = new List<int>(inventoryItems.Keys);
     foreach (var itemId in keys)
     {
       UserInventoryEntry userItem = UserInventoryManager.Instance.userInventoryEntries.Find(e => e.itemId == itemId);
@@ -132,7 +132,7 @@ public class InventoryManager : MonoBehaviour
       {
         if (inventoryItems.ContainsKey(itemId)) 
         {
-          Debug.Log($"🗑 아이템 삭제됨: {itemId}");
+          Debug.Log($"아이템 삭제됨: {itemId}");
           Destroy(inventoryItems[itemId]);
           inventoryItems.Remove(itemId);
         }
@@ -143,7 +143,7 @@ public class InventoryManager : MonoBehaviour
     Debug.Log("인벤토리 업데이트 완료");
   }
 
-    void ShowItemDescription(ItemEntry item)
+  void ShowItemDescription(ItemEntry item)
   {
     popupItemName.text = item.itemName;
     popupItemDescription.text = item.description;
@@ -156,27 +156,29 @@ public class InventoryManager : MonoBehaviour
     popupCloseButton.onClick.AddListener(() => descriptionPopup.SetActive(false));
   }
 
-    internal void AddEmblemBadge()
-    {
-    if (UserInventoryManager.Instance.userInventoryEntries.Count > 1)
-    {
-      UserInventoryEntry userItem = UserInventoryManager.Instance.userInventoryEntries.Find(e => e.itemId == 2);
+  internal void AddEmblemBadge()
+  {
+    int emblemItemId = 2;
+    string userId = UserDataManager.Instance.getUserID();
 
-      if (userItem != null)
-      {
-        userItem.itemCount = 1;
-        UserInventoryManager.Instance.UpdateItemCount(userItem.userId, userItem.itemId, userItem.itemCount);
-        UpdateInventory(); // 인벤토리 UI 갱신
-        Debug.Log("엠블렘 배지 획득!");
-      }
-      else
-      {
-        Debug.LogWarning("엠블렘 배지를 찾을 수 없습니다.");
-      }
+    UserInventoryEntry existingItem = UserInventoryManager.Instance.userInventoryEntries
+        .Find(e => e.itemId == emblemItemId);
+
+    if (existingItem != null)
+    {
+      // 기존 아이템이 있다면 개수 증가 및 DB 갱신
+      int newCount = existingItem.itemCount + 1;
+      UserInventoryManager.Instance.UpdateItemCount(userId, emblemItemId, newCount);
+      Debug.Log($"(튜토리얼) 엠블럼 배지 수량 증가: {newCount}");
     }
     else
     {
-      Debug.LogWarning("인벤토리에 최소 두 개 이상의 아이템이 필요함.");
+      // 기존에 없던 아이템이라면 새로 추가
+      UserInventoryManager.Instance.InsertUserInventory(userId, emblemItemId, 1);
+      Debug.Log("(튜토리얼) 엠블럼 배지 새로 추가됨.");
     }
+
+    // UI 갱신
+    UserInventoryManager.Instance.ReloadInventory();
   }
 }

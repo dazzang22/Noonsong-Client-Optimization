@@ -176,7 +176,10 @@ public class UserInventoryManager
         if (inventoryManager != null)
         {
             inventoryManager.UpdateInventory();
-            giftInventory.UpdateGiftInventoryUI();
+            if (giftInventory != null)
+            {
+                giftInventory.UpdateGiftInventoryUI();
+            }
             Debug.Log("인벤토리 UI 업데이트 완료");
         }
         else
