@@ -61,6 +61,9 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
     public Canvas bookCanvas;
     public Canvas savepointCanvas;
     public GameObject StudentId;
+    public GameObject remindPanel1;
+    public GameObject remindPanel2;
+    public GameObject remindPanel3;
 
     public Transform arCamera; // AR 카메라 Transform
     public float moveDuration = 2f; // 이동 애니메이션 지속 시간
@@ -129,11 +132,10 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         FirstDialog.Add(new DialogData("/color:black//emote:Happy/눈송이랑 친해지려면 인사를 하고 대화하는 게 중요한데…", "RoRo"));
         FirstDialog.Add(new DialogData("/color:black//emote:Happy/아, 맞다! 1캠퍼스 정문에서 눈송이를 본 것 같다는 걸 알려주려고 온 건데 깜빡했네!", "RoRo"));
         FirstDialog.Add(new DialogData("/color:black//emote:Happy/이러지 말고 직접 가 보는 게 좋겠어!", "RoRo"));
-        FirstDialog.Add(new DialogData("/color:black//emote:Call/아직 학교 지리는 잘 모르지? 내가 같이 가줄게!", "RoRo", () => {roro.SetActive(false); dialogTriggered[0] = true;}));
-        
+        FirstDialog.Add(new DialogData("/color:black//emote:Call/아직 학교 지리는 잘 모르지? 내가 같이 가줄게!", "RoRo", () => {roro.SetActive(false); dialogTriggered[0] = true; remindPanel1.SetActive(true);}));
 
         DialogManager.Show(FirstDialog);
-        
+
     }
 
     // 4
@@ -143,6 +145,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
          if (!dialogTriggered[0]) return; // 이전 다이얼로그가 호출되지 않았으면 return
 
         var SecondDialog = new List<DialogData>();
+        remindPanel1.SetActive(false);
 
         // part4 눈결이 등장
         SecondDialog.Add(new DialogData("/color:black//emote:Hello/저기,, 안녕하세요! 처음 보는 분이네요..!", "NoonGyeol", () => { noonkyeol.SetActive(true); PlaySound(noonkyeol);
@@ -164,9 +167,9 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         SecondDialog.Add(new DialogData("/color:black/[(그럼 혹시 도와줄 수 있냐고 묻는다.)]", "User"));
         SecondDialog.Add(new DialogData("/color:black/물론이에요..! 저도 동행할게요.", "NoonGyeol"));
         SecondDialog.Add(new DialogData("/color:black/으~음.. 눈송이 대신 눈결이가 있었네. 괜찮아! 마침 한 곳 더 짐작이 가는 곳이 있어!", "RoRo"));
-        SecondDialog.Add(new DialogData("/color:black/2캠퍼스 정문으로 가보자!", "RoRo", () => {noonkyeol.SetActive(false); dialogTriggered[1] = true;}));
+        SecondDialog.Add(new DialogData("/color:black/2캠퍼스 정문으로 가보자!", "RoRo", () => {noonkyeol.SetActive(false); dialogTriggered[1] = true; remindPanel2.SetActive(true);}));
 
-         DialogManager.Show(SecondDialog);
+        DialogManager.Show(SecondDialog);
     }
 
     // 5
@@ -175,7 +178,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
          if (dialogTriggered[2]) return;
          if (!dialogTriggered[1]) return; // 이전 다이얼로그가 호출되지 않았으면 return
 
-
+        remindPanel2.SetActive(false);
         var ThirdDialog = new List<DialogData>();
 
         // part5 꽃송이 등장
@@ -190,7 +193,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         ThirdDialog.Add(new DialogData("/color:black/참, 눈송이한테는 이걸 주면 좋아할 거야. 가서 말을 건 뒤 선물을 줘 봐!", "KkotSong", () => { kkotsong.SetActive(false); uiController.onClickInventoryButton(); StartCoroutine(GetEmblemBadge());}));
         //엠블럼 뱃지 획득
         ThirdDialog.Add(new DialogData("/color:black/엠블럼 뱃지를 획득했다!", "Narrator"));
-        ThirdDialog.Add(new DialogData("/color:black/왼쪽 두번째 인벤토리 아이콘을 클릭해보세요", "Narrator",()=> {dialogTriggered[2] = true; }));
+        ThirdDialog.Add(new DialogData("/color:black/왼쪽 두번째 인벤토리 아이콘을 클릭해보세요", "Narrator",()=> {dialogTriggered[2] = true; remindPanel3.SetActive(true);}));
 
         DialogManager.Show(ThirdDialog);
     }
@@ -202,7 +205,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
          if (!dialogTriggered[2]) return; // 이전 다이얼로그가 호출되지 않았으면 return
 
         dialogTriggered[3] = true;
-
+        remindPanel3.SetActive(false);
 
         var FourthDialog = new List<DialogData>();
 
