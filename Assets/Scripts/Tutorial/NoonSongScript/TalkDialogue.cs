@@ -497,6 +497,7 @@ public class TalkDialogue : MonoBehaviour // TalkDialogue는 튜토리얼 전체
         giftButton.onClick.AddListener(() =>
         {
             isGiftGiven = true;
+            UserInventoryManager.Instance.ConsumeItem(2); //앰블럼 소비
             Destroy(slotButton.gameObject);
             giftCanvas.gameObject.SetActive(false);
             popupUI.SetActive(false); // 팝업 UI 비활성화

@@ -166,6 +166,31 @@ public class UserInventoryManager
         }
     }
 
+    //아이템 제거 (인자 itemID)
+    public void ConsumeItem(int itemID)
+    {
+        string userId = UserDataManager.Instance.getUserID();
+
+        UserInventoryEntry existingItem = UserInventoryManager.Instance.userInventoryEntries
+            .Find(e => e.itemId == itemID);
+
+        if (existingItem == null)
+        {
+            Debug.LogWarning($"ConsumeItem: 유저 인벤토리에서 itemID {itemID}를 찾을 수 없습니다.");
+            return;
+        }
+
+        int newCount = existingItem.itemCount - 1;
+        if (newCount < 0) newCount = 0;
+
+        UserInventoryManager.Instance.UpdateItemCount(userId, itemID, newCount);
+
+        Debug.Log($"ConsumeItem: itemID {itemID} 사용됨. 남은 수량: {newCount}");
+
+        UserInventoryManager.Instance.ReloadInventory();
+    }
+
+
     public void ReloadInventory()
     {
         string userId = UserDataManager.Instance.getUserID();
