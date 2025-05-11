@@ -23,6 +23,7 @@ public class NoonsongManager : MonoBehaviour
   public Button view3DButton;
   public Canvas collectionCanvas;
   public Canvas cameraCanvas;
+    public GameObject cameraWarningPopup;
   public GameObject cameraPopup;
   public Camera renderCamera;
   public Button[] categoryButtons;
@@ -334,6 +335,13 @@ public class NoonsongManager : MonoBehaviour
 
     public void Open3DView(NoonsongEntry entry)
     {
+        if (entry.loveLevel < 50)
+        {
+            Debug.Log("호감도 부족 시 안열림");
+            cameraWarningPopup.SetActive(true);         
+            return;
+        }
+
         if (collectionCanvas != null)
         {
             collectionCanvas.gameObject.SetActive(false);
