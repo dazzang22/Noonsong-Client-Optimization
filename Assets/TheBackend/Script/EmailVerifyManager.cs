@@ -82,19 +82,17 @@ public class EmailVerifyManager : MonoBehaviour
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(senderEmail);
             mail.To.Add(recipientEmail);
-            mail.Subject = "안녕하세요. 프렌즈! 눈송에서 인증번호를 알려드립니다.";
+            mail.Subject = "안녕하세요. 프렌즈 눈송!에서 인증번호를 알려드립니다.";
 
             string emailBody = $@"
-        <head>
-    
-</head>
-<body>
-        <strong>안녕하세요. 프렌즈! 눈송입니다.</strong>
-            <h1>인증코드는 {code} 입니다. 감사합니다.</h1>
-        </p>
-        
-</body>
-</html>";
+                <html>
+                    <head>
+                    </head>
+                    <body>
+                        <strong>안녕하세요. 프렌즈 눈송!입니다.</strong>
+                        <h1>인증코드는 {code} 입니다. 감사합니다.</h1>
+                    </body>
+                </html>";
 
             mail.Body = emailBody;
             mail.IsBodyHtml = true;
