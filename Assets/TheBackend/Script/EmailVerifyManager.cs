@@ -82,30 +82,19 @@ public class EmailVerifyManager : MonoBehaviour
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(senderEmail);
             mail.To.Add(recipientEmail);
-            mail.Subject = "[프렌즈 눈송!] 학교 이메일 인증 코드";
+            mail.Subject = "안녕하세요. 프렌즈! 눈송에서 인증번호를 알려드립니다.";
 
             string emailBody = $@"
-        <html>
         <head>
-            <style>
-                body {{ font-family: Arial, sans-serif; text-align: center; }}
-                .container {{ width: 100%; max-width: 500px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #f9f9f9; }}
-                .title {{ font-size: 18px; font-weight: bold; margin-bottom: 20px; }}
-                .code-box {{ background-color: #fff; padding: 15px; border-radius: 5px; font-size: 24px; font-weight: bold; color: #2A3C89; }}
-                .footer {{ font-size: 12px; color: #666; margin-top: 20px; }}
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <div class='title'>이메일 인증코드를 입력해주세요.</div>
-                <div class='code-box'>{code}</div>
-                <div class='footer'>
-                    프렌즈 눈송! 학교 인증 이메일 본인 확인을 위한 메일입니다.<br>
-                    게임에 접속 후, 위의 코드를 입력하여 인증을 완료해 주세요
-                </div>
-            </div>
-        </body>
-        </html>";
+    
+</head>
+<body>
+        <strong>안녕하세요. 프렌즈! 눈송입니다.</strong>
+            <h1>인증코드는 {code} 입니다. 감사합니다.</h1>
+        </p>
+        
+</body>
+</html>";
 
             mail.Body = emailBody;
             mail.IsBodyHtml = true;
