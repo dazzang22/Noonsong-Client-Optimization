@@ -10,7 +10,7 @@ public class PlayerObjectSpawn : MonoBehaviour
 {
     [SerializeField] float spawnRadius = 10f; // 사용자의 위치에서 스폰할 반경
 
-    [SerializeField]  float spawnScale = 10f;
+    [SerializeField] float spawnScale = 10f;
 
     [SerializeField] NoonsongManager noonsongManager;
 
@@ -34,10 +34,10 @@ public class PlayerObjectSpawn : MonoBehaviour
     [SerializeField] private EncounterUI encounterUI;
 
     private Vector3 lastPosition;
-    private Vector3 movementDirection= Vector3.forward;
+    private Vector3 movementDirection = Vector3.forward;
 
-   
-
+    [SerializeField] private bool testModeSpawnInFrontOfCamera = true;
+    [SerializeField] private float testSpawnDistance = 3f;
 
     void Start()
     {
@@ -47,70 +47,92 @@ public class PlayerObjectSpawn : MonoBehaviour
 
 
     }
- 
-    void Update()   
+
+    void Update()
     {
         var activationController = GetComponentInParent<ScriptActivationController>();
-        bool isInActiveZone = activationController != null && activationController.IsActive();
-        bool isUICanvasOn = noonsongManager.Is3DViewActive() || friendsManager.Is3DViewActive();
-        
+
+        bool isInActiveZone = testModeSpawnInFrontOfCamera ||
+                              (activationController != null && activationController.IsActive());
+
+        bool isUICanvasOn =
+            (noonsongManager != null && noonsongManager.Is3DViewActive()) ||
+            (friendsManager != null && friendsManager.Is3DViewActive());
+
         if (!isInActiveZone || isUICanvasOn)
         {
-            PlayerObjectSpawnManager.Instance.RemoveSpawnedObjectsForBuilding(activationController.gameObject.name);
+            if (!testModeSpawnInFrontOfCamera &&
+                activationController != null &&
+                PlayerObjectSpawnManager.Instance != null)
+            {
+                PlayerObjectSpawnManager.Instance.RemoveSpawnedObjectsForBuilding(activationController.gameObject.name);
+            }
+
             timer = 0f;
             return;
         }
 
         UpdateMovementDirection();
 
-        if (isInActiveZone)
+        if (timer == 0f)
         {
-            if (timer == 0f)
+            if (PlayerObjectSpawnManager.Instance == null || PlayerObjectSpawnManager.Instance.CanSpawn())
             {
-                // 건물 안에 들어오면 바로 첫 번째 스폰
-                if (PlayerObjectSpawnManager.Instance.CanSpawn())
-                {
-                    SpawnObjectNearUser();
-                }
+                SpawnObjectNearUser();
             }
+        }
 
-            timer += Time.deltaTime;
+        timer += Time.deltaTime;
 
-            // 20초마다 오브젝트 교체
-            if (timer >= changeInterval)
+        if (timer >= changeInterval)
+        {
+            if (PlayerObjectSpawnManager.Instance != null)
             {
-                // 기존 오브젝트 제거
                 PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
-                encounterUI.CloseEncounter();
-
-                // 새로운 오브젝트 스폰
-                if (PlayerObjectSpawnManager.Instance.CanSpawn())
-                {
-                    SpawnObjectNearUser();
-                }
-
-                // 타이머 리셋
-                timer = 0f;
             }
+
+            if (encounterUI != null)
+            {
+                encounterUI.CloseEncounter();
+            }
+
+            if (PlayerObjectSpawnManager.Instance == null || PlayerObjectSpawnManager.Instance.CanSpawn())
+            {
+                SpawnObjectNearUser();
+            }
+
+            timer = 0f;
         }
     }
 
 
     void SpawnObjectNearUser()
     {
-        if (!PlayerObjectSpawnManager.Instance.CanSpawn()) return;
+        if (!testModeSpawnInFrontOfCamera)
+        {
+            if (PlayerObjectSpawnManager.Instance != null && !PlayerObjectSpawnManager.Instance.CanSpawn())
+                return;
+        }
 
-        //사용자 위치에서 일정 범위 내 랜덤 위치를 생성
-        Vector3 userPosition = xrOrigin.position;
+        Vector3 spawnPosition;
 
-        Vector3 cameraForward = new Vector3(arCamera.transform.forward.x, 0, arCamera.transform.forward.z).normalized;
-        Vector3 spawnPosition = GetSpawnPositionInFront(userPosition, cameraForward);
-        spawnPosition.y = -5; // Y 고정
+        if (testModeSpawnInFrontOfCamera)
+        {
+            spawnPosition = arCamera.transform.position + arCamera.transform.forward * testSpawnDistance;
+            spawnPosition.y = arCamera.transform.position.y;
+        }
+        else
+        {
+            Vector3 userPosition = xrOrigin.position;
+            Vector3 cameraForward = new Vector3(arCamera.transform.forward.x, 0, arCamera.transform.forward.z).normalized;
+            spawnPosition = GetSpawnPositionInFront(userPosition, cameraForward);
+            spawnPosition.y = -5;
+        }
+
         Debug.Log($"Attempting to spawn object at {spawnPosition}");
 
         var spawnedObject = GetRandomPrefab();
         GameObject prefab = spawnedObject.GameObject;
-
 
         if (prefab == null)
         {
@@ -118,33 +140,28 @@ public class PlayerObjectSpawn : MonoBehaviour
             return;
         }
 
-        //오브젝트 생성
         GameObject instance = Instantiate(prefab, spawnPosition, Quaternion.identity);
         Debug.Log($"Prefab {prefab.name} instantiated successfully.");
 
-        //크기 조정
         instance.transform.localScale = new Vector3(spawnScale, spawnScale, spawnScale);
 
-        //회전 조정
-        //회전 조정
-        float yRotation = xrOrigin.eulerAngles.y + 180f;
+        float yRotation = xrOrigin != null ? xrOrigin.eulerAngles.y + 180f : arCamera.transform.eulerAngles.y + 180f;
         instance.transform.rotation = Quaternion.Euler(0, yRotation, 0);
 
-        // ARAnchor 추가
         ARAnchor anchor = instance.AddComponent<ARAnchor>();
         anchor.transform.position = spawnPosition;
-
-        if (anchor == null)
-        {
-            Debug.LogError("Failed to attach ARAnchor to the instance.");
-        }
-        // Anchor를 통해 안정적으로 위치 고정
         instance.transform.parent = anchor.transform;
 
         var activationController = GetComponentInParent<ScriptActivationController>();
-        PlayerObjectSpawnManager.Instance.AddSpawnedObject(activationController.gameObject.name, 
-                                                            new SpawnedObject(instance, spawnedObject.NoonsongEntry));
+        string buildingName = activationController != null ? activationController.gameObject.name : "TestBuilding";
 
+        if (PlayerObjectSpawnManager.Instance != null)
+        {
+            PlayerObjectSpawnManager.Instance.AddSpawnedObject(
+                buildingName,
+                new SpawnedObject(instance, spawnedObject.NoonsongEntry)
+            );
+        }
     }
 
     private void UpdateMovementDirection()
@@ -168,9 +185,9 @@ public class PlayerObjectSpawn : MonoBehaviour
     {
         float angle = Random.Range(-30f, 30f); // 플레이어의 시야각 내에서 랜덤 위치
         Vector3 spawnOffset = Quaternion.Euler(0, angle, 0) * direction * Random.Range(6f, spawnRadius);
-    
+
         return userPosition + spawnOffset;
-    } 
+    }
     //랜덤 위치로 스폰
     // Vector3 GetRandomOffset()
     // {
@@ -231,6 +248,12 @@ public class PlayerObjectSpawn : MonoBehaviour
         List<NoonsongEntry> filteredEntries = new List<NoonsongEntry>();
 
         NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
+
+        if (testModeSpawnInFrontOfCamera)
+        {
+            // 테스트 모드에서는 모든 엔트리를 반환
+            return new List<NoonsongEntry>(entries);
+        }
 
         foreach (var entry in entries)
         {

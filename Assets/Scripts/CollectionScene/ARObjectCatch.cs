@@ -1,10 +1,15 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ARObjectCatch : MonoBehaviour
 {
     private PlayerObjectSpawnManager playerObjectSpawnManager;
+    // Camera Caching
+    private Camera mainCamera;
 
     [SerializeField]
     private NoonsongManager noonsongManager;
@@ -22,93 +27,138 @@ public class ARObjectCatch : MonoBehaviour
     [SerializeField] private EncounterUI encounterUI;
     [SerializeField] private GameObject exitPopup;
 
+    // GC Alloc 최적화를 위해 체크 포인트 배열을 미리 할당
+    private readonly Vector3[] checkPoints = new Vector3[5];
+    private WaitForSeconds detectWait;
+    private Coroutine detectionCoroutine;
+
+    // detection
+    [Header("Detection")]
+    [SerializeField] private float detectInterval = 0.1f;
+    [SerializeField] private float screenPadding = 50f;
+    [SerializeField] private float defaultBoundingRadius = 0.5f;
+
+    // test tool
+    private static readonly ProfilerMarker CheckForObjectMarker = new ProfilerMarker("ARObjectCatch.CheckForObjectInView");
+    private Stopwatch stopwatch = new Stopwatch();
+    private long totalTicks = 0;
+    private int checkCount = 0;
+    private float reportTimer = 0f;
+
 
     void Start()
     {
         playerObjectSpawnManager = PlayerObjectSpawnManager.Instance;
-
-        if (playerObjectSpawnManager == null)
-        {
-            Debug.LogError("PlayerObjectSpawnManager가 초기화되지 않았습니다!");
-        }
-    
+        // Camera.main 캐싱
+        mainCamera = Camera.main;
+        detectWait = new WaitForSeconds(detectInterval);
         catchButton.onClick.AddListener(OnCatchButtonClicked);
+        detectionCoroutine = StartCoroutine(CheckForObjectInViewCoroutine());
     }
 
     void Update()
     {
-        CheckForObjectInView();
+        reportTimer += Time.deltaTime;
+        if (reportTimer >= 5f)
+        {
+            double totalMs = totalTicks * 1000.0 / Stopwatch.Frequency;
+            double avgMs = totalMs / checkCount;
+            double avgUs = totalTicks * 1000000.0 / Stopwatch.Frequency / checkCount;
+
+            UnityEngine.Debug.Log(
+                $"평균 CheckForObjectInView 시간: {avgMs:F6} ms ({avgUs:F2} μs) over {checkCount} checks"
+            );
+
+            totalTicks = 0;
+            checkCount = 0;
+            reportTimer = 0f;
+        }
+    }
+
+    private IEnumerator CheckForObjectInViewCoroutine()
+    {
+        while (true)
+        {
+            stopwatch.Restart();
+            CheckForObjectInView();
+            stopwatch.Stop();
+
+            totalTicks += stopwatch.ElapsedTicks;
+            checkCount++;
+            yield return detectWait; // detectInterval마다 체크
+        }
     }
 
     void CheckForObjectInView()
     {
-        var spawnedObjects = playerObjectSpawnManager.SpawnedObjects;
-        if (spawnedObjects.Count > 0)
+
+        using (CheckForObjectMarker.Auto())
         {
-            foreach (var obj in spawnedObjects)
+            var spawnedObjects = playerObjectSpawnManager.SpawnedObjects;
+            if (spawnedObjects.Count > 0)
             {
-                GameObject target = obj.GameObject;
-                if (target == null)
-                    continue;
-
-                Vector3 objectPosition = target.transform.position;
-
-                // 기본 반지름 설정 (콜라이더 없을 때 대비)
-                float boundingRadius = 0.5f;
-
-                // 콜라이더가 있으면 크기 기반으로 반지름 계산
-                Collider col = target.GetComponent<Collider>();
-                if (col != null)
+                foreach (var obj in spawnedObjects)
                 {
-                    boundingRadius = col.bounds.extents.magnitude * 0.5f; 
-                }
+                    GameObject target = obj.GameObject;
+                    if (target == null)
+                        continue;
 
-                Vector3[] checkPoints = new Vector3[]
-                {
-                objectPosition,  
-                objectPosition + new Vector3(boundingRadius, 0, 0), 
-                objectPosition - new Vector3(boundingRadius, 0, 0), 
-                objectPosition + new Vector3(0, boundingRadius, 0), 
-                objectPosition - new Vector3(0, boundingRadius, 0)  
-                };
+                    Vector3 objectPosition = target.transform.position;
 
-                bool isVisible = false;
-                foreach (Vector3 point in checkPoints)
-                {
-                    Vector3 screenPoint = Camera.main.WorldToScreenPoint(point);
+                    // 기본 반지름 설정 (콜라이더 없을 때 대비)
+                    float boundingRadius = 0.5f;
 
-                    if (screenPoint.z > 0 &&
-                        screenPoint.x > -50 && screenPoint.x < Screen.width + 50 &&
-                        screenPoint.y > -50 && screenPoint.y < Screen.height + 50)
+                    // 콜라이더가 있으면 크기 기반으로 반지름 계산
+                    Collider col = target.GetComponent<Collider>();
+                    if (col != null)
                     {
-                        isVisible = true;
-                        break;
+                        boundingRadius = col.bounds.extents.magnitude * 0.5f;
+                    }
+
+                    // 체크 포인트 계산 (중심 + 4방향)
+                    checkPoints[0] = objectPosition; // 중심
+                    checkPoints[1] = objectPosition + new Vector3(boundingRadius, 0, 0); // 오른쪽
+                    checkPoints[2] = objectPosition + new Vector3(-boundingRadius, 0, 0); // 왼쪽
+                    checkPoints[3] = objectPosition + new Vector3(0, boundingRadius, 0); // 위
+                    checkPoints[4] = objectPosition + new Vector3(0, -boundingRadius, 0); // 아래
+
+                    bool isVisible = false;
+                    foreach (Vector3 point in checkPoints)
+                    {
+                        Vector3 screenPoint = mainCamera.WorldToScreenPoint(point);
+
+                        if (screenPoint.z > 0 &&
+                            screenPoint.x > -screenPadding && screenPoint.x < Screen.width + screenPadding &&
+                            screenPoint.y > -screenPadding && screenPoint.y < Screen.height + screenPadding)
+                        {
+                            isVisible = true;
+                            break;
+                        }
+                    }
+
+                    if (isVisible)
+                    {
+                        currentTarget = target;
+
+                        // Vector3 lookPosition = Camera.main.transform.position - target.transform.position;
+                        // lookPosition.y = 0;
+                        // Quaternion targetRotation = Quaternion.LookRotation(lookPosition);
+                        // target.transform.rotation = Quaternion.Slerp(target.transform.rotation, targetRotation, Time.deltaTime * 5);
+
+                        return;
                     }
                 }
-
-                if (isVisible)
-                {
-                    currentTarget = target;
-
-                    // Vector3 lookPosition = Camera.main.transform.position - target.transform.position;
-                    // lookPosition.y = 0;
-                    // Quaternion targetRotation = Quaternion.LookRotation(lookPosition);
-                    // target.transform.rotation = Quaternion.Slerp(target.transform.rotation, targetRotation, Time.deltaTime * 5);
-
-                    return;
-                }
+                currentTarget = null;
             }
-            currentTarget = null;
-        }
-        else
-        {
-            currentTarget = null;
+            else
+            {
+                currentTarget = null;
+            }
         }
     }
 
     void OnCatchButtonClicked()
     {
-        Debug.Log("Catch 버튼 클릭됨!");
 
         if (encounterUI.gameObject.activeSelf)
         {
@@ -118,39 +168,17 @@ public class ARObjectCatch : MonoBehaviour
 
         if (currentTarget != null && currentTarget.name == "noonsong remake 0202(Clone)")
         {
-            encounterUI.ShowDefaultDialogue(noonsongPrefeb, () => {
-                Debug.Log("기본 대화 종료 후 로직 실행");
-            });
             return;
         }
 
         if (currentTarget != null)
         {
-            Debug.Log($"현재 타겟: {currentTarget.name}");
 
             var spawnedObject = playerObjectSpawnManager.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
             if (spawnedObject != null)
             {
                 NoonsongEntry entry = spawnedObject.NoonsongEntry;
-                if (entry != null)
-                {
-                    encounterUI.Show(entry, () => {
-                        Debug.Log("대화 종료 후 캐릭터 수집 실행");
-                    });
-                }
-                else
-                {
-                    Debug.LogWarning("NoonsongEntry가 존재하지 않음!");
-                }
             }
-            else
-            {
-                Debug.LogWarning("SpawnedObjects 목록에서 currentTarget을 찾을 수 없음!");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("currentTarget이 null!");
         }
     }
 
@@ -184,15 +212,10 @@ Debug.Log("Not enough currency to catch the generalNoonsong.");
 
                     if (!entry.isDiscovered)
                     {
-                        Debug.Log($"첫 번째 발견: {entry.noonsongName}");
 
                         noonsongManager.DiscoverItem(entry);
                         entry.isDiscovered = true;
                         //currencyManager.UseCurrency(requiredCurrency);
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"이미 발견된 눈송이: {entry.noonsongName}");
                     }
                 }
 
@@ -207,7 +230,6 @@ Debug.Log("Not enough currency to catch the generalNoonsong.");
 
     private void CloseEncounterCallback()
     {
-        Debug.Log("Encounter UI가 닫혔습니다.");
         exitPopup.SetActive(false);
     }
 }
