@@ -59,14 +59,14 @@ public class ARObjectCatch : MonoBehaviour
     void Update()
     {
         reportTimer += Time.deltaTime;
-        if (reportTimer >= 5f)
+        if (reportTimer >= 1f)
         {
             double totalMs = totalTicks * 1000.0 / Stopwatch.Frequency;
             double avgMs = totalMs / checkCount;
             double avgUs = totalTicks * 1000000.0 / Stopwatch.Frequency / checkCount;
 
             UnityEngine.Debug.Log(
-                $"평균 CheckForObjectInView 시간: {avgMs:F6} ms ({avgUs:F2} μs) over {checkCount} checks"
+                $"CheckForObjectInView - Total Checks: {checkCount}, Total Time: {totalMs:F2} ms, Average Time: {avgMs:F4} ms ({avgUs:F2} µs)"
             );
 
             totalTicks = 0;
@@ -92,7 +92,6 @@ public class ARObjectCatch : MonoBehaviour
     void CheckForObjectInView()
     {
 
-        using (CheckForObjectMarker.Auto())
         {
             var spawnedObjects = playerObjectSpawnManager.SpawnedObjects;
             if (spawnedObjects.Count > 0)
@@ -168,16 +167,33 @@ public class ARObjectCatch : MonoBehaviour
 
         if (currentTarget != null && currentTarget.name == "noonsong remake 0202(Clone)")
         {
+            encounterUI.ShowDefaultDialogue(noonsongPrefeb, () => {
+                UnityEngine.Debug.Log("기본 대화 종료 후 로직 실행");
+            });
             return;
         }
 
         if (currentTarget != null)
         {
-
+            UnityEngine.Debug.Log($"Attempting to catch object: {currentTarget.name}");
             var spawnedObject = playerObjectSpawnManager.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
             if (spawnedObject != null)
             {
+                UnityEngine.Debug.Log($"Caught object: {currentTarget.name}, checking for NoonsongEntry...");
                 NoonsongEntry entry = spawnedObject.NoonsongEntry;
+                if (entry != null)
+                {
+                    //UnityEngine.Debug.Log($"Found NoonsongEntry for {currentTarget.name}: {entry.itemName}, requiredNoonsongs: {entry.requiredNoonsongs}");
+                    encounterUI.Show(entry, () =>
+                    {
+                        UnityEngine.Debug.Log("대화 종료 후 캐릭터 수집 실행");
+                    });
+
+                }
+                else
+                {
+                    UnityEngine.Debug.Log($"No NoonsongEntry found for {currentTarget.name}");
+                }
             }
         }
     }
