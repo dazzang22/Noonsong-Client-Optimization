@@ -80,10 +80,10 @@ public class NoonsongEntryManager : MonoBehaviour
         return isInCollection;
     }
 
-    public NoonsongEntry[] GetNoonsongEntries()
+    public List<NoonsongEntry> GetNoonsongEntries()
     {
         Debug.Log($"Retrieving all entries. Total count: {noonsongEntries.Count}");
-        return noonsongEntries.ToArray();
+        return new List<NoonsongEntry>(noonsongEntries); // 반환 시 복사본을 만들어서 반환
     }
 
     //db랑 noonsongentry 싱크 맞추기

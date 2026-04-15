@@ -58,21 +58,21 @@ public class ARObjectCatch : MonoBehaviour
 
     void Update()
     {
-        reportTimer += Time.deltaTime;
-        if (reportTimer >= 1f)
-        {
-            double totalMs = totalTicks * 1000.0 / Stopwatch.Frequency;
-            double avgMs = totalMs / checkCount;
-            double avgUs = totalTicks * 1000000.0 / Stopwatch.Frequency / checkCount;
+        // reportTimer += Time.deltaTime;
+        // if (reportTimer >= 1f)
+        // {
+        //     double totalMs = totalTicks * 1000.0 / Stopwatch.Frequency;
+        //     double avgMs = totalMs / checkCount;
+        //     double avgUs = totalTicks * 1000000.0 / Stopwatch.Frequency / checkCount;
 
-            UnityEngine.Debug.Log(
-                $"CheckForObjectInView - Total Checks: {checkCount}, Total Time: {totalMs:F2} ms, Average Time: {avgMs:F4} ms ({avgUs:F2} µs)"
-            );
+        //     UnityEngine.Debug.Log(
+        //         $"CheckForObjectInView - Total Checks: {checkCount}, Total Time: {totalMs:F2} ms, Average Time: {avgMs:F4} ms ({avgUs:F2} µs)"
+        //     );
 
-            totalTicks = 0;
-            checkCount = 0;
-            reportTimer = 0f;
-        }
+        //     totalTicks = 0;
+        //     checkCount = 0;
+        //     reportTimer = 0f;
+        // }
     }
 
     private IEnumerator CheckForObjectInViewCoroutine()

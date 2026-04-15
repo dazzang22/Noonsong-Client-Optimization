@@ -39,13 +39,36 @@ public class PlayerObjectSpawn : MonoBehaviour
     [SerializeField] private bool testModeSpawnInFrontOfCamera = true;
     [SerializeField] private float testSpawnDistance = 3f;
 
+    //caching fields for performance
+    private Dictionary<string, List<NoonsongEntry>> entriesByBuilding;
+    private List<NoonsongEntry> allEntriesCache;
+    private static readonly List<NoonsongEntry> EmptyEntries = new List<NoonsongEntry>();
+
     void Start()
     {
         lastPosition = xrOrigin.position;
-
         PlayerObjectSpawnManager.Instance.RegisterSpawnController(this);
+        BuildEntryCache();
+    }
 
+    private void BuildEntryCache()
+    {
+        allEntriesCache = noonsongEntryManager.GetNoonsongEntries();
+        entriesByBuilding = new Dictionary<string, List<NoonsongEntry>>();
 
+        foreach (var entry in allEntriesCache)
+        {
+            if (entry == null || string.IsNullOrEmpty(entry.buildingName))
+                continue;
+
+            if (!entriesByBuilding.TryGetValue(entry.buildingName, out var list))
+            {
+                list = new List<NoonsongEntry>();
+                entriesByBuilding[entry.buildingName] = list;
+            }
+
+            list.Add(entry);
+        }
     }
 
     void Update()
@@ -245,25 +268,16 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     List<NoonsongEntry> GetNoonsongEntriesByBuildingName(string buildingName)
     {
-        List<NoonsongEntry> filteredEntries = new List<NoonsongEntry>();
-
-        NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
-
         if (testModeSpawnInFrontOfCamera)
         {
-            // 테스트 모드에서는 모든 엔트리를 반환
-            return new List<NoonsongEntry>(entries);
+            return allEntriesCache;
         }
 
-        foreach (var entry in entries)
+        if (entriesByBuilding != null && entriesByBuilding.TryGetValue(buildingName, out var entries))
         {
-            if (entry.buildingName == buildingName)
-            {
-                filteredEntries.Add(entry);
-            }
+            return entries;
         }
-
-        return filteredEntries;
+        return EmptyEntries; // 해당 건물 이름에 대한 엔트리가 없는 경우 빈 리스트 반환
     }
     public bool AreAllEntriesDiscoveredForBuilding(string buildingName)
     {
