@@ -4,9 +4,9 @@ This repository is a fork of a team project.
 I was responsible for refactoring the AR object detection system and optimizing runtime performance.
 
 Key Contributions:
-- Refactored ARObjectCatch system
-- Optimized object detection logic
-- Reduced unnecessary Update calls
+- Refactored AR object detection flow
+- Reduced detection cost from O(N) to O(1)
+- Eliminated unnecessary allocations and Update-based polling
 
 ## 🩶 Featured Projects 
 
@@ -14,10 +14,10 @@ Key Contributions:
 
 # ❄️ 프렌즈! 눈송 (GPS 기반 AR 수집 게임)
 ![ScreenRecording_04-14-202518-39-19_1-ezgif com-resize](https://github.com/user-attachments/assets/cf67caca-2726-469d-8398-0f3abd7253f0)
-[Notion](https://friendsnoonsong.notion.site)  
+[Notion](https://friendsnoonsong.notion.site) 
+
 > GPS 기반 AR 수집 게임으로,  
 > 위치에 따라 생성된 캐릭터를 수집하고 도감을 완성하는 인터랙티브 게임입니다.
-
 
 
 ## 🩶 Overview
@@ -27,11 +27,16 @@ Key Contributions:
 - **Role**: Client Developer (시스템 설계 및 구현)
 - **Focus**: AR 인터랙션, 데이터 흐름 설계, UI 동기화, 라이브 환경 대응
 
+## 🩶 Core Achievement
 
-## 🩶 What I Did
+- Spawn → UI Sync 파이프라인 설계
+- AR 오브젝트 탐지 구조 리팩토링
+- Update 기반 로직을 Coroutine 구조로 최적화
+- 탐색 및 데이터 처리 구조 개선
+  
+## 🩶 Key Implementation (Initial)
 **1. `ScriptableObject` 기반 데이터 모델 설계**
 - Noonsong / Friends / Item 등 게임 내 주요 엔트리 구조를 `ScriptableObject`로 설계  
-- 캐릭터 상태(발견 여부, 호감도, 관계 상태), 아이템 속성, 건물별 스폰 기준을 데이터 단위로 정의  
 - 게임 로직, UI, DB 동기화가 동일한 데이터 모델을 기준으로 동작하도록 구조 설계
 <details>
 <summary>${\color{Blue}Code}$</summary> 
@@ -71,15 +76,6 @@ public class NoonsongEntry : ScriptableObject
 <summary>Code</summary>
     
 ~~~csharp
-Vector3[] checkPoints = new Vector3[]
-{
-    objectPosition,
-    objectPosition + new Vector3(boundingRadius, 0, 0),
-    objectPosition - new Vector3(boundingRadius, 0, 0),
-    objectPosition + new Vector3(0, boundingRadius, 0),
-    objectPosition - new Vector3(0, boundingRadius, 0)
-};
-
 bool isVisible = false;
 foreach (Vector3 point in checkPoints)
 {
@@ -99,10 +95,6 @@ foreach (Vector3 point in checkPoints)
 → 화면 중심 Raycast의 한계를 보완하여, 실제 사용자 시야 기준으로 상호작용 대상을 판별하도록 개선  
 
 **4. 게임 시스템 구현 (재화 / 인벤토리 / 상점 / 관계 시스템)**
-- `Singleton` 기반 재화 시스템을 설계하여 상태 변경 시 UI가 자동으로 갱신되도록 구성  
-- 아이템 구매 → DB 반영 → UI 갱신까지 이어지는 데이터 흐름 구현  
-- 선호도 기반 호감도 및 관계 상태(친구 / 베스트프렌드) 변화 시스템 설계  
-
 
 **5. 베타 테스트 기반 문제 분석 및 패치**
 - 실제 사용자 환경에서 발생한 문제를 로그 기반으로 분석  
@@ -111,7 +103,7 @@ foreach (Vector3 point in checkPoints)
 
 --- 
 
-## 🩶 Core Problem
+## 🩶 Core Problem 
 기존 스폰 시스템은 랜덤 기반으로 동작하여,  
 위치와 캐릭터 간의 연결 기준이 없었습니다.
 
@@ -175,16 +167,110 @@ if (filteredEntries.Count > 0)
   
 </details>
 
+## 🩶 Optimization
+
+### 1. 탐색 구조 개선
+- 기존: Update에서 Entry 전체 순회 (O(N))
+- 개선: Dictionary 기반 구조 → O(1)
+→ 탐색 비용 대폭 감소
+<details>
+<summary>Before / After</summary>
+
+### Before
+~~~csharp
+List<NoonsongEntry> filteredEntries = new List<NoonsongEntry>();
+NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
+
+foreach (var entry in entries)
+{
+    if (entry.buildingName == buildingName)
+    {
+        filteredEntries.Add(entry);
+    }
+}
+~~~
+### After
+~~~csharp
+List<NoonsongEntry> GetNoonsongEntriesByBuildingName(string buildingName)
+{
+    if (entriesByBuilding != null && entriesByBuilding.TryGetValue(buildingName, out var entries))
+    {
+        return entries;
+    }
+    return EmptyEntries;
+}
+~~~
+</details>
+
+### 2. GC Alloc 제거
+- 기존: 매 프레임 new 연산 발생
+- 개선: 배열 재사용 구조로 변경
+→ 프레임 드랍 원인 제거
+<details>
+<summary>Before / After</summary>
+
+### Before
+~~~csharp
+Vector3[] checkPoints = new Vector3[]
+{
+    objectPosition,
+    objectPosition + new Vector3(boundingRadius, 0, 0),
+    objectPosition - new Vector3(boundingRadius, 0, 0),
+    objectPosition + new Vector3(0, boundingRadius, 0),
+    objectPosition - new Vector3(0, boundingRadius, 0)
+};
+~~~
+### After
+~~~csharp
+checkPoints[0] = objectPosition;
+checkPoints[1] = objectPosition + rightOffset;
+checkPoints[2] = objectPosition - rightOffset;
+checkPoints[3] = objectPosition + upOffset;
+checkPoints[4] = objectPosition - upOffset;
+~~~
+</details>
+
+### 3. 실행 구조 개선
+- 기존: Update 기반 탐지 로직
+- 개선: Coroutine 기반 실행 주기 제어
+→ 불필요한 연산 제거 및 CPU 안정화
+<details>
+<summary>Before / After</summary>
+
+### Before
+~~~csharp
+void Update()
+{
+    DetectObject();
+}
+~~~
+### After
+~~~csharp
+IEnumerator DetectRoutine()
+{
+    while (true)
+    {
+        DetectObject();
+        yield return waitInterval;
+    }
+}
+~~~
+</details>
+
 ## 📈 Result
 
-- 위치 기반으로 캐릭터가 일관되게 생성되는 구조 구축  
-- 스폰과 UI 데이터가 연결된 시스템 완성  
-- 플레이 환경에 관계없이 예측 가능한 인터렉션 경험 제공
+- 탐색 연산: O(N) → O(1)
+- GC Alloc 제거
+- 불필요한 Update 호출 제거
+- 프레임 드랍 제거 및 안정성 확보
+- 위치 기반 스폰과 UI 상태가 일관되게 연결되는 구조 완성
 
 ## 🧪 Live Experience
 
-- 베타 테스트 환경에서 실제 사용자 로그 기반 문제 분석  
-- GPS 오차 및 네트워크 상태 대응  
-- 수정 → 패치 배포 경험
+- iOS / Android 크로스 플랫폼 환경에서 테스트 및 운영
+- 100건 이상의 버그 및 사용자 피드백 대응
+- 실제 사용자 로그 기반 문제 분석 및 원인 추적
+- GPS 오차 및 네트워크 상태에 따른 예외 상황 대응
+- 현장에서 직접 디버깅 및 이슈 재현 / 수정 / 패치 배포 경험
 
 ---
