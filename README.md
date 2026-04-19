@@ -7,7 +7,7 @@
 Key Contributions:
 - Refactored AR object detection flow
 - Reduced detection cost from O(N) to O(1)
-- Eliminated unnecessary allocations and Update-based polling
+- Eliminated unnecessary allocations and Update-based polling to stabilize frame performance
 
 ---
 
@@ -41,10 +41,10 @@ Key Contributions:
 ## 🩶 Key Implementation (Initial)
 **1. `ScriptableObject` 기반 데이터 모델 설계**
 - `Noonsong` / `Friends` / `Item` 등 게임 내 주요 엔트리 구조를 `ScriptableObject`로 설계  
-- 게임 로직, UI, DB 동기화가 동일한 데이터 모델을 기준으로 동작하도록 구조 설계
+- 게임 로직, UI, DB 동기화가 **동일한 데이터 모델**을 기준으로 동작하도록 구조 설계
 <details>
-<summary>Code</summary> 
-    
+<summary>Core Logic</summary> 
+  
 ~~~csharp
 [CreateAssetMenu(fileName = "NewNoonsongEntry", menuName = "Noonsong Entry")]
 public class NoonsongEntry : ScriptableObject
@@ -74,10 +74,10 @@ public class NoonsongEntry : ScriptableObject
 **3. AR 기반 인터랙션 시스템 구현**
 - Camera 기준으로 현재 상호작용 가능한 타겟을 판별하고 `currentTarget`으로 관리  
 - 단순 `Raycast`로는 화면 내 노출 여부를 정확히 판단하기 어려워,  
-  오브젝트의 바운더리 포인트를 기준으로 화면 내 존재 여부를 판정하는 로직 구현
+  오브젝트의 **바운더리 포인트**를 기준으로 화면 내 존재 여부를 판정하는 로직 구현
 
 <details>
-<summary>Code</summary>
+<summary>Core Logic</summary>
     
 ~~~csharp
 bool isVisible = false;
@@ -113,13 +113,12 @@ foreach (Vector3 point in checkPoints)
 
 ## 🩶 Solution — Location-based Spawn Filtering
 > 기존 랜덤 스폰 구조 위에,  
-> 현재 진입한 건물 정보를 기준으로 캐릭터 후보군을 필터링하는 로직을 추가했습니다.
+> 현재 **진입한 건물 정보**를 기준으로 캐릭터 후보군을 **필터링**하는 로직을 추가했습니다.
 
 이를 통해  
-위치 → 캐릭터 → 데이터로 이어지는 기준을 만들었습니다.
-
+위치 → 캐릭터 → 데이터로 이어지는 파이프라인을 만들었습니다.
 <details>
-<summary>Code</summary>
+<summary>Core Logic</summary>
 
 ```csharp
 List<NoonsongEntry> GetFilteredNoonsongEntries()
@@ -157,7 +156,7 @@ List<NoonsongEntry> GetNoonsongEntriesByBuildingName(string buildingName)
 필터링된 `Entry List`를 기존 스폰 로직에 연결하여 프리팹과 데이터가 함께 전달되도록 구성했습니다.
 
 <details>
-  <summary>Code</summary>
+  <summary>Core Logic</summary>
   
   ~~~csharp
 if (filteredEntries.Count > 0)
@@ -170,7 +169,7 @@ if (filteredEntries.Count > 0)
 
 ## 🩶 Optimization
 
-### 1. 탐색 구조 개선
+### 1. 탐색 구조 개선 (AR Object를 Building name으로 필터링)
 - 기존: `Update`에서 `Entry` 전체 순회 (O(N))
 - 개선: `Dictionary` 기반 구조 → O(1)
 → 탐색 비용 대폭 감소
@@ -203,7 +202,7 @@ List<NoonsongEntry> GetNoonsongEntriesByBuildingName(string buildingName)
 ~~~
 </details>
 
-### 2. GC Alloc 제거
+### 2. GC Alloc 제거(화면 내 viewpoint 확인)
 - 기존: 매 프레임 `new` 연산 발생
 - 개선: 배열 재사용 구조로 변경
 → 프레임 드랍 원인 제거
@@ -231,10 +230,10 @@ checkPoints[4] = objectPosition - upOffset;
 ~~~
 </details>
 
-### 3. 실행 구조 개선
+### 3. 실행 구조 개선(화면 내 AR Object 탐지)
 - 기존: `Update` 기반 탐지 로직
 - 개선: `Coroutine` 기반 실행 주기 제어
-→ 불필요한 연산 제거 및 CPU 안정화
+→ **불필요한 연산 제거** 및 CPU 안정화
 <details>
 <summary>Before / After</summary>
 
@@ -260,18 +259,18 @@ IEnumerator DetectRoutine()
 
 ## 🩶 Result
 
-- 탐색 연산: O(N) → O(1)
+- 탐색 연산: **O(N) → O(1)**
 - GC Alloc 제거
 - 불필요한 `Update` 호출 제거
 - 프레임 드랍 제거 및 안정성 확보
-- 위치 기반 스폰과 UI 상태가 일관되게 연결되는 구조 완성
+- 위치 기반 스폰과 UI 상태가 **일관되게 연결**되는 구조 완성
 
 ## 🧪 Live Experience
 
-- iOS / Android 크로스 플랫폼 환경에서 테스트 및 운영
-- 100건 이상의 버그 및 사용자 피드백 대응
+- iOS / Android **크로스 플랫폼** 환경에서 테스트 및 운영
+- 100건 이상의 **버그 및 사용자 피드백 대응**
 - 실제 사용자 로그 기반 문제 분석 및 원인 추적
 - GPS 오차 및 네트워크 상태에 따른 예외 상황 대응
-- 현장에서 직접 디버깅 및 이슈 재현 / 수정 / 패치 배포 경험
+- **현장**에서 직접 디버깅 및 이슈 재현 / 수정 / **패치 배포** 경험
 
 ---
