@@ -54,21 +54,51 @@ public class PlayerObjectSpawnManager : MonoBehaviour
         _spawnedObjects.Add(obj);
     }
 
+    // Destroy된 단일 오브젝트의 registry 정보 제거
+    public void RemoveSpawnedObject(SpawnedObject target)
+    {
+        if (target == null)
+            return;
+
+        _spawnedObjects.Remove(target);
+
+        string emptyBuildingKey = null;
+
+        foreach (var kvp in _spawnedObjectsPerBuilding)
+        {
+            if (!kvp.Value.Remove(target))
+                continue;
+
+            if (kvp.Value.Count == 0)
+                emptyBuildingKey = kvp.Key;
+
+            break;
+        }
+
+        if (emptyBuildingKey != null)
+            _spawnedObjectsPerBuilding.Remove(emptyBuildingKey);
+    }
+
     // 특정 건물에 대한 오브젝트 제거
     public void RemoveSpawnedObjectsForBuilding(string buildingName)
     {
-        if (_spawnedObjectsPerBuilding.ContainsKey(buildingName))
+        if (!_spawnedObjectsPerBuilding.TryGetValue(buildingName, out var objects))
+            return;
+
+        foreach (var obj in objects)
         {
-            foreach (var obj in _spawnedObjectsPerBuilding[buildingName])
+            if (obj?.GameObject != null)
             {
-                if (obj.GameObject != null)
-                {
-                    GameObject.Destroy(obj.GameObject);
-                    Debug.Log($"Destroyed object for building: {buildingName}");
-                }
+                obj.GameObject.SetActive(false);
+                GameObject.Destroy(obj.GameObject);
+                Debug.Log($"Destroyed object for building: {buildingName}");
             }
-            _spawnedObjectsPerBuilding[buildingName].Clear();
+
+            _spawnedObjects.Remove(obj);
         }
+
+        objects.Clear();
+        _spawnedObjectsPerBuilding.Remove(buildingName);
     }
 
     // 전체 제거 (타이머 기반 리셋 등)
@@ -78,15 +108,17 @@ public class PlayerObjectSpawnManager : MonoBehaviour
         {
             foreach (var obj in kvp.Value)
             {
-                if (obj.GameObject != null)
+                if (obj?.GameObject != null)
                 {
+                    obj.GameObject.SetActive(false);
                     GameObject.Destroy(obj.GameObject);
                     Debug.Log("Destroy spawnObject (TimeOut)");
                 }
-                _spawnedObjects.Clear();
             }
-            kvp.Value.Clear();
         }
+
+        _spawnedObjects.Clear();
+        _spawnedObjectsPerBuilding.Clear();
     }
 
     // 디버깅용 전체 리스트 조회

@@ -36,7 +36,7 @@ public class PlayerObjectSpawn : MonoBehaviour
     private Vector3 lastPosition;
     private Vector3 movementDirection = Vector3.forward;
 
-    [SerializeField] private bool testModeSpawnInFrontOfCamera = true;
+    [SerializeField] private bool testModeSpawnInFrontOfCamera = false; 
     [SerializeField] private float testSpawnDistance = 3f;
 
     //caching fields for performance
