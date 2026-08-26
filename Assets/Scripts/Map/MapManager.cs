@@ -173,7 +173,7 @@ public class MapManager : MonoBehaviour
         {
             string buildingName = buildingNames[i];
 
-            bool allDiscovered = playerObjectSpawn.AreAllEntriesDiscoveredForBuilding(buildingName);
+            bool allDiscovered = playerObjectSpawn.AreAllNoonsongsFriendsInBuilding(buildingName);
 
             if (allDiscovered)
             {
