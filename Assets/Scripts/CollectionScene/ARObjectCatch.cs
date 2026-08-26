@@ -14,11 +14,10 @@ public class ARObjectCatch : MonoBehaviour
 
     private GameObject currentTarget;
 
-    public GameObject noonsongPrefab;
+    [SerializeField] private GameObject noonsongPrefab;
 
     [SerializeField] private Button catchButton;
     [SerializeField] private EncounterUI encounterUI;
-    [SerializeField] private GameObject exitPopup;
 
     // GC Alloc 최적화를 위해 체크 포인트 배열을 미리 할당
     private readonly Vector3[] checkPoints = new Vector3[5];
@@ -44,67 +43,60 @@ public class ARObjectCatch : MonoBehaviour
     {
         while (true)
         {
-            CheckForObjectInView();
+            UpdateCurrentTarget();
             yield return detectWait; // detectInterval마다 체크
         }
     }
 
-    void CheckForObjectInView()
+    void UpdateCurrentTarget()
     {
         var spawnedObjects = playerObjectSpawnManager.SpawnedObjects;
-        if (spawnedObjects.Count > 0)
+        foreach (var obj in spawnedObjects)
         {
-            foreach (var obj in spawnedObjects)
+            GameObject target = obj.GameObject;
+            if (target == null) continue;
+
+            if (IsVisibleInView(target))
             {
-                GameObject target = obj.GameObject;
-                if (target == null)
-                    continue;
-
-                Vector3 objectPosition = target.transform.position;
-
-                // 기본 반지름 설정 (콜라이더 없을 때 대비)
-                float boundingRadius = defaultBoundingRadius;
-
-                // 콜라이더가 있으면 크기 기반으로 반지름 계산
-                Collider col = target.GetComponent<Collider>();
-                if (col != null)
-                {
-                    boundingRadius = col.bounds.extents.magnitude * 0.5f;
-                }
-
-                // 체크 포인트 계산 (중심 + 4방향)
-                checkPoints[0] = objectPosition; // 중심
-                checkPoints[1] = objectPosition + new Vector3(boundingRadius, 0, 0); // 오른쪽
-                checkPoints[2] = objectPosition + new Vector3(-boundingRadius, 0, 0); // 왼쪽
-                checkPoints[3] = objectPosition + new Vector3(0, boundingRadius, 0); // 위
-                checkPoints[4] = objectPosition + new Vector3(0, -boundingRadius, 0); // 아래
-
-                bool isVisible = false;
-                foreach (Vector3 point in checkPoints)
-                {
-                    Vector3 screenPoint = mainCamera.WorldToScreenPoint(point);
-
-                    if (screenPoint.z > 0 &&
-                        screenPoint.x > -screenPadding && screenPoint.x < Screen.width + screenPadding &&
-                        screenPoint.y > -screenPadding && screenPoint.y < Screen.height + screenPadding)
-                    {
-                        isVisible = true;
-                        break;
-                    }
-                }
-
-                if (isVisible)
-                {
-                    currentTarget = target;
-                    return;
-                }
+                currentTarget = target;
+                return;
             }
-            currentTarget = null;
         }
-        else
+
+        currentTarget = null;
+    }
+
+    private bool IsVisibleInView(GameObject target)
+    {
+        Vector3 objectPosition = target.transform.position;
+        float boundingRadius = defaultBoundingRadius;
+
+        // 콜라이더가 있으면 크기 기반으로 반지름 계산
+        Collider col = target.GetComponent<Collider>();
+        if (col != null)
         {
-            currentTarget = null;
+            boundingRadius = col.bounds.extents.magnitude * 0.5f;
         }
+
+        // 체크 포인트 계산 (중심 + 4방향)
+        checkPoints[0] = objectPosition; // 중심
+        checkPoints[1] = objectPosition + new Vector3(boundingRadius, 0, 0); // 오른쪽
+        checkPoints[2] = objectPosition + new Vector3(-boundingRadius, 0, 0); // 왼쪽
+        checkPoints[3] = objectPosition + new Vector3(0, boundingRadius, 0); // 위
+        checkPoints[4] = objectPosition + new Vector3(0, -boundingRadius, 0); // 아래
+
+        foreach (Vector3 point in checkPoints)
+        {
+            Vector3 screenPoint = mainCamera.WorldToScreenPoint(point);
+
+            if (screenPoint.z > 0 &&
+                screenPoint.x > -screenPadding && screenPoint.x < Screen.width + screenPadding &&
+                screenPoint.y > -screenPadding && screenPoint.y < Screen.height + screenPadding)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     void OnCatchButtonClicked()
@@ -116,8 +108,7 @@ public class ARObjectCatch : MonoBehaviour
             encounterUI.ShowExitConfirmation();
             return;
         }
-        var spawnedObject = playerObjectSpawnManager.SpawnedObjects
-        .Find(obj => obj.GameObject == currentTarget);
+        var spawnedObject = FindCurrentSpawnedObject(currentTarget);
 
         if (spawnedObject == null) return;
         NoonsongEntry entry = spawnedObject.NoonsongEntry;
@@ -144,7 +135,6 @@ public class ARObjectCatch : MonoBehaviour
     {
         GameObject destroyedTarget = spawnedObject?.GameObject;
 
-        // Destroy는 프레임 종료 시 반영되므로 다음 프레임에 실제 제거 여부를 확인한다.
         yield return null;
 
         if (spawnedObject == null || destroyedTarget != null)
@@ -160,7 +150,7 @@ public class ARObjectCatch : MonoBehaviour
     {
         if (currentTarget == null) return;
 
-        var spawnedObject = playerObjectSpawnManager.SpawnedObjects.Find(obj => obj.GameObject == currentTarget);
+        var spawnedObject = FindCurrentSpawnedObject(currentTarget);
         if (spawnedObject == null) return;
 
         NoonsongEntry entry = spawnedObject.NoonsongEntry;
@@ -168,18 +158,17 @@ public class ARObjectCatch : MonoBehaviour
         if (entry == null || entry.isDiscovered) return;
 
         noonsongManager.DiscoverItem(entry);
-        entry.isDiscovered = true;
 
-        CheckForObjectInView();
+        UpdateCurrentTarget();
+    }
+
+    private SpawnedObject FindCurrentSpawnedObject(GameObject target)
+    {
+        return playerObjectSpawnManager.SpawnedObjects.Find(obj => obj.GameObject == target);
     }
 
     public GameObject GetCurrentTarget()
     {
         return currentTarget;
-    }
-
-    private void CloseEncounterCallback()
-    {
-        exitPopup.SetActive(false);
     }
 }
