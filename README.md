@@ -23,13 +23,13 @@ GPS를 기반으로 캠퍼스 내 건물 영역을 탐험하며,
 ## My Contribution
 
 - **AR Target Selection**  
-  화면 내 AR Object의 존재유무를 판정하고 현재 상호작용 대상을 관리하는 시스템 구현
+  화면 내 AR Object의 존재 여부를 판정하고 현재 상호작용 대상을 관리하는 시스템 구현
 
 - **Location-based Entry Lookup**  
   건물별 Spawn 후보 데이터를 조회하는 구조를 구현하고 Dictionary 기반 Cache로 리팩토링
 
-- **Runtime Data Mapping**  
-  Spawn된 `GameObject`와 `NoonsongEntry`를 연결하여 Spawn부터 Collection까지 동일한 데이터 참조 유지
+- **Runtime Data Mapping**
+  Spawn된 `GameObject`와 `NoonsongEntry`를 연결하여 Collection까지 동일한 Entry reference 유지
 
 - **Runtime Optimization**  
   AR Target 탐지 과정의 반복 Allocation을 줄이고 실행 빈도를 제어하여 Runtime Cost 개선
@@ -49,7 +49,7 @@ flowchart LR
     F["Collection<br/>State Update"]
     G["NoonsongManager<br/>Collection UI"]
 
-    A -->|"Location"| B
+    A -->|"Location"| B 
     B -->|"Active Building"| C
     C --> D
     D --> E
@@ -107,15 +107,21 @@ private Dictionary<string, List<NoonsongEntry>> entriesByBuilding;
 
 private void BuildEntryCache()
 {
-    foreach (var entry in noonsongEntryManager.GetNoonsongEntries())
+    allEntriesCache = noonsongEntryManager.GetNoonsongEntries();
+    entriesByBuilding = new Dictionary<string, List<NoonsongEntry>>();
+
+    foreach (var entry in allEntriesCache)
     {
-        if (!entriesByBuilding.TryGetValue(entry.buildingName, out var entries))
+        if (entry == null || string.IsNullOrEmpty(entry.buildingName))
+            continue;
+
+        if (!entriesByBuilding.TryGetValue(entry.buildingName, out var list))
         {
-            entries = new List<NoonsongEntry>();
-            entriesByBuilding.Add(entry.buildingName, entries);
+            list = new List<NoonsongEntry>();
+            entriesByBuilding[entry.buildingName] = list;
         }
 
-        entries.Add(entry);
+        list.Add(entry);
     }
 }
 ```
@@ -217,7 +223,7 @@ private IEnumerator CheckForObjectInViewCoroutine()
 ### Allocation Reduction
 
 탐지마다 생성되던 Checkpoint 배열을 재사용하도록 변경하고,
-`Camera.main`과 `WaitForSeconds` 를 초기화 시 캐싱했습니다.
+`Camera.main`과 `WaitForSeconds`를 초기화 시 캐싱했습니다.
 
 ```csharp
 private readonly Vector3[] checkPoints = new Vector3[5];
@@ -260,15 +266,15 @@ GPS, AR Session, 장시간 실행 환경에서 발생하는 이슈를 재현하�
 
 > This repository is a fork of a team project.
 
-README에서는 제가 직접 구현하거나 리팩터링한 영역을 중심으로 설명했습니다.
+README에서는 제가 직접 구현하거나 리팩토링한 영역을 중심으로 설명했습니다.
 
 - `ARObjectCatch` — AR Target Selection 및 Runtime Optimization
 - `SpawnedObject` — Runtime Object ↔ Entry 연결 구조
 - `NoonsongEntry` — 초기 ScriptableObject 데이터 모델 설계
-- `PlayerObjectSpawn` — 공동 Spawn 코드 중 Building Entry Cache 및 후보 조회/선택 로직 리팩터링
+- `PlayerObjectSpawn` — 공동 Spawn 코드 중 Building Entry Cache 및 후보 조회/선택 로직 리팩토링
 
 그 외 시스템은 전체 프로젝트의 데이터 흐름을 설명하기 위한 맥락으로만 포함했습니다.
 
 ## Links
 
-- [Project Notion]((https://app.notion.com/p/teamnob/95db8411afc147c4b7c93fbaea46fcae?source=copy_link))
+- [Project Notion](https://app.notion.com/p/teamnob/95db8411afc147c4b7c93fbaea46fcae?source=copy_link)
