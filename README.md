@@ -14,7 +14,7 @@ GPS를 기반으로 캠퍼스 내 건물 영역을 탐험하며,
 | Tech | C#, AR Foundation |
 | Role | Client Developer |
 | Team | 17 members / Client 3 |
-| Period | 2024.08 - 2025.05 |
+| Period | 2024.01 - 2025.05 |
 
 > This repository is a fork of a team project.  
 > The sections below focus on the systems I directly implemented or refactored.
