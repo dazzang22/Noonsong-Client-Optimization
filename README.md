@@ -1,185 +1,118 @@
-# Friends_noonsong
+# ❄️ Friends! Noonsong
 
-> This repository is a fork of a team project.
-> I was responsible for refactoring the AR object detection system and optimizing runtime
-> performance.
+> GPS 기반 AR 수집 게임  
+> Unity / AR Foundation / C#
 
-Key Contributions:
-- Refactored AR object detection flow
-- Reduced detection cost from O(N) to O(1)
-- Eliminated unnecessary allocations and Update-based polling to stabilize frame performance
+![Gameplay](https://github.com/user-attachments/assets/cf67caca-2726-469d-8398-0f3abd7253f0)
+
+GPS를 기반으로 교내 건물 영역을 탐색하고,
+위치에 따라 등장하는 AR 캐릭터를 수집하여 도감을 완성하는 모바일 게임입니다.
+
+| | |
+|---|---|
+| Platform | iOS / Android |
+| Engine | Unity 2022.3.10f1 |
+| Tech | C#, AR Foundation |
+| Role | Client Developer |
+| Team | 6 members / Client 2 |
+| Period | 2024.08 - 2025.05 |
+
+> This repository is a fork of a team project.  
+> The sections below focus on the systems I directly implemented or refactored.
+
+---
+## My Contribution
+
+- **AR Target Selection**  
+  화면 내 AR Object의 가시성을 판정하고 현재 상호작용 대상을 관리하는 시스템 구현
+
+- **Location-based Entry Lookup**  
+  건물별 Spawn 후보 데이터를 조회하는 구조를 구현하고 Dictionary 기반 Cache로 리팩터링
+
+- **Runtime Data Mapping**  
+  Spawn된 `GameObject`와 `NoonsongEntry`를 연결하여 Spawn부터 Collection까지 동일한 데이터 참조 유지
+
+- **Runtime Optimization**  
+  AR Target 탐지 과정의 반복 Allocation을 줄이고 실행 빈도를 제어하여 Runtime Cost 개선
+
+# System Architecture
+
+GPS 위치 정보부터 AR Object Spawn, Target Selection, Collection UI까지
+다음과 같은 흐름으로 연결됩니다.
+
+```mermaid
+flowchart LR
+    A["LocationManager<br/>GPS Location"]
+    B["ScriptActivationController<br/>Building Area"]
+    C["PlayerObjectSpawn<br/>Entry Lookup & Spawn"]
+    D["SpawnedObject<br/>GameObject + NoonsongEntry"]
+    E["ARObjectCatch<br/>Target Selection"]
+    F["Collection<br/>State Update"]
+    G["NoonsongManager<br/>Collection UI"]
+
+    A -->|"Location"| B
+    B -->|"Active Building"| C
+    C --> D
+    D --> E
+    E -->|"Selected Entry"| F
+    F --> G
+```
+### Data Flow
+
+```text
+GPS Location
+      ↓
+Building Area Detection
+      ↓
+buildingName 기반 Entry Lookup
+      ↓
+AR Object Spawn
+      ↓
+GameObject ↔ NoonsongEntry Mapping
+      ↓
+Screen Visibility 기반 Target Selection
+      ↓
+Collection State Update
+      ↓
+Collection UI
+```
+`NoonsongEntry`를 캐릭터 데이터의 기준으로 사용하고,
+Spawn 시 Runtime `GameObject`와 함께 `SpawnedObject`로 연결합니다.
+
+이를 통해 Spawn된 객체를 다시 탐색하거나 이름으로 데이터를 추론하지 않고,
+Target Selection 이후에도 연결된 `NoonsongEntry`를 Collection 과정까지 전달할 수 있도록 구성했습니다.
 
 ---
 
-# ❄️ 프렌즈! 눈송 (GPS 기반 AR 수집 게임)
-![ScreenRecording_04-14-202518-39-19_1-ezgif com-resize](https://github.com/user-attachments/assets/cf67caca-2726-469d-8398-0f3abd7253f0)
-| 플랫폼 | 모바일 |
-| --- | --- |
-| ESD | Android, IOS |
-| 장르 | 위치 기반 AR 게임 |
-| 엔진 | Unity (2022.3.10f1) |
-| 플레이 타임 | 7-10h |
-| 기타 링크 | [Notion](https://friendsnoonsong.notion.site) |
-> GPS 기반 AR 수집 게임으로,  
-> 위치에 따라 생성된 캐릭터를 수집하고 도감을 완성하는 인터랙티브 게임입니다.
+## Core Components
 
+### 01. Location-based Entry Lookup
 
-## 🩶 Overview
+현재 활성화된 건물을 기준으로 해당 위치에서 Spawn 가능한
+`NoonsongEntry` 후보군을 결정합니다.
 
-- **Platform**: Unity (AR Foundation)
-- **Language**: C#
-- **Role**: Client Developer (시스템 설계 및 구현)
-- **Focus**: AR 인터랙션, 데이터 흐름 설계, UI 동기화, 라이브 환경 대응
+```text
+Active Building
+      ↓
+ buildingName
+      ↓
+Entry Dictionary
+      ↓
+List<NoonsongEntry>
+      ↓
+Candidate Selection
+      ↓
+   AR Spawn
+```
 
-## 🩶 Core Achievement
+#### Building Entry Cache
 
-- `Spawn` → UI Sync 파이프라인 설계
-- `AR Object` 탐지 구조 리팩토링
-- `Update` 기반 로직을 `Coroutine` 구조로 최적화
-- 탐색 및 데이터 처리 구조 개선
-  
-## 🩶 Key Implementation (Initial)
-**1. `ScriptableObject` 기반 데이터 모델 설계**
-- `Noonsong` / `Friends` / `Item` 등 게임 내 주요 엔트리 구조를 `ScriptableObject`로 설계  
-- 게임 로직, UI, DB 동기화가 **동일한 데이터 모델**을 기준으로 동작하도록 구조 설계
-<details>
-<summary>Core Logic</summary> 
-  
-~~~csharp
-[CreateAssetMenu(fileName = "NewNoonsongEntry", menuName = "Noonsong Entry")]
-public class NoonsongEntry : ScriptableObject
-{
-    public string noonsongName;
-    public string university;
-    public string description;
-    public Sprite noonsongSprite;
-    public bool isDiscovered;
-    public GameObject prefab;
-    public int requiredNoonsongs;
-    public string buildingName;
-
-    [Range(0, 100)]
-    public int loveLevel = 0;
-    public bool isFriend;
-    public bool isBestFriend;
-}
-~~~
-</details>
-
-**2. 데이터 흐름 기반 UI 동기화 구조 설계**
-- Spawn된 오브젝트와 `Entry` 데이터를 연결하여  
-  Target → `Entry` → UI로 이어지는 데이터 파이프라인 구축  
-- 수집 시 상태 변화가 도감 UI에 즉시 반영되도록 동기화 구조 설계  
-
-**3. AR 기반 인터랙션 시스템 구현**
-- Camera 기준으로 현재 상호작용 가능한 타겟을 판별하고 `currentTarget`으로 관리  
-- 단순 `Raycast`로는 화면 내 노출 여부를 정확히 판단하기 어려워,  
-  오브젝트의 **바운더리 포인트**를 기준으로 화면 내 존재 여부를 판정하는 로직 구현
-
-<details>
-<summary>Core Logic</summary>
-    
-~~~csharp
-bool isVisible = false;
-foreach (Vector3 point in checkPoints)
-{
-    Vector3 screenPoint = Camera.main.WorldToScreenPoint(point);
-
-    if (screenPoint.z > 0 &&
-        screenPoint.x > -50 && screenPoint.x < Screen.width + 50 &&
-        screenPoint.y > -50 && screenPoint.y < Screen.height + 50)
-    {
-        isVisible = true;
-        break;
-    }
-}
-~~~
-</details>
-
-→ 화면 중심 `Raycast`의 한계를 보완하여, 실제 사용자 시야 기준으로 상호작용 대상을 판별하도록 개선  
-
-**4. 게임 시스템 구현 (재화 / 인벤토리 / 상점 / 관계 시스템)**
-
-**5. 베타 테스트 기반 문제 분석 및 패치**
-
---- 
-
-## 🩶 Core Problem 
-기존 스폰 시스템은 랜덤 기반으로 동작하여,  
-위치와 캐릭터 간의 연결 기준이 없었습니다.
-
-또한, 스폰된 오브젝트와 도감(UI) 데이터가 분리되어  
-수집 상태가 일관되게 관리되지 않는 문제가 있었습니다. 
-
-## 🩶 Solution — Location-based Spawn Filtering
-> 기존 랜덤 스폰 구조 위에,  
-> 현재 **진입한 건물 정보**를 기준으로 캐릭터 후보군을 **필터링**하는 로직을 추가했습니다.
-
-이를 통해  
-위치 → 캐릭터 → 데이터로 이어지는 파이프라인을 만들었습니다.
-<details>
-<summary>Core Logic</summary>
+기존에는 Spawn 후보를 조회할 때마다 전체 `NoonsongEntry`를 순회하여
+`buildingName`이 일치하는 Entry를 새로운 List에 추가했습니다.
 
 ```csharp
-List<NoonsongEntry> GetFilteredNoonsongEntries()
-{
-    var activationController = GetComponentInParent<ScriptActivationController>();
-    string buildingName = activationController != null ? activationController.gameObject.name : null;
-
-    if (!string.IsNullOrEmpty(buildingName))
-    {
-        return GetNoonsongEntriesByBuildingName(buildingName);
-    }
-
-    return new List<NoonsongEntry>();
-}
-
-List<NoonsongEntry> GetNoonsongEntriesByBuildingName(string buildingName)
-{
-    List<NoonsongEntry> filteredEntries = new List<NoonsongEntry>();
-    NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
-
-    foreach (var entry in entries)
-    {
-        if (entry.buildingName == buildingName)
-        {
-            filteredEntries.Add(entry);
-        }
-    }
-
-    return filteredEntries;
-}
-```
-</details>
-
-현재 진입한 건물 기준으로 캐릭터 후보군을 필터링했으며, 
-필터링된 `Entry List`를 기존 스폰 로직에 연결하여 프리팹과 데이터가 함께 전달되도록 구성했습니다.
-
-<details>
-  <summary>Core Logic</summary>
-  
-  ~~~csharp
-if (filteredEntries.Count > 0)
-{
-    return new SpawnedObject(filteredEntries[randomIndex].prefab, filteredEntries[randomIndex]);
-}
-~~~
-  
-</details>
-
-## 🩶 Optimization
-
-### 1. 탐색 구조 개선 (AR Object를 Building name으로 필터링)
-- 기존: `Update`에서 `Entry` 전체 순회 (O(N))
-- 개선: `Dictionary` 기반 구조 → O(1)
-→ 탐색 비용 대폭 감소
-<details>
-<summary>Before / After</summary>
-
-### Before
-~~~csharp
+// Before
 List<NoonsongEntry> filteredEntries = new List<NoonsongEntry>();
-NoonsongEntry[] entries = noonsongEntryManager.GetNoonsongEntries();
 
 foreach (var entry in entries)
 {
@@ -188,89 +121,229 @@ foreach (var entry in entries)
         filteredEntries.Add(entry);
     }
 }
-~~~
-### After
-~~~csharp
-List<NoonsongEntry> GetNoonsongEntriesByBuildingName(string buildingName)
+```
+
+이를 초기화 시점에 건물별로 분류하여 캐싱하도록 변경했습니다.
+
+```csharp
+private readonly Dictionary<string, List<NoonsongEntry>> entriesByBuilding
+    = new Dictionary<string, List<NoonsongEntry>>();
+
+private void BuildEntryCache()
 {
-    if (entriesByBuilding != null && entriesByBuilding.TryGetValue(buildingName, out var entries))
+    foreach (var entry in noonsongEntryManager.GetNoonsongEntries())
+    {
+        if (!entriesByBuilding.TryGetValue(entry.buildingName, out var entries))
+        {
+            entries = new List<NoonsongEntry>();
+            entriesByBuilding.Add(entry.buildingName, entries);
+        }
+
+        entries.Add(entry);
+    }
+}
+```
+
+이후 Spawn 시에는 현재 건물의 `buildingName`을 key로
+해당 후보 List를 바로 조회합니다.
+
+```csharp
+private List<NoonsongEntry> GetNoonsongEntriesByBuildingName(string buildingName)
+{
+    if (entriesByBuilding.TryGetValue(buildingName, out var entries))
     {
         return entries;
     }
+
     return EmptyEntries;
 }
-~~~
-</details>
+```
+### 02. Runtime Object ↔ Entry Mapping
 
-### 2. GC Alloc 제거(화면 내 viewpoint 확인)
-- 기존: 매 프레임 `new` 연산 발생
-- 개선: 배열 재사용 구조로 변경
-→ 프레임 드랍 원인 제거
-<details>
-<summary>Before / After</summary>
+Spawn된 AR Object와 원본 캐릭터 데이터를 함께 추적하기 위해
+Runtime `GameObject`와 `NoonsongEntry`를 `SpawnedObject`로 연결했습니다.
 
-### Before
-~~~csharp
-Vector3[] checkPoints = new Vector3[]
+```csharp
+public class SpawnedObject
 {
-    objectPosition,
-    objectPosition + new Vector3(boundingRadius, 0, 0),
-    objectPosition - new Vector3(boundingRadius, 0, 0),
-    objectPosition + new Vector3(0, boundingRadius, 0),
-    objectPosition - new Vector3(0, boundingRadius, 0)
-};
-~~~
-### After
-~~~csharp
-checkPoints[0] = objectPosition;
-checkPoints[1] = objectPosition + rightOffset;
-checkPoints[2] = objectPosition - rightOffset;
-checkPoints[3] = objectPosition + upOffset;
-checkPoints[4] = objectPosition - upOffset;
-~~~
-</details>
+    public GameObject GameObject { get; private set; }
+    public NoonsongEntry NoonsongEntry { get; private set; }
 
-### 3. 실행 구조 개선(화면 내 AR Object 탐지)
-- 기존: `Update` 기반 탐지 로직
-- 개선: `Coroutine` 기반 실행 주기 제어
-→ **불필요한 연산 제거** 및 CPU 안정화
-<details>
-<summary>Before / After</summary>
+    public SpawnedObject(GameObject gameObject, NoonsongEntry noonsongEntry)
+    {
+        GameObject = gameObject;
+        NoonsongEntry = noonsongEntry;
+    }
+}
+```
 
-### Before
-~~~csharp
+Spawn 시 선택된 Prefab과 Entry를 함께 전달합니다.
+
+```csharp
+return new SpawnedObject(
+    filteredEntries[randomIndex].prefab,
+    filteredEntries[randomIndex]
+);
+```
+
+생성된 Runtime Instance 역시 동일한 Entry와 함께 관리됩니다.
+
+```text
+NoonsongEntry
+     │
+     ├── Prefab
+     │
+     ↓
+   Spawn
+     ↓
+SpawnedObject
+ ├── GameObject       → Runtime Object
+ └── NoonsongEntry    → Character Data
+          ↓
+   Target Selection
+          ↓
+      Collection
+```
+
+이를 통해 화면에서 선택된 Runtime Object로부터 연결된 `NoonsongEntry`를 조회하여
+Collection 단계까지 동일한 데이터 참조를 전달할 수 있도록 구성했습니다.
+
+**Code:** `SpawnObject.cs`, `PlayerObjectSpawn.cs`, `ARObjectCatch.cs`
+
+### 03. AR Target Selection
+
+화면 중앙 Raycast만으로는 화면 안에 존재하는 AR Object를 안정적으로 판별하기 어려워,
+Object의 중심과 상·하·좌·우 지점을 Screen Space로 변환하여 가시성을 판정합니다.
+
+```text
+Spawned Objects
+      ↓
+5-point Visibility Check
+      ↓
+WorldToScreenPoint
+      ↓
+Screen Bounds
+      ↓
+currentTarget
+```
+
+```csharp
+foreach (Vector3 point in checkPoints)
+{
+    Vector3 screenPoint = mainCamera.WorldToScreenPoint(point);
+
+    if (screenPoint.z > 0 &&
+        screenPoint.x > -screenPadding &&
+        screenPoint.x < Screen.width + screenPadding &&
+        screenPoint.y > -screenPadding &&
+        screenPoint.y < Screen.height + screenPadding)
+    {
+        return true;
+    }
+}
+```
+
+가시성이 확인된 Runtime Object를 `currentTarget`으로 관리하고,
+`SpawnedObject`에 연결된 `NoonsongEntry`를 이후 상호작용 과정에 전달합니다.
+
+**Code:** `ARObjectCatch.cs` — `UpdateCurrentTarget()`, `IsVisibleInView()`
+
+---
+
+## Runtime Optimization
+
+AR Target 탐지 로직의 반복 실행 비용과 Allocation을 분석하고,
+호출 빈도 제어와 데이터 재사용 구조를 적용했습니다.
+
+| | Before | After |
+|---|---|---|
+| Target Detection | Every Frame | `0.1s` Interval |
+| Detection Calls | ~400 / sec | ~10 / sec |
+| Checkpoint GC Alloc | 92 B / frame | 0 B / frame |
+| Building Entry Lookup | `O(N)` traversal | Average `O(1)` lookup |
+
+### Detection Frequency
+
+화면 내 Target 판정은 매 프레임 실행할 필요가 없다고 판단하여
+`Update()` 기반 탐지를 약 `0.1s` 간격으로 제한했습니다.
+
+```csharp
+// Before
 void Update()
 {
-    DetectObject();
+    CheckForObjectInView();
 }
-~~~
-### After
-~~~csharp
-IEnumerator DetectRoutine()
+
+// After
+private IEnumerator CheckForObjectInViewCoroutine()
 {
     while (true)
     {
-        DetectObject();
-        yield return waitInterval;
+        UpdateCurrentTarget();
+        yield return detectWait;
     }
 }
-~~~
-</details>
+```
 
-## 🩶 Result
+### Allocation Reduction
 
-- 탐색 연산: **O(N) → O(1)**
-- GC Alloc 제거
-- 불필요한 `Update` 호출 제거
-- 프레임 드랍 제거 및 안정성 확보
-- 위치 기반 스폰과 UI 상태가 **일관되게 연결**되는 구조 완성
+탐지마다 생성되던 Checkpoint 배열을 재사용하도록 변경하고,
+`Camera.main`과 `WaitForSeconds` 역시 초기화 시 캐싱했습니다.
 
-## 🧪 Live Experience
+```csharp
+private readonly Vector3[] checkPoints = new Vector3[5];
 
-- iOS / Android **크로스 플랫폼** 환경에서 테스트 및 운영
-- 100건 이상의 **버그 및 사용자 피드백 대응**
-- 실제 사용자 로그 기반 문제 분석 및 원인 추적
-- GPS 오차 및 네트워크 상태에 따른 예외 상황 대응
-- **현장**에서 직접 디버깅 및 이슈 재현 / 수정 / **패치 배포** 경험
+private void Start()
+{
+    mainCamera = Camera.main;
+    detectWait = new WaitForSeconds(detectInterval);
+}
+```
+
+> Target Detection 호출 빈도 `~400/sec → ~10/sec`  
+> Checkpoint 배열 관련 GC Alloc `92 B/frame → 0 B/frame`
+
+**Code:** `ARObjectCatch.cs`
+
 
 ---
+
+## Live Service Experience
+
+2025.05.01 – 2025.05.21 동안 iOS / Android 실제 사용자 환경에서 서비스를 운영하며
+GPS, AR Session, 장시간 실행 환경에서 발생하는 이슈를 재현하고 대응했습니다.
+
+- 100건 이상의 사용자 피드백 및 이슈 분석
+- GPS / Building Zone Boundary 현장 테스트
+- 실제 디바이스 기반 이슈 재현 및 로그 추적
+- 수정 → 재현 시나리오 테스트 → 패치 배포
+
+---
+
+## Code Navigation
+
+| Area | Code | Responsibility |
+|---|---|---|
+| AR Target Selection | [`ARObjectCatch.cs`](Assets/Scripts/CollectionScene/ARObjectCatch.cs) | 화면 내 AR Object 판정 및 Target 관리 |
+| Entry Lookup / Spawn | [`PlayerObjectSpawn.cs`](Assets/Scripts/ObjectSpawn/PlayerObjectSpawn.cs) | 건물별 Entry 조회 및 Spawn |
+| Runtime Data Mapping | [`SpawnObject.cs`](Assets/Scripts/CollectionScene/SpawnObject.cs) | Runtime GameObject ↔ Entry 연결 |
+| Data Model | [`NoonsongEntry.cs`](Assets/Scripts/CollectionScene/NoonsongEntry.cs) | 캐릭터 ScriptableObject 데이터 모델 |
+
+---
+
+## Contribution Scope
+
+> This repository is a fork of a team project.
+
+README에서는 제가 직접 구현하거나 리팩터링한 영역을 중심으로 설명했습니다.
+
+- `ARObjectCatch` — AR Target Selection 및 Runtime Optimization
+- `SpawnedObject` — Runtime Object ↔ Entry 연결 구조
+- `NoonsongEntry` — 초기 ScriptableObject 데이터 모델 설계
+- `PlayerObjectSpawn` — 공동 Spawn 코드 중 Building Entry Cache 및 후보 조회/선택 로직 리팩터링
+
+그 외 시스템은 전체 프로젝트의 데이터 흐름을 설명하기 위한 맥락으로만 포함했습니다.
+
+## Links
+
+- [Project Notion](https://friendsnoonsong.notion.site)
