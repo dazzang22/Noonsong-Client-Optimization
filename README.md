@@ -29,7 +29,7 @@ GPS를 기반으로 캠퍼스 내 건물 영역을 탐험하며,
   건물별 Spawn 후보 데이터를 조회하는 구조를 구현하고 Dictionary 기반 Cache로 리팩토링
 
 - **Runtime Data Mapping**  
-  Spawn된 `GameObject`와 `NoonsongEntry`를 연결하여 Spawn부터 Collection까지 데이터 무결성 유지
+  Spawn된 `GameObject`와 `NoonsongEntry`를 연결하여 Spawn부터 Collection까지 동일한 데이터 참조 유지
 
 - **Runtime Optimization**  
   AR Target 탐지 과정의 반복 Allocation을 줄이고 실행 빈도를 제어하여 Runtime Cost 개선
@@ -60,8 +60,19 @@ flowchart LR
 `NoonsongEntry`를 캐릭터 데이터의 기준으로 사용하고,
 Spawn 시 Runtime `GameObject`와 함께 `SpawnedObject`로 연결합니다.
 
-이를 통해 Target Selection 이후에도 연결된 `NoonsongEntry`를 Collection 과정까지 전달할 수 있도록 구성했습니다.
+```csharp
+public class SpawnedObject
+{
+    public GameObject GameObject { get; private set; }
+    public NoonsongEntry NoonsongEntry { get; private set; }
 
+    public SpawnedObject(GameObject gameObject, NoonsongEntry noonsongEntry)
+    {
+        GameObject = gameObject;
+        NoonsongEntry = noonsongEntry;
+    }
+}
+```
 ---
 
 ## Core Components
@@ -92,8 +103,7 @@ foreach (var entry in entries)
 이를 **초기화** 시점에 **건물 이름으로 분류하여 캐싱**하도록 변경했습니다.
 
 ```csharp
-private readonly Dictionary<string, List<NoonsongEntry>> entriesByBuilding
-    = new Dictionary<string, List<NoonsongEntry>>();
+private Dictionary<string, List<NoonsongEntry>> entriesByBuilding;
 
 private void BuildEntryCache()
 {
@@ -129,40 +139,8 @@ private List<NoonsongEntry> GetNoonsongEntriesByBuildingName(string buildingName
     return EmptyEntries;
 }
 ```
-### 02. Runtime Object ↔ Entry Mapping
 
-Spawn된 AR Object와 원본 캐릭터 데이터를 함께 추적하기 위해
-Runtime `GameObject`와 `NoonsongEntry`를 `SpawnedObject`로 연결했습니다.
-
-```csharp
-public class SpawnedObject
-{
-    public GameObject GameObject { get; private set; }
-    public NoonsongEntry NoonsongEntry { get; private set; }
-
-    public SpawnedObject(GameObject gameObject, NoonsongEntry noonsongEntry)
-    {
-        GameObject = gameObject;
-        NoonsongEntry = noonsongEntry;
-    }
-}
-```
-
-Spawn 시 선택된 Prefab과 Entry를 함께 전달합니다.
-
-```csharp
-return new SpawnedObject(
-    filteredEntries[randomIndex].prefab,
-    filteredEntries[randomIndex]
-);
-```
-
-생성된 Runtime Instance와 연결된 `NoonsongEntry`를
-Target Selection부터 Collection 단계까지 동일하게 전달합니다.
-
-**Code:** `SpawnObject.cs`, `PlayerObjectSpawn.cs`, `ARObjectCatch.cs`
-
-### 03. AR Target Selection
+### 02. AR Target Selection
 
 화면 중앙 Raycast만으로는 화면 안에 존재하는 AR Object를 안정적으로 판별하기 어려워,
 Object의 중심과 상·하·좌·우 지점을 Screen Space로 변환하여 가시성을 판정합니다.
@@ -198,7 +176,8 @@ foreach (Vector3 point in checkPoints)
 가시성이 확인된 Runtime Object를 `currentTarget`으로 관리하고,
 `SpawnedObject`에 연결된 `NoonsongEntry`를 이후 상호작용 과정에 전달합니다.
 
-**Code:** `ARObjectCatch.cs` — `UpdateCurrentTarget()`, `IsVisibleInView()`
+**Code:** [`ARObjectCatch.cs`](Assets/Scripts/CollectionScene/ARObjectCatch.cs)
+— `UpdateCurrentTarget()`, `IsVisibleInView()`
 
 ---
 
@@ -210,8 +189,7 @@ AR Target 탐지 로직의 반복 실행 비용과 Allocation을 분석하고,
 | | Before | After |
 |---|---|---|
 | Target Detection | Every Frame | `0.1s` Interval |
-| Detection Calls | ~400 / sec | ~10 / sec |
-| Checkpoint GC Alloc | 92 B / frame | 0 B / frame |
+| Checkpoint Array | 탐지마다 생성 | Reusable Array |
 
 ### Detection Frequency
 
@@ -239,7 +217,7 @@ private IEnumerator CheckForObjectInViewCoroutine()
 ### Allocation Reduction
 
 탐지마다 생성되던 Checkpoint 배열을 재사용하도록 변경하고,
-`Camera.main`과 `WaitForSeconds` 도 초기화 시 캐싱했습니다.
+`Camera.main`과 `WaitForSeconds` 를 초기화 시 캐싱했습니다.
 
 ```csharp
 private readonly Vector3[] checkPoints = new Vector3[5];
@@ -251,11 +229,7 @@ private void Start()
 }
 ```
 
-> Target Detection 호출 빈도 `~400/sec → ~10/sec`  
-> Checkpoint 배열 관련 GC Alloc `92 B/frame → 0 B/frame`
-
-**Code:** `ARObjectCatch.cs`
-
+**Code:** [`ARObjectCatch.cs`](Assets/Scripts/CollectionScene/ARObjectCatch.cs)
 
 ---
 
@@ -297,4 +271,4 @@ README에서는 제가 직접 구현하거나 리팩터링한 영역을 중심�
 
 ## Links
 
-- [Project Notion](https://friendsnoonsong.notion.site)
+- [Project Notion]((https://app.notion.com/p/teamnob/95db8411afc147c4b7c93fbaea46fcae?source=copy_link))
