@@ -1,7 +1,6 @@
 # ❄️ Friends! Noonsong
 
 > GPS 기반 AR 수집 게임  
-> Unity / AR Foundation / C#
 
 ![Gameplay](https://github.com/user-attachments/assets/cf67caca-2726-469d-8398-0f3abd7253f0)
 
@@ -14,7 +13,7 @@ GPS를 기반으로 교내 건물 영역을 탐색하고,
 | Engine | Unity 2022.3.10f1 |
 | Tech | C#, AR Foundation |
 | Role | Client Developer |
-| Team | 6 members / Client 2 |
+| Team | 17 members / Client 3 |
 | Period | 2024.08 - 2025.05 |
 
 > This repository is a fork of a team project.  
@@ -61,8 +60,7 @@ flowchart LR
 `NoonsongEntry`를 캐릭터 데이터의 기준으로 사용하고,
 Spawn 시 Runtime `GameObject`와 함께 `SpawnedObject`로 연결합니다.
 
-이를 통해 Spawn된 객체를 다시 탐색하거나 이름으로 데이터를 추론하지 않고,
-Target Selection 이후에도 연결된 `NoonsongEntry`를 Collection 과정까지 전달할 수 있도록 구성했습니다.
+이를 통해 Target Selection 이후에도 연결된 `NoonsongEntry`를 Collection 과정까지 전달할 수 있도록 구성했습니다.
 
 ---
 
@@ -159,10 +157,8 @@ return new SpawnedObject(
 );
 ```
 
-생성된 Runtime Instance 역시 동일한 Entry와 함께 관리됩니다.
-
-이를 통해 화면에서 선택된 Runtime Object로부터 연결된 `NoonsongEntry`를 조회하여
-Collection 단계까지 동일한 데이터 참조를 전달할 수 있도록 구성했습니다.
+생성된 Runtime Instance와 연결된 `NoonsongEntry`를
+Target Selection부터 Collection 단계까지 동일하게 전달합니다.
 
 **Code:** `SpawnObject.cs`, `PlayerObjectSpawn.cs`, `ARObjectCatch.cs`
 
