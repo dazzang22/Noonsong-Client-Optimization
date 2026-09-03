@@ -4,8 +4,8 @@
 
 ![Gameplay](https://github.com/user-attachments/assets/cf67caca-2726-469d-8398-0f3abd7253f0)
 
-GPS를 기반으로 교내 건물 영역을 탐색하고,
-위치에 따라 등장하는 AR 캐릭터를 수집하여 도감을 완성하는 모바일 게임입니다.
+GPS를 기반으로 캠퍼스 내 건물 영역을 탐험하며,
+건물별로 나타나는 AR 캐릭터(학과별 마스코트)를 수집하여 도감을 완성하는 모바일 게임입니다.
 
 | | |
 |---|---|
@@ -23,13 +23,13 @@ GPS를 기반으로 교내 건물 영역을 탐색하고,
 ## My Contribution
 
 - **AR Target Selection**  
-  화면 내 AR Object의 가시성을 판정하고 현재 상호작용 대상을 관리하는 시스템 구현
+  화면 내 AR Object의 존재유무를 판정하고 현재 상호작용 대상을 관리하는 시스템 구현
 
 - **Location-based Entry Lookup**  
-  건물별 Spawn 후보 데이터를 조회하는 구조를 구현하고 Dictionary 기반 Cache로 리팩터링
+  건물별 Spawn 후보 데이터를 조회하는 구조를 구현하고 Dictionary 기반 Cache로 리팩토링
 
 - **Runtime Data Mapping**  
-  Spawn된 `GameObject`와 `NoonsongEntry`를 연결하여 Spawn부터 Collection까지 동일한 데이터 참조 유지
+  Spawn된 `GameObject`와 `NoonsongEntry`를 연결하여 Spawn부터 Collection까지 데이터 무결성 유지
 
 - **Runtime Optimization**  
   AR Target 탐지 과정의 반복 Allocation을 줄이고 실행 빈도를 제어하여 Runtime Cost 개선
@@ -73,7 +73,7 @@ Spawn 시 Runtime `GameObject`와 함께 `SpawnedObject`로 연결합니다.
 
 #### Building Entry Cache
 
-기존에는 Spawn 후보를 조회할 때마다 전체 `NoonsongEntry`를 순회하여
+기존에는 Spawn 후보를 조회할 때마다 **전체** `NoonsongEntry`를 순회하여
 `buildingName`이 일치하는 Entry를 새로운 List에 추가했습니다.
 
 ```csharp
@@ -89,7 +89,7 @@ foreach (var entry in entries)
 }
 ```
 
-이를 초기화 시점에 건물별로 분류하여 캐싱하도록 변경했습니다.
+이를 **초기화** 시점에 **건물 이름으로 분류하여 캐싱**하도록 변경했습니다.
 
 ```csharp
 private readonly Dictionary<string, List<NoonsongEntry>> entriesByBuilding
@@ -239,7 +239,7 @@ private IEnumerator CheckForObjectInViewCoroutine()
 ### Allocation Reduction
 
 탐지마다 생성되던 Checkpoint 배열을 재사용하도록 변경하고,
-`Camera.main`과 `WaitForSeconds` 역시 초기화 시 캐싱했습니다.
+`Camera.main`과 `WaitForSeconds` 도 초기화 시 캐싱했습니다.
 
 ```csharp
 private readonly Vector3[] checkPoints = new Vector3[5];
