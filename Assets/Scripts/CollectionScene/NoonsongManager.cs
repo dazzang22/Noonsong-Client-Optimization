@@ -109,7 +109,7 @@ public class NoonsongManager : MonoBehaviour
     int discoveredItems = 0;
 
     //DB 싱크
-    noonsongEntryManager.syncwithEntryDB();
+    noonsongEntryManager.SyncWithEntryDB();
 
     foreach (var entry in entries)
     {

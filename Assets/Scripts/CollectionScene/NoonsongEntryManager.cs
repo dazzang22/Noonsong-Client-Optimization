@@ -21,21 +21,13 @@ public class NoonsongEntryManager : MonoBehaviour
                 noon.loveLevel=0;
             }
         }
-        syncwithEntryDB();
+        SyncWithEntryDB();
     }
     void Start()
     {
         if (noonsongEntries == null || noonsongEntries.Count == 0)
         {
             Debug.LogError("Noonsong entries are not assigned in the inspector!");
-        }
-        else
-        {
-            Debug.Log("AR Session active: " + (FindObjectOfType<ARSession>() != null));
-            Debug.Log("XR Origin active: " + (FindObjectOfType<XROrigin>() != null));
-            Debug.Log("AR Camera Background active: " + (FindObjectOfType<ARCameraBackground>() != null));
-
-            Debug.Log($"NoonsongEntryManager initialized with {noonsongEntries.Count} entries.");
         }
     }
 
@@ -51,8 +43,6 @@ public class NoonsongEntryManager : MonoBehaviour
         {
             noonsongEntries.Add(entry);
             Debug.Log($"Added to the collection: {entry.noonsongName}");
-            //DB 에 추가
-            Debug.Log("디비 추가");
             int num=0;
             if(entry.isBestFriend ){    num= 5;       }
             if(!entry.isFriend ){    num= entry.loveLevel/10;       }
@@ -87,7 +77,7 @@ public class NoonsongEntryManager : MonoBehaviour
     }
 
     //db랑 noonsongentry 싱크 맞추기
-    public void syncwithEntryDB()
+    public void SyncWithEntryDB()
     {
         List<UserDogam> userdogamlist= UserDogamManager.Instance.getUserDogamList();
         if(userdogamlist!=null)
