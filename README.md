@@ -35,7 +35,7 @@ GPS를 기반으로 교내 건물 영역을 탐색하고,
 - **Runtime Optimization**  
   AR Target 탐지 과정의 반복 Allocation을 줄이고 실행 빈도를 제어하여 Runtime Cost 개선
 
-# System Architecture
+## System Architecture
 
 GPS 위치 정보부터 AR Object Spawn, Target Selection, Collection UI까지
 다음과 같은 흐름으로 연결됩니다.
@@ -57,25 +57,7 @@ flowchart LR
     E -->|"Selected Entry"| F
     F --> G
 ```
-### Data Flow
 
-```text
-GPS Location
-      ↓
-Building Area Detection
-      ↓
-buildingName 기반 Entry Lookup
-      ↓
-AR Object Spawn
-      ↓
-GameObject ↔ NoonsongEntry Mapping
-      ↓
-Screen Visibility 기반 Target Selection
-      ↓
-Collection State Update
-      ↓
-Collection UI
-```
 `NoonsongEntry`를 캐릭터 데이터의 기준으로 사용하고,
 Spawn 시 Runtime `GameObject`와 함께 `SpawnedObject`로 연결합니다.
 
@@ -90,20 +72,6 @@ Target Selection 이후에도 연결된 `NoonsongEntry`를 Collection 과정까�
 
 현재 활성화된 건물을 기준으로 해당 위치에서 Spawn 가능한
 `NoonsongEntry` 후보군을 결정합니다.
-
-```text
-Active Building
-      ↓
- buildingName
-      ↓
-Entry Dictionary
-      ↓
-List<NoonsongEntry>
-      ↓
-Candidate Selection
-      ↓
-   AR Spawn
-```
 
 #### Building Entry Cache
 
@@ -143,6 +111,11 @@ private void BuildEntryCache()
     }
 }
 ```
+| | Before | After |
+|---|---|---|
+| Entry Lookup | 전체 Entry 순회 | Dictionary Lookup |
+| Complexity | `O(N)` | Average `O(1)` |
+| Temporary List | 조회마다 생성 | Cached List 재사용 |
 
 이후 Spawn 시에는 현재 건물의 `buildingName`을 key로
 해당 후보 List를 바로 조회합니다.
@@ -187,23 +160,6 @@ return new SpawnedObject(
 ```
 
 생성된 Runtime Instance 역시 동일한 Entry와 함께 관리됩니다.
-
-```text
-NoonsongEntry
-     │
-     ├── Prefab
-     │
-     ↓
-   Spawn
-     ↓
-SpawnedObject
- ├── GameObject       → Runtime Object
- └── NoonsongEntry    → Character Data
-          ↓
-   Target Selection
-          ↓
-      Collection
-```
 
 이를 통해 화면에서 선택된 Runtime Object로부터 연결된 `NoonsongEntry`를 조회하여
 Collection 단계까지 동일한 데이터 참조를 전달할 수 있도록 구성했습니다.
@@ -260,7 +216,6 @@ AR Target 탐지 로직의 반복 실행 비용과 Allocation을 분석하고,
 | Target Detection | Every Frame | `0.1s` Interval |
 | Detection Calls | ~400 / sec | ~10 / sec |
 | Checkpoint GC Alloc | 92 B / frame | 0 B / frame |
-| Building Entry Lookup | `O(N)` traversal | Average `O(1)` lookup |
 
 ### Detection Frequency
 
