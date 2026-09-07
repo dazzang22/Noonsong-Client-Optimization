@@ -74,11 +74,16 @@ public class EmailVerifyManager : MonoBehaviour
 
     private void SendVerificationEmail(string recipientEmail, string code)
     {
-        string senderEmail = "friendsnoonsong@gmail.com"; //프눈 계정 이메일
-        string senderPassword = "tkousxipdrjdrotq"; //설정되어있는 앱 비밀번호
+        string senderEmail = Environment.GetEnvironmentVariable("NOONSONG_SMTP_EMAIL");
+        string senderPassword = Environment.GetEnvironmentVariable("NOONSONG_SMTP_APP_PASSWORD");
         
         try
         {
+            if (string.IsNullOrWhiteSpace(senderEmail) || string.IsNullOrWhiteSpace(senderPassword))
+            {
+                throw new InvalidOperationException("SMTP credentials are not configured.");
+            }
+
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(senderEmail);
             mail.To.Add(recipientEmail);
