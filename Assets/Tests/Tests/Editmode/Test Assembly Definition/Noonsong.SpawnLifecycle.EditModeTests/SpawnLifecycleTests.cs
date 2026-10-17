@@ -122,4 +122,92 @@ public class SpawnLifecycleTests
             Is.EqualTo(SpawnCommand.Remove)
         );
     }
+    [Test]
+    // 객체가 보이는 상태에서 외부에서 제거되면 WaitingForLifetimeEnd 상태로 전환되고, 수명이 끝나면 NoObjects 상태로 전환
+    public void NotifyObjectRemovedExternally_WhenVisible_WaitsForLifetimeEnd()
+    {
+        var lifecycle = new SpawnLifecycle(1f);
+
+        lifecycle.NotifySpawnSucceeded();
+        lifecycle.NotifyObjectRemovedExternally();
+
+        Assert.That(
+            lifecycle.CurrentState,
+            Is.EqualTo(SpawnState.WaitingForLifetimeEnd)
+        );
+
+        Assert.That(
+            lifecycle.Tick(0.5f),
+            Is.EqualTo(SpawnCommand.None)
+        );
+        Assert.That(
+            lifecycle.CurrentState,
+            Is.EqualTo(SpawnState.WaitingForLifetimeEnd)
+        );
+
+        Assert.That(
+            lifecycle.Tick(0.5f),
+            Is.EqualTo(SpawnCommand.None)
+        );
+        Assert.That(
+            lifecycle.CurrentState,
+            Is.EqualTo(SpawnState.NoObjects)
+        );
+    }
+    [Test]
+    // 수집으로 슬롯이 해제되어도 수명이 끝나기 전까지는 Remove 명령이 반환되지 않아야 함
+    public void NotifySpawnSucceeded_WhenWaitingForLifetimeEnd_DoesNotStartNewLifetime()
+    {
+        var lifecycle = new SpawnLifecycle(1f);
+        lifecycle.NotifySpawnSucceeded();
+        lifecycle.NotifyObjectRemovedExternally();
+
+        lifecycle.NotifySpawnSucceeded(); // 수집으로 슬롯이 해제되어도 수명이 끝나기 전까지는 Remove 명령이 반환되지 않아야 함
+        Assert.That(
+             lifecycle.CurrentState,
+             Is.EqualTo(SpawnState.WaitingForLifetimeEnd)
+         );
+
+        Assert.That(
+            lifecycle.Tick(0.5f),
+            Is.EqualTo(SpawnCommand.None)
+        );
+        Assert.That(
+            lifecycle.CurrentState,
+            Is.EqualTo(SpawnState.WaitingForLifetimeEnd)
+        );
+
+        lifecycle.Tick(0.5f); // 수명이 끝나면 NoObjects 상태로 전환
+        Assert.That(
+            lifecycle.CurrentState,
+            Is.EqualTo(SpawnState.NoObjects)
+        );
+        lifecycle.NotifySpawnSucceeded(); // 새로운 수명 시작
+        Assert.That(
+            lifecycle.CurrentState,
+            Is.EqualTo(SpawnState.Visible)
+        );
+    }
+    [Test]
+    // A/B 테스트: 수집으로 슬롯이 해제되어도 수명이 끝나기 전까지는 Remove 명령이 반환되지 않아야 함
+    public void Tick_WhenNonOwnerHasNoObject_DoesNotRemoveOwnersObject()
+    {
+        var ownerLifecycle = new SpawnLifecycle(1f);
+        var nonOwnerLifecycle = new SpawnLifecycle(1f);
+
+        // A 건물만 실제 스폰에 성공
+        ownerLifecycle.NotifySpawnSucceeded();
+
+        // B 건물의 Tick은 제거할 자기 객체가 없으므로 아무 명령도 내리지 않음
+        SpawnCommand nonOwnerCommand = nonOwnerLifecycle.Tick(1f);
+
+        // A 건물의 수명 만료만 A 객체 제거 명령을 만듦
+        SpawnCommand ownerCommand = ownerLifecycle.Tick(1f);
+
+        Assert.That(nonOwnerCommand, Is.EqualTo(SpawnCommand.None));
+        Assert.That(nonOwnerLifecycle.CurrentState, Is.EqualTo(SpawnState.NoObjects));
+
+        Assert.That(ownerCommand, Is.EqualTo(SpawnCommand.Remove));
+        Assert.That(ownerLifecycle.CurrentState, Is.EqualTo(SpawnState.NoObjects));
+    }
 }

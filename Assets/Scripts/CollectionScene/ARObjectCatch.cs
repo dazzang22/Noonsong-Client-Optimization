@@ -14,6 +14,9 @@ public class ARObjectCatch : MonoBehaviour
 
     private GameObject currentTarget;
 
+    private GameObject encounterTarget;
+    public GameObject EncounterTarget => encounterTarget;
+
     [SerializeField] private GameObject noonsongPrefab;
 
     [SerializeField] private Button catchButton;
@@ -111,6 +114,9 @@ public class ARObjectCatch : MonoBehaviour
         var spawnedObject = FindCurrentSpawnedObject(currentTarget);
 
         if (spawnedObject == null) return;
+        // 조우를 시작한 캐릭터를 따로 기억
+        encounterTarget = spawnedObject.GameObject;
+        Debug.Log($"[Encounter] 조우 대상 id={encounterTarget.GetInstanceID()}");
         NoonsongEntry entry = spawnedObject.NoonsongEntry;
 
         // General Noonsong
@@ -118,6 +124,7 @@ public class ARObjectCatch : MonoBehaviour
         {
             encounterUI.ShowDefaultDialogue(noonsongPrefab, () =>
             {
+                encounterTarget = null;
                 StartCoroutine(CleanupDestroyedSpawnedObject(spawnedObject));
                 UnityEngine.Debug.Log("Default dialogue closed");
             });
@@ -126,6 +133,7 @@ public class ARObjectCatch : MonoBehaviour
         // Major Noonsong
         encounterUI.Show(entry, () =>
         {
+            encounterTarget = null;
             StartCoroutine(CleanupDestroyedSpawnedObject(spawnedObject));
             Debug.Log("Encounter dialogue closed");
         });
@@ -169,6 +177,12 @@ public class ARObjectCatch : MonoBehaviour
 
     public GameObject GetCurrentTarget()
     {
+        // 조우 중이면 조우를 시작한 캐릭터를 반환
+        if (encounterTarget != null)
+        {
+            return encounterTarget;
+        }
+
         return currentTarget;
     }
 }

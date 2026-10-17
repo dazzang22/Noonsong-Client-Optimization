@@ -19,6 +19,16 @@ public class SpawnLifecycle
         spawnLifetime.StartLifetime();
         CurrentState = SpawnState.Visible;
     }
+    public void NotifyObjectRemovedExternally()
+    {
+        if (CurrentState != SpawnState.Visible && CurrentState != SpawnState.HiddenForPhoto)
+        {
+            return;
+        }
+
+        // 수집으로 객체가 사라진 후 수명이 끝나기를 기다리는 상태로 전환
+        CurrentState = SpawnState.WaitingForLifetimeEnd;
+    }
     // 수명이 끝난 경우에만 Remove 명령을 반환하고 NoObjects로 전환, 그렇지 않으면 None 반환
     public SpawnCommand Tick(float deltaTime)
     {
@@ -31,6 +41,11 @@ public class SpawnLifecycle
 
         if (!lifetimeExpired)
         {
+            return SpawnCommand.None;
+        }
+        if(CurrentState == SpawnState.WaitingForLifetimeEnd)
+        {
+            CurrentState = SpawnState.NoObjects;
             return SpawnCommand.None;
         }
 

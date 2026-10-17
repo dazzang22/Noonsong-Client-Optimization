@@ -6,6 +6,7 @@ public class PlayerObjectSpawnManager : MonoBehaviour
     public static PlayerObjectSpawnManager Instance;
 
     private List<PlayerObjectSpawn> spawnControllers = new List<PlayerObjectSpawn>();
+    private readonly List<PlayerObjectSpawn> spawnCandidates = new List<PlayerObjectSpawn>();
     private Dictionary<string, List<SpawnedObject>> _spawnedObjectsPerBuilding;
     private List<SpawnedObject> _spawnedObjects;
     public List<SpawnedObject> SpawnedObjects => _spawnedObjects;
@@ -23,12 +24,74 @@ public class PlayerObjectSpawnManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    void Update()
+    {
+        // 전역 슬롯이 사용 중이면 선택하지 않음
+        if (Instance != this || !CanSpawn())
+        {
+            return;
+        }
+
+        // 지금 스폰할 수 있는 건물을 다시 모음
+        RefreshSpawnCandidates();
+
+        if (spawnCandidates.Count == 0)
+        {
+            return;
+        }
+        DebugSpawnCandidates();
+
+        // 후보 중 하나를 균등 랜덤으로 선택
+        int randomIndex = Random.Range(0, spawnCandidates.Count);
+        PlayerObjectSpawn selected = spawnCandidates[randomIndex];
+
+        var area = selected.GetComponentInParent<ScriptActivationController>();
+        string buildingName = area != null ? area.gameObject.name : selected.gameObject.name;
+
+        Debug.Log(
+            $"[SpawnSelection] 후보 수={spawnCandidates.Count}, 선택={buildingName}",
+            selected
+        );
+
+        selected.TrySpawnFromManager();
+    }
 
     public void RegisterSpawnController(PlayerObjectSpawn controller)
     {
         if (!spawnControllers.Contains(controller))
         {
             spawnControllers.Add(controller);
+        }
+    }
+    // 스폰 후보 갱신
+    private void RefreshSpawnCandidates()
+    {
+        spawnCandidates.Clear();
+
+        foreach (PlayerObjectSpawn controller in spawnControllers)
+        {
+            if (controller != null && controller.IsReadyToSpawn())
+            {
+                spawnCandidates.Add(controller);
+            }
+        }
+    }
+    [ContextMenu("스폰 후보 확인")]
+    private void DebugSpawnCandidates()
+    {
+        RefreshSpawnCandidates();
+
+        Debug.Log($"[SpawnCandidates] 후보 수: {spawnCandidates.Count}");
+
+        foreach (PlayerObjectSpawn candidate in spawnCandidates)
+        {
+            var area = candidate.GetComponentInParent<ScriptActivationController>();
+
+            string buildingName = area != null
+                ? area.gameObject.name
+                : candidate.gameObject.name;
+
+            Debug.Log($"[SpawnCandidates] 후보: {buildingName}", candidate);
         }
     }
 
