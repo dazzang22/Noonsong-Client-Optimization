@@ -49,6 +49,12 @@ public class ARObjectCatch : MonoBehaviour
 
     void Start()
     {
+        ARObjectCatch[] activeObjectCatches = FindObjectsOfType<ARObjectCatch>();
+        Debug.Log(
+            $"[RuntimeOptimizationBenchmark] ARObjectCatch instance={GetInstanceID()}, " +
+            $"activeCount={activeObjectCatches.Length}, variant={benchmarkVariant}",
+            this);
+
         playerObjectSpawnManager = PlayerObjectSpawnManager.Instance;
         if (playerObjectSpawnManager != null)
         {
