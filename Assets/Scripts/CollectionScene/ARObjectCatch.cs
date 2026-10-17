@@ -1,10 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ARObjectCatch : MonoBehaviour
 {
+    private enum DetectionBenchmarkVariant
+    {
+        A_AllocateEveryFrame,
+        B_ReuseEveryFrame,
+        C_ReuseAtInterval
+    }
+
+    private static readonly ProfilerMarker DetectionMarker =
+        new ProfilerMarker("ARObjectCatch.CheckForObjectInView");
+
     private PlayerObjectSpawnManager playerObjectSpawnManager;
     // Camera Caching
     private Camera mainCamera;
@@ -28,6 +39,9 @@ public class ARObjectCatch : MonoBehaviour
 
     // detection
     [Header("Detection")]
+    [Tooltip("Benchmark branch only. A/B isolate GC allocation; B/C isolate call frequency.")]
+    [SerializeField] private DetectionBenchmarkVariant benchmarkVariant =
+        DetectionBenchmarkVariant.C_ReuseAtInterval;
     [SerializeField] private float detectInterval = 0.1f;
     [SerializeField] private float screenPadding = 50f;
     [SerializeField] private float defaultBoundingRadius = 0.5f;
@@ -44,15 +58,34 @@ public class ARObjectCatch : MonoBehaviour
         mainCamera = Camera.main;
         detectWait = new WaitForSeconds(detectInterval);
         catchButton.onClick.AddListener(OnCatchButtonClicked);
-        StartCoroutine(CheckForObjectInViewCoroutine());
+        if (benchmarkVariant == DetectionBenchmarkVariant.C_ReuseAtInterval)
+        {
+            StartCoroutine(CheckForObjectInViewCoroutine());
+        }
+    }
+
+    private void Update()
+    {
+        if (benchmarkVariant != DetectionBenchmarkVariant.C_ReuseAtInterval)
+        {
+            RunDetectionBenchmarkSample();
+        }
     }
 
     private IEnumerator CheckForObjectInViewCoroutine()
     {
         while (true)
         {
-            UpdateCurrentTarget();
+            RunDetectionBenchmarkSample();
             yield return detectWait; // detectInterval마다 체크
+        }
+    }
+
+    private void RunDetectionBenchmarkSample()
+    {
+        using (DetectionMarker.Auto())
+        {
+            UpdateCurrentTarget();
         }
     }
 
@@ -86,14 +119,18 @@ public class ARObjectCatch : MonoBehaviour
             boundingRadius = col.bounds.extents.magnitude * 0.5f;
         }
 
-        // 체크 포인트 계산 (중심 + 4방향)
-        checkPoints[0] = objectPosition; // 중심
-        checkPoints[1] = objectPosition + new Vector3(boundingRadius, 0, 0); // 오른쪽
-        checkPoints[2] = objectPosition + new Vector3(-boundingRadius, 0, 0); // 왼쪽
-        checkPoints[3] = objectPosition + new Vector3(0, boundingRadius, 0); // 위
-        checkPoints[4] = objectPosition + new Vector3(0, -boundingRadius, 0); // 아래
+        Vector3[] points = benchmarkVariant == DetectionBenchmarkVariant.A_AllocateEveryFrame
+            ? new Vector3[5]
+            : checkPoints;
 
-        foreach (Vector3 point in checkPoints)
+        // 체크 포인트 계산 (중심 + 4방향)
+        points[0] = objectPosition; // 중심
+        points[1] = objectPosition + new Vector3(boundingRadius, 0, 0); // 오른쪽
+        points[2] = objectPosition + new Vector3(-boundingRadius, 0, 0); // 왼쪽
+        points[3] = objectPosition + new Vector3(0, boundingRadius, 0); // 위
+        points[4] = objectPosition + new Vector3(0, -boundingRadius, 0); // 아래
+
+        foreach (Vector3 point in points)
         {
             Vector3 screenPoint = mainCamera.WorldToScreenPoint(point);
 
