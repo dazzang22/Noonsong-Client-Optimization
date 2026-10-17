@@ -9,7 +9,14 @@ public class PlayerObjectSpawnManager : MonoBehaviour
     private readonly List<PlayerObjectSpawn> spawnCandidates = new List<PlayerObjectSpawn>();
     private Dictionary<string, List<SpawnedObject>> _spawnedObjectsPerBuilding;
     private List<SpawnedObject> _spawnedObjects;
+    private PlayerObjectSpawn slotOwner;
     public List<SpawnedObject> SpawnedObjects => _spawnedObjects;
+    public ARObjectCatch ObjectCatch { get; private set; }
+
+    public void RegisterObjectCatch(ARObjectCatch objectCatch)
+    {
+        ObjectCatch = objectCatch;
+    }
 
     void Awake()
     {
@@ -54,6 +61,10 @@ public class PlayerObjectSpawnManager : MonoBehaviour
         );
 
         selected.TrySpawnFromManager();
+        if (selected.IsSpawnLifetimeRunning)
+        {
+            slotOwner = selected;
+        }
     }
 
     public void RegisterSpawnController(PlayerObjectSpawn controller)
@@ -98,6 +109,7 @@ public class PlayerObjectSpawnManager : MonoBehaviour
     // 전체에 대해 아무 오브젝트도 없을 때만 스폰 가능
     public bool CanSpawn()
     {
+        if (slotOwner != null && slotOwner.IsSpawnLifetimeRunning) return false;
         foreach (var kvp in _spawnedObjectsPerBuilding)
         {
             if (kvp.Value.Count > 0)

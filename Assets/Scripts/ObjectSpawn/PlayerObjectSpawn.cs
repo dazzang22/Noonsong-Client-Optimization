@@ -31,6 +31,7 @@ public class PlayerObjectSpawn : MonoBehaviour
     public Transform xrOrigin; // XR Origin 참조
     // 상태머신
     private SpawnLifecycle spawnLifecycle;
+    public bool IsSpawnLifetimeRunning => spawnLifecycle != null && spawnLifecycle.CurrentState != SpawnState.NoObjects;
     private SpawnedObject ownedSpawnedObject;
     private bool wasPhotoModeActive;
     private const float changeInterval = 20f;
@@ -78,11 +79,11 @@ public class PlayerObjectSpawn : MonoBehaviour
     void Update()
     {
         bool isInActiveZone = IsInSpawnArea();
-        bool isPhotoModeActive = IsPhotoModeActive();
+        bool shouldHideFieldObject = ShouldHideFieldObject();
 
         HandleExternallyRemovedObjec();
-        // 사진 모드 전환: Hide 또는 Show를 한 번만 실행
-        HandlePhotoModeState(isPhotoModeActive);
+        // hide/show field object based on photo mode and encounter state
+        HandlePhotoModeState(shouldHideFieldObject);
 
         // 구역·사진 모드와 무관하게 항상 20초 수명을 진행
         ExecuteSpawnCommand(spawnLifecycle.Tick(Time.deltaTime));
@@ -125,6 +126,28 @@ public class PlayerObjectSpawn : MonoBehaviour
 
         Debug.Log("Owned spawned object has been removed externally. Transitioning to WaitingForLifetimeEnd state.");
     }
+    private bool ShouldHideFieldObject()
+    {
+        // 조우 -> 숨길지 말지 판단
+        var manager = PlayerObjectSpawnManager.Instance;
+
+        GameObject encounterTarget =
+            manager != null && manager.ObjectCatch != null
+                ? manager.ObjectCatch.EncounterTarget
+                : null;
+
+        GameObject fieldObject =
+            ownedSpawnedObject != null
+                ? ownedSpawnedObject.GameObject
+                : null;
+
+        // 현재 조우 중인 A -> 숨기지 no
+        if (encounterTarget != null && encounterTarget == fieldObject)
+            return false;
+
+        // 사진 모드 또는 조우 중이라면 필드 캐릭터를 숨긴다.
+        return IsPhotoModeActive() || encounterTarget != null;
+    }
     private void ExecuteSpawnCommand(SpawnCommand command)
     {
         switch (command)
@@ -152,26 +175,44 @@ public class PlayerObjectSpawn : MonoBehaviour
     }
     private void RemoveOwnedSpawnedObject()
     {
-        // Hide -> 비활성화, Remove -> 제거, Show -> 활성화
-        if (ownedSpawnedObject?.GameObject != null)
+        if (ownedSpawnedObject == null)
+            return;
+
+        var manager = PlayerObjectSpawnManager.Instance;
+        GameObject fieldObject = ownedSpawnedObject.GameObject;
+
+        // 수명이 끝난 캐릭터가 현재 조우 대상인지 확인한다. 
+        bool isEncounterTarget =
+            manager != null &&
+            manager.ObjectCatch != null &&
+            fieldObject != null &&
+            manager.ObjectCatch.EncounterTarget == fieldObject;
+
+        if (isEncounterTarget)
         {
-            ownedSpawnedObject.GameObject.SetActive(false);
+            // 조우 중인 A는 화면에 남겨둔다.
             Debug.Log(
-    $"[SpawnLifecycle] Lifetime expired. Removing id=" +
-    $"{ownedSpawnedObject.GameObject.GetInstanceID()}"
-);
-            Destroy(ownedSpawnedObject.GameObject);
+                $"[SpawnLifecycle] 조우 대상 유지 id={fieldObject.GetInstanceID()}"
+            );
         }
-        if (PlayerObjectSpawnManager.Instance != null)
+        else if (fieldObject != null)
         {
-            PlayerObjectSpawnManager.Instance.RemoveSpawnedObject(ownedSpawnedObject);
-        }
-        ownedSpawnedObject = null;
-        if (encounterUI != null)
-        {
-            encounterUI.CloseEncounter();
+            // 조우 대상이 아니면 평소처럼 제거한다.
+            Debug.Log(
+                $"[SpawnLifecycle] 수명 만료로 제거 id={fieldObject.GetInstanceID()}"
+            );
+
+            fieldObject.SetActive(false);
+            Destroy(fieldObject);
         }
 
+        // 조우 중인 A는 남기더라도 필드 슬롯은 비운다.
+        if (manager != null)
+        {
+            manager.RemoveSpawnedObject(ownedSpawnedObject);
+        }
+
+        ownedSpawnedObject = null;
     }
 
     private void HandlePhotoModeState(bool isPhotoModeActive)
@@ -184,7 +225,7 @@ public class PlayerObjectSpawn : MonoBehaviour
         wasPhotoModeActive = isPhotoModeActive;
         SpawnCommand command = isPhotoModeActive ? spawnLifecycle.OnPhotoOpened() : spawnLifecycle.OnPhotoClosed();
         ExecuteSpawnCommand(command);
-        Debug.Log($"Photo mode state changed. Command: {command}, New State: {spawnLifecycle.CurrentState}");
+        //Debug.Log($"Photo mode state changed. Command: {command}, New State: {spawnLifecycle.CurrentState}");
     }
 
     public void TrySpawnFromManager()
@@ -262,11 +303,12 @@ public class PlayerObjectSpawn : MonoBehaviour
             );
         }
         spawnLifecycle.NotifySpawnSucceeded();
-        // 사진 모드가 활성화된 상태에서 스폰되면 즉시 Hide 명령을 실행
-        if (IsPhotoModeActive())
+        // 조우 중이거나 사진 모드일 때는 숨김 처리
+        if (ShouldHideFieldObject())
         {
             SpawnCommand hideCommand = spawnLifecycle.OnPhotoOpened();
             ExecuteSpawnCommand(hideCommand);
+            wasPhotoModeActive = true; // 상태를 업데이트하여 다음 프레임에서 중복 실행 방지
             Debug.Log(
     $"[SpawnLifecycle] PhotoSpawn id={instance.GetInstanceID()}, " +
     $"command={hideCommand}, activeSelf={instance.activeSelf}"

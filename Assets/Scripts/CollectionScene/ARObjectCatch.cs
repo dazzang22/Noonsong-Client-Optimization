@@ -36,6 +36,11 @@ public class ARObjectCatch : MonoBehaviour
     void Start()
     {
         playerObjectSpawnManager = PlayerObjectSpawnManager.Instance;
+        if (playerObjectSpawnManager != null)
+        {
+            playerObjectSpawnManager.RegisterObjectCatch(this);
+            Debug.Log("[Encounter] ARObjectCatch registered with PlayerObjectSpawnManager");
+        }
         mainCamera = Camera.main;
         detectWait = new WaitForSeconds(detectInterval);
         catchButton.onClick.AddListener(OnCatchButtonClicked);
@@ -57,7 +62,7 @@ public class ARObjectCatch : MonoBehaviour
         foreach (var obj in spawnedObjects)
         {
             GameObject target = obj.GameObject;
-            if (target == null) continue;
+            if (target == null || !target.activeInHierarchy) continue;
 
             if (IsVisibleInView(target))
             {
@@ -104,6 +109,11 @@ public class ARObjectCatch : MonoBehaviour
 
     void OnCatchButtonClicked()
     {
+        if (encounterTarget != null)
+        {
+            encounterUI.ShowExitConfirmation();
+            return;
+        }
         if (currentTarget == null) return;
 
         if (encounterUI.gameObject.activeSelf)
@@ -156,19 +166,21 @@ public class ARObjectCatch : MonoBehaviour
 
     public void CollectCharacter()
     {
-        if (currentTarget == null) return;
+        if (encounterTarget == null || encounterUI == null)
+            return;
 
-        var spawnedObject = FindCurrentSpawnedObject(currentTarget);
-        if (spawnedObject == null) return;
+        // 현재 조우 중인 A의 캐릭터 데이터
+        NoonsongEntry entry = encounterUI.GetCurrentNoonsongEntry();
 
-        NoonsongEntry entry = spawnedObject.NoonsongEntry;
+        if (entry == null || entry.isDiscovered)
+            return;
 
-        if (entry == null || entry.isDiscovered) return;
+        Debug.Log($"[Collect] 조우 대상 발견: {entry.noonsongName}");
 
         noonsongManager.DiscoverItem(entry);
-
         UpdateCurrentTarget();
     }
+
 
     private SpawnedObject FindCurrentSpawnedObject(GameObject target)
     {
@@ -177,7 +189,7 @@ public class ARObjectCatch : MonoBehaviour
 
     public GameObject GetCurrentTarget()
     {
-        // 조우 중이면 조우를 시작한 캐릭터를 반환
+        // 조우 중에는 처음 조우한 A를 반환한다.
         if (encounterTarget != null)
         {
             return encounterTarget;
