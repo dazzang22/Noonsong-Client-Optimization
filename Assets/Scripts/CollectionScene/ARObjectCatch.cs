@@ -1,10 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ARObjectCatch : MonoBehaviour
 {
+    private enum DetectionBenchmarkVariant
+    {
+        A_AllocateEveryFrame,
+        B_ReuseEveryFrame,
+        C_ReuseAtInterval
+    }
+
+    private static readonly ProfilerMarker DetectionMarker =
+        new ProfilerMarker("ARObjectCatch.CheckForObjectInView");
+
     private PlayerObjectSpawnManager playerObjectSpawnManager;
     // Camera Caching
     private Camera mainCamera;
@@ -13,6 +24,9 @@ public class ARObjectCatch : MonoBehaviour
     private NoonsongManager noonsongManager;
 
     private GameObject currentTarget;
+
+    private GameObject encounterTarget;
+    public GameObject EncounterTarget => encounterTarget;
 
     [SerializeField] private GameObject noonsongPrefab;
 
@@ -25,6 +39,9 @@ public class ARObjectCatch : MonoBehaviour
 
     // detection
     [Header("Detection")]
+    [Tooltip("Benchmark branch only. A/B isolate GC allocation; B/C isolate call frequency.")]
+    [SerializeField] private DetectionBenchmarkVariant benchmarkVariant =
+        DetectionBenchmarkVariant.C_ReuseAtInterval;
     [SerializeField] private float detectInterval = 0.1f;
     [SerializeField] private float screenPadding = 50f;
     [SerializeField] private float defaultBoundingRadius = 0.5f;
@@ -32,19 +49,49 @@ public class ARObjectCatch : MonoBehaviour
 
     void Start()
     {
+        ARObjectCatch[] activeObjectCatches = FindObjectsOfType<ARObjectCatch>();
+        Debug.Log(
+            $"[RuntimeOptimizationBenchmark] ARObjectCatch instance={GetInstanceID()}, " +
+            $"activeCount={activeObjectCatches.Length}, variant={benchmarkVariant}",
+            this);
+
         playerObjectSpawnManager = PlayerObjectSpawnManager.Instance;
+        if (playerObjectSpawnManager != null)
+        {
+            playerObjectSpawnManager.RegisterObjectCatch(this);
+            Debug.Log("[Encounter] ARObjectCatch registered with PlayerObjectSpawnManager");
+        }
         mainCamera = Camera.main;
         detectWait = new WaitForSeconds(detectInterval);
         catchButton.onClick.AddListener(OnCatchButtonClicked);
-        StartCoroutine(CheckForObjectInViewCoroutine());
+        if (benchmarkVariant == DetectionBenchmarkVariant.C_ReuseAtInterval)
+        {
+            StartCoroutine(CheckForObjectInViewCoroutine());
+        }
+    }
+
+    private void Update()
+    {
+        if (benchmarkVariant != DetectionBenchmarkVariant.C_ReuseAtInterval)
+        {
+            RunDetectionBenchmarkSample();
+        }
     }
 
     private IEnumerator CheckForObjectInViewCoroutine()
     {
         while (true)
         {
-            UpdateCurrentTarget();
+            RunDetectionBenchmarkSample();
             yield return detectWait; // detectInterval마다 체크
+        }
+    }
+
+    private void RunDetectionBenchmarkSample()
+    {
+        using (DetectionMarker.Auto())
+        {
+            UpdateCurrentTarget();
         }
     }
 
@@ -54,7 +101,7 @@ public class ARObjectCatch : MonoBehaviour
         foreach (var obj in spawnedObjects)
         {
             GameObject target = obj.GameObject;
-            if (target == null) continue;
+            if (target == null || !target.activeInHierarchy) continue;
 
             if (IsVisibleInView(target))
             {
@@ -78,14 +125,18 @@ public class ARObjectCatch : MonoBehaviour
             boundingRadius = col.bounds.extents.magnitude * 0.5f;
         }
 
-        // 체크 포인트 계산 (중심 + 4방향)
-        checkPoints[0] = objectPosition; // 중심
-        checkPoints[1] = objectPosition + new Vector3(boundingRadius, 0, 0); // 오른쪽
-        checkPoints[2] = objectPosition + new Vector3(-boundingRadius, 0, 0); // 왼쪽
-        checkPoints[3] = objectPosition + new Vector3(0, boundingRadius, 0); // 위
-        checkPoints[4] = objectPosition + new Vector3(0, -boundingRadius, 0); // 아래
+        Vector3[] points = benchmarkVariant == DetectionBenchmarkVariant.A_AllocateEveryFrame
+            ? new Vector3[5]
+            : checkPoints;
 
-        foreach (Vector3 point in checkPoints)
+        // 체크 포인트 계산 (중심 + 4방향)
+        points[0] = objectPosition; // 중심
+        points[1] = objectPosition + new Vector3(boundingRadius, 0, 0); // 오른쪽
+        points[2] = objectPosition + new Vector3(-boundingRadius, 0, 0); // 왼쪽
+        points[3] = objectPosition + new Vector3(0, boundingRadius, 0); // 위
+        points[4] = objectPosition + new Vector3(0, -boundingRadius, 0); // 아래
+
+        foreach (Vector3 point in points)
         {
             Vector3 screenPoint = mainCamera.WorldToScreenPoint(point);
 
@@ -101,6 +152,11 @@ public class ARObjectCatch : MonoBehaviour
 
     void OnCatchButtonClicked()
     {
+        if (encounterTarget != null)
+        {
+            encounterUI.ShowExitConfirmation();
+            return;
+        }
         if (currentTarget == null) return;
 
         if (encounterUI.gameObject.activeSelf)
@@ -111,6 +167,9 @@ public class ARObjectCatch : MonoBehaviour
         var spawnedObject = FindCurrentSpawnedObject(currentTarget);
 
         if (spawnedObject == null) return;
+        // 조우를 시작한 캐릭터를 따로 기억
+        encounterTarget = spawnedObject.GameObject;
+        Debug.Log($"[Encounter] 조우 대상 id={encounterTarget.GetInstanceID()}");
         NoonsongEntry entry = spawnedObject.NoonsongEntry;
 
         // General Noonsong
@@ -118,6 +177,7 @@ public class ARObjectCatch : MonoBehaviour
         {
             encounterUI.ShowDefaultDialogue(noonsongPrefab, () =>
             {
+                encounterTarget = null;
                 StartCoroutine(CleanupDestroyedSpawnedObject(spawnedObject));
                 UnityEngine.Debug.Log("Default dialogue closed");
             });
@@ -126,6 +186,7 @@ public class ARObjectCatch : MonoBehaviour
         // Major Noonsong
         encounterUI.Show(entry, () =>
         {
+            encounterTarget = null;
             StartCoroutine(CleanupDestroyedSpawnedObject(spawnedObject));
             Debug.Log("Encounter dialogue closed");
         });
@@ -148,19 +209,21 @@ public class ARObjectCatch : MonoBehaviour
 
     public void CollectCharacter()
     {
-        if (currentTarget == null) return;
+        if (encounterTarget == null || encounterUI == null)
+            return;
 
-        var spawnedObject = FindCurrentSpawnedObject(currentTarget);
-        if (spawnedObject == null) return;
+        // 현재 조우 중인 A의 캐릭터 데이터
+        NoonsongEntry entry = encounterUI.GetCurrentNoonsongEntry();
 
-        NoonsongEntry entry = spawnedObject.NoonsongEntry;
+        if (entry == null || entry.isDiscovered)
+            return;
 
-        if (entry == null || entry.isDiscovered) return;
+        Debug.Log($"[Collect] 조우 대상 발견: {entry.noonsongName}");
 
         noonsongManager.DiscoverItem(entry);
-
         UpdateCurrentTarget();
     }
+
 
     private SpawnedObject FindCurrentSpawnedObject(GameObject target)
     {
@@ -169,6 +232,12 @@ public class ARObjectCatch : MonoBehaviour
 
     public GameObject GetCurrentTarget()
     {
+        // 조우 중에는 처음 조우한 A를 반환한다.
+        if (encounterTarget != null)
+        {
+            return encounterTarget;
+        }
+
         return currentTarget;
     }
 }

@@ -24,21 +24,24 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     [SerializeField] ARAnchorManager anchorManager;
 
-    [SerializeField] private Camera arCamera; 
+    [SerializeField] private Camera arCamera;
 
-    [SerializeField] float changeInterval = 20f; // 오브젝트가 재스폰되는 시간(초)
-
-    [SerializeField] private float majorNoonsongProbability = 0.8f; 
+    [SerializeField] private float majorNoonsongProbability = 0.8f;
 
     public Transform xrOrigin; // XR Origin 참조
-    private float timer = 0f;
+    // 상태머신
+    private SpawnLifecycle spawnLifecycle;
+    public bool IsSpawnLifetimeRunning => spawnLifecycle != null && spawnLifecycle.CurrentState != SpawnState.NoObjects;
+    private SpawnedObject ownedSpawnedObject;
+    private bool wasPhotoModeActive;
+    private const float changeInterval = 20f;
 
     [SerializeField] private EncounterUI encounterUI;
 
     private Vector3 lastPosition;
     private Vector3 movementDirection = Vector3.forward;
 
-    [SerializeField] private bool testModeSpawnInFrontOfCamera = false; 
+    [SerializeField] private bool testModeSpawnInFrontOfCamera = false;
     [SerializeField] private float testSpawnDistance = 3f;
 
     //caching fields for performance
@@ -48,6 +51,7 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     void Start()
     {
+        spawnLifecycle = new SpawnLifecycle(changeInterval);
         lastPosition = xrOrigin.position;
         PlayerObjectSpawnManager.Instance.RegisterSpawnController(this);
         BuildEntryCache();
@@ -72,65 +76,175 @@ public class PlayerObjectSpawn : MonoBehaviour
             list.Add(entry);
         }
     }
-
     void Update()
     {
-        var activationController = GetComponentInParent<ScriptActivationController>();
+        bool isInActiveZone = IsInSpawnArea();
+        bool shouldHideFieldObject = ShouldHideFieldObject();
 
-        bool isInActiveZone = testModeSpawnInFrontOfCamera ||
-                              (activationController != null && activationController.IsActive());
+        HandleExternallyRemovedObjec();
+        // hide/show field object based on photo mode and encounter state
+        HandlePhotoModeState(shouldHideFieldObject);
 
-        bool isUICanvasOn =
-            (noonsongManager != null && noonsongManager.Is3DViewActive()) ||
-            (friendsManager != null && friendsManager.Is3DViewActive());
+        // 구역·사진 모드와 무관하게 항상 20초 수명을 진행
+        ExecuteSpawnCommand(spawnLifecycle.Tick(Time.deltaTime));
 
-        if (!isInActiveZone || isUICanvasOn)
+        // 새 스폰만 막는다. 이미 스폰된 오브젝트의 수명은 계속 유지한다.
+        if (!isInActiveZone)
         {
-            if (!testModeSpawnInFrontOfCamera &&
-                activationController != null &&
-                PlayerObjectSpawnManager.Instance != null)
-            {
-                PlayerObjectSpawnManager.Instance.RemoveSpawnedObjectsForBuilding(activationController.gameObject.name);
-            }
-
-            timer = 0f;
             return;
         }
 
         UpdateMovementDirection();
+    }
+    public bool IsInSpawnArea()
+    {
+        var activationController = GetComponentInParent<ScriptActivationController>();
 
-        if (timer == 0f)
+        return testModeSpawnInFrontOfCamera ||
+               (activationController != null && activationController.IsActive());
+    }
+    public bool IsReadyToSpawn()
+    {
+        return isActiveAndEnabled &&
+               spawnLifecycle != null &&
+               IsInSpawnArea() &&
+               spawnLifecycle.CurrentState == SpawnState.NoObjects;
+    }
+    private bool IsPhotoModeActive()
+    {
+        return (noonsongManager != null && noonsongManager.Is3DViewActive()) ||
+               (friendsManager != null && friendsManager.Is3DViewActive());
+    }
+    private void HandleExternallyRemovedObjec()
+    {
+        if (ownedSpawnedObject == null || ownedSpawnedObject.GameObject != null)
         {
-            if (PlayerObjectSpawnManager.Instance == null || PlayerObjectSpawnManager.Instance.CanSpawn())
-            {
-                SpawnObjectNearUser();
-            }
+            return;
         }
+        ownedSpawnedObject = null;
+        spawnLifecycle.NotifyObjectRemovedExternally();
 
-        timer += Time.deltaTime;
+        Debug.Log("Owned spawned object has been removed externally. Transitioning to WaitingForLifetimeEnd state.");
+    }
+    private bool ShouldHideFieldObject()
+    {
+        // 조우 -> 숨길지 말지 판단
+        var manager = PlayerObjectSpawnManager.Instance;
 
-        if (timer >= changeInterval)
+        GameObject encounterTarget =
+            manager != null && manager.ObjectCatch != null
+                ? manager.ObjectCatch.EncounterTarget
+                : null;
+
+        GameObject fieldObject =
+            ownedSpawnedObject != null
+                ? ownedSpawnedObject.GameObject
+                : null;
+
+        // 현재 조우 중인 A -> 숨기지 no
+        if (encounterTarget != null && encounterTarget == fieldObject)
+            return false;
+
+        // 사진 모드 또는 조우 중이라면 필드 캐릭터를 숨긴다.
+        return IsPhotoModeActive() || encounterTarget != null;
+    }
+    private void ExecuteSpawnCommand(SpawnCommand command)
+    {
+        switch (command)
         {
-            if (PlayerObjectSpawnManager.Instance != null)
-            {
-                PlayerObjectSpawnManager.Instance.RemoveSpawnedObjects();
-            }
-
-            if (encounterUI != null)
-            {
-                encounterUI.CloseEncounter();
-            }
-
-            if (PlayerObjectSpawnManager.Instance == null || PlayerObjectSpawnManager.Instance.CanSpawn())
-            {
-                SpawnObjectNearUser();
-            }
-
-            timer = 0f;
+            case SpawnCommand.Hide:
+                if (ownedSpawnedObject?.GameObject != null)
+                {
+                    ownedSpawnedObject.GameObject.SetActive(false);
+                }
+                break;
+            case SpawnCommand.Show:
+                if (ownedSpawnedObject?.GameObject != null)
+                {
+                    ownedSpawnedObject.GameObject.SetActive(true);
+                }
+                break;
+            case SpawnCommand.Remove:
+                RemoveOwnedSpawnedObject();
+                break;
+            case SpawnCommand.None:
+            default:
+                // Do nothing
+                break;
         }
     }
+    private void RemoveOwnedSpawnedObject()
+    {
+        if (ownedSpawnedObject == null)
+            return;
 
+        var manager = PlayerObjectSpawnManager.Instance;
+        GameObject fieldObject = ownedSpawnedObject.GameObject;
 
+        // 수명이 끝난 캐릭터가 현재 조우 대상인지 확인한다.
+        bool isEncounterTarget =
+            manager != null &&
+            manager.ObjectCatch != null &&
+            fieldObject != null &&
+            manager.ObjectCatch.EncounterTarget == fieldObject;
+
+        if (isEncounterTarget)
+        {
+            // 조우 중인 A는 화면에 남겨둔다.
+            Debug.Log(
+                $"[SpawnLifecycle] 조우 대상 유지 id={fieldObject.GetInstanceID()}"
+            );
+        }
+        else if (fieldObject != null)
+        {
+            // 조우 대상이 아니면 평소처럼 제거한다.
+            Debug.Log(
+                $"[SpawnLifecycle] 수명 만료로 제거 id={fieldObject.GetInstanceID()}"
+            );
+
+            fieldObject.SetActive(false);
+            Destroy(fieldObject);
+        }
+
+        // 조우 중인 A는 남기더라도 필드 슬롯은 비운다.
+        if (manager != null)
+        {
+            manager.RemoveSpawnedObject(ownedSpawnedObject);
+        }
+
+        ownedSpawnedObject = null;
+    }
+
+    private void HandlePhotoModeState(bool isPhotoModeActive)
+    {
+        if (isPhotoModeActive == wasPhotoModeActive)
+        {
+            return; // 상태가 변하지 않았으므로 아무 작업도 수행하지 않음
+        }
+
+        wasPhotoModeActive = isPhotoModeActive;
+        SpawnCommand command = isPhotoModeActive ? spawnLifecycle.OnPhotoOpened() : spawnLifecycle.OnPhotoClosed();
+        ExecuteSpawnCommand(command);
+        //Debug.Log($"Photo mode state changed. Command: {command}, New State: {spawnLifecycle.CurrentState}");
+    }
+
+    public void TrySpawnFromManager()
+    {
+        // 현재도 이 건물이 스폰 가능한지 확인
+        if (!IsReadyToSpawn())
+        {
+            return;
+        }
+
+        // 전역 슬롯이 비어 있는지 확인
+        if (PlayerObjectSpawnManager.Instance == null ||
+            !PlayerObjectSpawnManager.Instance.CanSpawn())
+        {
+            return;
+        }
+
+        SpawnObjectNearUser();
+    }
     void SpawnObjectNearUser()
     {
         if (!testModeSpawnInFrontOfCamera)
@@ -180,13 +294,32 @@ public class PlayerObjectSpawn : MonoBehaviour
         var activationController = GetComponentInParent<ScriptActivationController>();
         string buildingName = activationController != null ? activationController.gameObject.name : "TestBuilding";
 
+        ownedSpawnedObject = new SpawnedObject(instance, spawnedObject.NoonsongEntry);
         if (PlayerObjectSpawnManager.Instance != null)
         {
             PlayerObjectSpawnManager.Instance.AddSpawnedObject(
                 buildingName,
-                new SpawnedObject(instance, spawnedObject.NoonsongEntry)
+                ownedSpawnedObject
             );
         }
+        spawnLifecycle.NotifySpawnSucceeded();
+        // 조우 중이거나 사진 모드일 때는 숨김 처리
+        if (ShouldHideFieldObject())
+        {
+            SpawnCommand hideCommand = spawnLifecycle.OnPhotoOpened();
+            ExecuteSpawnCommand(hideCommand);
+            wasPhotoModeActive = true; // 상태를 업데이트하여 다음 프레임에서 중복 실행 방지
+            Debug.Log(
+    $"[SpawnLifecycle] PhotoSpawn id={instance.GetInstanceID()}, " +
+    $"command={hideCommand}, activeSelf={instance.activeSelf}"
+);
+        }
+        //debug lifetime
+        Debug.Log(
+    $"[SpawnLifecycle] Spawned building={buildingName}, " +
+    $"id={instance.GetInstanceID()}, " +
+    $"lifetime={changeInterval:F1}s"
+);
     }
 
     private void UpdateMovementDirection()
@@ -216,7 +349,7 @@ public class PlayerObjectSpawn : MonoBehaviour
 
     private SpawnedObject GetRandomPrefab()
     {
-        float probability = Random.Range(0f, 1f); 
+        float probability = Random.Range(0f, 1f);
         if (probability < majorNoonsongProbability)
         {
             List<NoonsongEntry> filteredEntries = GetFilteredNoonsongEntries();
@@ -225,7 +358,7 @@ public class PlayerObjectSpawn : MonoBehaviour
             {
                 int randomIndex = Random.Range(0, filteredEntries.Count);
                 NoonsongEntry selectedEntry = filteredEntries[randomIndex];
-                
+
                 return new SpawnedObject(selectedEntry.prefab, selectedEntry);
             }
         }
@@ -237,7 +370,7 @@ public class PlayerObjectSpawn : MonoBehaviour
         int randomIndex = Random.Range(0, generalNoonsong.Length);
         return new SpawnedObject(generalNoonsong[randomIndex], null);
     }
-    
+
     private List<NoonsongEntry> GetFilteredNoonsongEntries()
     {
         var activationController = GetComponentInParent<ScriptActivationController>();
@@ -274,13 +407,13 @@ public class PlayerObjectSpawn : MonoBehaviour
             {
                 if (!entry.isFriend)
                 {
-                    return false; 
+                    return false;
                 }
             }
 
-            return true; 
+            return true;
         }
 
-        return false; 
+        return false;
     }
 }
