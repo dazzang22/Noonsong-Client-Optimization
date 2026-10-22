@@ -4,7 +4,9 @@
 
 ![프렌즈 눈송 게임 화면](https://github.com/user-attachments/assets/cf67caca-2726-469d-8398-0f3abd7253f0)
 
-건물 구역에 들어가면 해당 건물의 캐릭터가 AR 공간에 등장합니다. 플레이어가 화면의 캐릭터를 수집하면 발견 상태가 바뀌고 도감 UI에 반영됩니다. 이 README는 그 흐름을 **건물 데이터 연결 → 생성 객체 식별 → 수집 → 수명 관리** 순서로 설명합니다.
+▶ [프렌즈 눈송 실제 플레이 영상 보기](https://youtu.be/8JvtPYTLDJI?si=8AwcJ5Sj5yy2kRYz)
+
+건물 구역에 들어가면 해당 건물의 마스코트가 AR 공간에 등장합니다. 플레이어가 화면의 마스코트를 수집하면 발견 상태가 바뀌고 도감 UI에 반영됩니다. 이 README는 그 흐름을 **건물 데이터 연결 → 생성 객체 식별 → 수집 → 수명 관리** 순서로 설명합니다.
 
 | 항목 | 내용 |
 |---|---|
@@ -14,17 +16,16 @@
 | 개발 / 운영 | 2024.01–2025.05 / 2025.05.01–05.21 |
 | 저장소 | 팀 프로젝트를 바탕으로 한 개인 개선 fork |
 
-## 제가 맡은 범위
+## 맡은 범위
 
 | 구분 | 책임 |
 |---|---|
-| 기존 팀 시스템 | GPS 구역 판정과 Controller 활성화, 서버 저장·불러오기, 전역 단일 Spawn 정책의 시작 |
 | 직접 구현 · 2024–2025 | Controller 이름을 건물 키로 사용하는 규칙, 건물별 Entry 후보 선택과 랜덤 Spawn, `GameObject`–`NoonsongEntry` 매핑, AR 수집과 클라이언트 발견 상태·도감 UI 갱신 |
 | 후속 개선 · 2026 | 건물별 Dictionary 캐시, AR 탐지 배열·호출 주기 최적화, Controller별 객체 소유권과 `SpawnLifecycle` 상태 계약 |
 
-후속 생명주기 작업에는 Codex의 구현·테스트 보조가 있었습니다. **20초 생성 주기를 보존하고, 객체가 먼저 사라져도 수명은 계속 진행한다는 정책**은 제가 정한 설계 기준입니다. 아래의 13개 테스트는 순수 로직 테스트 구성이고, 최신 Unity Test Runner 통과 여부는 별도로 재확인해야 합니다.
+2026년 생명주기 개선에는 Codex의 코드·테스트 작성 도움을 받았습니다. **20초 생성 주기는 원래 게임 기획에 있던 규칙**입니다. 저는 수집으로 객체가 먼저 사라져도 그 시간이 계속 흐르도록 상태를 나눴습니다. 13개 순수 로직 테스트는 2026년 10월 16일 Unity Test Runner에서 통과했습니다. [실행 화면](docs/spawn-lifecycle-follow-up.md#확인한-동작)을 남겼습니다.
 
-## 1. 건물 신호를 캐릭터 데이터로 연결
+## 1. 파이프라인 설계: 건물 신호와 마스코트 데이터 연결
 
 ```text
 기존 위치 시스템 → 활성 ScriptActivationController
@@ -33,7 +34,7 @@
                  → 후보 중 하나 선택 → Prefab 생성
 ```
 
-`NoonsongEntry.buildingName`은 기존 데이터의 건물 식별 필드입니다. 별도 ID를 만드는 대신 부모 Controller의 GameObject 이름과 같은 규칙으로 관리했습니다. 위치 판정 자체를 제가 구현했다고 주장하지 않습니다.
+`NoonsongEntry.buildingName`은 기존 데이터의 건물 식별 필드입니다. 별도 ID를 만드는 대신 부모 Controller의 GameObject 이름과 **같은 규칙**으로 관리했습니다. 위치 인식 로직은 다른 팀원이 구현했습니다.
 
 현재 키를 읽는 코드는 [`PlayerObjectSpawn.GetFilteredNoonsongEntries()`](Assets/Scripts/ObjectSpawn/PlayerObjectSpawn.cs)에 있습니다.
 
@@ -57,7 +58,7 @@ foreach (var entry in entries)
 }
 ```
 
-**After — 초기화 시 건물별 캐시.** 현재 [`BuildEntryCache()`](Assets/Scripts/ObjectSpawn/PlayerObjectSpawn.cs)는 Entry를 건물명으로 사전 분류하고, Spawn 후보 조회에는 `TryGetValue()`를 사용합니다.
+**After — 초기화 시 건물별 캐시.** 현재 [`BuildEntryCache()`](Assets/Scripts/ObjectSpawn/PlayerObjectSpawn.cs)는 Entry를 건물명 기반 list들로 사전 캐싱하고, Spawn 후보 조회에는 `TryGetValue()`를 사용합니다.
 
 ```csharp
 if (!entriesByBuilding.TryGetValue(entry.buildingName, out var list))
@@ -75,11 +76,11 @@ if (entriesByBuilding != null &&
 return EmptyEntries;
 ```
 
-이 변경의 목적은 **반복적인 전체 목록 탐색과 임시 List 생성 예방**입니다. 실행 시간이나 FPS 향상은 측정하지 않았습니다. 캐시는 초기화 시점에 만들므로, 실행 중 Entry 데이터가 바뀐다면 별도 갱신이 필요합니다. 구현 흐름과 이력은 [상세 문서](docs/building-collection-pipeline.md)에 정리했습니다.
+이 변경의 목적은 **반복적인 전체 목록 탐색과 임시 List 생성 예방**입니다. 캐시는 초기화 시점에 만들므로, 실행 중 Entry 데이터가 바뀐다면 별도 갱신이 필요합니다. 구현 흐름과 이력은 [상세 문서](docs/building-collection-pipeline.md)에 정리했습니다.
 
-## 2. Spawn한 객체에서 원본 Entry 되찾기
+## 2. 데이터 매핑: 생성 객체에서 원본 Entry 추적
 
-생성된 캐릭터의 외형만으로는 수집 시 어느 도감 Entry인지 안정적으로 알 수 없습니다. [`SpawnedObject`](Assets/Scripts/CollectionScene/SpawnObject.cs)는 **생성된 `GameObject`와 원본 `NoonsongEntry`를 한 쌍**으로 보관합니다.
+생성된 마스코트의 외형만으로는 수집 시 어느 도감 Entry인지 안정적으로 알 수 없습니다. [`SpawnedObject`](Assets/Scripts/CollectionScene/SpawnObject.cs)는 **생성된 `GameObject`와 원본 `NoonsongEntry`를 한 쌍**으로 보관합니다.
 
 ```csharp
 ownedSpawnedObject = new SpawnedObject(
@@ -101,11 +102,11 @@ entry.isDiscovered = true;
 PopulateNoonsong();
 ```
 
-이 메서드의 직접 책임을 서버 저장으로 확대해 설명하지 않습니다. 일반 캐릭터는 `NoonsongEntry == null`인 별도 경로로 처리합니다.
+서버 저장·불러오기는 다른 팀원이 맡았습니다. Normal 마스코트는 `NoonsongEntry == null`인 경로로 구분합니다.
 
-## 3. 전역 제거에서 소유 객체의 생명주기로
+## 3. 생명주기 설계: 소유권과 논리적 수명 분리
 
-기존 구현에서 각 건물의 `PlayerObjectSpawn`은 20초 타이머를 진행했지만, 만료 시 Manager의 **전역 제거 함수**를 호출했습니다. Manager는 호출한 Controller와 무관하게 건물별 Spawn 목록 전체를 순회했습니다. 전역 최대 1개 Spawn 제한이 있었으므로, 여러 Controller의 객체가 동시에 생성돼 실제 오삭제가 났다고 주장하지 않습니다. 문제는 **수명 판단 주체와 제거 범위가 맞지 않는 구조적 위험**입니다.
+기존 구현에서 각 건물의 `PlayerObjectSpawn`은 20초 타이머를 진행했지만, 만료 시 Manager의 **전역 제거 함수**를 호출했습니다. Manager는 호출한 Controller와 무관하게 건물별 Spawn 목록 전체를 순회했습니다. 당시에는 전체에서 최대 한 개만 생성할 수 있어 실제로 다른 Controller의 객체를 지운 사례는 확인되지 않았습니다. 다만 **타이머를 가진 Controller와 제거 범위가 서로 맞지 않는 구조**였습니다.
 
 **Before — Controller 타이머 → Manager 전역 제거** ([리팩터링 전 호출부](https://github.com/dazzang22/Noonsong-Client-Optimization/blob/01948f81d918597a01a5804f598c594047bed7d7/Assets/Scripts/ObjectSpawn/PlayerObjectSpawn.cs), [전역 순회](https://github.com/dazzang22/Noonsong-Client-Optimization/blob/01948f81d918597a01a5804f598c594047bed7d7/Assets/Scripts/ObjectSpawn/PlayerObjectSpawnManager.cs))
 
@@ -149,11 +150,11 @@ case SpawnCommand.Remove:
 
 테스트 파일은 [`SpawnLifetimeTests` 2개](Assets/Tests/Tests/Editmode/Test%20Assembly%20Definition/Noonsong.SpawnLifecycle.EditModeTests/SpawnLifetimeTests.cs)와 [`SpawnLifecycleTests` 11개](Assets/Tests/Tests/Editmode/Test%20Assembly%20Definition/Noonsong.SpawnLifecycle.EditModeTests/SpawnLifecycleTests.cs)입니다. 수명 계산·상태 전이·명령 반환을 검증하며 실제 Unity `GameObject` 생성·제거 통합 테스트는 아닙니다. [설계·이력](docs/spawn-lifecycle-follow-up.md)
 
-## 4. 라이브 증상에서 측정 가능한 비용 찾기
+## 4. 성능 분석·최적화: AR 탐지의 반복 비용 개선
 
-운영 중 장시간 플레이의 발열과 AR 캐릭터 미생성이 보고됐고 직접 증상도 경험했습니다. 두 현상의 원인을 단정하지 않고, 화면 변화와 무관하게 반복되는 AR 탐지를 조사했습니다.
+운영 중 장시간 플레이의 발열과 AR 마스코트 미생성이 보고됐고 직접 증상도 경험했습니다. 두 현상의 원인을 단정하지 않고, 화면 변화와 무관하게 매 프레임 반복되는 AR 탐지로직을 의심했습니다.
 
-**Before — 매 프레임 실행, 호출마다 검사점 배열 생성.** 아래 발췌는 [최적화 전 실제 코드](https://github.com/dazzang22/Noonsong-Client-Optimization/blob/c18069d47db6e7798fec9a9e720ff0255be41d51/Assets/Scripts/CollectionScene/ARObjectCatch.cs)입니다.
+**Before — 매 프레임 실행, 호출마다 검사점 배열 생성.** 아래 발췌는 [최적화 전 코드](https://github.com/dazzang22/Noonsong-Client-Optimization/blob/c18069d47db6e7798fec9a9e720ff0255be41d51/Assets/Scripts/CollectionScene/ARObjectCatch.cs)입니다.
 
 ```csharp
 void Update()
@@ -184,10 +185,10 @@ private readonly Vector3[] checkPoints = new Vector3[5];
 | 탐지 Marker GC Alloc | 92 B/call | 0 B/call | — |
 | 탐지 호출 빈도 | 중앙값 95.47 calls/sec | 매 프레임 유지 | 중앙값 8.21 calls/sec |
 
-A→B는 배열 생성 방식, B→C는 실행 방식을 바꾼 비교입니다. A/C 호출 빈도는 조건별 3회 측정의 중앙값으로 **91.4% 감소**했습니다. `calls/sec = Marker 총 호출 수 ÷ (Frame Count × Mean Frame Time)`으로 산출했습니다. `92 B`는 선택한 탐지 Marker의 **호출당** GC Alloc이며 배열 하나의 크기나 앱 전체 GC가 아닙니다. 이 결과로 CPU·발열·AR 미생성 개선을 주장하지 않습니다. [측정 방법과 해석 범위](docs/runtime-optimization.md)
+A→B는 배열 생성 방식, B→C는 실행 방식을 바꾼 비교입니다. A/C 호출 빈도는 조건별 3회 측정의 중앙값으로 **91.4% 감소**했습니다. `calls/sec = Marker 총 호출 수 ÷ (Frame Count × Mean Frame Time)`으로 산출했습니다. `92 B`는 선택한 탐지 Marker의 **호출당** GC Alloc이며 배열 하나의 크기나 앱 전체 GC가 아닙니다. CPU 시간, 발열, AR 미생성이 개선됐는지는 이 측정만으로 알 수 없습니다. [측정 방법과 해석 범위](docs/runtime-optimization.md)
 
 ## 코드와 검증 자료
 
 - [건물별 Spawn과 Entry 연결](Assets/Scripts/ObjectSpawn/PlayerObjectSpawn.cs) · [AR 화면 탐지와 수집](Assets/Scripts/CollectionScene/ARObjectCatch.cs)
 - [건물별 데이터 연결 문서](docs/building-collection-pipeline.md) · [런타임 측정 문서](docs/runtime-optimization.md) · [생명주기 설계 문서](docs/spawn-lifecycle-follow-up.md)
-- 본문의 2026 후속 개선은 원 프로젝트 구현과 구분했습니다. 측정된 호출·할당 수치 외에 FPS, 기기 온도, 라이브 장애 해결 수치는 제시하지 않습니다.
+- 2026년 후속 개선은 원 프로젝트 때 만든 기능과 구분해 적었습니다. FPS나 기기 온도, 라이브 장애 해결 수치는 측정하지 않았습니다.

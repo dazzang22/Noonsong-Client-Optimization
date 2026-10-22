@@ -1,12 +1,12 @@
-# Runtime Optimization Measurement
+# AR 객체 탐지 비용 측정
 
-## Operational Signal
+## 왜 측정했나
 
-2025년 라이브 운영 중 장시간 플레이 환경에서 발열과 Spawn 중단이 보고됐습니다. 두 현상의 단일 원인을 확정하지 않고, 화면 변화가 없어도 매 프레임 호출되던 AR 객체 탐지 경로를 우선 측정 대상으로 정했습니다.
+2025년 라이브 운영 때 오래 플레이하면 발열이 심해지고 마스코트 생성이 멈춘다는 보고가 있었습니다. 두 증상의 원인은 확인되지 않았습니다. 다만 화면에 변화가 없어도 AR 객체 탐지가 매 프레임 실행되는 코드를 발견해, 이 부분부터 측정했습니다.
 
-## Isolation Strategy
+## A/B/C로 나눠서 비교
 
-현재 [`ARObjectCatch.cs`](../Assets/Scripts/CollectionScene/ARObjectCatch.cs)의 benchmark variant는 두 변수를 나누어 비교합니다.
+현재 [`ARObjectCatch.cs`](../Assets/Scripts/CollectionScene/ARObjectCatch.cs)에 측정용 A/B/C 분기를 두었습니다. 배열 생성과 탐지 간격을 한 번에 바꾸면 어느 쪽의 영향인지 알 수 없어서 순서대로 나눴습니다.
 
 | Variant | Array | Frequency | Purpose |
 |---|---|---|---|
@@ -26,36 +26,45 @@ private void RunDetectionBenchmarkSample()
 }
 ```
 
-## Allocation Result
+## 배열을 재사용했을 때
 
 | Condition | GC Alloc |
 |---|---:|
 | A · 새 `Vector3[5]` 생성 | 92 B/call |
 | B · 배열 재사용 | 0 B/call |
 
-이 수치는 탐지 Marker에서 확인한 호출당 할당량입니다. 전체 프레임 또는 전체 애플리케이션의 GC Alloc을 의미하지 않습니다.
+탐지 Marker 안에서 한 번 호출할 때 생긴 할당량입니다. 게임 전체의 GC Alloc 수치는 아닙니다.
 
-## Call-frequency Result
+Profiler에서 A와 B의 한 프레임씩 골라 비교했습니다. 이미지를 누르면 원본 크기로 볼 수 있습니다.
 
-Profile Analyzer에서 각 조건을 300 frames씩 3회 비교했습니다.
+| A · 92 B/call | B · 0 B/call |
+|:---:|:---:|
+| <a href="images/runtime-a-92b.png"><img src="images/runtime-a-92b.png" alt="Unity Profiler, A 조건에서 ARObjectCatch.CheckForObjectInView의 GC Alloc 92 B" width="440"></a> | <a href="images/runtime-b-0b.png"><img src="images/runtime-b-0b.png" alt="Unity Profiler, B 조건에서 같은 Marker의 GC Alloc 0 B" width="440"></a> |
+
+## 탐지 간격을 바꿨을 때
+
+Profile Analyzer에서 조건마다 300프레임을 3회씩 측정했습니다.
 
 | Metric | Before | After |
 |---|---:|---:|
 | Detection calls/sec · median | 95.5 | 8.2 |
 | Reduction |  | 약 91.4% |
 
-계산식은 `Marker Count ÷ 측정 시간`이며, 측정 시간은 `Frame Count × Mean frame time`으로 정리했습니다. Figma 포트폴리오의 `95.5 → 8.2 calls/sec`, `91.4% 감소` 표기와 일치합니다.
+초당 호출 수는 `Marker Count ÷ (Frame Count × Mean frame time)`으로 계산했습니다. 표의 값은 3회 측정의 중앙값이며, 포트폴리오에 쓴 `95.5 → 8.2 calls/sec`, `91.4% 감소`와 같습니다.
 
-## Interpretation Boundary
+아래 캡처는 측정 구간 중 B와 C를 하나씩 고른 것입니다. B에서는 300프레임 동안 299회, C에서는 28회 호출됐습니다. 이 두 장은 호출 방식의 차이를 보여주고, 위 중앙값 전체를 대신하지는 않습니다.
 
-- 배열 재사용으로 해당 Marker의 반복 할당이 제거된 것은 확인했습니다.
-- 0.1초 주기로 탐지 호출이 줄어든 것은 확인했습니다.
-- CPU 시간은 Profiler 표시 해상도 아래였으므로 정량 개선 수치로 제시하지 않습니다.
-- 실제 기기 온도와 소비 전력은 측정하지 않았습니다.
-- 이 실험만으로 장시간 Spawn 중단의 근본 원인을 확정하지 않습니다.
-- `.pdata`는 Unity 전용 형식이므로 GitHub README에서 직접 열람하기 어렵습니다. 후속 정리 시 동일 화면의 PNG 또는 표 내보내기를 추가하는 편이 좋습니다.
+| B · 매 프레임 탐지 유지 | C · 0.1초 간격 탐지 |
+|:---:|:---:|
+| <a href="images/runtime-b-300frames.png"><img src="images/runtime-b-300frames.png" alt="Profile Analyzer B Run1 Part2, 300 frames, ARObjectCatch.CheckForObjectInView Count 299" width="440"></a> | <a href="images/runtime-c-300frames.png"><img src="images/runtime-c-300frames.png" alt="Profile Analyzer C Run3, 300 frames, ARObjectCatch.CheckForObjectInView Count 28" width="440"></a> |
 
-## Related History
+## 확인한 것과 확인하지 못한 것
+
+배열을 재사용한 뒤 이 Marker의 호출당 할당이 0 B로 표시됐고, 탐지 간격을 둔 뒤 호출 수도 줄었습니다. CPU 시간은 Profiler 화면에서 차이를 읽기 어려워 개선 수치로 쓰지 않았습니다. 실제 기기의 온도·소비 전력은 측정하지 않았고, Spawn 중단 원인도 이 실험만으로 확인할 수 없습니다.
+
+`.pdata` 원본은 Unity에서 열어야 합니다. 위 PNG는 일부 구간을 보여주는 캡처입니다.
+
+## 관련 커밋
 
 - [`0e72016c`](https://github.com/dazzang22/Noonsong-Client-Optimization/commit/0e72016c) — test spawn mode and AR detection optimization
 - [`0c87cdff`](https://github.com/dazzang22/Noonsong-Client-Optimization/commit/0c87cdff) — Entry cache
